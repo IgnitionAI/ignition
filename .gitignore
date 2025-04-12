@@ -1,0 +1,31 @@
+# node
+node_modules/
+.pnpm/
+.pnpm-debug.log
+npm-debug.log*
+
+# dist
+dist/
+build/
+out/
+
+# logs
+logs
+*.log
+
+# TypeScript
+*.tsbuildinfo
+
+# testing
+coverage/
+.vitest/
+
+# IDEs
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# OS
+Thumbs.db
+ehthumbs.db
