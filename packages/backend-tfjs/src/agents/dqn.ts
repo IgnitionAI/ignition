@@ -118,27 +118,27 @@ export class DQNAgent {
     console.log(`[DQN] Training on batch of ${this.batchSize}, tensors before:`, tensorsBefore);
     
     try {
-      // Obtenir un batch d'expériences
+      // Get a batch of experiences
       const batch = this.memory.sample(this.batchSize);
 
-      // Préparer les tenseurs pour les états et les états suivants
+      // Prepare tensors for current and next states
       const states = batch.map(exp => exp.state);
       const nextStates = batch.map(exp => exp.nextState);
 
       const stateTensor = tf.tensor2d(states);
       const nextStateTensor = tf.tensor2d(nextStates);
 
-      // Calculer les Q-values actuelles
+      // Calculate Q-values for current state
       const qValues = this.model.predict(stateTensor) as tf.Tensor2D;
-      // Calculer les Q-values pour les états suivants
+      // Calculate Q-values for next state
       const nextQValues = this.targetModel.predict(nextStateTensor) as tf.Tensor2D;
 
-      // Convertir en tableaux JavaScript
+      // Convertir tensors in javascript array
       const qValuesArray = qValues.arraySync() as number[][];
       const nextQValuesArray = nextQValues.arraySync() as number[][];
       tf.dispose([qValues,nextQValues])
 
-      // Préparer les valeurs cibles pour l'entraînement
+      // Prepare target values for training
       const targetQ = qValuesArray.map((q, i) => {
         const exp = batch[i];
         const oldQ = q[exp.action];
@@ -154,27 +154,27 @@ export class DQNAgent {
 
       const targetTensor = tf.tensor2d(targetQ);
 
-      // Entraîner le modèle
+      // Train the model
       const result = await this.model.fit(stateTensor, targetTensor, {
         epochs: 1,
         verbose: 0,
       });
 
-      // Afficher la perte
+      // Display the loss
       const loss = result.history.loss[0] as number;
       console.log(`[DQN] Training loss: ${loss.toFixed(4)}`);
 
-      // Libérer les tenseurs créés
+      // Dispose of created tensors
       tf.dispose([stateTensor, nextStateTensor, qValues, nextQValues, targetTensor]);
 
-      // Mettre à jour epsilon (exploration/exploitation)
+      // Update epsilon (exploration/exploitation)
       const oldEpsilon = this.epsilon;
       if (this.epsilon > this.minEpsilon) {
         this.epsilon *= this.epsilonDecay;
         console.log(`[DQN] Epsilon: ${oldEpsilon.toFixed(3)} -> ${this.epsilon.toFixed(3)}`);
       }
 
-      // Mettre à jour le modèle cible périodiquement
+      // Update target model periodically
       this.trainStepCounter++;
       if (this.trainStepCounter % this.targetUpdateFrequency === 0) {
         await this.updateTargetModel();
@@ -183,7 +183,7 @@ export class DQNAgent {
     } catch (error) {
       console.error('[DQN] Error during training:', error);
     } finally {
-      // Vérifier les fuites potentielles
+      // Check for potential leaks
       const tensorsAfter = tf.memory().numTensors;
       console.log(`[DQN] Tensors after training: ${tensorsBefore} -> ${tensorsAfter} (diff: ${tensorsAfter - tensorsBefore})`);
     }
@@ -210,7 +210,7 @@ export class DQNAgent {
     if (this.targetModel) {
       this.targetModel.dispose();
     }
-    // Vider la mémoire
+    // Clear the memory
     this.memory = new ReplayBuffer(0);
   }
 }
