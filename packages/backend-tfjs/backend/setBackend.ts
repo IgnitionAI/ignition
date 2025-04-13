@@ -3,12 +3,12 @@ import '@tensorflow/tfjs-backend-webgpu'; // Experimental
 
 /**
  * Initialize TensorFlow.js with the best available backend
- * Preference order: WebGPU > WebGL > CPU
+ * Preference order: WebGPU > WebGL > CPU > WASM
  * @returns The name of the backend used
  */
 export async function initTfjsBackend(): Promise<string> {
   // List of backends in order of preference
-  const backends = ['webgpu', 'webgl', 'cpu'];
+  const backends = ['webgpu', 'webgl', 'cpu', 'wasm'];
 
   // Check which backends are available
   const availableBackends = backends.filter(b => tf.findBackend(b) !== undefined);
@@ -54,7 +54,7 @@ export function getTfjsBackendInfo() {
 
 /**
  * Configure TensorFlow.js backend safely
- * @param name Name of the backend to use
+ * @param name Name of the backend to use ('webgpu', 'webgl', 'cpu', or 'wasm')
  * @returns Promise<void>
  */
 export async function setBackendSafe(
