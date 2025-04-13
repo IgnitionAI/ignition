@@ -8,11 +8,30 @@ This document outlines the phased development of **IgnitionAI** — a modular, b
 
 > ⚙️ Goal: Run agent-environment logic headlessly (no UI)
 
-- [x] `@ignitionai/core` base structure with `Agent`, `InferenceBackend`, `MockBackend`
-- [ ] Implement `TargetChasingEnvironment` (no UI)
-- [ ] Create `step()` RL loop: observe → act → reward → learn
-- [ ] Log rewards and done state in Node
-- [ ] Add unit tests (Vitest)
+✅ Roadmap for "RL algo first"
+Phase A — @ignitionai/backend-tfjs only
+Implementing classic algorithms with TensorFlow.js
+
+1. 🔁 Q-learning (tabular) – minimalist JS version
+without neural networks
+
+testable directly on a grid (state → action → Q[state][action])
+
+2. 🧠 DQN – Deep Q-Network
+MLP simple input → hidden → output
+
+replay buffer
+
+target network
+
+loss = TD_error
+
+3. 🧘‍♂️ PPO – Policy Gradient
+Simple Actor-Critic
+
+Episode-based training
+
+Policy loss + value loss
 
 ---
 
