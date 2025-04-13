@@ -136,6 +136,7 @@ export class DQNAgent {
       // Convertir en tableaux JavaScript
       const qValuesArray = qValues.arraySync() as number[][];
       const nextQValuesArray = nextQValues.arraySync() as number[][];
+      tf.dispose([qValues,nextQValues])
 
       // Préparer les valeurs cibles pour l'entraînement
       const targetQ = qValuesArray.map((q, i) => {
