@@ -29,3 +29,8 @@ coverage/
 # OS
 Thumbs.db
 ehthumbs.db
+
+# env files
+.env
+.env.*
+!.env.example
