@@ -11,6 +11,9 @@ importers:
       '@vitest/ui':
         specifier: ^3.1.1
         version: 3.1.1(vitest@3.1.1)
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -22,6 +25,9 @@ importers:
 
   packages/backend-tfjs:
     dependencies:
+      '@huggingface/hub':
+        specifier: ^1.1.2
+        version: 1.1.2
       '@tensorflow/tfjs':
         specifier: ^4.22.0
         version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
@@ -37,13 +43,19 @@ importers:
       '@tensorflow/tfjs-backend-webgpu':
         specifier: ^4.22.0
         version: 4.22.0(@tensorflow/tfjs-core@4.22.0(encoding@0.1.13))
-      '@tensorflow/tfjs-node':
-        specifier: ^4.22.0
-        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
       '@tensorflow/tfjs-vis':
         specifier: ^1.5.1
         version: 1.5.1(@tensorflow/tfjs-core@4.22.0(encoding@0.1.13))(encoding@0.1.13)
     devDependencies:
+      '@tensorflow/tfjs-node':
+        specifier: ^4.22.0
+        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
+      form-data:
+        specifier: ^4.0.2
+        version: 4.0.2
       vitest:
         specifier: ^3.1.1
         version: 3.1.1(@types/node@22.14.1)(@vitest/ui@3.1.1)
@@ -233,6 +245,13 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@huggingface/hub@1.1.2':
+    resolution: {integrity: sha512-Jf4GhvVj9ABDw4Itb3BV1T7f22iewuZva476qTicQ4kOTbosuUuFDhsVH7ZH6rVNgg20Ll9kaNBF5CXjySIT+w==}
+    engines: {node: '>=18'}
+
+  '@huggingface/tasks@0.18.7':
+    resolution: {integrity: sha512-ZzwifnFo4onuIs7cIzm/1G8MFZPQeMhQplG/Ru5Xnnm4TDwxrtThHfhrCZrdS8vEKpy+XBH9INoNelnWox8UQQ==}
 
   '@jridgewell/sourcemap-codec@1.5.0':
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
@@ -852,6 +871,10 @@ packages:
   detect-libc@2.0.3:
     resolution: {integrity: sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==}
     engines: {node: '>=8'}
+
+  dotenv@16.5.0:
+    resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
+    engines: {node: '>=12'}
 
   draco3d@1.5.7:
     resolution: {integrity: sha512-m6WCKt/erDXcw+70IJXnG7M3awwQPAsZvJGX5zY7beBqpELw6RDGkYVU0W43AFxye4pDZ5i2Lbyc/NNGqwjUVQ==}
@@ -1936,6 +1959,12 @@ snapshots:
   '@esbuild/win32-x64@0.25.2':
     optional: true
 
+  '@huggingface/hub@1.1.2':
+    dependencies:
+      '@huggingface/tasks': 0.18.7
+
+  '@huggingface/tasks@0.18.7': {}
+
   '@jridgewell/sourcemap-codec@1.5.0': {}
 
   '@mapbox/node-pre-gyp@1.0.9(encoding@0.1.13)':
@@ -2576,6 +2605,8 @@ snapshots:
       webgl-constants: 1.1.1
 
   detect-libc@2.0.3: {}
+
+  dotenv@16.5.0: {}
 
   draco3d@1.5.7: {}
 

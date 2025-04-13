@@ -8,15 +8,18 @@
     "test": "vitest --config ../../vitest.config.ts"
   },
   "dependencies": {
+    "@huggingface/hub": "^1.1.2",
     "@tensorflow/tfjs": "^4.22.0",
     "@tensorflow/tfjs-backend-cpu": "^4.22.0",
     "@tensorflow/tfjs-backend-wasm": "^4.22.0",
     "@tensorflow/tfjs-backend-webgl": "^4.22.0",
     "@tensorflow/tfjs-backend-webgpu": "^4.22.0",
-    "@tensorflow/tfjs-node": "^4.22.0",
     "@tensorflow/tfjs-vis": "^1.5.1"
   },
   "devDependencies": {
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "dotenv": "^16.5.0",
+    "form-data": "^4.0.2",
     "vitest": "^3.1.1"
   }
 }
