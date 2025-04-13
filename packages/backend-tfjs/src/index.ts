@@ -1,7 +1,6 @@
-// Backend TensorFlow.js implementation
-export const version = '0.1.0';
-
-export default {
-  name: 'backend-tfjs',
-  version
-}; 
+export * from './agents/dqn';
+//export * from './agents/ppo';
+//export * from './agents/qtable';
+export * from './memory/ReplayBuffer';
+export * from './model/BuildMLP';
+export * from './types';
