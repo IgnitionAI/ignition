@@ -14,24 +14,39 @@ Implementing classic algorithms with TensorFlow.js
 
 1. 🔁 Q-learning (tabular) – minimalist JS version
 without neural networks
-
-testable directly on a grid (state → action → Q[state][action])
+✅ Implemented Q-Table agent with state/action lookup
+✅ Added tests for basic functionality
 
 2. 🧠 DQN – Deep Q-Network
-MLP simple input → hidden → output
-
-replay buffer
-
-target network
-
-loss = TD_error
+✅ Implemented MLP simple input → hidden → output
+✅ Added replay buffer with experience sampling
+✅ Implemented target network with periodic updates
+✅ Added epsilon-greedy exploration/exploitation
+✅ Loss function based on TD error
+✅ Unit tests with training validation
 
 3. 🧘‍♂️ PPO – Policy Gradient
-Simple Actor-Critic
+✅ Created initial PPO agent skeleton
+- [ ] Implement Actor-Critic model
+- [ ] Implement episode-based training
+- [ ] Add policy and value loss functions
 
-Episode-based training
+---
 
-Policy loss + value loss
+## 🚀 Phase 1.5 — Backend Infrastructure
+
+> 🧰 Goal: Create robust, multi-environment backend support
+
+✅ Created modular monorepo structure
+✅ Implemented robust backend selection system
+✅ Added support for all major TensorFlow.js backends:
+  - WebGPU (experimental)
+  - WebGL
+  - CPU
+  - WASM
+✅ Added helper utilities for backend detection and info
+✅ Comprehensive unit tests and error handling
+- [ ] Add model serialization and loading
 
 ---
 
@@ -49,9 +64,10 @@ Policy loss + value loss
 
 > 🧠 Goal: Train and run a model directly in the browser
 
-- [ ] `@ignitionai/backend-tfjs`: build simple MLP model
-- [ ] Implement `train()`, `predict()`, `save()` APIs
-- [ ] Plug into `Agent` class
+✅ `@ignitionai/backend-tfjs`: built simple MLP model with configurable layers
+✅ Implemented `train()` and `predict()` APIs via DQN agent
+- [ ] Add model serialization with `save()` and `load()`
+- [ ] Create streamlined `Agent` class interface
 
 ---
 
@@ -59,9 +75,10 @@ Policy loss + value loss
 
 > ⚡ Goal: Run optimized pre-trained models in production
 
-- [ ] `@ignitionai/backend-onnx`: ONNX Runtime Web
-- [ ] Load `.onnx` model and infer
-- [ ] Implement `InferenceBackend` wrapper
+✅ Created initial package structure for ONNX backend
+- [ ] Implement ONNX Runtime Web integration
+- [ ] Add `.onnx` model loading and inference
+- [ ] Create `InferenceBackend` wrapper
 
 ---
 
