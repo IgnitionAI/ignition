@@ -8,6 +8,7 @@ npm-debug.log*
 dist/
 build/
 out/
+tmp-model/
 
 # logs
 logs
