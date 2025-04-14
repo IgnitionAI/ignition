@@ -74,7 +74,7 @@ env.step = async () => {
     console.log(`[CHECKPOINT] Nouvelle meilleure distance: ${d.toFixed(4)}`);
     console.log(`[CHECKPOINT] Sauvegarde du meilleur modèle...`);
     await agent.saveCheckpoint(
-      'salim4n/dqn-checkpoint-demo',
+      'salim4n/test-checkpoint',
       process.env.HF_TOKEN!,
       'best'
     );
@@ -85,7 +85,7 @@ env.step = async () => {
   if (env.stepCount % 100 === 0) {
     console.log(`[CHECKPOINT] Sauvegarde régulière à l'étape ${env.stepCount}`);
     await agent.saveCheckpoint(
-      'salim4n/dqn-checkpoint-demo',
+      'salim4n/test-checkpoint',
       process.env.HF_TOKEN!,
       `step-${env.stepCount}`
     );
