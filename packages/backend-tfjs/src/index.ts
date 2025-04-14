@@ -4,3 +4,4 @@ export * from './agents/dqn';
 export * from './memory/ReplayBuffer';
 export * from './model/BuildMLP';
 export * from './types';
+export { DQNAgent } from './agents/dqn';
