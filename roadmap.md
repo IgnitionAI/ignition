@@ -65,6 +65,7 @@ without neural networks
 
 ✅ `@ignitionai/r3f`: add `AgentMesh`, `TargetMesh`, `useAgent`
 ✅ `@ignitionai/demo-target-chasing`: setup Vite + R3F scene
+✅ Add training monitoring and auto-stop functionality
 - [ ] Display step count and reward in the UI
 - [ ] Add training controls and visualization
 - [ ] Implement real-time model updates
