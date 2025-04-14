@@ -16,6 +16,7 @@ export class DQNAgent {
   private targetUpdateFrequency: number;
   private trainStepCounter = 0;
   private actionSize: number;
+  private bestReward: number = -Infinity;
 
   constructor(private config: DQNConfig) {
     const {
@@ -134,6 +135,17 @@ async saveCheckpoint(repoId: string, token: string, checkpointName: string): Pro
   await saveModelToHub(this.model, repoId, token, folder);
   console.log(`[DQN] ✅ Checkpoint "${checkpointName}" saved`);
 }
+
+async maybeSaveBestCheckpoint(repoId: string, token: string, reward: number, step?: number): Promise<void> {
+  console.log(`[DQN] Current best: ${this.bestReward.toFixed(4)}, new reward: ${reward.toFixed(4)}`);
+  if (reward > this.bestReward) {
+    console.log(`[DQN] 🏆 New best reward: ${reward.toFixed(3)} > ${this.bestReward.toFixed(3)}`);
+    this.bestReward = reward;
+    const checkpointName = step !== undefined ? `step-${step}` : 'best';
+    await this.saveCheckpoint(repoId, token, checkpointName);
+  }
+}
+
 
 /**
  * Load a checkpointed model from Hugging Face Hub.

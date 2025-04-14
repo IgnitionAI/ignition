@@ -10,6 +10,9 @@ export interface IgnitionEnvConfig {
   onReset?: () => void;
 
   stepIntervalMs?: number;
+  // 👉 NEW: Save best checkpoint automatically
+  hfRepoId?: string;
+  hfToken?: string;
 }
 
 export class IgnitionEnv {
@@ -44,6 +47,16 @@ export class IgnitionEnv {
 
     this.agent.remember(experience);
     await this.agent.train();
+    // ✅ Save best checkpoint if reward is best so far
+    if ('maybeSaveBestCheckpoint' in this.agent && this.config.hfRepoId && this.config.hfToken) {
+        await (this.agent as any).maybeSaveBestCheckpoint(
+        this.config.hfRepoId,
+        this.config.hfToken,
+        reward,
+        this.stepCount
+        );
+    }
+
 
     if (done) {
       this.config.onReset?.();

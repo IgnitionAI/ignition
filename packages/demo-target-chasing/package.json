@@ -10,6 +10,7 @@
   "dependencies": {
     "@ignitionai/backend-tfjs": "workspace:*",
     "@ignitionai/core": "workspace:*",
+    "dotenv": "^16.4.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "three": "^0.175.0",

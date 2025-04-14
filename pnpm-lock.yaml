@@ -74,6 +74,9 @@ importers:
       '@ignitionai/core':
         specifier: workspace:*
         version: link:../core
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.5.0
       react:
         specifier: ^19.1.0
         version: 19.1.0
