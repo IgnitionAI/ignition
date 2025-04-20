@@ -6,7 +6,10 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "r3f:dev": "pnpm --filter @ignitionai/r3f dev",
+    "r3f:build": "pnpm --filter @ignitionai/r3f build",
+    "r3f:preview": "pnpm --filter @ignitionai/r3f preview"
   },
   "packageManager": "pnpm@10.8.0+sha512.0e82714d1b5b43c74610193cb20734897c1d00de89d0e18420aebc5977fa13d780a9cb05734624e81ebd81cc876cd464794850641c48b9544326b5622ca29971",
   "devDependencies": {

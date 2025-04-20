@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@ignitionai/core": ["../../packages/core/src"],
+      "@ignitionai/backend-tfjs": ["../../packages/backend-tfjs/src"]
+    },
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "../../node_modules/@types"]
+  },
+  "include": ["src"],
+  "extends": "./tsconfig.app.json"
+}
