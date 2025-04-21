@@ -4,7 +4,7 @@ export interface IgnitionEnvConfig {
   agent: AgentInterface;
 
   getObservation: () => number[];
-  applyAction: (action: number) => void;
+  applyAction: (action: number | number[]) => void;
   computeReward: () => number;
   isDone: () => boolean;
   onReset?: () => void;
