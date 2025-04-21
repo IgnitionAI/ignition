@@ -1,4 +1,11 @@
-import { RigidBody } from "@react-three/rapier";
+import {  useKeyboardControls } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { RigidBody, RapierRigidBody } from "@react-three/rapier";
+import {  useRef } from "react";
+import { Controls } from "./App";
+import { Vector3 } from "three";
+
+const MOVEMENT_SPEED = 100;
 
 function Ground() {
   return (
@@ -14,7 +21,15 @@ function Ground() {
 function Cible() {
 
   return (
-    <RigidBody  type="fixed" position={[0, 10, 0]}>
+    <RigidBody  
+    type="dynamic" 
+    position={[0, 10, 0]} 
+    shape="cuboid"
+    linearDamping={0.5}
+    mass={1}
+    friction={0}
+    lockRotations
+    >
       <mesh castShadow>
         <boxGeometry args={[20, 20, 20]} />
         <meshStandardMaterial color="red" />
@@ -23,26 +38,50 @@ function Cible() {
   );
 }
 
-function Agent() {
+function Agent() { 
+  const bodyRef = useRef<RapierRigidBody>(null);
+  const initialPosition: [number, number, number] = [100, 10, 100];
+  const [, get] = useKeyboardControls();
+  const velocity = new Vector3();
+  
+  useFrame(() => {
+    velocity.x = 0;
+    velocity.y = 0;
+    velocity.z = 0;
+    if (get()[Controls.forward]) {
+      velocity.z -= MOVEMENT_SPEED;
+    }
+    if (get()[Controls.back]) {
+      velocity.z += MOVEMENT_SPEED;
+    }
+    if (get()[Controls.left]) {
+      velocity.x -= MOVEMENT_SPEED;
+    }
+    if (get()[Controls.right]) {
+      velocity.x += MOVEMENT_SPEED;
+    }
+    if (get()[Controls.jump]) {
+      velocity.y += MOVEMENT_SPEED;
+    }
+    bodyRef.current?.setLinvel(velocity, true);
+  });
   
   return (
-    <>
-      <RigidBody 
-        type="dynamic" 
-        position={[0, 10, 100]}
-        linearDamping={0.05}  // Très faible amortissement
-        angularDamping={0.9}
-        friction={0}         // Aucune friction pour maximiser le glissement
-        restitution={0}
-        lockRotations={true}
-        gravityScale={0.05}  // Très légère gravité pour maintenir le contact
-      >
-        <mesh castShadow>
-          <boxGeometry args={[20, 20, 20]} />
-          <meshStandardMaterial color="blue" />
-        </mesh>
-      </RigidBody>
-    </>
+    <RigidBody 
+      ref={bodyRef}
+      position={initialPosition}
+      type="dynamic"
+      shape="cuboid"
+      linearDamping={0.5}
+      mass={1}
+      friction={0}
+      lockRotations
+    >
+      <mesh castShadow>
+        <boxGeometry args={[20, 20, 20]} />
+        <meshStandardMaterial color="blue" />
+      </mesh>
+    </RigidBody>
   );
 }
 
