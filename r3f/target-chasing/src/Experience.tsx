@@ -95,11 +95,12 @@ function Agent({targetPosition}: {targetPosition: [number, number, number]}) {
     const dqnAgent = new DQNAgent({
       actionSize: 4,
       inputSize: 9,
-      epsilon: 0.95,     // Très forte exploration au début
-      epsilonDecay: 0.99, // Décroissance lente
-      lr: 0.001,
-      batchSize: 32,
+      epsilon: 0.9,            // moins haut
+      epsilonDecay: 0.97,      // decay plus rapide
+      minEpsilon: 0.05,
       gamma: 0.99,
+      lr: 0.001,
+      batchSize: 128,          // batch plus large
       hiddenLayers: [64, 64],
       memorySize: 100000,
       targetUpdateFrequency: 200,
@@ -147,10 +148,7 @@ function Agent({targetPosition}: {targetPosition: [number, number, number]}) {
         
         // Vérifier l'état actuel de l'agent
         const pos = bodyRef.current.translation();
-        
-        // Ajouter un peu d'aléatoire aux premières étapes
-        const randomFactor = Math.min(1, 100 / (episodeCount + 1));
-        const shouldRandomize = Math.random() < randomFactor && episodeSteps < 5;
+        const shouldRandomize = episodeSteps < 20 && Math.random() < 0.5;
         
         if (Array.isArray(action)) {
           bodyRef.current.setLinvel(new Vector3(
@@ -233,9 +231,7 @@ function Agent({targetPosition}: {targetPosition: [number, number, number]}) {
           return 100; // Récompense très élevée pour atteindre la cible
         }
         
-        // Récompense proportionnelle à la proximité (plus simple)
-        // Coefficient entre 0 et 1 basé sur la distance (1 = proche, 0 = loin)
-        const proximityReward = Math.max(0, 1 - distance / 200);
+        const proximityReward = Math.max(0, 2 * (1 - distance / 200)); // au lieu de 1x
         calculatedReward = proximityReward;
         
         // Récompense additionnelle si l'agent se rapproche de la cible
