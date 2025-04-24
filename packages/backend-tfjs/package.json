@@ -1,12 +1,36 @@
 {
   "name": "@ignitionai/backend-tfjs",
   "version": "0.1.0",
+  "description": "TensorFlow.js backend for IgnitionAI - browser-based reinforcement learning framework",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
-    "test": "vitest --config ../../vitest.config.ts"
+    "test": "vitest --config ../../vitest.config.ts",
+    "prepublishOnly": "npm run build"
   },
+  "keywords": [
+    "reinforcement-learning",
+    "tensorflow",
+    "tfjs",
+    "dqn",
+    "ppo",
+    "q-learning",
+    "browser",
+    "webgl",
+    "webgpu"
+  ],
+  "author": "salim4n (@IgnitionAI)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IgnitionAI/ignition-monorepo-starter"
+  },
+  "homepage": "https://github.com/IgnitionAI/ignition-monorepo-starter#readme",
   "dependencies": {
     "@huggingface/hub": "^1.1.2",
     "@tensorflow/tfjs": "^4.22.0",
@@ -21,5 +45,8 @@
     "dotenv": "^16.5.0",
     "form-data": "^4.0.2",
     "vitest": "^3.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

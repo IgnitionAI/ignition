@@ -1,3 +1,2 @@
-export const backendTfjs = () => {
-    console.log("Hello from backend Tfjs");
-  };
+// Re-export all from src/index.ts
+export * from './src/index';
