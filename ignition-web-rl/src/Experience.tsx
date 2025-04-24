@@ -6,6 +6,9 @@ import * as THREE from 'three'
 import Logo3D from './logo-3d'
 import SimpleAgent from './simple-agent'
 
+import {DQNAgent} from '@ignitionai/backend-tfjs'
+import {IgnitionEnv} from "@ignitionai/core"
+
 // Composant pour créer un mur
 function Wall({ position, size, color = "#0c8cbf" }: { position: [number, number, number], size: [number, number, number], color?: string }) {
   return (
@@ -63,6 +66,33 @@ function Obstacle({ position, size = [2, 4, 2], color = "#a5f3fc", movementType 
 
 function Experience() {
   const spotLightRef = useRef<THREE.SpotLight>(null)
+
+  const dqnAgent = new DQNAgent({
+    inputSize: 3,
+    actionSize: 4,
+    lr: 0.001,
+    gamma: 0.99,
+    epsilon: 0.1,
+    epsilonDecay: 0.999,
+    minEpsilon: 0.01,
+    batchSize: 32,
+    memorySize: 10000
+  })
+
+  const env = new IgnitionEnv({
+    agent: dqnAgent,
+    getObservation: () => {
+      return [0, 0, 0]
+    },
+    applyAction: (action) => {
+      console.log(action)
+      return [0, 0, 0]
+    },
+    computeReward: () => 0,
+    isDone: () => false
+  })
+
+  console.log(env)
   
   useFrame((state) => {
     if (spotLightRef.current) {
