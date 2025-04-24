@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Grid, Box, Environment, SpotLight } from '@react-three/drei'
-import { RigidBody } from '@react-three/rapier'
+import { RapierRigidBody, RigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
 import Logo3D from './logo-3d'
 import SimpleAgent from './simple-agent'
@@ -18,13 +18,45 @@ function Wall({ position, size, color = "#0c8cbf" }: { position: [number, number
 }
 
 // Composant pour créer un obstacle
-function Obstacle({ position, size = [2, 4, 2], color = "#a5f3fc" }: 
-  { position: [number, number, number], size?: [number, number, number], color?: string }) {
+function Obstacle({ position, size = [2, 4, 2], color = "#a5f3fc", movementType = "none", movementSpeed = 1 }: 
+  { position: [number, number, number], size?: [number, number, number], color?: string, movementType?: "none" | "horizontal" | "vertical" | "circular", movementSpeed?: number }) {
+  
+  const obstacleRef = useRef<RapierRigidBody>(null)
+  const initialPosition = useRef<[number, number, number]>([...position])
+  
+  useFrame((state) => {
+    if (obstacleRef.current && movementType !== "none") {
+      const time = state.clock.getElapsedTime() * movementSpeed
+      let newPosition = [...initialPosition.current] as [number, number, number]
+      
+      switch (movementType) {
+        case "horizontal":
+          newPosition[0] = initialPosition.current[0] + Math.sin(time) * 12
+          break
+        case "vertical":
+          // Au lieu de monter/descendre, on fait un mouvement avant/arrière
+          newPosition[2] = initialPosition.current[2] + Math.sin(time) * 7
+          break
+        case "circular":
+          newPosition[0] = initialPosition.current[0] + Math.sin(time) * 3
+          newPosition[2] = initialPosition.current[2] + Math.cos(time) * 3
+          break
+      }
+      
+      // Maintenir la hauteur Y constante (au niveau du sol + moitié de la hauteur)
+      newPosition[1] = initialPosition.current[1]
+      
+      obstacleRef.current.setTranslation(new THREE.Vector3(newPosition[0], newPosition[1], newPosition[2]), true)
+    }
+  })
+  
   return (
-    <RigidBody type="fixed" position={position} colliders="cuboid">
-      <Box args={size} castShadow receiveShadow>
-        <meshStandardMaterial color={color} metalness={0.8} roughness={0.1} emissive={color} emissiveIntensity={0.2} />
-      </Box>
+    <RigidBody ref={obstacleRef} type="kinematicPosition" position={position} colliders="cuboid">
+      <group>
+        <Box args={size} castShadow receiveShadow>
+          <meshStandardMaterial color={color} metalness={0.8} roughness={0.1} emissive={color} emissiveIntensity={0.2} />
+        </Box>
+      </group>
     </RigidBody>
   )
 }
@@ -123,11 +155,11 @@ function Experience() {
       />
       
       {/* Obstacles dans l'arène */}
-      <Obstacle position={[8, 2, 8]} />
-      <Obstacle position={[-10, 2, 12]} />
-      <Obstacle position={[12, 2, -5]} />
-      <Obstacle position={[-5, 2, -15]} />
-      <Obstacle position={[0, 2, 0]} size={[3, 6, 3]} color="#3f4e8d" />
+      <Obstacle position={[8, 2, 8]} movementType="horizontal" movementSpeed={1.5} />
+      <Obstacle position={[-10, 2, 12]} movementType="vertical" movementSpeed={4.3} />
+      <Obstacle position={[12, 2, -5]} movementType="circular" movementSpeed={0.9} />
+      <Obstacle position={[-5, 2, -15]} movementType="horizontal" movementSpeed={1.9} />
+      <Obstacle position={[0, 2, 0]} size={[3, 6, 3]} color="#3f4e8d" movementType="horizontal" movementSpeed={1.4} />
       
       {/* Agent */}
       <SimpleAgent position={[-15, 1, -15]} />
