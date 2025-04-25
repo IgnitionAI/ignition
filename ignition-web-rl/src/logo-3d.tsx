@@ -2,6 +2,7 @@ import { Center, Text, shaderMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 import { useFrame, extend } from '@react-three/fiber'
 import { useRef } from 'react'
+import { DefaultTheme, ThemeProps } from './themes'
 
 // Définition d'un matériau shader personnalisé pour le gradient
 //vibe-coding for shader
@@ -43,7 +44,11 @@ declare global {
   }
 }
 
-function Logo3D() {
+interface Logo3DProps {
+  theme?: ThemeProps;
+}
+
+function Logo3D({ theme = DefaultTheme }: Logo3DProps) {
   const groupRef = useRef<THREE.Group>(null)
   const materialRef = useRef<any>(null)
   
@@ -65,6 +70,12 @@ function Logo3D() {
       groupRef.current.rotation.y = Math.sin(time * 0.8) * 0.15
       groupRef.current.rotation.x = Math.sin(time * 0.6) * 0.08
       groupRef.current.rotation.z = Math.sin(time * 0.5) * 0.05
+      
+      // Mise à jour des couleurs du gradient selon le thème
+      if (materialRef.current) {
+        materialRef.current.uniforms.colorA.value = new THREE.Color(theme.logo.startColor);
+        materialRef.current.uniforms.colorB.value = new THREE.Color(theme.logo.endColor);
+      }
     }
   })
   
@@ -76,7 +87,7 @@ function Logo3D() {
             font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
             characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
             letterSpacing={0.05}
-            color="#0c8cbf"
+            color={theme.logo.materialProps.color}
           >
             IgnitionAI
             {/* @ts-ignore */}

@@ -5,24 +5,37 @@ import { RapierRigidBody, RigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
 import Logo3D from './logo-3d'
 import SimpleAgent from './simple-agent'
+import { DefaultTheme, ThemeProps } from './themes'
 
 import {DQNAgent} from '@ignitionai/backend-tfjs'
 import {IgnitionEnv} from "@ignitionai/core"
 
+// Propriétés pour l'expérience
+interface ExperienceProps {
+  theme?: ThemeProps;
+}
+
 // Composant pour créer un mur
-function Wall({ position, size, color = "#0c8cbf" }: { position: [number, number, number], size: [number, number, number], color?: string }) {
+function Wall({ position, size, color = DefaultTheme.materials.wall.color, materialProps = DefaultTheme.materials.wall }: 
+  { position: [number, number, number], size: [number, number, number], color?: string, materialProps?: any }) {
   return (
     <RigidBody type="fixed" position={position} colliders="cuboid">
       <Box args={size} castShadow receiveShadow>
-        <meshStandardMaterial color={color} metalness={0.6} roughness={0.2} />
+        <meshStandardMaterial 
+          color={color} 
+          metalness={materialProps.metalness} 
+          roughness={materialProps.roughness}
+          emissive={materialProps.emissive}
+          emissiveIntensity={materialProps.emissiveIntensity} 
+        />
       </Box>
     </RigidBody>
   )
 }
 
 // Composant pour créer un obstacle
-function Obstacle({ position, size = [2, 4, 2], color = "#a5f3fc", movementType = "none", movementSpeed = 1 }: 
-  { position: [number, number, number], size?: [number, number, number], color?: string, movementType?: "none" | "horizontal" | "vertical" | "circular", movementSpeed?: number }) {
+function Obstacle({ position, size = [2, 4, 2], color = DefaultTheme.materials.obstacle.color, materialProps = DefaultTheme.materials.obstacle, movementType = "none", movementSpeed = 1 }: 
+  { position: [number, number, number], size?: [number, number, number], color?: string, materialProps?: any, movementType?: "none" | "horizontal" | "vertical" | "circular", movementSpeed?: number }) {
   
   const obstacleRef = useRef<RapierRigidBody>(null)
   const initialPosition = useRef<[number, number, number]>([...position])
@@ -57,14 +70,20 @@ function Obstacle({ position, size = [2, 4, 2], color = "#a5f3fc", movementType 
     <RigidBody ref={obstacleRef} type="kinematicPosition" position={position} colliders="cuboid">
       <group>
         <Box args={size} castShadow receiveShadow>
-          <meshStandardMaterial color={color} metalness={0.8} roughness={0.1} emissive={color} emissiveIntensity={0.2} />
+          <meshStandardMaterial 
+            color={color} 
+            metalness={materialProps.metalness} 
+            roughness={materialProps.roughness} 
+            emissive={materialProps.emissive} 
+            emissiveIntensity={materialProps.emissiveIntensity} 
+          />
         </Box>
       </group>
     </RigidBody>
   )
 }
 
-function Experience() {
+function Experience({ theme = DefaultTheme }: ExperienceProps) {
   const spotLightRef = useRef<THREE.SpotLight>(null)
 
   const dqnAgent = new DQNAgent({
@@ -109,12 +128,12 @@ function Experience() {
   return (
     <>
       {/* Éclairage ambiant */}
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={theme.lighting.ambient.intensity} />
       
       {/* Lumière principale */}
       <directionalLight 
-        position={[10, 10, 5]} 
-        intensity={1.5} 
+        position={theme.lighting.directional.position} 
+        intensity={theme.lighting.directional.intensity} 
         castShadow 
         shadow-mapSize={[2048, 2048]}
         shadow-camera-left={-arenaSize/2}
@@ -127,14 +146,14 @@ function Experience() {
       <SpotLight
         ref={spotLightRef}
         position={[0, 15, 0]}
-        intensity={1}
-        angle={0.6}
-        penumbra={0.5}
+        intensity={theme.lighting.spot.intensity}
+        angle={theme.lighting.spot.angle}
+        penumbra={theme.lighting.spot.penumbra}
         castShadow
-        distance={50}
+        distance={theme.lighting.spot.distance}
         attenuation={5}
         anglePower={5}
-        color="#0c8cbf"
+        color={theme.lighting.spot.color}
       />
       
       {/* Sol avec physique */}
@@ -145,9 +164,9 @@ function Experience() {
           receiveShadow
         >
           <meshStandardMaterial 
-            color="#171730" 
-            metalness={0.8}
-            roughness={0.2}
+            color={theme.materials.floor.color} 
+            metalness={theme.materials.floor.metalness}
+            roughness={theme.materials.floor.roughness}
           />
         </Box>
       </RigidBody>
@@ -156,40 +175,79 @@ function Experience() {
       <Grid 
         position={[0, 0.01, 0]} 
         args={[arenaSize, arenaSize]} 
-        cellSize={2}
-        cellThickness={0.6}
-        cellColor="#3f4e8d"
-        sectionSize={10}
-        sectionThickness={1.5}
-        sectionColor="#0c8cbf"
+        cellSize={theme.grid.cellSize}
+        cellThickness={theme.grid.cellThickness}
+        cellColor={theme.colors.gridCell}
+        sectionSize={theme.grid.sectionSize}
+        sectionThickness={theme.grid.sectionThickness}
+        sectionColor={theme.colors.gridSection}
         fadeDistance={arenaSize}
-        fadeStrength={1}
+        fadeStrength={theme.grid.fadeStrength}
       />
       
       {/* Murs de l'arène */}
       <Wall 
         position={[0, wallHeight/2, arenaSize/2 + wallThickness/2]} 
         size={[arenaSize + wallThickness*2, wallHeight, wallThickness]} 
+        color={theme.materials.wall.color}
+        materialProps={theme.materials.wall}
       />
       <Wall 
         position={[0, wallHeight/2, -arenaSize/2 - wallThickness/2]} 
         size={[arenaSize + wallThickness*2, wallHeight, wallThickness]} 
+        color={theme.materials.wall.color}
+        materialProps={theme.materials.wall}
       />
       <Wall 
         position={[arenaSize/2 + wallThickness/2, wallHeight/2, 0]} 
         size={[wallThickness, wallHeight, arenaSize]} 
+        color={theme.materials.wall.color}
+        materialProps={theme.materials.wall}
       />
       <Wall 
         position={[-arenaSize/2 - wallThickness/2, wallHeight/2, 0]} 
         size={[wallThickness, wallHeight, arenaSize]} 
+        color={theme.materials.wall.color}
+        materialProps={theme.materials.wall}
       />
       
       {/* Obstacles dans l'arène */}
-      <Obstacle position={[8, 2, 8]} movementType="horizontal" movementSpeed={1.5} />
-      <Obstacle position={[-10, 2, 12]} movementType="vertical" movementSpeed={4.3} />
-      <Obstacle position={[12, 2, -5]} movementType="circular" movementSpeed={0.9} />
-      <Obstacle position={[-5, 2, -15]} movementType="horizontal" movementSpeed={1.9} />
-      <Obstacle position={[0, 2, 0]} size={[3, 6, 3]} color="#3f4e8d" movementType="horizontal" movementSpeed={1.4} />
+      <Obstacle 
+        position={[8, 2, 8]} 
+        movementType="horizontal" 
+        movementSpeed={1.5} 
+        color={theme.materials.obstacle.color}
+        materialProps={theme.materials.obstacle}
+      />
+      <Obstacle 
+        position={[-10, 2, 12]} 
+        movementType="vertical" 
+        movementSpeed={4.3} 
+        color={theme.materials.obstacle.color}
+        materialProps={theme.materials.obstacle}
+      />
+      <Obstacle 
+        position={[12, 2, -5]} 
+        movementType="circular" 
+        movementSpeed={0.9} 
+        color={theme.materials.obstacle.color}
+        materialProps={theme.materials.obstacle}
+      />
+      <Obstacle 
+        position={[-5, 2, -15]} 
+        movementType="horizontal" 
+        movementSpeed={1.9} 
+        color={theme.materials.obstacle.color}
+        materialProps={theme.materials.obstacle}
+      />
+      <Obstacle 
+        position={[0, 2, 0]} 
+        size={[3, 6, 3]} 
+        color={theme.colors.accent}
+        materialProps={theme.materials.obstacle}
+        movementType="horizontal" 
+        movementSpeed={1.4} 
+      />
       
       {/* Agent */}
       <SimpleAgent position={[-15, 1, -15]} />

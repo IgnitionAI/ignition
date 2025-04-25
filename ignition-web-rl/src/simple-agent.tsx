@@ -1,10 +1,15 @@
 import { useRef } from 'react'
 import { RigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
+import { DefaultTheme, ThemeProps } from './themes'
 
-function SimpleAgent(props: { position?: [number, number, number] }) {
+interface SimpleAgentProps {
+  position?: [number, number, number];
+  theme?: ThemeProps;
+}
+
+function SimpleAgent({ position = [0, 1, 0], theme = DefaultTheme }: SimpleAgentProps) {
   const bodyRef = useRef<THREE.Group>(null)
-  const { position = [0, 1, 0] } = props
   
   // Animation simple pour donner vie à l'agent
 //   useFrame((state) => {
@@ -24,11 +29,11 @@ function SimpleAgent(props: { position?: [number, number, number] }) {
         <mesh castShadow>
           <boxGeometry args={[1, 1, 1]} />
           <meshStandardMaterial 
-            color="#0c8cbf" 
-            metalness={0.7} 
-            roughness={0.2} 
-            emissive="#0c8cbf"
-            emissiveIntensity={0.3}
+            color={theme.materials.agent.color} 
+            metalness={theme.materials.agent.metalness} 
+            roughness={theme.materials.agent.roughness} 
+            emissive={theme.materials.agent.emissive}
+            emissiveIntensity={theme.materials.agent.emissiveIntensity}
           />
         </mesh>
         
@@ -79,10 +84,10 @@ function SimpleAgent(props: { position?: [number, number, number] }) {
         <mesh position={[0, -0.2, 0.51]} castShadow>
           <boxGeometry args={[0.5, 0.1, 0.05]} />
           <meshStandardMaterial 
-            color="#a5f3fc" 
+            color={theme.colors.secondary} 
             metalness={0.8} 
             roughness={0.1}
-            emissive="#a5f3fc"
+            emissive={theme.colors.secondary}
             emissiveIntensity={0.5}
           />
         </mesh>
