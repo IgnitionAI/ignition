@@ -1,15 +1,20 @@
-import { useRef } from 'react'
-import { RigidBody } from '@react-three/rapier'
+import { useRef, forwardRef, useImperativeHandle } from 'react'
+import { RigidBody, RapierRigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
 import { DefaultTheme, ThemeProps } from './themes'
 
 interface SimpleAgentProps {
   position?: [number, number, number];
   theme?: ThemeProps;
+  onObstacleCollision?: () => void;
 }
 
-function SimpleAgent({ position = [0, 1, 0], theme = DefaultTheme }: SimpleAgentProps) {
+const SimpleAgent = forwardRef(({ position = [0, 1, 0], theme = DefaultTheme, onObstacleCollision }: SimpleAgentProps, ref) => {
   const bodyRef = useRef<THREE.Group>(null)
+  const rigidBodyRef = useRef<RapierRigidBody>(null)
+  
+  // Exposer la référence
+  useImperativeHandle(ref, () => rigidBodyRef.current)
   
   // Animation simple pour donner vie à l'agent
 //   useFrame((state) => {
@@ -23,7 +28,21 @@ function SimpleAgent({ position = [0, 1, 0], theme = DefaultTheme }: SimpleAgent
 //   })
   
   return (
-    <RigidBody position={position} colliders="cuboid" type="dynamic">
+    <RigidBody 
+      ref={rigidBodyRef}
+      position={position} 
+      colliders="cuboid" 
+      type="dynamic"
+      name="agent"
+      onCollisionEnter={(e) => {
+        // Vérifier si la collision est avec un obstacle ou un mur
+        if (e.other.rigidBodyObject?.name === 'obstacle' || 
+            e.other.rigidBodyObject?.name === 'wall') {
+          // Signaler la collision
+          onObstacleCollision && onObstacleCollision();
+        }
+      }}
+    >
       <group ref={bodyRef}>
         {/* Corps simple cubique comme dans Unity ML-Agents */}
         <mesh castShadow>
@@ -94,6 +113,6 @@ function SimpleAgent({ position = [0, 1, 0], theme = DefaultTheme }: SimpleAgent
       </group>
     </RigidBody>
   )
-}
+})
 
 export default SimpleAgent
