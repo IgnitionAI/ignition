@@ -25,6 +25,7 @@ export interface ThemeProps {
     obstacle: MaterialProps;
     agent: MaterialProps;
     floor: MaterialProps;
+    target: MaterialProps;
   };
   logo: {
     startColor: string;
@@ -92,6 +93,13 @@ export const FuturisticTheme: ThemeProps = {
       color: "#171730",
       metalness: 0.8,
       roughness: 0.2
+    },
+    target: {
+      color: "#ff9d00",
+      metalness: 0.9,
+      roughness: 0.1,
+      emissive: "#ff9d00",
+      emissiveIntensity: 0.8
     }
   },
   logo: {
@@ -166,6 +174,13 @@ export const AncientTheme: ThemeProps = {
       color: "#4e342e",
       metalness: 0.2,
       roughness: 0.8
+    },
+    target: {
+      color: "#ffd54f",
+      metalness: 0.4,
+      roughness: 0.5,
+      emissive: "#ffd54f",
+      emissiveIntensity: 0.6
     }
   },
   logo: {
@@ -240,6 +255,13 @@ export const NatureTheme: ThemeProps = {
       color: "#2e7d32",
       metalness: 0.1,
       roughness: 0.9
+    },
+    target: {
+      color: "#8bc34a",
+      metalness: 0.3,
+      roughness: 0.6,
+      emissive: "#8bc34a",
+      emissiveIntensity: 0.5
     }
   },
   logo: {

@@ -1,3 +1,4 @@
+
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Grid, Box, Environment, SpotLight } from '@react-three/drei'
@@ -6,10 +7,12 @@ import * as THREE from 'three'
 import Logo3D from './logo-3d'
 import SimpleAgent from './simple-agent'
 import { DefaultTheme, ThemeProps } from './themes'
-
-import {DQNAgent} from '@ignitionai/backend-tfjs'
-import {IgnitionEnv} from "@ignitionai/core"
-
+import { useTargetStore } from './store/targetStore'
+import Target from './target'
+/*-------------------IgnitionAI---------------------*/
+import { DQNAgent } from '@ignitionai/backend-tfjs'
+import { IgnitionEnv } from "@ignitionai/core"
+/*--------------------------------------------------*/
 // Propriétés pour l'expérience
 interface ExperienceProps {
   theme?: ThemeProps;
@@ -85,9 +88,10 @@ function Obstacle({ position, size = [2, 4, 2], color = DefaultTheme.materials.o
 
 function Experience({ theme = DefaultTheme }: ExperienceProps) {
   const spotLightRef = useRef<THREE.SpotLight>(null)
+  const { collected } = useTargetStore()
 
   const dqnAgent = new DQNAgent({
-    inputSize: 3,
+    inputSize: 5, // Augmenter pour inclure la distance à la cible
     actionSize: 4,
     lr: 0.001,
     gamma: 0.99,
@@ -101,14 +105,25 @@ function Experience({ theme = DefaultTheme }: ExperienceProps) {
   const env = new IgnitionEnv({
     agent: dqnAgent,
     getObservation: () => {
-      return [0, 0, 0]
+      // À implémenter: obtenir la position de l'agent et calculer la distance à la cible
+      // et aux obstacles les plus proches
+      return [0, 0, 0, 0, 0]
     },
-    applyAction: (action) => {
+    applyAction: (action: number | number[]) => {
       console.log(action)
-      return [0, 0, 0]
+      // À implémenter: déplacer l'agent en fonction de l'action choisie
+      return [0, 0, 0, 0, 0]
     },
-    computeReward: () => 0,
-    isDone: () => false
+    computeReward: () => {
+      // À implémenter: récompense positive si l'agent s'approche de la cible
+      // récompense négative s'il s'approche des obstacles
+      // récompense très positive s'il atteint la cible
+      return 0
+    },
+    isDone: () => {
+      // L'épisode se termine si l'agent touche un obstacle ou atteint la cible
+      return false
+    }
   })
 
   console.log(env)
@@ -251,6 +266,9 @@ function Experience({ theme = DefaultTheme }: ExperienceProps) {
       
       {/* Agent */}
       <SimpleAgent position={[-15, 1, -15]} />
+      
+      {/* Target (cible) */}
+      {!collected && <Target theme={theme} />}
       
       {/* Logo IgnitionAI */}
       <Logo3D />
