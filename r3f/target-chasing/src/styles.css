@@ -1,0 +1,38 @@
+.training-controls {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 300px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 15px;
+  border-radius: 5px;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  z-index: 1000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.training-controls h3 {
+  margin-top: 0;
+  color: #0c8cbf; /* Bleu IgnitionAI */
+  border-bottom: 1px solid #3f4e8d;
+  padding-bottom: 8px;
+}
+
+.training-controls button {
+  background-color: #0c8cbf;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.training-controls button:hover {
+  background-color: #3f4e8d;
+}
+
+.training-controls div {
+  margin-bottom: 5px;
+}

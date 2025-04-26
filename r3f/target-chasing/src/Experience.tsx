@@ -1,11 +1,11 @@
-import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { RigidBody, RapierRigidBody } from "@react-three/rapier";
-import { useRef, useState } from "react";
+import { useRef, forwardRef, useImperativeHandle } from "react";
 import { Vector3 } from "three";
 import { DQNAgent } from "@ignitionai/backend-tfjs";
 import { IgnitionEnv } from "@ignitionai/core";
 import React from "react";
+import { useTrainingStore } from "./store/trainingStore";
 
 const MOVEMENT_SPEED = 100;
 
@@ -19,6 +19,17 @@ const PLATEAU_LIMITS = {
   maxZ: 500   // Moitié de la profondeur du ground (1000/2)
 };
 
+// Fonction pour générer une position aléatoire pour la cible
+function getRandomTargetPosition(): [number, number, number] {
+  // Limiter la zone où la cible peut apparaître pour éviter qu'elle soit trop près des bords
+  const margin = 100; // Marge par rapport aux bords
+  const x = Math.random() * (PLATEAU_LIMITS.maxX - PLATEAU_LIMITS.minX - 2 * margin) + PLATEAU_LIMITS.minX + margin;
+  const y = 10; // Hauteur fixe pour la cible
+  const z = Math.random() * (PLATEAU_LIMITS.maxZ - PLATEAU_LIMITS.minZ - 2 * margin) + PLATEAU_LIMITS.minZ + margin;
+  
+  return [x, y, z];
+}
+
 function Ground() {
   return (
     <RigidBody type="fixed">
@@ -30,17 +41,19 @@ function Ground() {
   );
 }
 
-function Cible({cibleRef}: {cibleRef: React.RefObject<RapierRigidBody | null>}) {
+function Cible({cibleRef, position}: {cibleRef: React.RefObject<RapierRigidBody | null>, position: [number, number, number]}) {
+  // Utiliser la position fournie en prop
   return (
     <RigidBody  
       ref={cibleRef}
       type="kinematicPosition" 
-      position={[0, 10, 0]} 
+      position={position} 
       shape="cuboid"
       linearDamping={0.5}
       mass={1}
       friction={0}
       lockRotations
+      sensor // Ajouter cette propriété pour que la cible soit un capteur et non un objet solide
     >
       <mesh castShadow>
         <boxGeometry args={[20, 20, 20]} />
@@ -50,23 +63,25 @@ function Cible({cibleRef}: {cibleRef: React.RefObject<RapierRigidBody | null>}) 
   );
 }
 
-function Agent({targetPosition}: {targetPosition: [number, number, number]}) { 
+const Agent = forwardRef(function Agent({targetPosition}: {targetPosition: [number, number, number]}, ref) { 
   // Références et états
   const bodyRef = useRef<RapierRigidBody>(null);
   const initialPosition: [number, number, number] = [100, 10, 100]; // Position de départ éloignée
   
-  // États d'entraînement
-  const [isTraining, setIsTraining] = useState(false);
-  const [episodeCount, setEpisodeCount] = useState(0);
-  const [reward, setReward] = useState(0);
-  const [bestReward, setBestReward] = useState(-Infinity);
-  const [episodeSteps, setEpisodeSteps] = useState(0);
-  const [reachedTarget, setReachedTarget] = useState(false);
-  const [episodeTime, setEpisodeTime] = useState(0);
-  const [episodeStartTime, setEpisodeStartTime] = useState(Date.now());
-  const [successCount, setSuccessCount] = useState(0);
-  const [difficulty, setDifficulty] = useState(0);
-  const [lastAction, setLastAction] = useState(-1);
+  // Utiliser le store Zustand au lieu des useState - ne garder que ce qui est nécessaire
+  const { 
+    isTraining, setIsTraining,
+    episodeCount, setEpisodeCount,
+    setReward,
+    bestReward, setBestReward,
+    episodeSteps, setEpisodeSteps,
+    setReachedTarget,
+    episodeTime, setEpisodeTime,
+    episodeStartTime, setEpisodeStartTime,
+    setSuccessCount,
+    difficulty, setDifficulty,
+    setLastAction,
+  } = useTrainingStore();
   
   // Référence à l'environnement (initialisé une seule fois)
   const envRef = useRef<IgnitionEnv | null>(null);
@@ -317,6 +332,10 @@ function Agent({targetPosition}: {targetPosition: [number, number, number]}) {
         setEpisodeStartTime(Date.now());
         lastDistance.current = Infinity;
         
+        // Générer une nouvelle position pour la cible à chaque épisode
+        const { setTargetPosition } = useTrainingStore.getState();
+        setTargetPosition(getRandomTargetPosition());
+        
         console.log(`Épisode ${episodeCount} terminé.`);
       },
       stepIntervalMs: 1000 / 60, // 60fps
@@ -344,8 +363,26 @@ function Agent({targetPosition}: {targetPosition: [number, number, number]}) {
   // Boucle principale, mettre à jour le temps de l'épisode
   useFrame(() => {
     if (isTraining && envRef.current) {
-      // Mode entraînement: IA contrôle l'agent
-      envRef.current.step();
+      const { isTrainingInProgress, setIsTrainingInProgress } = useTrainingStore.getState();
+      
+      // Vérifier si un entraînement est déjà en cours
+      if (!isTrainingInProgress) {
+        // Marquer l'entraînement comme en cours
+        setIsTrainingInProgress(true);
+        
+        // Exécuter step() de manière asynchrone
+        Promise.resolve().then(async () => {
+          try {
+            // Appeler step() de manière sécurisée
+            await envRef.current?.step();
+          } catch (error) {
+            console.error("Erreur pendant l'entraînement:", error);
+          } finally {
+            // Marquer l'entraînement comme terminé
+            setIsTrainingInProgress(false);
+          }
+        });
+      }
       
       // Mettre à jour le temps écoulé de l'épisode
       const currentTime = Date.now();
@@ -377,9 +414,50 @@ function Agent({targetPosition}: {targetPosition: [number, number, number]}) {
   
   const resetEnvironment = () => {
     if (envRef.current) {
+      // Générer une nouvelle position pour la cible
+      const { setTargetPosition } = useTrainingStore.getState();
+      setTargetPosition(getRandomTargetPosition());
+      
       envRef.current.reset();
     }
   };
+  
+  // Exposer les méthodes via useImperativeHandle
+  useImperativeHandle(ref, () => ({
+    startTraining,
+    stopTraining,
+    resetEnvironment,
+    // Ajouter une méthode pour obtenir la position actuelle de l'agent
+    getAgentPosition: () => {
+      if (bodyRef.current) {
+        return bodyRef.current.translation();
+      }
+      return { x: 0, y: 0, z: 0 };
+    },
+    // Ajouter une méthode pour gérer quand l'agent atteint la cible
+    handleTargetReached: () => {
+      // Incrémenter le compteur de succès
+      setSuccessCount(prev => {
+        console.log(`✅ Succès incrémenté: ${prev} -> ${prev + 1}`);
+        // Augmenter la difficulté après plusieurs succès
+        if ((prev + 1) % 3 === 0) {
+          setDifficulty(prevDiff => Math.min(prevDiff + 1, 2));
+          console.log(`🔼 Difficulté augmentée à ${Math.min((prev + 1) % 3 + 1, 3)}`);
+        }
+        return prev + 1;
+      });
+      
+      // Réinitialiser l'environnement
+      if (envRef.current) {
+        // Générer une nouvelle position pour la cible
+        const { setTargetPosition } = useTrainingStore.getState();
+        setTargetPosition(getRandomTargetPosition());
+        
+        // Réinitialiser l'agent
+        envRef.current.reset();
+      }
+    }
+  }));
   
   return (
     <>
@@ -398,39 +476,122 @@ function Agent({targetPosition}: {targetPosition: [number, number, number]}) {
           <meshStandardMaterial color="blue" />
         </mesh>
       </RigidBody>
-      
-      {/* Interface utilisateur pour contrôler l'entraînement */}
-      <Html position={[100, 100, 0]} style={{ width: '300px', height: 'auto', background: 'rgba(0,0,0,0.7)', padding: '10px', borderRadius: '5px', color: 'white' }}>
-        <div>
-          <h3>Contrôle d'entraînement</h3>
-          <div>Épisodes: {episodeCount}</div>
-          <div>Succès: {successCount} / {episodeCount}</div>
-          <div>Difficulté: {difficulty + 1}/3</div>
-          <div>Temps: {episodeTime.toFixed(1)}s</div>
-          <div>Dernière action: {lastAction !== -1 ? ['Gauche', 'Droite', 'Avant', 'Arrière'][lastAction] : 'Aucune'}</div>
-          <div>Récompense: {reward.toFixed(2)}</div>
-          <div style={{ marginTop: '10px' }}>
-            {!isTraining ? (
-              <button onClick={startTraining}>Démarrer l'entraînement</button>
-            ) : (
-              <button onClick={stopTraining}>Arrêter l'entraînement</button>
-            )}
-            <button onClick={resetEnvironment} style={{ marginLeft: '10px' }}>Réinitialiser</button>
-          </div>
-        </div>
-      </Html>
     </>
   );
-}
+});
 
-function Experience() {
+const Experience = forwardRef(function Experience(_, ref) {
   const cibleRef = useRef<RapierRigidBody | null>(null);
-  const [targetPosition, setTargetPosition] = useState<[number, number, number]>([0, 10, 0]);
+  const { targetPosition, setTargetPosition } = useTrainingStore();
+  const agentRef = useRef<any>(null);
+  
+  // Référence pour la détection de collision stable
+  const collisionDetectionRef = useRef({
+    consecutiveCollisions: 0,
+    lastCollisionTime: 0,
+    collisionInProgress: false
+  });
+  
+  // Exposer les méthodes de contrôle via useImperativeHandle
+  useImperativeHandle(ref, () => ({
+    startTraining: () => {
+      if (agentRef.current) {
+        agentRef.current.startTraining();
+      }
+    },
+    stopTraining: () => {
+      if (agentRef.current) {
+        agentRef.current.stopTraining();
+      }
+    },
+    resetEnvironment: () => {
+      if (agentRef.current) {
+        agentRef.current.resetEnvironment();
+      }
+    }
+  }));
+  
+  // Initialiser la position de la cible au premier rendu
+  React.useEffect(() => {
+    setTargetPosition(getRandomTargetPosition());
+  }, [setTargetPosition]);
+  
+  // Ajouter un gestionnaire de collision pour détecter quand l'agent touche la cible
+  React.useEffect(() => {
+    // Fonction pour vérifier les collisions manuellement
+    const checkCollisions = () => {
+      if (!agentRef.current || !cibleRef.current) return;
+      
+      // Obtenir les positions
+      const agentPos = agentRef.current.getAgentPosition();
+      const ciblePos = cibleRef.current.translation();
+      
+      // Calculer la distance
+      const distance = Math.sqrt(
+        Math.pow(agentPos.x - ciblePos.x, 2) +
+        Math.pow(agentPos.y - ciblePos.y, 2) +
+        Math.pow(agentPos.z - ciblePos.z, 2)
+      );
+      
+      // Ajuster le seuil de collision en fonction de la taille réelle des objets
+      // La taille de l'agent et de la cible est de 20 unités chacun, donc une distance de 20 unités
+      // signifie que les bords se touchent. Utilisons une valeur légèrement plus petite pour être sûr.
+      const collisionThreshold = 22; // Somme des rayons (10+10) + une petite marge d'erreur (2)
+      
+      // Si la distance est inférieure au seuil, il y a potentiellement une collision
+      if (distance < collisionThreshold) {
+        // Incrémenter le compteur de collisions consécutives
+        collisionDetectionRef.current.consecutiveCollisions++;
+        collisionDetectionRef.current.lastCollisionTime = Date.now();
+        
+        // Si nous avons détecté plusieurs collisions consécutives et qu'aucune collision n'est en cours
+        if (collisionDetectionRef.current.consecutiveCollisions >= 2 && !collisionDetectionRef.current.collisionInProgress) {
+          console.log(`🎯 Collision confirmée! Distance: ${distance.toFixed(2)}`);
+          // Marquer qu'une collision est en cours pour éviter les déclenchements multiples
+          collisionDetectionRef.current.collisionInProgress = true;
+          
+          // Déclencher manuellement la récompense et la réinitialisation
+          if (agentRef.current) {
+            agentRef.current.handleTargetReached();
+          }
+          
+          // Réinitialiser le compteur après un certain délai
+          setTimeout(() => {
+            collisionDetectionRef.current.consecutiveCollisions = 0;
+            collisionDetectionRef.current.collisionInProgress = false;
+          }, 1000);
+        }
+      } else {
+        // Si la distance est supérieure au seuil, réinitialiser le compteur
+        // mais seulement si un certain temps s'est écoulé depuis la dernière collision
+        const timeSinceLastCollision = Date.now() - collisionDetectionRef.current.lastCollisionTime;
+        if (timeSinceLastCollision > 300) {
+          collisionDetectionRef.current.consecutiveCollisions = 0;
+        }
+      }
+    };
+    
+    // Réduire la fréquence des vérifications pour éviter les faux positifs
+    const interval = setInterval(checkCollisions, 200);
+    
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
   
   useFrame(() => {
     if (cibleRef.current) {
+      // Mettre à jour la position du RigidBody de la cible
+      cibleRef.current.setTranslation(
+        new Vector3(targetPosition[0], targetPosition[1], targetPosition[2]),
+        true
+      );
+      
+      // Mettre à jour la position dans le store (pour l'agent)
       const pos = cibleRef.current.translation();
-      setTargetPosition([pos.x, pos.y, pos.z]);
+      if (pos.x !== targetPosition[0] || pos.y !== targetPosition[1] || pos.z !== targetPosition[2]) {
+        setTargetPosition([pos.x, pos.y, pos.z]);
+      }
     }
   });
 
@@ -443,11 +604,11 @@ function Experience() {
         castShadow
         shadow-mapSize={[1024, 1024]}
       />
-      <Agent targetPosition={targetPosition} />
-      <Cible cibleRef={cibleRef} />
+      <Agent ref={agentRef} targetPosition={targetPosition} />
+      <Cible cibleRef={cibleRef} position={targetPosition} />
       <Ground />
     </>
   );
-}
+});
 
 export default Experience;
