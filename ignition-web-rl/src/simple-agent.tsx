@@ -42,6 +42,9 @@ const SimpleAgent = forwardRef(({ position = [0, 1, 0], theme = DefaultTheme, on
           onObstacleCollision && onObstacleCollision();
         }
       }}
+      linearDamping={0.5}
+      angularDamping={0.5}
+      mass={1}
     >
       <group ref={bodyRef}>
         {/* Corps simple cubique comme dans Unity ML-Agents */}
