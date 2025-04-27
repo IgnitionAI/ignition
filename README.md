@@ -1,145 +1,167 @@
-# 🧭 IgnitionAI - Project Roadmap
 
-This document outlines the phased development of **IgnitionAI** — a modular, browser-friendly framework for intelligent agent simulation and reinforcement learning.
+# 🚀 IgnitionAI - Reinforcement Learning Made Simple
 
----
-
-## ✅ Phase 1 — Core Logic (MVP)
-
-> ⚙️ Goal: Run agent-environment logic headlessly (no UI)
-
-✅ Roadmap for "RL algo first"
-Phase A — @ignitionai/backend-tfjs only
-Implementing classic algorithms with TensorFlow.js
-
-1. 🔁 Q-learning (tabular) – minimalist JS version
-without neural networks
-✅ Implemented Q-Table agent with state/action lookup
-✅ Added tests for basic functionality
-
-2. 🧠 DQN – Deep Q-Network
-✅ Implemented MLP simple input → hidden → output
-✅ Added replay buffer with experience sampling
-✅ Implemented target network with periodic updates
-✅ Added epsilon-greedy exploration/exploitation
-✅ Loss function based on TD error
-✅ Unit tests with training validation
-
-3. 🧘‍♂️ PPO – Policy Gradient
-✅ Created initial PPO agent skeleton
-- [ ] Implement Actor-Critic model
-- [ ] Implement episode-based training
-- [ ] Add policy and value loss functions
+[![NPM Version](https://img.shields.io/npm/v/@ignitionai/backend-tfjs?style=flat-square)](https://www.npmjs.com/package/@ignitionai/backend-tfjs)
+[![License](https://img.shields.io/npm/l/@ignitionai/backend-tfjs?style=flat-square)](https://www.npmjs.com/package/@ignitionai/backend-tfjs)
+[![Made with ❤️ by IgnitionAI](https://img.shields.io/badge/made%20with-%E2%9D%A4%EF%B8%8F%20IgnitionAI-blueviolet?style=flat-square)](https://github.com/ignitionai)
 
 ---
 
-## ✅ Phase 1.5 — Backend Infrastructure
+# 📑 Table of Contents
 
-> 🧰 Goal: Create robust, multi-environment backend support
-
-✅ Created modular monorepo structure
-✅ Implemented robust backend selection system
-✅ Added support for all major TensorFlow.js backends:
-  - WebGPU (experimental)
-  - WebGL
-  - CPU
-  - WASM
-✅ Added helper utilities for backend detection and info
-✅ Added comprehensive model management system:
-  - IndexedDB local storage
-  - Hugging Face Hub integration with authentication
-  - Automatic model serialization/deserialization
-  - Checkpoint system with:
-    - Regular checkpoints (step-based)
-    - Best model checkpoints
-    - Automatic retry with exponential backoff
-  - Model versioning and metadata
-✅ Added robust error handling and logging
-✅ Comprehensive unit tests and integration tests
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+  - [1. Import Modules](#1-import-modules)
+  - [2. Create a DQN Agent](#2-create-a-dqn-agent)
+  - [3. Create an Environment](#3-create-an-environment)
+  - [4. Step Through Training](#4-step-through-training)
+- [Tips](#tips)
+- [Example: Reward Shaping](#example-reward-shaping)
 
 ---
 
-## 🚀 Phase 2 — R3F Visualisation
+# Installation
 
-> 🎮 Goal: Make the agent & target visible in a 3D scene
+```bash
+npm install @ignitionai/backend-tfjs @ignitionai/core
+```
 
-✅ `@ignitionai/r3f`: add `AgentMesh`, `TargetMesh`, `useAgent`
-✅ `@ignitionai/demo-target-chasing`: setup Vite + R3F scene
-✅ Add training monitoring and auto-stop functionality
-✅ Display step count and reward in the UI
-✅ Implement real-time model updates
-- [ ] Add training controls and visualization
-- [ ] Optimize performance for longer training sessions
-- [ ] Add ability to save/load models from the UI
+or
 
----
-
-## ✅ Phase 3 — TFJS Backend (Training & Inference)
-
-> 🧠 Goal: Train and run a model directly in the browser
-
-✅ `@ignitionai/backend-tfjs`: built simple MLP model with configurable layers
-✅ Implemented `train()` and `predict()` APIs via DQN agent
-✅ Added model serialization with `save()` and `load()`
-✅ Added support for Hugging Face Hub integration
-✅ Created streamlined `Agent` class interface
-✅ Added comprehensive training utilities:
-  - Progress tracking
-  - Performance metrics
-  - Model checkpointing
-  - Training visualization
-✅ Implemented browser-based training with Three.js visualization
-✅ Added automatic checkpoint saving for best models
+```bash
+yarn add @ignitionai/backend-tfjs @ignitionai/core
+```
 
 ---
 
-## 🚀 Phase 4 — ONNX Runtime Backend (Inference-only)
+# Getting Started
 
-> ⚡ Goal: Run optimized pre-trained models in production
+## 1. Import Modules
 
-✅ Created initial package structure for ONNX backend
-- [ ] Implement ONNX Runtime Web integration
-- [ ] Add `.onnx` model loading and inference
-- [ ] Create `InferenceBackend` wrapper
-- [ ] Add model conversion utilities (TFJS → ONNX)
-
----
-
-## 🚀 Phase 5 — Advanced Environments
-
-> 🌍 Goal: Create more complex environments for agent training
-
-- [ ] Implement grid-based environments (maze, pathfinding)
-- [ ] Add physics-based environments (pendulum, cartpole)
-- [ ] Create multi-agent environments
-- [ ] Add environment customization tools
-- [ ] Implement environment visualization tools
+```tsx
+import { DQNAgent } from '@ignitionai/backend-tfjs'
+import { IgnitionEnv } from '@ignitionai/core'
+```
 
 ---
 
-## 🚀 Phase 6 — Advanced Algorithms
+## 2. Create a DQN Agent
 
-> 🧠 Goal: Implement more sophisticated RL algorithms
-
-- [ ] Implement DDPG (Deep Deterministic Policy Gradient)
-- [ ] Add SAC (Soft Actor-Critic)
-- [ ] Implement A2C (Advantage Actor-Critic)
-- [ ] Add support for custom algorithm implementations
-- [ ] Create algorithm comparison tools
-
----
-
-## 🚀 Phase 7 — Deployment & Production
-
-> 🚢 Goal: Make the framework production-ready
-
-- [ ] Add comprehensive documentation
-- [ ] Create example applications
-- [ ] Implement CI/CD pipeline
-- [ ] Add performance optimization tools
-- [ ] Create deployment guides
-- [ ] Add monitoring and analytics
+```tsx
+const dqnAgent = new DQNAgent({
+  inputSize: 10,        // Size of the observation space
+  actionSize: 4,        // Number of possible actions
+  lr: 0.005,            // Learning rate
+  gamma: 0.9,           // Discount factor
+  epsilon: 0.5,         // Initial exploration rate
+  epsilonDecay: 0.99,   // Epsilon decay per step
+  minEpsilon: 0.1,      // Minimum exploration
+  batchSize: 64,        // Batch size for training
+  memorySize: 10000     // Experience replay memory size
+})
+```
 
 ---
 
-Built with ❤️ by Salim (@IgnitionAI)
+## 3. Create an Environment
+
+```tsx
+const trainingEnv = new IgnitionEnv({
+  agent: dqnAgent,
+
+  getObservation: () => {
+    // Return an array of normalized values.
+    return []
+  },
+
+  applyAction: (action: number | number[]) => {
+    console.log("Applying action:", action)
+    // Apply the action to update your environment.
+  },
+
+  computeReward: () => {
+    // Return a numerical reward based on the new state.
+    return 0
+  },
+
+  isDone: () => {
+    // Return true if episode should end (e.g., agent reaches goal).
+    return false
+  },
+
+  onReset: () => {
+    // Reset environment for the next episode.
+  }
+})
+```
+
+---
+
+## 4. Step Through Training
+
+```tsx
+useFrame(() => {
+  if (isTraining) {
+    trainingEnv.step()
+  }
+})
+```
+
+Each call to `step()` will:
+- Get the current observation.
+- Let the agent choose an action.
+- Apply the action to the environment.
+- Calculate a reward.
+- Store the experience (state, action, reward, next state).
+- Train the model periodically.
+- Reset if the episode ends.
+
+---
+
+# Tips
+
+- **Normalize** your observations (example: coordinates between 0 and 1).
+- **Reward shaping** is crucial: give small intermediate rewards, not just final rewards.
+- **Visual feedback** (like graphs or dashboards) can greatly help debugging.
+- **Tune epsilon decay** to control exploration vs exploitation.
+
+---
+
+# Example: Reward Shaping
+
+Bad reward shaping:
+
+```tsx
+// Only rewards success
+computeReward: () => {
+  return agentReachedTarget ? 100 : 0
+}
+```
+
+Good reward shaping:
+
+```tsx
+// Encourage progress toward the goal
+computeReward: () => {
+  const distBefore = distance(prevAgentPos, targetPos)
+  const distNow = distance(currentAgentPos, targetPos)
+  
+  let reward = (distBefore - distNow) * 10; // Reward getting closer
+  
+  if (agentReachedTarget) {
+    reward += 100; // Bonus for reaching the goal
+  }
+  
+  return reward;
+}
+```
+
+✅ Encourages better learning, faster convergence!
+
+---
+
+# ✨ Let's Build Smarter Agents!
+> IgnitionAI is designed to make Deep Reinforcement Learning **easy**, **modular**, and **production-ready**.
+
+---
+
