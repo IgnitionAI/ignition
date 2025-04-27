@@ -1,54 +1,85 @@
-# React + TypeScript + Vite
+# IgnitionAI Web Reinforcement Learning Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project demonstrates the capabilities of IgnitionAI's reinforcement learning framework in a web environment. It features a 3D obstacle course where an agent learns to navigate and avoid moving obstacles to reach a target.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **3D Environment**: Built with React Three Fiber and Rapier physics
+- **Reinforcement Learning**: Powered by IgnitionAI's DQN implementation
+- **Interactive Training**: Real-time visualization of the agent's learning process
+- **Dynamic Obstacles**: Various movement patterns (horizontal, vertical, circular)
+- **Training Dashboard**: Monitor rewards, episodes, and learning progress
 
-## Expanding the ESLint configuration
+## Technologies
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend**: React, TypeScript, Vite
+- **3D Rendering**: Three.js, React Three Fiber
+- **Physics**: Rapier (WebAssembly-based physics engine)
+- **Machine Learning**: TensorFlow.js, IgnitionAI
+- **State Management**: Zustand
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Getting Started
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Prerequisites
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Node.js (v16+)
+- npm or yarn
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/ignition-monorepo-starter.git
+   cd ignition-monorepo-starter/ignition-web-rl
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+## Usage
+
+1. **Start Training**: Click the "Start Training" button to begin the reinforcement learning process
+2. **Reset Environment**: Use the reset button to start a new episode
+3. **Adjust Parameters**: Modify learning parameters in the `Experience.tsx` file
+4. **Observe Progress**: Watch the training dashboard for real-time metrics
+
+## Architecture
+
+The project is structured as follows:
+
+- `src/Experience.tsx`: Main environment setup and RL integration
+- `src/simple-agent.tsx`: Agent visualization and physics
+- `src/store/trainingStore.ts`: Training state management
+- `src/training-dashboard.tsx`: UI for monitoring training progress
+
+## Known Issues
+
+- Rapier physics engine may occasionally throw Rust errors due to concurrent access to physics objects
+- These errors are handled with try/catch blocks and proper synchronization
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- IgnitionAI team for the reinforcement learning framework
+- React Three Fiber community for the 3D rendering capabilities
+- Rapier team for the physics engine
