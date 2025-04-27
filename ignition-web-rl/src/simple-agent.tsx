@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { RigidBody } from '@react-three/rapier'
+import { useRef, forwardRef } from 'react'
+import { RigidBody, RapierRigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
 import { DefaultTheme, ThemeProps } from './themes'
 
@@ -8,22 +8,22 @@ interface SimpleAgentProps {
   theme?: ThemeProps;
 }
 
-function SimpleAgent({ position = [0, 1, 0], theme = DefaultTheme }: SimpleAgentProps) {
+const SimpleAgent = forwardRef<RapierRigidBody, SimpleAgentProps>(({ position = [0, 1, 0], theme = DefaultTheme }, ref) => {
   const bodyRef = useRef<THREE.Group>(null)
   
-  // Animation simple pour donner vie à l'agent
-//   useFrame((state) => {
-//     if (bodyRef.current) {
-//       // Légère oscillation pour simuler une respiration
-//       bodyRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 2) * 0.1 + position[1]
-      
-//       // Légère rotation pour plus de dynamisme
-//       bodyRef.current.rotation.y = state.clock.getElapsedTime() * 0.5
-//     }
-//   })
-  
   return (
-    <RigidBody position={position} colliders="cuboid" type="dynamic">
+    <RigidBody 
+    ref={ref} 
+    name="agent"
+    position={position} 
+    colliders="cuboid" 
+    type="dynamic" 
+    lockRotations={true} 
+    lockTranslations={true}  
+    angularDamping={5} 
+    linearDamping={1}
+    mass={1}
+    restitution={0.1}>
       <group ref={bodyRef}>
         {/* Corps simple cubique comme dans Unity ML-Agents */}
         <mesh castShadow>
@@ -94,6 +94,6 @@ function SimpleAgent({ position = [0, 1, 0], theme = DefaultTheme }: SimpleAgent
       </group>
     </RigidBody>
   )
-}
+})
 
 export default SimpleAgent

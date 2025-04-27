@@ -4,6 +4,7 @@ import { Physics } from '@react-three/rapier'
 import Experience from './Experience'
 import { useState } from 'react'
 import { Themes, ThemeName } from './themes'
+import { TrainingDashboard } from './training-dashboard'
 
 function App() {
   const [currentTheme, setCurrentTheme] = useState<ThemeName>('Futuristic')
@@ -40,6 +41,8 @@ function App() {
           </button>
         ))}
       </div>
+  <TrainingDashboard />
+
 
       <Canvas camera={{ position: [30, 100, 300], fov: 60}} shadows >
         <OrbitControls 

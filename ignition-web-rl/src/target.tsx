@@ -1,6 +1,6 @@
-import { useRef } from 'react'
+import { useRef, forwardRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { RigidBody } from '@react-three/rapier'
+import { RigidBody, RapierRigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
 import { DefaultTheme, ThemeProps } from './themes'
 import { useTargetStore } from './store/targetStore'
@@ -9,7 +9,7 @@ interface TargetProps {
   theme?: ThemeProps;
 }
 
-function Target({ theme = DefaultTheme }: TargetProps) {
+const Target = forwardRef<RapierRigidBody, TargetProps>(({ theme = DefaultTheme }, ref) => {
   const targetRef = useRef<THREE.Group>(null)
   const { position, collectTarget } = useTargetStore()
   
@@ -26,12 +26,13 @@ function Target({ theme = DefaultTheme }: TargetProps) {
   
   return (
     <RigidBody 
+      ref={ref}
       position={position} 
       colliders="ball"
       type="fixed"
       sensor
       onIntersectionEnter={(e) => {
-        // Vérifier si c'est l'agent qui a touché la cible
+        console.log('🚀 Intersection detected with:', e.rigidBodyObject?.name)
         if (e.rigidBodyObject?.name === 'agent') {
           collectTarget()
         }
@@ -97,6 +98,6 @@ function Target({ theme = DefaultTheme }: TargetProps) {
       </group>
     </RigidBody>
   )
-}
+})
 
 export default Target
