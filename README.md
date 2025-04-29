@@ -158,6 +158,15 @@ computeReward: () => {
 
 ✅ Encourages better learning, faster convergence!
 
+# 🚧 Project Status
+**IgnitionAI is currently on hold.**
+
+I'm actively searching for creative Three.js developers interested in collaborating to build meaningful interactive environments.
+At this stage, I'm still learning a lot about Three.js, especially browser physics (Rapier), and I need strong creative partners.
+
+If you’re passionate about 3D worlds, RL training playgrounds, and want to co-create an awesome framework —
+contact me! 🚀
+
 ---
 
 # ✨ Let's Build Smarter Agents!
