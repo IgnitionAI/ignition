@@ -59,24 +59,26 @@ without neural networks
 
 ---
 
-## 🚀 Phase 2 — R3F Visualisation
+## 🚀 Phase 2 — R3F Visualisation & Basic UI
 
-> 🎮 Goal: Make the agent & target visible in a 3D scene
+> 🎮 Goal: Visualize the agent/environment and provide basic interaction
 
 ✅ `@ignitionai/r3f`: add `AgentMesh`, `TargetMesh`, `useAgent`
 ✅ `@ignitionai/demo-target-chasing`: setup Vite + R3F scene
 ✅ Add training monitoring and auto-stop functionality
 ✅ Display step count and reward in the UI
 ✅ Implement real-time model updates
-- [ ] Add training controls and visualization
+✅ Added basic training controls (Start/Stop/Reset)
+✅ Added real-time visualization charts (Reward, Loss, Epsilon) using Recharts
+- [ ] Add more advanced visualization (e.g., network graph, Q-values)
 - [ ] Optimize performance for longer training sessions
 - [ ] Add ability to save/load models from the UI
 
 ---
 
-## ✅ Phase 3 — TFJS Backend (Training & Inference)
+## ✅ Phase 3 — TFJS Backend & Dynamic Configuration
 
-> 🧠 Goal: Train and run a model directly in the browser
+> 🧠 Goal: Train and run a model directly in the browser with user configuration
 
 ✅ `@ignitionai/backend-tfjs`: built simple MLP model with configurable layers
 ✅ Implemented `train()` and `predict()` APIs via DQN agent
@@ -87,9 +89,14 @@ without neural networks
   - Progress tracking
   - Performance metrics
   - Model checkpointing
-  - Training visualization
+  - Training visualization (3D scene + charts)
 ✅ Implemented browser-based training with Three.js visualization
 ✅ Added automatic checkpoint saving for best models
+✅ Refactored demo to accept dynamic agent configuration from UI
+✅ Added UI Panel for Agent Hyperparameter Configuration (Learning Rate, Epsilon, Gamma, etc.)
+✅ Added basic Drag-and-Drop Network Designer (React Flow) for visual representation (Note: Currently visual only, config panel drives actual layer structure)
+- [ ] Fully integrate Network Designer to drive agent creation
+- [ ] Add support for loading pre-trained weights via UI
 
 ---
 
@@ -143,3 +150,4 @@ without neural networks
 ---
 
 Built with ❤️ by Salim (@IgnitionAI)
+

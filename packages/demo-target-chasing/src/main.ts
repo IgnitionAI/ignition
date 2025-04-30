@@ -1,6 +1,7 @@
+import * as dotenv from 'dotenv';
+
 import { DQNAgent } from '@ignitionai/backend-tfjs';
 import { IgnitionEnv } from '@ignitionai/core';
-import * as dotenv from 'dotenv';
 
 // Charger les variables d'environnement depuis le fichier .env
 dotenv.config();
@@ -35,13 +36,16 @@ const isDone = (): boolean => {
 const env: IgnitionEnv = new IgnitionEnv({
   agent,
   getObservation: () => [position, target],
-  applyAction: (a: number) => {
+  applyAction: (action: number | number[]) => {
+    // Handle array actions by taking the first number
+    const a = Array.isArray(action) ? action[0] : action;
     const dx = a - 1;
     position += dx * 0.2;
+  
     if (env.stepCount % 10 === 0) {
       console.log(`Step ${env.stepCount}: pos=${position.toFixed(2)}, target=${target.toFixed(2)}`);
     }
-  },
+  },  
   computeReward: () => {
     const d = Math.abs(position - target);
     const reward = 1.0 / (1.0 + d);

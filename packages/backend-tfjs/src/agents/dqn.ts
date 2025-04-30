@@ -1,9 +1,14 @@
 import * as tf from '@tensorflow/tfjs';
-import { ReplayBuffer, Experience } from '../memory/ReplayBuffer';
-import { DQNConfig } from '../types';
-import { buildQNetwork } from '../model/BuildMLP';
-import { saveModelToHub } from '../io/saveModelToHub';
+
 import { loadModelFromHub } from '../io/loadModel';
+import { saveModelToHub } from '../io/saveModelToHub';
+import {
+  Experience,
+  ReplayBuffer,
+} from '../memory/ReplayBuffer';
+import { buildQNetwork } from '../model/BuildMLP';
+import { DQNConfig } from '../types';
+
 export class DQNAgent {
   private model: tf.Sequential;
   private targetModel: tf.Sequential;
@@ -114,7 +119,8 @@ export class DQNAgent {
 
   async saveToHub(repoId: string, token: string, modelName = 'model', checkpointName = 'last'): Promise<void> {
     console.log(`[DQN] Saving model to HF Hub: ${repoId}`);
-    await saveModelToHub(this.model, repoId, token, `model_${checkpointName}`);
+    // later generate model based on template mode name
+    await saveModelToHub(this.model, repoId, token, `${modelName}_${checkpointName}`);
 
   }
 

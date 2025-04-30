@@ -1,11 +1,22 @@
-import { useFrame } from "@react-three/fiber";
-import { RigidBody, RapierRigidBody, CuboidCollider } from "@react-three/rapier"; // Added CuboidCollider
-import { useRef, forwardRef, useImperativeHandle, useEffect } from "react"; // Added useEffect
-import { Vector3 } from "three";
-import { DQNAgent } from "@ignitionai/backend-tfjs";
-import { IgnitionEnv } from "@ignitionai/core";
-import React from "react";
-import { useTrainingStore } from "./store/trainingStore";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react'; // Added useEffect
+
+import { Vector3 } from 'three';
+
+import { DQNAgent } from '@ignitionai/backend-tfjs';
+import { IgnitionEnv } from '@ignitionai/core';
+import { useFrame } from '@react-three/fiber';
+import {
+  CuboidCollider,
+  RapierRigidBody,
+  RigidBody,
+} from '@react-three/rapier'; // Added CuboidCollider
+
+import { useTrainingStore } from './store/trainingStore';
 
 // Define the structure for agent configuration (matching App.tsx)
 interface AgentConfig {
