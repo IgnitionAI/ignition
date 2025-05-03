@@ -1,0 +1,42 @@
+# IgnitionAI Enhancement Project Todo List
+
+- [X] **Step 1: Setup & Initial Exploration**
+    - [X] Install project dependencies (`pnpm install`).
+    - [X] Explore `packages` directory structure and contents (`core`, `backend-tfjs`, `r3f`).
+    - [X] Explore `ignition-web-rl` and `r3f` demo directories.
+    - [X] Understand the interaction between packages.
+- [X] **Step 2: Update Roadmap**
+    - [X] Edit `/home/ubuntu/ignition/roadmap.md`.
+    - [X] Integrate drag-and-drop interface goal.
+    - [X] Expand visualization goals.
+    - [X] Add performance and documentation enhancement notes.
+    - [X] Restructure/rephrase for clarity as a contribution.
+- [X] **Step 3: Implement Visualization Functions**
+    - [X] Identify existing visualization capabilities in `r3f` package/demo.
+    - [X] Choose and integrate a charting library (e.g., Recharts) into the demo app.
+    - [X] Implement reward plot visualization.
+    - [X] Implement loss plot visualization.
+    - [X] Implement epsilon decay visualization.
+- [X] **Step 4: Enhance and Generalize Code**
+    - [X] **Drag-and-Drop Interface:**
+        - [X] Choose UI framework/library (likely React within the existing demo structure).
+        - [X] Choose drag-and-drop library (e.g., React Flow).
+        - [X] Design node types (layers, inputs, outputs, etc.).
+        - [X] Implement the drag-and-drop canvas.
+        - [X] Develop logic to translate the visual graph into an agent configuration (e.g., MLP layers for DQN).
+        - [X] Integrate the interface with `@ignitionai/backend-tfjs` agent creation.
+    - [X] **Code Generalization:**
+        - [X] Refactor agent configuration/creation in `@ignitionai/backend-tfjs` to support dynamic creation from the new interface.
+        - [X] Improve modularity where needed.
+- [X] **Step 5: Test Implementations**
+    - [X] Test new visualization components.
+    - [X] Test the drag-and-drop interface for network design.
+    - [X] Run existing examples/tests to ensure no regressions.
+- [X] **Step 6: Document Changes and Improvements**
+    - [X] Add comments to new code sections.
+    - [X] Update `/home/ubuntu/ignition/README.md` with information about new features (visualizations, drag-and-drop interface).
+    - [X] Write explanations of the work done, focusing on design choices and concepts for long-term contribution (save as a separate file, e.g., `CONTRIBUTION_NOTES.md`).
+- [X] **Step 7: Prepare Final Deliverables**
+    - [X] Verify all todo items are complete or skipped intentionally.
+    - [X] Create a patch file or zip archive of the modified `ignition` directory.
+    - [ ] Prepare a summary message for the user including the deliverables.

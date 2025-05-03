@@ -77,7 +77,6 @@ const env: IgnitionEnv = new IgnitionEnv({
     // Log de l'action
     console.log(`[ACTION] ${a} (dx: ${dx.toFixed(2)})`);
   },
-  
   computeReward: () => {
     const d = Math.abs(position - targetPosition);
     

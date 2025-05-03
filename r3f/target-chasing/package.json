@@ -18,6 +18,8 @@
     "@types/three": "^0.162.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "reactflow": "^11.11.4",
+    "recharts": "^2.15.3",
     "three": "^0.162.0",
     "zustand": "^5.0.3"
   },

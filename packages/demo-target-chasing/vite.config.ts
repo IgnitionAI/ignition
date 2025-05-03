@@ -1,5 +1,8 @@
-import { defineConfig } from 'vite';
 import * as dotenv from 'dotenv';
+import path from 'path';
+import { defineConfig } from 'vite';
+
+import react from '@vitejs/plugin-react';
 
 // Charger les variables d'environnement
 dotenv.config();
@@ -22,5 +25,12 @@ export default defineConfig({
   },
   define: {
     'process.env': process.env
-  }
+  },
+  plugins: [react()],
+    resolve: {
+      alias: {
+        '@ignitionai/backend-tfjs': path.resolve(__dirname, '../backend-tfjs/src'),
+        '@ignitionai/core': path.resolve(__dirname, '../core/src')
+      }
+    }
 }); 

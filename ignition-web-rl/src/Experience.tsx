@@ -1,17 +1,38 @@
-import { useRef, forwardRef, useImperativeHandle, useState, useEffect, useCallback } from 'react'
-import { useFrame } from '@react-three/fiber'
-import { Grid, Box, Environment, SpotLight } from '@react-three/drei'
-import { RapierRigidBody, RigidBody } from '@react-three/rapier'
-import * as THREE from 'three'
-import Logo3D from './logo-3d'
-import SimpleAgent from './simple-agent'
-import { DefaultTheme, ThemeProps } from './themes'
-import { useTargetStore } from './store/targetStore'
-import Target from './target'
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
+
+import * as THREE from 'three';
 
 /*-------------------IgnitionAI---------------------*/
-import { DQNAgent } from '@ignitionai/backend-tfjs'
-import { IgnitionEnv } from "@ignitionai/core"
+import { DQNAgent } from '@ignitionai/backend-tfjs';
+import { IgnitionEnv } from '@ignitionai/core';
+import {
+  Box,
+  Environment,
+  Grid,
+  SpotLight,
+} from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import {
+  RapierRigidBody,
+  RigidBody,
+} from '@react-three/rapier';
+
+import Logo3D from './logo-3d';
+import SimpleAgent from './simple-agent';
+import { useTargetStore } from './store/targetStore';
+import Target from './target';
+import {
+  DefaultTheme,
+  ThemeProps,
+} from './themes';
+
 /*--------------------------------------------------*/
 
 // Propriétés pour l'expérience

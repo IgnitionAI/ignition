@@ -1,10 +1,16 @@
-import * as tf from '@tensorflow/tfjs-node';
 import * as fs from 'fs';
 import * as path from 'path';
-import { uploadFiles, createRepo } from '@huggingface/hub';
-import { loadModelFromHub } from './loadModel';
+
+import {
+  createRepo,
+  uploadFiles,
+} from '@huggingface/hub';
+import * as tf from '@tensorflow/tfjs-node';
+
+// import { loadModelFromHub } from './loadModel';
 
 // Classe File polyfill pour Node.js
+/**
 class NodeFile {
   name: string;
   content: Buffer;
@@ -14,6 +20,7 @@ class NodeFile {
     this.name = name;
   }
 }
+ */
 
 /**
  * Save a TensorFlow.js model locally and push it to Hugging Face Hub.

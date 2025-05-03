@@ -1,4 +1,7 @@
-import { AgentInterface, Experience } from './types';
+import {
+  AgentInterface,
+  Experience,
+} from './types';
 
 export interface IgnitionEnvConfig {
   agent: AgentInterface;
@@ -10,7 +13,6 @@ export interface IgnitionEnvConfig {
   onReset?: () => void;
 
   stepIntervalMs?: number;
-  // 👉 NEW: Save best checkpoint automatically
   hfRepoId?: string;
   hfToken?: string;
 }
@@ -30,6 +32,7 @@ export class IgnitionEnv {
 
   public async step(): Promise<void> {
     this.stepCount++;
+
     const action = await this.agent.getAction(this.currentState);
     this.config.applyAction(action);
 
@@ -47,16 +50,15 @@ export class IgnitionEnv {
 
     this.agent.remember(experience);
     await this.agent.train();
-    // ✅ Save best checkpoint if reward is best so far
+
     if ('maybeSaveBestCheckpoint' in this.agent && this.config.hfRepoId && this.config.hfToken) {
-        await (this.agent as any).maybeSaveBestCheckpoint(
+      await (this.agent as any).maybeSaveBestCheckpoint(
         this.config.hfRepoId,
         this.config.hfToken,
         reward,
         this.stepCount
-        );
+      );
     }
-
 
     if (done) {
       this.config.onReset?.();
@@ -66,20 +68,22 @@ export class IgnitionEnv {
     }
   }
 
-  public start(auto: boolean = true) {
+  public start(auto: boolean = true): void {
     if (!auto) return;
     const interval = this.config.stepIntervalMs ?? 100;
     this.intervalId = setInterval(() => this.step(), interval);
   }
 
-  public stop() {
+  public stop(): void {
     if (this.intervalId) {
       clearInterval(this.intervalId);
+      this.intervalId = undefined;
     }
   }
 
-  public reset() {
+  public reset(): void {
     this.config.onReset?.();
     this.currentState = this.config.getObservation();
+    this.stepCount = 0;
   }
 }
