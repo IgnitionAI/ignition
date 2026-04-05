@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import '@tensorflow/tfjs-node';
+import '@tensorflow/tfjs-backend-cpu';
 import { setBackend, getAvailableBackends } from '../src/utils/backend-selector';
 
 describe('backend-selector', () => {
@@ -22,11 +22,8 @@ describe('backend-selector', () => {
   });
 
   it('setBackend falls back to cpu when requested backend is unavailable', async () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    // webgpu is not available in Node.js test environment
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // webgpu is not available in Node.js test environment — should fallback silently
     await expect(setBackend('webgpu')).resolves.toBeUndefined();
-    // Either fallback warning was emitted or backend was set successfully
-    // In either case, no exception should be thrown
-    expect(true).toBe(true);
   });
 });
