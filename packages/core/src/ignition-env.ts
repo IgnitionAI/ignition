@@ -21,7 +21,7 @@ export class IgnitionEnv {
   private config: IgnitionEnvConfig;
   private agent: AgentInterface;
   private currentState: number[];
-  private intervalId?: ReturnType<typeof setInterval>;
+  private isRunning: boolean = false;
   public stepCount: number = 0;
 
   constructor(config: IgnitionEnvConfig) {
@@ -68,17 +68,31 @@ export class IgnitionEnv {
     }
   }
 
-  public start(auto: boolean = true): void {
-    if (!auto) return;
-    const interval = this.config.stepIntervalMs ?? 100;
-    this.intervalId = setInterval(() => this.step(), interval);
+  /**
+   * Start the training loop using an async recursive loop.
+   * - Avoids setInterval accumulation: if step() takes longer than stepIntervalMs,
+   *   the next step starts immediately without stacking callbacks.
+   * - isRunning flag prevents double-start.
+   */
+  public async start(auto: boolean = true): Promise<void> {
+    if (!auto || this.isRunning) return;
+    this.isRunning = true;
+    const intervalMs = this.config.stepIntervalMs ?? 100;
+
+    while (this.isRunning) {
+      const t0 = Date.now();
+      await this.step();
+      const elapsed = Date.now() - t0;
+      const remaining = intervalMs - elapsed;
+      // Only wait if the step finished faster than the target interval
+      if (remaining > 0) {
+        await new Promise<void>(resolve => setTimeout(resolve, remaining));
+      }
+    }
   }
 
   public stop(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = undefined;
-    }
+    this.isRunning = false;
   }
 
   public reset(): void {
