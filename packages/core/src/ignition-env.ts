@@ -1,21 +1,7 @@
-import {
-  AgentInterface,
-  Experience,
-} from './types';
+import { AgentInterface, Experience } from './types';
+import { IgnitionEnvConfig, IgnitionEnvConfigSchema } from './schemas';
 
-export interface IgnitionEnvConfig {
-  agent: AgentInterface;
-
-  getObservation: () => number[];
-  applyAction: (action: number | number[]) => void;
-  computeReward: () => number;
-  isDone: () => boolean;
-  onReset?: () => void;
-
-  stepIntervalMs?: number;
-  hfRepoId?: string;
-  hfToken?: string;
-}
+export type { IgnitionEnvConfig };
 
 export class IgnitionEnv {
   private config: IgnitionEnvConfig;
@@ -25,6 +11,11 @@ export class IgnitionEnv {
   public stepCount: number = 0;
 
   constructor(config: IgnitionEnvConfig) {
+    const result = IgnitionEnvConfigSchema.safeParse(config);
+    if (!result.success) {
+      const messages = result.error.errors.map((e) => e.message).join('; ');
+      throw new Error(`[IgnitionEnv] Invalid config: ${messages}`);
+    }
     this.config = config;
     this.agent = config.agent;
     this.currentState = config.getObservation();

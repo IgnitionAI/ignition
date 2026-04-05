@@ -1,4 +1,3 @@
-// Core package implementation
 export const version = '0.1.0';
 
 export default {
@@ -6,4 +5,10 @@ export default {
   version
 };
 
-export { IgnitionEnv } from './ignition-env'; 
+export { IgnitionEnv } from './ignition-env';
+export type { IgnitionEnvConfig } from './ignition-env';
+export type { Experience, AgentInterface } from './types';
+export {
+  ExperienceSchema,
+  IgnitionEnvConfigSchema,
+} from './schemas';
