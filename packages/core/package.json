@@ -26,9 +26,7 @@
     "url": "https://github.com/IgnitionAI/ignition"
   },
   "homepage": "https://github.com/IgnitionAI/ignition#readme",
-  "dependencies": {
-    "zod": "^3.24.2"
-  },
+  "dependencies": {},
   "publishConfig": {
     "access": "public"
   }
