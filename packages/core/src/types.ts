@@ -1,3 +1,5 @@
+export type TFBackend = 'webgpu' | 'webgl' | 'cpu' | 'wasm' | 'node' | 'auto';
+
 // ─── Observation & Action Spaces ────────────────────────────────────────────
 
 export interface DiscreteSpace {

@@ -1,9 +1,12 @@
 import { z } from 'zod';
 
+const TFBackendSchema = z.enum(['webgpu', 'webgl', 'cpu', 'wasm', 'node', 'auto']).optional();
+
 // ─── DQNConfig ────────────────────────────────────────────────────────────────
 
 export const DQNConfigSchema = z
   .object({
+    backend: TFBackendSchema,
     inputSize: z
       .number()
       .int()
@@ -70,6 +73,7 @@ export type DQNConfig = z.infer<typeof DQNConfigSchema>;
 // ─── PPOConfig ────────────────────────────────────────────────────────────────
 
 export const PPOConfigSchema = z.object({
+  backend: TFBackendSchema,
   inputSize: z
     .number()
     .int()
@@ -126,6 +130,7 @@ export type PPOConfig = z.infer<typeof PPOConfigSchema>;
 // ─── QTableConfig ─────────────────────────────────────────────────────────────
 
 export const QTableConfigSchema = z.object({
+  backend: TFBackendSchema,
   inputSize: z
     .number()
     .int()

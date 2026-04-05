@@ -8,3 +8,5 @@ export * from './schemas';
 export { DQNAgent } from './agents/dqn';
 export { PPOAgent } from './agents/ppo';
 export { QTableAgent } from './agents/qtable';
+export { setBackend, getAvailableBackends } from './utils/backend-selector';
+export type { TFBackend } from './utils/backend-selector';

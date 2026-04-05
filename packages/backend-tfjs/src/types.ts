@@ -1,3 +1,5 @@
+import type { TFBackend } from './utils/backend-selector';
+
 /**
  * AgentInterface — contrat minimal pour tout agent IgnitionAI.
  * Correspond au type AgentInterface exporté par @ignitionai/core.
@@ -21,6 +23,7 @@ export interface Experience {
 }
 
 export interface DQNConfig {
+  backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;              // Dimension du vecteur d'état
   actionSize: number;             // Nombre d'actions discrètes
   hiddenLayers?: number[];        // Neurones par couche cachée (défaut : [24, 24])
@@ -35,6 +38,7 @@ export interface DQNConfig {
 }
 
 export interface PPOConfig {
+  backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;        // Dimension du vecteur d'état
   actionSize: number;       // Nombre d'actions discrètes
   hiddenLayers?: number[];  // Neurones par couche cachée (défaut : [64, 64])
@@ -49,6 +53,7 @@ export interface PPOConfig {
 }
 
 export interface QTableConfig {
+  backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;        // Nombre de dimensions d'état
   actionSize: number;       // Nombre d'actions discrètes
   stateBins?: number;       // Nombre de bins par dimension (défaut : 10)

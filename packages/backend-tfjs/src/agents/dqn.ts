@@ -7,6 +7,7 @@ import { ReplayBuffer } from '../memory/ReplayBuffer';
 import { buildQNetwork } from '../model/BuildMLP';
 import { DQNConfig } from '../types';
 import { DQNConfigSchema } from '../schemas';
+import { setBackend } from '../utils/backend-selector';
 
 export class DQNAgent implements AgentInterface {
   private model: tf.Sequential;
@@ -40,7 +41,12 @@ export class DQNAgent implements AgentInterface {
       batchSize = 32,
       memorySize = 10000,
       targetUpdateFrequency = 1000,
+      backend = 'auto',
     } = config;
+
+    setBackend(backend).catch(err =>
+      console.warn('[DQNAgent] Backend init warning:', err)
+    );
 
     this.actionSize = actionSize;
     this.gamma = gamma;

@@ -4,6 +4,7 @@ export { IgnitionEnv } from './ignition-env';
 export type { IgnitionEnvConfig } from './ignition-env';
 
 export type {
+  TFBackend,
   AgentInterface,
   CheckpointableAgent,
   Experience,
