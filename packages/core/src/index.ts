@@ -14,3 +14,8 @@ export type {
   BoxSpace,
   MultiDiscreteSpace,
 } from './types';
+
+export {
+  ExperienceSchema,
+  IgnitionEnvConfigSchema,
+} from './schemas';

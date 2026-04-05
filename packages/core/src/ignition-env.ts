@@ -1,30 +1,7 @@
 import { AgentInterface, Experience, StepResult } from './types';
+import { IgnitionEnvConfig, IgnitionEnvConfigSchema } from './schemas';
 
-// ─── Callbacks ───────────────────────────────────────────────────────────────
-
-export interface IgnitionEnvCallbacks {
-  onStep?: (result: StepResult, stepCount: number) => void | Promise<void>;
-  onEpisodeEnd?: (stepCount: number) => void | Promise<void>;
-  onTrainEnd?: () => void | Promise<void>;
-}
-
-// ─── Config ──────────────────────────────────────────────────────────────────
-
-export interface IgnitionEnvConfig {
-  agent: AgentInterface;
-
-  getObservation: () => number[];
-  applyAction: (action: number | number[]) => void;
-  computeReward: () => number;
-  /** Returns true when the episode ends due to a terminal condition */
-  isTerminated: () => boolean;
-  /** Returns true when the episode ends due to a time/step limit (optional) */
-  isTruncated?: () => boolean;
-  onReset?: () => void;
-
-  stepIntervalMs?: number;
-  callbacks?: IgnitionEnvCallbacks;
-}
+export type { IgnitionEnvConfig };
 
 // ─── Environment ─────────────────────────────────────────────────────────────
 
@@ -36,6 +13,11 @@ export class IgnitionEnv {
   public stepCount = 0;
 
   constructor(config: IgnitionEnvConfig) {
+    const result = IgnitionEnvConfigSchema.safeParse(config);
+    if (!result.success) {
+      const messages = result.error.errors.map((e) => e.message).join('; ');
+      throw new Error(`[IgnitionEnv] Invalid config: ${messages}`);
+    }
     this.config = config;
     this.agent = config.agent;
     this.currentState = config.getObservation();

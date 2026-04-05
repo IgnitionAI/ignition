@@ -39,7 +39,8 @@
     "@tensorflow/tfjs-backend-wasm": "^4.22.0",
     "@tensorflow/tfjs-backend-webgl": "^4.22.0",
     "@tensorflow/tfjs-backend-webgpu": "^4.22.0",
-    "@tensorflow/tfjs-vis": "^1.5.1"
+    "@tensorflow/tfjs-vis": "^1.5.1",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@tensorflow/tfjs-node": "^4.22.0",

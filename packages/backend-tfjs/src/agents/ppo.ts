@@ -16,6 +16,7 @@
 
 import * as tf from '@tensorflow/tfjs';
 import { AgentInterface, Experience, PPOConfig } from '../types';
+import { PPOConfigSchema } from '../schemas';
 
 // ---------------------------------------------------------------------------
 // Types internes
@@ -126,6 +127,11 @@ export class PPOAgent implements AgentInterface {
   private readonly actionSize: number;
 
   constructor(config: PPOConfig) {
+    const result = PPOConfigSchema.safeParse(config);
+    if (!result.success) {
+      const messages = result.error.errors.map((e) => e.message).join('; ');
+      throw new Error(`[PPOAgent] Invalid config: ${messages}`);
+    }
     const {
       inputSize,
       actionSize,

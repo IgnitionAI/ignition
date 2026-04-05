@@ -11,6 +11,7 @@
  */
 
 import { AgentInterface, Experience, QTableConfig } from '../types';
+import { QTableConfigSchema } from '../schemas';
 
 export class QTableAgent implements AgentInterface {
   /** Table Q : stateIndex → valeurs Q pour chaque action */
@@ -32,6 +33,11 @@ export class QTableAgent implements AgentInterface {
   private readonly stateHigh: number[];
 
   constructor(config: QTableConfig) {
+    const result = QTableConfigSchema.safeParse(config);
+    if (!result.success) {
+      const messages = result.error.errors.map((e) => e.message).join('; ');
+      throw new Error(`[QTableAgent] Invalid config: ${messages}`);
+    }
     const {
       inputSize,
       actionSize,

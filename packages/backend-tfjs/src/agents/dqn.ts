@@ -6,6 +6,7 @@ import { saveModelToHub } from '../io/saveModelToHub';
 import { ReplayBuffer } from '../memory/ReplayBuffer';
 import { buildQNetwork } from '../model/BuildMLP';
 import { DQNConfig } from '../types';
+import { DQNConfigSchema } from '../schemas';
 
 export class DQNAgent implements AgentInterface {
   private model: tf.Sequential;
@@ -22,6 +23,11 @@ export class DQNAgent implements AgentInterface {
   private bestReward = -Infinity;
 
   constructor(private config: DQNConfig) {
+    const result = DQNConfigSchema.safeParse(config);
+    if (!result.success) {
+      const messages = result.error.errors.map((e) => e.message).join('; ');
+      throw new Error(`[DQNAgent] Invalid config: ${messages}`);
+    }
     const {
       inputSize,
       actionSize,
