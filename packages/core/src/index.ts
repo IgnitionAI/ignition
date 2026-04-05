@@ -6,4 +6,5 @@ export default {
   version
 };
 
-export { IgnitionEnv } from './ignition-env'; 
+export { IgnitionEnv } from './ignition-env';
+export type { AgentInterface, Experience } from './types';
