@@ -1,0 +1,23 @@
+{
+  "name": "@ignitionai/environments",
+  "version": "0.1.0",
+  "description": "Reference environments for IgnitionAI — GridWorld, CartPole, MountainCar",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest --config ../../vitest.config.ts"
+  },
+  "keywords": [
+    "reinforcement-learning",
+    "environment",
+    "gridworld",
+    "cartpole",
+    "mountain-car"
+  ],
+  "author": "salim4n (@IgnitionAI)",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

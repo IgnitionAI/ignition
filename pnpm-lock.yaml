@@ -140,6 +140,8 @@ importers:
         specifier: ^6.3.1
         version: 6.3.3(@types/node@22.14.1)(tsx@4.19.3)
 
+  packages/environments: {}
+
 packages:
 
   '@ampproject/remapping@2.3.0':
