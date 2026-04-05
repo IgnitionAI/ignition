@@ -58,9 +58,11 @@ export class DQNAgent implements AgentInterface {
 
     const stateTensor = tf.tensor2d([state]);
     const qValues = this.model.predict(stateTensor) as tf.Tensor;
-    const action = (await qValues.argMax(1).data())[0];
+    // argMax crée un tensor intermédiaire : on le dispose explicitement
+    const argMaxTensor = qValues.argMax(1);
+    const action = (await argMaxTensor.data())[0];
 
-    tf.dispose([stateTensor, qValues]);
+    tf.dispose([stateTensor, qValues, argMaxTensor]);
     return action;
   }
 
