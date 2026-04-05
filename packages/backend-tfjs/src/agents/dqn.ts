@@ -1,15 +1,13 @@
 import * as tf from '@tensorflow/tfjs';
+import { AgentInterface, Experience } from '@ignitionai/core';
 
 import { loadModelFromHub } from '../io/loadModel';
 import { saveModelToHub } from '../io/saveModelToHub';
-import {
-  Experience,
-  ReplayBuffer,
-} from '../memory/ReplayBuffer';
+import { ReplayBuffer } from '../memory/ReplayBuffer';
 import { buildQNetwork } from '../model/BuildMLP';
 import { DQNConfig } from '../types';
 
-export class DQNAgent {
+export class DQNAgent implements AgentInterface {
   private model: tf.Sequential;
   private targetModel: tf.Sequential;
   private memory: ReplayBuffer;
@@ -21,7 +19,7 @@ export class DQNAgent {
   private targetUpdateFrequency: number;
   private trainStepCounter = 0;
   private actionSize: number;
-  private bestReward: number = -Infinity;
+  private bestReward = -Infinity;
 
   constructor(private config: DQNConfig) {
     const {
@@ -91,8 +89,10 @@ export class DQNAgent {
     const nextQArray = nextQValues.arraySync() as number[][];
 
     const updatedQ = qArray.map((q, i) => {
-      const { action, reward, done } = batch[i];
-      q[action] = done ? reward : reward + this.gamma * Math.max(...nextQArray[i]);
+      const { action, reward, terminated, truncated } = batch[i];
+      const done = terminated || truncated;
+      const a = action as number;
+      q[a] = done ? reward : reward + this.gamma * Math.max(...nextQArray[i]);
       return q;
     });
 
@@ -119,9 +119,7 @@ export class DQNAgent {
 
   async saveToHub(repoId: string, token: string, modelName = 'model', checkpointName = 'last'): Promise<void> {
     console.log(`[DQN] Saving model to HF Hub: ${repoId}`);
-    // later generate model based on template mode name
     await saveModelToHub(this.model, repoId, token, `${modelName}_${checkpointName}`);
-
   }
 
   async loadFromHub(repoId: string, modelPath = 'model.json'): Promise<void> {
@@ -131,49 +129,37 @@ export class DQNAgent {
     await this.updateTargetModel();
   }
 
-  /**
- * Save the model under a checkpoint name to Hugging Face Hub.
- * e.g., checkpointName = "last", "best", "step-1000"
- */
-async saveCheckpoint(repoId: string, token: string, checkpointName: string): Promise<void> {
-  const folder = `model_${checkpointName}`;
-  console.log(`[DQN] Saving checkpoint "${checkpointName}" to HF Hub...`);
-  await saveModelToHub(this.model, repoId, token, folder);
-  console.log(`[DQN] ✅ Checkpoint "${checkpointName}" saved`);
-}
-
-async maybeSaveBestCheckpoint(repoId: string, token: string, reward: number, step?: number): Promise<void> {
-  console.log(`[DQN] Current best: ${this.bestReward.toFixed(4)}, new reward: ${reward.toFixed(4)}`);
-  if (reward > this.bestReward) {
-    console.log(`[DQN] 🏆 New best reward: ${reward.toFixed(3)} > ${this.bestReward.toFixed(3)}`);
-    this.bestReward = reward;
-    const checkpointName = step !== undefined ? `step-${step}` : 'best';
-    await this.saveCheckpoint(repoId, token, checkpointName);
+  async saveCheckpoint(repoId: string, token: string, checkpointName: string): Promise<void> {
+    const folder = `model_${checkpointName}`;
+    console.log(`[DQN] Saving checkpoint "${checkpointName}" to HF Hub...`);
+    await saveModelToHub(this.model, repoId, token, folder);
+    console.log(`[DQN] ✅ Checkpoint "${checkpointName}" saved`);
   }
-}
 
+  async maybeSaveBestCheckpoint(repoId: string, token: string, reward: number, step?: number): Promise<void> {
+    console.log(`[DQN] Current best: ${this.bestReward.toFixed(4)}, new reward: ${reward.toFixed(4)}`);
+    if (reward > this.bestReward) {
+      console.log(`[DQN] 🏆 New best reward: ${reward.toFixed(3)} > ${this.bestReward.toFixed(3)}`);
+      this.bestReward = reward;
+      const checkpointName = step !== undefined ? `step-${step}` : 'best';
+      await this.saveCheckpoint(repoId, token, checkpointName);
+    }
+  }
 
-/**
- * Load a checkpointed model from Hugging Face Hub.
- */
-async loadCheckpoint(repoId: string, checkpointName: string): Promise<void> {
-  const modelPath = `model_${checkpointName}/model.json`;
-  console.log(`[DQN] Loading checkpoint "${checkpointName}" from HF Hub...`);
-  const model = await loadModelFromHub(repoId, modelPath);
-  this.model = model as tf.Sequential;
-  await this.updateTargetModel();
-  console.log(`[DQN] ✅ Checkpoint "${checkpointName}" loaded`);
-}
-
+  async loadCheckpoint(repoId: string, checkpointName: string): Promise<void> {
+    const modelPath = `model_${checkpointName}/model.json`;
+    console.log(`[DQN] Loading checkpoint "${checkpointName}" from HF Hub...`);
+    const model = await loadModelFromHub(repoId, modelPath);
+    this.model = model as tf.Sequential;
+    await this.updateTargetModel();
+    console.log(`[DQN] ✅ Checkpoint "${checkpointName}" loaded`);
+  }
 
   dispose(): void {
     console.log(`[DQN] Disposing model...`);
     this.model?.dispose();
-    console.log(`[DQN] Model disposed`);
     this.targetModel?.dispose();
-    console.log(`[DQN] Target model disposed`);
     this.memory = new ReplayBuffer(0);
-    console.log(`[DQN] Memory disposed`);
     console.log(`[DQN] ✅ DQNAgent disposed`);
   }
 }

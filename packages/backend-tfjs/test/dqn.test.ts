@@ -76,9 +76,8 @@ describe('DQNAgent', () => {
       console.log(`Reward: ${reward}, Running score: ${correctActions}/${step+1} (${(correctActions/(step+1)*100).toFixed(1)}%)`);
       
       const nextState = [Math.random()];
-      const done = false;
 
-      agent.remember({ state, action, reward, nextState, done });
+      agent.remember({ state, action, reward, nextState, terminated: false, truncated: false });
       console.log(`Memory size: ${(agent as any).memory.size()}`);
 
       // Train est déjà géré avec tf.dispose dans l'agent
