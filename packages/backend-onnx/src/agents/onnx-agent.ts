@@ -1,6 +1,7 @@
 import type { AgentInterface, Experience } from '@ignitionai/core';
 import { OnnxAgentConfigSchema, type OnnxAgentConfig } from '../types';
 import { createOnnxSession, runInference, inspectSession, type OrtSession } from '../runtime';
+import { loadOnnxModelFromHub } from '../io/loadOnnxFromHub';
 
 /**
  * Inference-only RL agent that loads a pre-trained .onnx model and runs forward passes.
@@ -74,6 +75,16 @@ export class OnnxAgent implements AgentInterface {
       throw new Error('OnnxAgent: call load() before inspect()');
     }
     return inspectSession(this.session);
+  }
+
+  /**
+   * Downloads a .onnx file from HF Hub and loads it as the inference session.
+   * @param repoId   - HF Hub repo (e.g. "salim4n/my-dqn-model")
+   * @param filename - Filename in the repo (default: "model.onnx")
+   */
+  async loadFromHub(repoId: string, filename: string = 'model.onnx'): Promise<void> {
+    const buffer = await loadOnnxModelFromHub(repoId, filename);
+    this.session = await createOnnxSession(buffer, this.config.executionProviders);
   }
 
   /** Releases the ONNX inference session */
