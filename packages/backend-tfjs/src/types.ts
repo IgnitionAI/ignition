@@ -1,3 +1,5 @@
+import type { ModelStorageProvider } from '@ignitionai/storage';
+
 export interface DQNConfig {
     inputSize: number;            // Dimension of the state vector
     actionSize: number;           // Number of possible discrete actions
@@ -10,5 +12,6 @@ export interface DQNConfig {
     batchSize?: number;           // Batch size for training (default: 32)
     memorySize?: number;          // Maximum size of the replay buffer (default: 10000)
     targetUpdateFrequency?: number; // How often to update the target network (in training steps)
+    storageProvider?: ModelStorageProvider; // Optional storage provider for save/load
   }
   

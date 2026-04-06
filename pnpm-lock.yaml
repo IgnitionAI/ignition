@@ -32,6 +32,9 @@ importers:
       '@huggingface/hub':
         specifier: ^1.1.2
         version: 1.1.2
+      '@ignitionai/storage':
+        specifier: workspace:*
+        version: link:../storage
       '@tensorflow/tfjs':
         specifier: ^4.22.0
         version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
@@ -139,6 +142,22 @@ importers:
       vite:
         specifier: ^6.3.1
         version: 6.3.3(@types/node@22.14.1)(tsx@4.19.3)
+
+  packages/storage:
+    dependencies:
+      '@huggingface/hub':
+        specifier: ^1.1.2
+        version: 1.1.2
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
+    devDependencies:
+      '@tensorflow/tfjs':
+        specifier: ^4.22.0
+        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
+      vitest:
+        specifier: ^3.1.1
+        version: 3.1.1(@types/node@22.14.1)(@vitest/ui@3.1.1)(tsx@4.19.3)
 
 packages:
 

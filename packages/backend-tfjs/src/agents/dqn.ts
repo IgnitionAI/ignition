@@ -166,6 +166,39 @@ async loadCheckpoint(repoId: string, checkpointName: string): Promise<void> {
 }
 
 
+  // ── ModelStorageProvider-based save / load ────────────────────────────
+
+  /**
+   * Save the model via the configured storageProvider.
+   * Throws if no storageProvider was supplied in DQNConfig.
+   *
+   * @returns the URI returned by the provider (e.g. "hf://user/repo/modelId")
+   */
+  async saveModel(
+    modelId: string,
+    metadata?: Record<string, unknown>
+  ): Promise<string> {
+    const provider = this.config.storageProvider;
+    if (!provider) {
+      throw new Error('[DQN] No storageProvider configured. Pass one in DQNConfig.');
+    }
+    return provider.save(modelId, this.model, metadata);
+  }
+
+  /**
+   * Load a model via the configured storageProvider and replace the current model.
+   * Throws if no storageProvider was supplied in DQNConfig.
+   */
+  async loadModel(modelId: string): Promise<void> {
+    const provider = this.config.storageProvider;
+    if (!provider) {
+      throw new Error('[DQN] No storageProvider configured. Pass one in DQNConfig.');
+    }
+    const loaded = await provider.load(modelId);
+    this.model = loaded as tf.Sequential;
+    await this.updateTargetModel();
+  }
+
   dispose(): void {
     console.log(`[DQN] Disposing model...`);
     this.model?.dispose();
