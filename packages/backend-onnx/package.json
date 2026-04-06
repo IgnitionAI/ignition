@@ -1,10 +1,45 @@
 {
   "name": "@ignitionai/backend-onnx",
   "version": "0.1.0",
+  "description": "ONNX inference backend for IgnitionAI — cross-platform, production-ready RL inference",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "vitest --config ../../vitest.config.ts",
+    "prepublishOnly": "npm run build"
   },
-  "dependencies": {}
+  "keywords": [
+    "reinforcement-learning",
+    "onnx",
+    "inference",
+    "onnxruntime",
+    "dqn",
+    "browser",
+    "node"
+  ],
+  "author": "salim4n (@IgnitionAI)",
+  "license": "MIT",
+  "dependencies": {
+    "@huggingface/hub": "^1.1.2",
+    "onnxruntime-node": "^1.17.0",
+    "zod": "^3.22.0"
+  },
+  "peerDependencies": {
+    "onnxruntime-web": "^1.17.0"
+  },
+  "peerDependenciesMeta": {
+    "onnxruntime-web": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "vitest": "^3.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
