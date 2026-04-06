@@ -1,0 +1,25 @@
+{
+  "name": "@ignitionai/storage",
+  "version": "0.1.0",
+  "description": "Model storage providers for IgnitionAI (Hugging Face Hub, S3, GCS, local)",
+  "main": "index.ts",
+  "types": "index.ts",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@huggingface/hub": "^1.1.2",
+    "zod": "^3.24.2"
+  },
+  "peerDependencies": {
+    "@tensorflow/tfjs": "^4.0.0"
+  },
+  "devDependencies": {
+    "@tensorflow/tfjs": "^4.22.0",
+    "vitest": "^3.1.1"
+  }
+}

@@ -33,9 +33,9 @@
   "homepage": "https://github.com/IgnitionAI/ignition-monorepo-starter#readme",
   "dependencies": {
     "@ignitionai/core": "workspace:*",
+    "@ignitionai/storage": "workspace:*",
     "@huggingface/hub": "^1.1.2",
     "@tensorflow/tfjs": "^4.22.0",
-    "zod": "^3.24.2",
     "@tensorflow/tfjs-backend-cpu": "^4.22.0",
     "@tensorflow/tfjs-backend-wasm": "^4.22.0",
     "@tensorflow/tfjs-backend-webgl": "^4.22.0",

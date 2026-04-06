@@ -1,4 +1,5 @@
 import type { TFBackend } from './utils/backend-selector';
+import type { ModelStorageProvider } from '@ignitionai/storage';
 
 /**
  * AgentInterface — contrat minimal pour tout agent IgnitionAI.
@@ -35,6 +36,7 @@ export interface DQNConfig {
   batchSize?: number;             // Taille du batch (défaut : 32)
   memorySize?: number;            // Taille du replay buffer (défaut : 10000)
   targetUpdateFrequency?: number; // Fréquence de synchro du target network (en steps)
+  storageProvider?: ModelStorageProvider; // Optional storage provider for save/load
 }
 
 export interface PPOConfig {
