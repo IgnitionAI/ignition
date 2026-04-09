@@ -9,8 +9,8 @@
 
 **Purpose**: Add PPOConfig type and prepare exports
 
-- [ ] T001 Add PPOConfig interface to `packages/backend-tfjs/src/types.ts`
-- [ ] T002 Uncomment PPO export and add new exports in `packages/backend-tfjs/src/index.ts`
+- [X] T001 Add PPOConfig interface to `packages/backend-tfjs/src/types.ts`
+- [X] T002 Uncomment PPO export and add new exports in `packages/backend-tfjs/src/index.ts`
 
 ---
 
@@ -20,13 +20,13 @@
 
 ### Tests FIRST (TDD Red phase)
 
-- [ ] T003 [P] Write RolloutBuffer tests in `packages/backend-tfjs/test/ppo.test.ts` — test add(), isFull(), computeAdvantages(), clear()
-- [ ] T004 [P] Write BuildActorCritic tests in `packages/backend-tfjs/test/ppo.test.ts` — test model output shapes (policy: [batch, actionSize], value: [batch, 1])
+- [X] T003 [P] Write RolloutBuffer tests in `packages/backend-tfjs/test/ppo.test.ts` — test add(), isFull(), computeAdvantages(), clear()
+- [X] T004 [P] Write BuildActorCritic tests in `packages/backend-tfjs/test/ppo.test.ts` — test model output shapes (policy: [batch, actionSize], value: [batch, 1])
 
 ### Implementation (TDD Green phase)
 
-- [ ] T005 [P] Implement RolloutBuffer in `packages/backend-tfjs/src/memory/RolloutBuffer.ts`
-- [ ] T006 [P] Implement buildActorCritic in `packages/backend-tfjs/src/model/BuildActorCritic.ts`
+- [X] T005 [P] Implement RolloutBuffer in `packages/backend-tfjs/src/memory/RolloutBuffer.ts`
+- [X] T006 [P] Implement buildActorCritic in `packages/backend-tfjs/src/model/BuildActorCritic.ts`
 
 **Checkpoint**: RolloutBuffer and ActorCritic model build, tests pass
 
@@ -40,14 +40,14 @@
 
 ### Tests FIRST (TDD Red phase)
 
-- [ ] T007 [US1] Write PPOAgent construction test — default config, custom config
-- [ ] T008 [US1] Write PPOAgent.getAction() test — returns valid action index, uses policy distribution
-- [ ] T009 [US1] Write PPOAgent.remember() + train() test — collects nSteps, trains, clears buffer
-- [ ] T010 [US1] Write PPOAgent memory stability test — tensor count stable over 100 train() calls
+- [X] T007 [US1] Write PPOAgent construction test — default config, custom config
+- [X] T008 [US1] Write PPOAgent.getAction() test — returns valid action index, uses policy distribution
+- [X] T009 [US1] Write PPOAgent.remember() + train() test — collects nSteps, trains, clears buffer
+- [X] T010 [US1] Write PPOAgent memory stability test — tensor count stable over 100 train() calls
 
 ### Implementation (TDD Green phase)
 
-- [ ] T011 [US1] Implement PPOAgent class in `packages/backend-tfjs/src/agents/ppo.ts` — constructor, getAction(), remember(), train(), dispose()
+- [X] T011 [US1] Implement PPOAgent class in `packages/backend-tfjs/src/agents/ppo.ts` — constructor, getAction(), remember(), train(), dispose()
 
 **Checkpoint**: PPOAgent trains on fake environment, all US1 tests pass
 
@@ -59,12 +59,12 @@
 
 ### Tests FIRST
 
-- [ ] T012 [US2] Write test verifying default config values are applied when only inputSize/actionSize provided
-- [ ] T013 [US2] Write test verifying custom config values (clipRatio, gaeLambda, entropyCoeff) are used in training
+- [X] T012 [US2] Write test verifying default config values are applied when only inputSize/actionSize provided
+- [X] T013 [US2] Write test verifying custom config values (clipRatio, gaeLambda, entropyCoeff) are used in training
 
 ### Implementation
 
-- [ ] T014 [US2] Ensure PPOAgent constructor applies all defaults and validates config in `packages/backend-tfjs/src/agents/ppo.ts`
+- [X] T014 [US2] Ensure PPOAgent constructor applies all defaults and validates config in `packages/backend-tfjs/src/agents/ppo.ts`
 
 **Checkpoint**: Config tests pass, defaults work
 
@@ -88,8 +88,8 @@
 
 ## Phase 6: Polish & Integration
 
-- [ ] T017 Run full test suite (`pnpm test`) — verify no regressions on DQN tests
-- [ ] T018 Verify PPOAgent works with IgnitionEnv integration (manual validation)
+- [X] T017 Run full test suite (`pnpm test`) — verify no regressions on DQN tests
+- [X] T018 Verify PPOAgent works with IgnitionEnv integration (manual validation)
 
 ---
 
