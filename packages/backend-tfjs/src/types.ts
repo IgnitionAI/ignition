@@ -11,4 +11,17 @@ export interface DQNConfig {
     memorySize?: number;          // Maximum size of the replay buffer (default: 10000)
     targetUpdateFrequency?: number; // How often to update the target network (in training steps)
   }
-  
+
+export interface PPOConfig {
+    inputSize: number;            // Dimension of the state vector
+    actionSize: number;           // Number of possible discrete actions
+    hiddenLayers?: number[];      // Neurons per hidden layer, default: [64, 64]
+    gamma?: number;               // Discount factor (default: 0.99)
+    lr?: number;                  // Learning rate (default: 3e-4)
+    clipRatio?: number;           // PPO clip ratio (default: 0.2)
+    epochs?: number;              // Number of optimization epochs per update (default: 4)
+    entropyCoeff?: number;        // Entropy bonus coefficient (default: 0.01)
+    valueCoeff?: number;          // Value loss coefficient (default: 0.5)
+    gaeLambda?: number;           // GAE lambda for advantage estimation (default: 0.95)
+    maxTrajectoryLength?: number; // Max steps per trajectory before training (default: 128)
+}
