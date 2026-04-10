@@ -7,7 +7,6 @@ metadata:
   author: "github-spec-kit"
   source: "templates/commands/analyze.md"
 user-invocable: true
-disable-model-invocation: true
 ---
 
 

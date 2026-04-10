@@ -6,7 +6,6 @@ metadata:
   author: github-spec-kit
   source: git:commands/speckit.git.initialize.md
 user-invocable: true
-disable-model-invocation: true
 ---
 
 # Initialize Git Repository

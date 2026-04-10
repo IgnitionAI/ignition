@@ -6,7 +6,6 @@ metadata:
   author: github-spec-kit
   source: git:commands/speckit.git.validate.md
 user-invocable: true
-disable-model-invocation: true
 ---
 
 # Validate Feature Branch
