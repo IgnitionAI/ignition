@@ -24,6 +24,7 @@
   "author": "salim4n (@IgnitionAI)",
   "license": "MIT",
   "dependencies": {
+    "@ignitionai/core": "workspace:*",
     "@huggingface/hub": "^1.1.2",
     "onnxruntime-node": "^1.17.0",
     "zod": "^3.22.0"

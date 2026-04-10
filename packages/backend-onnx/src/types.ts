@@ -14,3 +14,4 @@ export const OnnxAgentConfigSchema = z.object({
 });
 
 export type OnnxAgentConfig = z.infer<typeof OnnxAgentConfigSchema>;
+export type OnnxAgentConfigInput = z.input<typeof OnnxAgentConfigSchema>;

@@ -58,7 +58,7 @@ describe('OnnxAgent', () => {
 
   it('remember() is a no-op and does not throw', () => {
     expect(() =>
-      agent.remember({ state: [0], action: 0, reward: 1, nextState: [1], done: false }),
+      agent.remember({ state: [0], action: 0, reward: 1, nextState: [1], terminated: false, truncated: false }),
     ).not.toThrow();
   });
 

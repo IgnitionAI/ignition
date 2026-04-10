@@ -1,5 +1,5 @@
 import type { AgentInterface, Experience } from '@ignitionai/core';
-import { OnnxAgentConfigSchema, type OnnxAgentConfig } from '../types';
+import { OnnxAgentConfigSchema, type OnnxAgentConfig, type OnnxAgentConfigInput } from '../types';
 import { createOnnxSession, runInference, inspectSession, type OrtSession } from '../runtime';
 import { loadOnnxModelFromHub } from '../io/loadOnnxFromHub';
 
@@ -21,7 +21,7 @@ export class OnnxAgent implements AgentInterface {
   private config: OnnxAgentConfig;
   private session: OrtSession | null = null;
 
-  constructor(config: OnnxAgentConfig) {
+  constructor(config: OnnxAgentConfigInput) {
     this.config = OnnxAgentConfigSchema.parse(config);
   }
 
