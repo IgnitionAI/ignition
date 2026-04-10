@@ -107,10 +107,65 @@
 | 4 | **Navigation 2D** | DQN + PPO | Medium | Game-like, creative dev appeal |
 | 5 | **Snake** | DQN | Hard | Viral potential, stretch goal |
 
+## 6. GridWorld 3D (Q-Table + DQN — R3F)
+
+**What**: Same GridWorld logic as #1, but rendered as a 3D scene with React Three Fiber.
+**Visual**: Isometric 3D grid with cubes. Agent = animated sphere/cube gliding between tiles. Target = glowing cube. Walls = dark blocks. Camera orbits automatically.
+
+**Why**: Proves IgnitionAI works natively with R3F — the core audience's stack. Same env logic, different renderer. Shows the framework is renderer-agnostic.
+
+**Wow factor**: A beautiful 3D grid with a learning agent — shareable on Twitter/LinkedIn. "I trained this in my browser with 10 lines of JS."
+
+---
+
+## 7. CartPole 3D (DQN + PPO — R3F)
+
+**What**: Same CartPole physics as #2, rendered in 3D with R3F + Rapier.
+**Visual**: 3D cart on a rail, pole as a cylinder. Camera follows the cart. Lighting, shadows, environment map. Looks professional.
+
+**Why**: The classic RL demo in 3D. Most people have only seen the 2D matplotlib version. A 3D R3F version is a differentiator.
+
+**Wow factor**: A physics-accurate balancing pole in a polished 3D scene — looks like a real simulation, runs in the browser.
+
+---
+
+## 8. Navigation 3D (PPO — R3F)
+
+**What**: Agent navigates a 3D environment with obstacles. First-person or top-down camera.
+**Visual**: R3F scene with a ground plane, walls/obstacles as meshes, agent as a character/sphere. Trail renderer showing the learned path.
+
+**Why**: The closest to a game-like use case. Creative devs building Three.js games can directly relate to this.
+
+**Wow factor**: Looks like actual game AI pathfinding. "This is what ML-Agents does in Unity, but in my browser."
+
+---
+
+## Priority Order
+
+| # | Env | Algo | Renderer | Difficulty | Impact |
+|---|-----|------|----------|------------|--------|
+| 1 | **GridWorld 2D** | Q-Table + DQN | Canvas/CSS | Easy | Must-have — proves it works |
+| 2 | **CartPole 2D** | DQN + PPO | Canvas | Medium | Classic benchmark — credibility |
+| 3 | **GridWorld 3D** | Q-Table + DQN | R3F | Medium | Same logic, 3D wow factor |
+| 4 | **MountainCar 2D** | DQN + PPO | Canvas | Medium | Exploration showcase |
+| 5 | **CartPole 3D** | DQN + PPO | R3F | Medium | Premium 3D demo |
+| 6 | **Navigation 2D** | DQN + PPO | Canvas | Medium | Game-like appeal |
+| 7 | **Navigation 3D** | PPO | R3F | Hard | Game AI showcase |
+| 8 | **Snake** | DQN | Canvas | Hard | Viral potential |
+
 ## Implementation approach
 
-Each env should be:
-- A standalone HTML page (no R3F, just canvas/CSS)
-- Self-contained: env logic + agent + visualization in one file
-- Runnable with `pnpm dev` and a route like `/gridworld`, `/cartpole`, etc.
-- Convergence proven by tests before the visual demo is built
+**Dual-renderer architecture**: Each environment has two layers:
+1. **Env logic** (`@ignitionai/environments`): pure TS, no rendering — step(), reset(), getObservation(), computeReward(), isTerminated(). Shared between 2D and 3D.
+2. **Renderer**: either Canvas/CSS (lightweight, fast) or R3F (3D, immersive). Plugs into the same env logic.
+
+This means:
+- `GridWorldEnv` is written once, used by both the 2D CSS demo and the 3D R3F demo
+- Creative devs see R3F examples they can copy into their projects
+- Canvas demos load instantly for quick validation
+
+Each env:
+- Lives in `packages/environments/` (logic) + `packages/demos/` (visual)
+- Runnable with `pnpm dev` and routes like `/gridworld`, `/cartpole-3d`, etc.
+- Convergence proven by unit tests before any visual demo is built
+- 2D version first (fast to build, proves convergence), then 3D version (wow factor)
