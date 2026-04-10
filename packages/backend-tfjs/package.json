@@ -32,13 +32,16 @@
   },
   "homepage": "https://github.com/IgnitionAI/ignition-monorepo-starter#readme",
   "dependencies": {
+    "@ignitionai/core": "workspace:*",
     "@huggingface/hub": "^1.1.2",
     "@tensorflow/tfjs": "^4.22.0",
+    "zod": "^3.24.2",
     "@tensorflow/tfjs-backend-cpu": "^4.22.0",
     "@tensorflow/tfjs-backend-wasm": "^4.22.0",
     "@tensorflow/tfjs-backend-webgl": "^4.22.0",
     "@tensorflow/tfjs-backend-webgpu": "^4.22.0",
-    "@tensorflow/tfjs-vis": "^1.5.1"
+    "@tensorflow/tfjs-vis": "^1.5.1",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@tensorflow/tfjs-node": "^4.22.0",

@@ -1,208 +1,135 @@
+/**
+ * Tests PPOAgent
+ *
+ * 1. Test unitaire : vérification de l'interface (getAction, remember, train)
+ * 2. Test de convergence : navigation 1D — l'agent doit apprendre à aller
+ *    vers la cible. La récompense moyenne des derniers épisodes doit être
+ *    supérieure à celle des premiers.
+ */
+
 import { describe, it, expect, afterEach } from 'vitest';
 import * as tf from '@tensorflow/tfjs';
 import { PPOAgent } from '../src/agents/ppo';
-import { PPOConfig } from '../src/types';
 
-describe('PPOAgent', () => {
-  const config: PPOConfig = {
-    inputSize: 4,
-    actionSize: 2,
-    hiddenLayers: [32],
-    gamma: 0.99,
-    lr: 3e-4,
-    clipRatio: 0.2,
-    epochs: 3,
-    entropyCoeff: 0.01,
-    valueCoeff: 0.5,
-    gaeLambda: 0.95,
-    maxTrajectoryLength: 16,
-  };
+// ---------------------------------------------------------------------------
+// Mini-environnement : navigation 1D (identique au test DQN)
+// ---------------------------------------------------------------------------
 
-  afterEach(() => {
-    tf.disposeVariables();
-    tf.dispose();
+function nav1DStep(
+  pos: number,
+  action: number,
+): { newPos: number; reward: number; done: boolean } {
+  const delta = action === 1 ? 0.15 : -0.15;
+  const newPos = Math.max(0, Math.min(1, pos + delta));
+  const done = newPos > 0.7;
+  return { newPos, reward: done ? 1.0 : -0.05, done };
+}
+
+// ---------------------------------------------------------------------------
+
+afterEach(() => {
+  tf.disposeVariables();
+});
+
+describe('PPOAgent — interface', () => {
+  it('getAction retourne un indice d\'action valide', async () => {
+    const agent = new PPOAgent({
+      inputSize: 2,
+      actionSize: 3,
+      hiddenLayers: [8],
+    });
+    const action = await agent.getAction([0.5, 0.5]);
+    expect([0, 1, 2]).toContain(action);
+    agent.dispose();
   });
 
-  describe('constructor', () => {
-    it('should create an agent with given config', () => {
-      const agent = new PPOAgent(config);
-      expect(agent).toBeDefined();
-      agent.dispose();
+  it('remember puis train ne leve pas d\'erreur', async () => {
+    const agent = new PPOAgent({
+      inputSize: 1,
+      actionSize: 2,
+      hiddenLayers: [8],
+      batchSize: 4,
     });
-
-    it('should use default values when optional config is omitted', () => {
-      const minimal: PPOConfig = { inputSize: 2, actionSize: 3 };
-      const agent = new PPOAgent(minimal);
-      expect(agent).toBeDefined();
-      agent.dispose();
-    });
+    // Collecter quelques expériences
+    for (let i = 0; i < 8; i++) {
+      const state = [Math.random()];
+      const action = await agent.getAction(state);
+      agent.remember({ state, action, reward: Math.random(), nextState: [Math.random()], terminated: false, truncated: false });
+    }
+    await expect(agent.train()).resolves.not.toThrow();
+    agent.dispose();
   });
 
-  describe('getAction', () => {
-    it('should return a valid action index', async () => {
-      const agent = new PPOAgent(config);
-      const state = [0.1, 0.2, 0.3, 0.4];
-      const result = await agent.getAction(state);
+  it('le rollout est vide apres train()', async () => {
+    const agent = new PPOAgent({
+      inputSize: 1,
+      actionSize: 2,
+      hiddenLayers: [8],
+    });
+    const action = await agent.getAction([0.3]);
+    agent.remember({ state: [0.3], action, reward: 1, nextState: [0.5], terminated: false, truncated: false });
+    await agent.train();
+    // Un deuxième train() sur un rollout vide ne doit pas planter
+    await expect(agent.train()).resolves.not.toThrow();
+    agent.dispose();
+  });
+});
 
-      expect(result.action).toBeGreaterThanOrEqual(0);
-      expect(result.action).toBeLessThan(config.actionSize);
-      expect(typeof result.logProb).toBe('number');
-      expect(typeof result.value).toBe('number');
-      expect(Number.isFinite(result.logProb)).toBe(true);
-      expect(Number.isFinite(result.value)).toBe(true);
+// ---------------------------------------------------------------------------
 
-      agent.dispose();
+describe('PPOAgent — convergence', () => {
+  it('la récompense moyenne augmente sur 200 épisodes (navigation 1D)', async () => {
+    const agent = new PPOAgent({
+      inputSize: 1,
+      actionSize: 2,
+      hiddenLayers: [32, 32],
+      lr: 3e-4,
+      gamma: 0.99,
+      gaeLambda: 0.95,
+      clipRatio: 0.2,
+      epochs: 4,
+      batchSize: 16,
+      entropyCoef: 0.02, // entropie légèrement plus forte pour favoriser l'exploration
+      valueLossCoef: 0.5,
     });
 
-    it('should return different actions over many calls (stochastic policy)', async () => {
-      const agent = new PPOAgent(config);
-      const state = [0.5, 0.5, 0.5, 0.5];
-      const actions = new Set<number>();
+    const NUM_EPISODES = 200;
+    const MAX_STEPS = 25;
+    const episodeRewards: number[] = [];
 
-      for (let i = 0; i < 50; i++) {
-        const { action } = await agent.getAction(state);
-        actions.add(action);
+    for (let ep = 0; ep < NUM_EPISODES; ep++) {
+      let pos = Math.random() * 0.4; // départ dans [0, 0.4]
+      let totalReward = 0;
+
+      for (let step = 0; step < MAX_STEPS; step++) {
+        const state = [pos];
+        const action = await agent.getAction(state);
+        const { newPos, reward, done } = nav1DStep(pos, action);
+
+        agent.remember({ state, action, reward, nextState: [newPos], terminated: done, truncated: false });
+        totalReward += reward;
+        pos = newPos;
+        if (done) break;
       }
 
-      expect(actions.size).toBeGreaterThan(1);
-      agent.dispose();
-    });
-  });
+      // PPO est on-policy : mise à jour après chaque épisode
+      await agent.train();
+      episodeRewards.push(totalReward);
+    }
 
-  describe('storeTransition', () => {
-    it('should store a transition without error', () => {
-      const agent = new PPOAgent(config);
-      agent.storeTransition({
-        state: [0.1, 0.2, 0.3, 0.4],
-        action: 0,
-        reward: 1.0,
-        logProb: -0.5,
-        value: 0.8,
-        done: false,
-      });
-      expect(agent.getTrajectoryLength()).toBe(1);
-      agent.dispose();
-    });
-  });
+    const firstAvg =
+      episodeRewards.slice(0, 40).reduce((a, b) => a + b, 0) / 40;
+    const lastAvg =
+      episodeRewards.slice(-40).reduce((a, b) => a + b, 0) / 40;
 
-  describe('train', () => {
-    it('should not train when trajectory is empty', async () => {
-      const agent = new PPOAgent(config);
-      const result = await agent.train(0);
-      expect(result).toBeNull();
-      agent.dispose();
-    });
+    console.log(
+      `[PPO convergence] premiers 40 épisodes: ${firstAvg.toFixed(3)}, ` +
+      `derniers 40 épisodes: ${lastAvg.toFixed(3)}`,
+    );
 
-    it('should train and return loss metrics after collecting transitions', async () => {
-      const agent = new PPOAgent(config);
+    // L'agent doit avoir progressé (politique améliorée)
+    expect(lastAvg).toBeGreaterThan(firstAvg);
 
-      for (let i = 0; i < config.maxTrajectoryLength!; i++) {
-        const state = [Math.random(), Math.random(), Math.random(), Math.random()];
-        const { action, logProb, value } = await agent.getAction(state);
-        agent.storeTransition({
-          state,
-          action,
-          reward: Math.random(),
-          logProb,
-          value,
-          done: i === config.maxTrajectoryLength! - 1,
-        });
-      }
-
-      const lastValue = 0;
-      const result = await agent.train(lastValue);
-
-      expect(result).not.toBeNull();
-      expect(typeof result!.policyLoss).toBe('number');
-      expect(typeof result!.valueLoss).toBe('number');
-      expect(typeof result!.entropy).toBe('number');
-      expect(Number.isFinite(result!.policyLoss)).toBe(true);
-      expect(Number.isFinite(result!.valueLoss)).toBe(true);
-      expect(Number.isFinite(result!.entropy)).toBe(true);
-
-      // Trajectory should be cleared after training
-      expect(agent.getTrajectoryLength()).toBe(0);
-
-      agent.dispose();
-    });
-  });
-
-  describe('training loop (integration)', () => {
-    it('should train on a simple binary classification environment', async () => {
-      const smallConfig: PPOConfig = {
-        inputSize: 1,
-        actionSize: 2,
-        hiddenLayers: [16],
-        gamma: 0.99,
-        lr: 1e-3,
-        clipRatio: 0.2,
-        epochs: 4,
-        entropyCoeff: 0.01,
-        valueCoeff: 0.5,
-        gaeLambda: 0.95,
-        maxTrajectoryLength: 32,
-      };
-
-      const agent = new PPOAgent(smallConfig);
-      const numEpisodes = 10;
-
-      for (let ep = 0; ep < numEpisodes; ep++) {
-        for (let step = 0; step < smallConfig.maxTrajectoryLength!; step++) {
-          const state = [Math.random()];
-          const correct = state[0] > 0.5 ? 1 : 0;
-          const { action, logProb, value } = await agent.getAction(state);
-          const reward = action === correct ? 1 : -1;
-
-          agent.storeTransition({
-            state,
-            action,
-            reward,
-            logProb,
-            value,
-            done: step === smallConfig.maxTrajectoryLength! - 1,
-          });
-        }
-
-        const result = await agent.train(0);
-        expect(result).not.toBeNull();
-      }
-
-      // After training, the agent should produce valid actions
-      const testAction = await agent.getAction([0.9]);
-      expect([0, 1]).toContain(testAction.action);
-
-      agent.dispose();
-    }, 30000);
-  });
-
-  describe('dispose', () => {
-    it('should clean up tensors without error', () => {
-      const agent = new PPOAgent(config);
-      const tensorsBefore = tf.memory().numTensors;
-      agent.dispose();
-      const tensorsAfter = tf.memory().numTensors;
-      expect(tensorsAfter).toBeLessThanOrEqual(tensorsBefore);
-    });
-  });
-
-  describe('reset', () => {
-    it('should clear trajectory and reset state', async () => {
-      const agent = new PPOAgent(config);
-      const { action, logProb, value } = await agent.getAction([0.1, 0.2, 0.3, 0.4]);
-      agent.storeTransition({
-        state: [0.1, 0.2, 0.3, 0.4],
-        action,
-        reward: 1.0,
-        logProb,
-        value,
-        done: false,
-      });
-      expect(agent.getTrajectoryLength()).toBe(1);
-
-      agent.reset();
-      expect(agent.getTrajectoryLength()).toBe(0);
-
-      agent.dispose();
-    });
-  });
+    agent.dispose();
+  }, 90_000);
 });

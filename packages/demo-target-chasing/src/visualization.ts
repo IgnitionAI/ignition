@@ -100,7 +100,7 @@ const env: IgnitionEnv = new IgnitionEnv({
     
     return reward;
   },
-  isDone: (): boolean => {
+  isTerminated: (): boolean => {
     const d = Math.abs(position - targetPosition);
     const done = d < 0.1 || stepCount > 1000;
     

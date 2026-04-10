@@ -11,6 +11,9 @@ importers:
       reactflow:
         specifier: ^11.11.4
         version: 11.11.4(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@vitest/ui':
         specifier: ^3.1.1
@@ -32,6 +35,9 @@ importers:
       '@huggingface/hub':
         specifier: ^1.1.2
         version: 1.1.2
+      '@ignitionai/core':
+        specifier: workspace:*
+        version: link:../core
       '@tensorflow/tfjs':
         specifier: ^4.22.0
         version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
@@ -50,6 +56,9 @@ importers:
       '@tensorflow/tfjs-vis':
         specifier: ^1.5.1
         version: 1.5.1(@tensorflow/tfjs-core@4.22.0(encoding@0.1.13))(encoding@0.1.13)
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
     devDependencies:
       '@tensorflow/tfjs-node':
         specifier: ^4.22.0
@@ -2279,6 +2288,7 @@ packages:
   tar@6.2.1:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}

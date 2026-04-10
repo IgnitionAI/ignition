@@ -1,27 +1,48 @@
+import type { TFBackend } from './utils/backend-selector';
+
+// Re-export core types for convenience
+export type { AgentInterface, Experience } from '@ignitionai/core';
+
 export interface DQNConfig {
-    inputSize: number;            // Dimension of the state vector
-    actionSize: number;           // Number of possible discrete actions
-    hiddenLayers?: number[];      // Number of neurons per hidden layer, default: [24, 24]
-    gamma?: number;               // Discount factor (default: 0.99)
-    epsilon?: number;             // Exploration rate (default: 1.0)
-    epsilonDecay?: number;        // Decay rate for epsilon per training step (default: 0.995)
-    minEpsilon?: number;          // Minimum exploration rate (default: 0.01)
-    lr?: number;                  // Learning rate for the optimizer (default: 0.001)
-    batchSize?: number;           // Batch size for training (default: 32)
-    memorySize?: number;          // Maximum size of the replay buffer (default: 10000)
-    targetUpdateFrequency?: number; // How often to update the target network (in training steps)
-  }
+  backend?: TFBackend;             // TF.js backend to use (default: 'auto')
+  inputSize: number;              // Dimension du vecteur d'état
+  actionSize: number;             // Nombre d'actions discrètes
+  hiddenLayers?: number[];        // Neurones par couche cachée (défaut : [24, 24])
+  gamma?: number;                 // Facteur de discount (défaut : 0.99)
+  epsilon?: number;               // Taux d'exploration initial (défaut : 1.0)
+  epsilonDecay?: number;          // Décroissance d'epsilon par step (défaut : 0.995)
+  minEpsilon?: number;            // Epsilon minimum (défaut : 0.01)
+  lr?: number;                    // Taux d'apprentissage (défaut : 0.001)
+  batchSize?: number;             // Taille du batch (défaut : 32)
+  memorySize?: number;            // Taille du replay buffer (défaut : 10000)
+  targetUpdateFrequency?: number; // Fréquence de synchro du target network (en steps)
+}
 
 export interface PPOConfig {
-    inputSize: number;            // Dimension of the state vector
-    actionSize: number;           // Number of possible discrete actions
-    hiddenLayers?: number[];      // Neurons per hidden layer, default: [64, 64]
-    gamma?: number;               // Discount factor (default: 0.99)
-    lr?: number;                  // Learning rate (default: 3e-4)
-    clipRatio?: number;           // PPO clip ratio (default: 0.2)
-    epochs?: number;              // Number of optimization epochs per update (default: 4)
-    entropyCoeff?: number;        // Entropy bonus coefficient (default: 0.01)
-    valueCoeff?: number;          // Value loss coefficient (default: 0.5)
-    gaeLambda?: number;           // GAE lambda for advantage estimation (default: 0.95)
-    maxTrajectoryLength?: number; // Max steps per trajectory before training (default: 128)
+  backend?: TFBackend;             // TF.js backend to use (default: 'auto')
+  inputSize: number;        // Dimension du vecteur d'état
+  actionSize: number;       // Nombre d'actions discrètes
+  hiddenLayers?: number[];  // Neurones par couche cachée (défaut : [64, 64])
+  lr?: number;              // Taux d'apprentissage (défaut : 3e-4)
+  gamma?: number;           // Facteur de discount (défaut : 0.99)
+  gaeLambda?: number;       // Paramètre λ du GAE (défaut : 0.95)
+  clipRatio?: number;       // Epsilon du clipping PPO (défaut : 0.2)
+  epochs?: number;          // Epochs d'optimisation par mise à jour (défaut : 4)
+  batchSize?: number;       // Taille des mini-batchs (défaut : 64)
+  entropyCoef?: number;     // Coefficient du bonus d'entropie (défaut : 0.01)
+  valueLossCoef?: number;   // Coefficient de la loss du critic (défaut : 0.5)
+}
+
+export interface QTableConfig {
+  backend?: TFBackend;             // TF.js backend to use (default: 'auto')
+  inputSize: number;        // Nombre de dimensions d'état
+  actionSize: number;       // Nombre d'actions discrètes
+  stateBins?: number;       // Nombre de bins par dimension (défaut : 10)
+  stateLow?: number[];      // Borne inférieure par dimension (défaut : 0)
+  stateHigh?: number[];     // Borne supérieure par dimension (défaut : 1)
+  lr?: number;              // Taux d'apprentissage (défaut : 0.1)
+  gamma?: number;           // Facteur de discount (défaut : 0.99)
+  epsilon?: number;         // Taux d'exploration initial (défaut : 1.0)
+  epsilonDecay?: number;    // Décroissance d'epsilon par step (défaut : 0.995)
+  minEpsilon?: number;      // Epsilon minimum (défaut : 0.01)
 }

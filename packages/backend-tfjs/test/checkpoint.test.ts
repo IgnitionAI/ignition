@@ -41,7 +41,7 @@ if (!HF_TOKEN) {
         const a = Math.floor(Math.random() * 2);
         const r = Math.random();
         const sNext = [Math.random(), Math.random()];
-        agent.remember({ state: s, action: a, reward: r, nextState: sNext, done: false });
+        agent.remember({ state: s, action: a, reward: r, nextState: sNext, terminated: false, truncated: false });
       }
       await agent.train();
 

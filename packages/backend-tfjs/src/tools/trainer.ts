@@ -35,9 +35,7 @@ interface TrainAgentOptions {
   
       const action = await agent.getAction(state);
       const reward = action === correctAction ? 1 : -1;
-      const done = false;
-  
-      agent.remember({ state, action, reward, nextState, done });
+      agent.remember({ state, action, reward, nextState, terminated: false, truncated: false });
       await agent.train();
   
       onStep?.(step, reward, action, state);
