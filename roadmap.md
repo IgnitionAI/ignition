@@ -1,153 +1,96 @@
-# 🧭 IgnitionAI - Project Roadmap
+# IgnitionAI — Roadmap
 
-This document outlines the phased development of **IgnitionAI** — a modular, browser-friendly framework for intelligent agent simulation and reinforcement learning.
+## Phase 1 — Core Algorithms [DONE]
 
----
+> Train RL agents in the browser with zero Python dependencies.
 
-## ✅ Phase 1 — Core Logic (MVP)
+- [x] Q-Table — tabular Q-Learning with mixed-radix state discretization
+- [x] DQN — Deep Q-Network with replay buffer, target network, epsilon-greedy
+- [x] PPO — Proximal Policy Optimization with Actor-Critic, GAE-lambda, clipped surrogate, entropy bonus
+- [x] All agents implement `AgentInterface` (getAction, remember, train, dispose, reset)
+- [x] Zod schema validation for all agent configs
+- [x] Convergence tests (DQN navigation 1D, PPO navigation 1D, Q-Table GridWorld 5x5)
 
-> ⚙️ Goal: Run agent-environment logic headlessly (no UI)
+## Phase 2 — Core Infrastructure [DONE]
 
-✅ Roadmap for "RL algo first"
-Phase A — @ignitionai/backend-tfjs only
-Implementing classic algorithms with TensorFlow.js
+> Modular monorepo, configurable backends, environment loop.
 
-1. 🔁 Q-learning (tabular) – minimalist JS version
-without neural networks
-✅ Implemented Q-Table agent with state/action lookup
-✅ Added tests for basic functionality
+- [x] pnpm workspace monorepo (core, backend-tfjs, backend-onnx, storage)
+- [x] `IgnitionEnv` — environment loop with `step()`, `start()`, `stop()`, `reset()`
+- [x] Gymnasium-style API: `terminated` / `truncated` (not `done`)
+- [x] Configurable TF.js backend selector (WebGPU > WebGL > WASM > CPU)
+- [x] Ring buffer replay memory (O(1) insert)
+- [x] Callbacks system (onStep, onEpisodeEnd)
+- [x] Zod validation for IgnitionEnvConfig
 
-2. 🧠 DQN – Deep Q-Network
-✅ Implemented MLP simple input → hidden → output
-✅ Added replay buffer with experience sampling
-✅ Implemented target network with periodic updates
-✅ Added epsilon-greedy exploration/exploitation
-✅ Loss function based on TD error
-✅ Unit tests with training validation
+## Phase 3 — Model Persistence [DONE]
 
-3. 🧘‍♂️ PPO – Policy Gradient
-✅ Created initial PPO agent skeleton
-- [ ] Implement Actor-Critic model
-- [ ] Implement episode-based training
-- [ ] Add policy and value loss functions
+> Save, load, and share trained models.
 
----
+- [x] `@ignitionai/storage` package
+- [x] `ModelStorageProvider` interface (save/load/list/delete/exists)
+- [x] Hugging Face Hub provider with retry and Zod config validation
+- [x] DQN checkpoint system (regular + best model)
+- [x] 19 tests passing
 
-## ✅ Phase 1.5 — Backend Infrastructure
+## Phase 4 — ONNX Export & Inference [DONE]
 
-> 🧰 Goal: Create robust, multi-environment backend support
+> Train in JS, deploy anywhere.
 
-✅ Created modular monorepo structure
-✅ Implemented robust backend selection system
-✅ Added support for all major TensorFlow.js backends:
-  - WebGPU (experimental)
-  - WebGL
-  - CPU
-  - WASM
-✅ Added helper utilities for backend detection and info
-✅ Added comprehensive model management system:
-  - IndexedDB local storage
-  - Hugging Face Hub integration with authentication
-  - Automatic model serialization/deserialization
-  - Checkpoint system with:
-    - Regular checkpoints (step-based)
-    - Best model checkpoints
-    - Automatic retry with exponential backoff
-  - Model versioning and metadata
-✅ Added robust error handling and logging
-✅ Comprehensive unit tests and integration tests
+- [x] `@ignitionai/backend-onnx` package
+- [x] `OnnxAgent` — inference-only agent implementing AgentInterface
+- [x] ONNX Runtime wrapper (createOnnxSession, runInference)
+- [x] TF.js to ONNX exporter (saveForOnnxExport + Python conversion script)
+- [x] HF Hub loader for `.onnx` files with retry
+- [x] Cross-runtime: deploy trained models in Unity (Sentis/Barracuda), Unreal (NNE), Python, C++, Rust
 
----
+## Phase 5 — Visualization & Developer Experience [DONE]
 
-## 🚀 Phase 2 — R3F Visualisation & Basic UI
+> Watch agents learn in real time.
 
-> 🎮 Goal: Visualize the agent/environment and provide basic interaction
-
-✅ `@ignitionai/r3f`: add `AgentMesh`, `TargetMesh`, `useAgent`
-✅ `@ignitionai/demo-target-chasing`: setup Vite + R3F scene
-✅ Add training monitoring and auto-stop functionality
-✅ Display step count and reward in the UI
-✅ Implement real-time model updates
-✅ Added basic training controls (Start/Stop/Reset)
-✅ Added real-time visualization charts (Reward, Loss, Epsilon) using Recharts
-- [ ] Add more advanced visualization (e.g., network graph, Q-values)
-- [ ] Optimize performance for longer training sessions
-- [ ] Add ability to save/load models from the UI
-
----
-
-## ✅ Phase 3 — TFJS Backend & Dynamic Configuration
-
-> 🧠 Goal: Train and run a model directly in the browser with user configuration
-
-✅ `@ignitionai/backend-tfjs`: built simple MLP model with configurable layers
-✅ Implemented `train()` and `predict()` APIs via DQN agent
-✅ Added model serialization with `save()` and `load()`
-✅ Added support for Hugging Face Hub integration
-✅ Created streamlined `Agent` class interface
-✅ Added comprehensive training utilities:
-  - Progress tracking
-  - Performance metrics
-  - Model checkpointing
-  - Training visualization (3D scene + charts)
-✅ Implemented browser-based training with Three.js visualization
-✅ Added automatic checkpoint saving for best models
-✅ Refactored demo to accept dynamic agent configuration from UI
-✅ Added UI Panel for Agent Hyperparameter Configuration (Learning Rate, Epsilon, Gamma, etc.)
-✅ Added basic Drag-and-Drop Network Designer (React Flow) for visual representation (Note: Currently visual only, config panel drives actual layer structure)
+- [x] React Three Fiber demo (target chasing)
+- [x] 3D visualization with Rapier physics
+- [x] Real-time charts (reward, loss, epsilon) via Recharts
+- [x] UI panel for hyperparameter configuration
+- [x] Visual network designer (React Flow) — visual representation
 - [ ] Fully integrate Network Designer to drive agent creation
-- [ ] Add support for loading pre-trained weights via UI
+- [ ] Web-based training dashboard (start/stop/compare runs)
+
+## Phase 6 — Reference Environments [IN PROGRESS]
+
+> Standardized environments for benchmarking and learning.
+
+- [x] GridWorld NxN (in tests, needs standalone package)
+- [x] CartPole (in tests, needs standalone package)
+- [x] MountainCar (in tests, needs standalone package)
+- [ ] Extract to `@ignitionai/environments` package with proper API
+- [ ] Navigation 2D/3D environments for R3F
+- [ ] Multi-agent environments
+- [ ] Environment gallery / playground
+
+## Phase 7 — Advanced Algorithms [PLANNED]
+
+> Continuous action spaces and more.
+
+- [ ] DDPG — Deep Deterministic Policy Gradient (continuous actions)
+- [ ] SAC — Soft Actor-Critic
+- [ ] A2C — Advantage Actor-Critic
+- [ ] Curriculum learning utilities
+- [ ] Self-play support
+- [ ] Algorithm comparison / benchmarking tools
+
+## Phase 8 — Production & Ecosystem [PLANNED]
+
+> Make it easy to adopt and contribute.
+
+- [ ] npm publish for all packages
+- [ ] Comprehensive docs site
+- [ ] CI/CD pipeline (GitHub Actions)
+- [ ] Example gallery (Three.js, R3F, vanilla JS)
+- [ ] ONNX deployment guides (Unity, Unreal, mobile)
+- [ ] Performance profiling tools
+- [ ] Community templates and starter kits
 
 ---
 
-## 🚀 Phase 4 — ONNX Runtime Backend (Inference-only)
-
-> ⚡ Goal: Run optimized pre-trained models in production
-
-✅ Created initial package structure for ONNX backend
-- [ ] Implement ONNX Runtime Web integration
-- [ ] Add `.onnx` model loading and inference
-- [ ] Create `InferenceBackend` wrapper
-- [ ] Add model conversion utilities (TFJS → ONNX)
-
----
-
-## 🚀 Phase 5 — Advanced Environments
-
-> 🌍 Goal: Create more complex environments for agent training
-
-- [ ] Implement grid-based environments (maze, pathfinding)
-- [ ] Add physics-based environments (pendulum, cartpole)
-- [ ] Create multi-agent environments
-- [ ] Add environment customization tools
-- [ ] Implement environment visualization tools
-
----
-
-## 🚀 Phase 6 — Advanced Algorithms
-
-> 🧠 Goal: Implement more sophisticated RL algorithms
-
-- [ ] Implement DDPG (Deep Deterministic Policy Gradient)
-- [ ] Add SAC (Soft Actor-Critic)
-- [ ] Implement A2C (Advantage Actor-Critic)
-- [ ] Add support for custom algorithm implementations
-- [ ] Create algorithm comparison tools
-
----
-
-## 🚀 Phase 7 — Deployment & Production
-
-> 🚢 Goal: Make the framework production-ready
-
-- [ ] Add comprehensive documentation
-- [ ] Create example applications
-- [ ] Implement CI/CD pipeline
-- [ ] Add performance optimization tools
-- [ ] Create deployment guides
-- [ ] Add monitoring and analytics
-
----
-
-Built with ❤️ by Salim (@IgnitionAI)
-
+Built by [@salim4n](https://github.com/salim4n) / [@IgnitionAI](https://github.com/IgnitionAI)
