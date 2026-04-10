@@ -217,7 +217,7 @@ const Agent = forwardRef(function Agent({ targetPosition, agentConfig }: AgentPr
         if (calculatedReward > bestReward) setBestReward(calculatedReward);
         return calculatedReward;
       },
-      isDone: () => {
+      isTerminated: () => {
         const pos = bodyRef.current?.translation() || { x: 0, y: 0, z: 0 };
         if (pos.x < PLATEAU_LIMITS.minX || pos.x > PLATEAU_LIMITS.maxX || pos.y < PLATEAU_LIMITS.minY || pos.z < PLATEAU_LIMITS.minZ || pos.z > PLATEAU_LIMITS.maxZ) {
           return true; // Out of bounds

@@ -56,7 +56,7 @@ describe('QTableAgent — interface', () => {
 
   it('remember + train ne leve pas d\'erreur', async () => {
     const agent = new QTableAgent({ inputSize: 1, actionSize: 2 });
-    agent.remember({ state: [0.3], action: 1, reward: 1, nextState: [0.4], done: false });
+    agent.remember({ state: [0.3], action: 1, reward: 1, nextState: [0.4], terminated: false, truncated: false });
     await expect(agent.train()).resolves.not.toThrow();
   });
 
@@ -69,7 +69,7 @@ describe('QTableAgent — interface', () => {
       minEpsilon: 0.01,
     });
     const epsBefore = agent.currentEpsilon;
-    agent.remember({ state: [0.5], action: 0, reward: 0, nextState: [0.5], done: false });
+    agent.remember({ state: [0.5], action: 0, reward: 0, nextState: [0.5], terminated: false, truncated: false });
     await agent.train();
     expect(agent.currentEpsilon).toBeLessThan(epsBefore);
   });
@@ -84,7 +84,7 @@ describe('QTableAgent — interface', () => {
     for (let i = 0; i < 20; i++) {
       const state = [Math.random()];
       const action = await agent.getAction(state);
-      agent.remember({ state, action, reward: 1, nextState: [Math.random()], done: false });
+      agent.remember({ state, action, reward: 1, nextState: [Math.random()], terminated: false, truncated: false });
       await agent.train();
     }
     expect(agent.tableSize).toBeGreaterThan(0);
@@ -126,7 +126,8 @@ describe('QTableAgent — convergence GridWorld 5×5', () => {
           action,
           reward,
           nextState: encodeState(next),
-          done,
+          terminated: done,
+          truncated: false,
         });
         await agent.train();
 

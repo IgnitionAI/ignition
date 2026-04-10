@@ -61,7 +61,7 @@ describe('DQN — convergence', () => {
         const action = await agent.getAction(state);
         const { newPos, reward, done } = nav1DStep(pos, action);
 
-        agent.remember({ state, action, reward, nextState: [newPos], done });
+        agent.remember({ state, action, reward, nextState: [newPos], terminated: done, truncated: false });
         await agent.train();
 
         totalReward += reward;

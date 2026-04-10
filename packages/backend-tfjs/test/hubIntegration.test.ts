@@ -46,7 +46,7 @@ if (!HF_TOKEN) {
         const action = Math.floor(Math.random() * 2);
         const reward = Math.random();
         const nextState = [Math.random(), Math.random()];
-        agent.remember({ state, action, reward, nextState, done: false });
+        agent.remember({ state, action, reward, nextState, terminated: false, truncated: false });
       }
       await agent.train();
 

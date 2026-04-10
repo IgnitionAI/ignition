@@ -221,7 +221,7 @@ export class PPOAgent implements AgentInterface {
     const { returns, advantages } = this.computeGAE();
 
     const states = this.rollout.map(e => e.state);
-    const actions = this.rollout.map(e => e.action);
+    const actions = this.rollout.map(e => e.action as number);
     const oldLogProbs = this.rollout.map(e => e.logProb);
 
     for (let epoch = 0; epoch < this.epochs; epoch++) {
@@ -277,8 +277,8 @@ export class PPOAgent implements AgentInterface {
     let lastGAE = 0;
 
     for (let t = n - 1; t >= 0; t--) {
-      const { reward, done, value } = this.rollout[t];
-      const mask = done ? 0 : 1;
+      const { reward, terminated, truncated, value } = this.rollout[t];
+      const mask = (terminated || truncated) ? 0 : 1;
 
       // Erreur TD
       const delta = reward + this.gamma * nextValue * mask - value;
@@ -332,10 +332,10 @@ export class PPOAgent implements AgentInterface {
 
     // Variables entraînables — passées explicitement pour cibler le bon réseau
     const actorVars = this.actorNet.trainableWeights.map(
-      w => w.val as tf.Variable,
+      w => (w as unknown as { val: tf.Variable }).val,
     );
     const criticVars = this.criticNet.trainableWeights.map(
-      w => w.val as tf.Variable,
+      w => (w as unknown as { val: tf.Variable }).val,
     );
 
     try {

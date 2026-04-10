@@ -54,7 +54,7 @@ describe('PPOAgent — interface', () => {
     for (let i = 0; i < 8; i++) {
       const state = [Math.random()];
       const action = await agent.getAction(state);
-      agent.remember({ state, action, reward: Math.random(), nextState: [Math.random()], done: false });
+      agent.remember({ state, action, reward: Math.random(), nextState: [Math.random()], terminated: false, truncated: false });
     }
     await expect(agent.train()).resolves.not.toThrow();
     agent.dispose();
@@ -67,7 +67,7 @@ describe('PPOAgent — interface', () => {
       hiddenLayers: [8],
     });
     const action = await agent.getAction([0.3]);
-    agent.remember({ state: [0.3], action, reward: 1, nextState: [0.5], done: false });
+    agent.remember({ state: [0.3], action, reward: 1, nextState: [0.5], terminated: false, truncated: false });
     await agent.train();
     // Un deuxième train() sur un rollout vide ne doit pas planter
     await expect(agent.train()).resolves.not.toThrow();
@@ -106,7 +106,7 @@ describe('PPOAgent — convergence', () => {
         const action = await agent.getAction(state);
         const { newPos, reward, done } = nav1DStep(pos, action);
 
-        agent.remember({ state, action, reward, nextState: [newPos], done });
+        agent.remember({ state, action, reward, nextState: [newPos], terminated: done, truncated: false });
         totalReward += reward;
         pos = newPos;
         if (done) break;
