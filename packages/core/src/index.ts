@@ -20,3 +20,4 @@ export {
   ExperienceSchema,
   IgnitionEnvConfigSchema,
 } from './schemas';
+export type { IgnitionEnvCallbacks } from './schemas';

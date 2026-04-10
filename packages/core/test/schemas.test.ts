@@ -19,7 +19,7 @@ const validEnvConfig = {
   getObservation: () => [0],
   applyAction: () => {},
   computeReward: () => 0,
-  isDone: () => false,
+  isTerminated: () => false,
 };
 
 // ─── ExperienceSchema ─────────────────────────────────────────────────────────
@@ -31,26 +31,27 @@ describe('ExperienceSchema', () => {
       action: 1,
       reward: -1,
       nextState: [0.3, 0.4],
-      done: false,
+      terminated: false,
+      truncated: false,
     };
     expect(() => ExperienceSchema.parse(exp)).not.toThrow();
   });
 
   it('rejects non-array state', () => {
     expect(() =>
-      ExperienceSchema.parse({ state: 'bad', action: 0, reward: 0, nextState: [], done: false })
+      ExperienceSchema.parse({ state: 'bad', action: 0, reward: 0, nextState: [], terminated: false, truncated: false })
     ).toThrow();
   });
 
   it('rejects non-number action', () => {
     expect(() =>
-      ExperienceSchema.parse({ state: [], action: 'a', reward: 0, nextState: [], done: false })
+      ExperienceSchema.parse({ state: [], action: 'a', reward: 0, nextState: [], terminated: false, truncated: false })
     ).toThrow();
   });
 
-  it('rejects non-boolean done', () => {
+  it('rejects non-boolean terminated', () => {
     expect(() =>
-      ExperienceSchema.parse({ state: [], action: 0, reward: 0, nextState: [], done: 'yes' })
+      ExperienceSchema.parse({ state: [], action: 0, reward: 0, nextState: [], terminated: 'yes', truncated: false })
     ).toThrow();
   });
 });

@@ -1,12 +1,10 @@
-export * from './agents/dqn';
-export * from './agents/ppo';
-export * from './agents/qtable';
-export * from './memory/ReplayBuffer';
-export * from './model/BuildMLP';
-export * from './types';
-export * from './schemas';
 export { DQNAgent } from './agents/dqn';
 export { PPOAgent } from './agents/ppo';
 export { QTableAgent } from './agents/qtable';
+export { ReplayBuffer } from './memory/ReplayBuffer';
+export { buildQNetwork } from './model/BuildMLP';
 export { setBackend, getAvailableBackends } from './utils/backend-selector';
 export type { TFBackend } from './utils/backend-selector';
+export type { AgentInterface, Experience } from './types';
+export type { DQNConfig, PPOConfig, QTableConfig } from './types';
+export { DQNConfigSchema, PPOConfigSchema, QTableConfigSchema } from './schemas';

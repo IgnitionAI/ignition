@@ -27,8 +27,8 @@ let position = 0;
 let target = (Math.random() - 0.5) * 4;
 let bestDistance = Infinity;
 
-// Définir la fonction isDone en dehors de la configuration
-const isDone = (): boolean => {
+// Définir la fonction isTerminated en dehors de la configuration
+const isTerminated = (): boolean => {
   const d = Math.abs(position - target);
   return d < 0.1 || env.stepCount > 1000;
 };
@@ -54,7 +54,7 @@ const env: IgnitionEnv = new IgnitionEnv({
     }
     return reward;
   },
-  isDone,
+  isTerminated,
   onReset: () => {
     position = 0;
     target = (Math.random() - 0.5) * 4;
@@ -68,7 +68,7 @@ const env: IgnitionEnv = new IgnitionEnv({
 // Étendre la méthode step pour gérer les checkpoints
 const originalStep = env.step.bind(env);
 env.step = async () => {
-  await originalStep();
+  const stepResult = await originalStep();
   
   const d = Math.abs(position - target);
   
@@ -96,7 +96,7 @@ env.step = async () => {
   }
   
   // Si c'est la fin, sauvegarder un dernier checkpoint
-  if (isDone()) {
+  if (isTerminated()) {
     console.log(`Training finished at step ${env.stepCount}!`);
     console.log(`Final distance: ${d.toFixed(2)}`);
     await agent.saveCheckpoint(
@@ -107,6 +107,7 @@ env.step = async () => {
     env.stop();
     process.exit(0);
   }
+  return stepResult;
 };
 
 env.start();

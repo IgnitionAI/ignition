@@ -1,27 +1,8 @@
 import type { TFBackend } from './utils/backend-selector';
 import type { ModelStorageProvider } from '@ignitionai/storage';
 
-/**
- * AgentInterface — contrat minimal pour tout agent IgnitionAI.
- * Correspond au type AgentInterface exporté par @ignitionai/core.
- */
-export interface AgentInterface {
-  getAction(observation: number[]): Promise<number>;
-  remember(experience: Experience): void;
-  train(): Promise<void>;
-}
-
-/**
- * Experience — une transition (s, a, r, s', done) stockée dans le replay buffer.
- * Correspond au type Experience exporté par @ignitionai/core.
- */
-export interface Experience {
-  state: number[];
-  action: number;
-  reward: number;
-  nextState: number[];
-  done: boolean;
-}
+// Re-export core types for convenience
+export type { AgentInterface, Experience } from '@ignitionai/core';
 
 export interface DQNConfig {
   backend?: TFBackend;             // TF.js backend to use (default: 'auto')
