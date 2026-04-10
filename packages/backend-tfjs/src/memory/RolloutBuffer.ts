@@ -57,7 +57,8 @@ export class RolloutBuffer {
 
   computeAdvantagesAndReturns(
     gamma: number,
-    gaeLambda: number
+    gaeLambda: number,
+    lastValue: number = 0
   ): { advantages: number[]; returns: number[] } {
     const n = this.size();
     const advantages = new Array<number>(n);
@@ -66,7 +67,7 @@ export class RolloutBuffer {
     let lastAdvantage = 0;
 
     for (let t = n - 1; t >= 0; t--) {
-      const nextValue = t === n - 1 ? 0 : this.values[t + 1];
+      const nextValue = t === n - 1 ? lastValue : this.values[t + 1];
       const nextNonTerminal = this.dones[t] ? 0 : 1;
 
       const delta =
