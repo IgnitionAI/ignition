@@ -5,14 +5,14 @@
 
 ## Phase 1: Setup
 
-- [ ] **T1** [setup] Create Zustand stores skeleton and types
+- [x] **T1** [setup] Create Zustand stores skeleton and types
   - Files: `src/stores/networkStore.ts`, `src/stores/runStore.ts`, `src/types/runs.ts`
   - Define `TrainingRun`, `RunMetrics`, `RunStore` types
   - Define `NetworkStore` with `nodes`, `edges`, `hiddenLayers` state
   - Install `zustand` persist middleware if not present
   - Test: stores initialize without errors
 
-- [ ] **T2** [setup] Create `graphToConfig.ts` pure function + tests (TDD)
+- [x] **T2** [setup] Create `graphToConfig.ts` pure function + tests (TDD)
   - File: `src/components/NetworkDesigner/graphToConfig.ts`
   - Test file: `test/graphToConfig.test.ts`
   - Input: React Flow `Node[]` and `Edge[]`
@@ -21,7 +21,7 @@
 
 ## Phase 2: Foundational — Network Store with Bidirectional Sync
 
-- [ ] **T3** [core] Implement `networkStore` with bidirectional sync + tests (TDD)
+- [x] **T3** [core] Implement `networkStore` with bidirectional sync + tests (TDD)
   - File: `src/stores/networkStore.ts`
   - Test file: `test/networkStore.test.ts`
   - Actions: `setGraph(nodes, edges)` → recomputes `hiddenLayers` via `graphToConfig`
@@ -35,18 +35,18 @@
 
 **Independent test**: Open demo → drag nodes → Apply → agent trains with new architecture.
 
-- [ ] **T4** [ui] Create `DenseLayerNode` custom React Flow node
+- [x] **T4** [ui] Create `DenseLayerNode` custom React Flow node
   - File: `src/components/NetworkDesigner/DenseLayerNode.tsx`
   - Displays unit count (e.g. "Dense 64"), click to edit inline (input field)
   - On edit confirm: update node data, trigger `networkStore.setGraph()`
   - Has delete handle (X button)
 
-- [ ] **T5** [ui] Create `InputOutputNode` custom React Flow node
+- [x] **T5** [ui] Create `InputOutputNode` custom React Flow node
   - File: `src/components/NetworkDesigner/InputOutputNode.tsx`
   - Read-only display: "Input (4)" and "Output (2)" showing inputSize/actionSize
   - Not deletable, not editable
 
-- [ ] **T6** [ui] Refactor `NetworkDesigner.tsx` to use custom nodes + store
+- [x] **T6** [ui] Refactor `NetworkDesigner.tsx` to use custom nodes + store
   - File: `src/components/NetworkDesigner/NetworkDesigner.tsx`
   - Replace current visual-only React Flow with functional version
   - Initialize graph from current `hiddenLayers` config via `networkStore`
@@ -54,12 +54,12 @@
   - Node deletion: remove node + reconnect edges automatically
   - All graph mutations go through `networkStore.setGraph()`
 
-- [ ] **T7** [ui] Wire config panel ↔ Network Designer bidirectional sync
+- [x] **T7** [ui] Wire config panel ↔ Network Designer bidirectional sync
   - When config panel `hiddenLayers` changes → `networkStore.setHiddenLayers()` → graph updates
   - When graph changes → `networkStore` → config panel reflects new `hiddenLayers`
   - "Apply" button: reads `hiddenLayers` from store, disposes old agent, creates new agent, shows notification
 
-- [ ] **T8** [test] Integration test: graph → agent creation
+- [x] **T8** [test] Integration test: graph → agent creation
   - Test file: `test/networkDesigner.integration.test.ts`
   - Verify: modify graph → click Apply → new DQNAgent has correct `hiddenLayers`
   - Verify: mid-training Apply → training stops, agent disposed, new agent created
@@ -70,7 +70,7 @@
 
 **Independent test**: Start two runs with different configs → select both → curves overlaid.
 
-- [ ] **T9** [core] Implement `runStore` with persistence + tests (TDD)
+- [x] **T9** [core] Implement `runStore` with persistence + tests (TDD)
   - File: `src/stores/runStore.ts`
   - Test file: `test/runStore.test.ts`
   - State: `runs: TrainingRun[]`, `selectedRunIds: string[]`, `activeRunId: string | null`
@@ -79,7 +79,7 @@
   - Auto-prune: keep max 100 runs, oldest first
   - Tests: CRUD operations, persistence round-trip, auto-prune, selection logic
 
-- [ ] **T10** [ui] Create `RunList.tsx` component
+- [x] **T10** [ui] Create `RunList.tsx` component
   - File: `src/components/Dashboard/RunList.tsx`
   - List all runs: name, date, episode count, final reward
   - Checkbox selection (max 5)
@@ -87,7 +87,7 @@
   - Delete button with confirmation
   - Sort by: date (default), final reward, episode count
 
-- [ ] **T11** [ui] Create `RunChart.tsx` component
+- [x] **T11** [ui] Create `RunChart.tsx` component
   - File: `src/components/Dashboard/RunChart.tsx`
   - Recharts `LineChart` with overlaid series for selected runs
   - X-axis: episode number, Y-axis: reward (primary), epsilon (secondary)
@@ -95,14 +95,14 @@
   - Downsample to 200 points per series if > 200 episodes
   - Responsive width
 
-- [ ] **T12** [ui] Create `Dashboard.tsx` container + wire IgnitionEnv callbacks
+- [x] **T12** [ui] Create `Dashboard.tsx` container + wire IgnitionEnv callbacks
   - File: `src/components/Dashboard/Dashboard.tsx`
   - Layout: RunList (left panel) + RunChart (main area)
   - "New Run" button: starts a new run entry via `runStore.startRun(config)`
   - Wire `IgnitionEnv` callbacks: `onStep` → update live metrics, `onEpisodeEnd` → `runStore.recordEpisode()`
   - "Export JSON" button for selected run
 
-- [ ] **T13** [test] Integration test: run recording + chart display
+- [x] **T13** [test] Integration test: run recording + chart display
   - Test file: `test/dashboard.integration.test.ts`
   - Verify: start run → step through episodes → run appears in list with correct metrics
   - Verify: select 2 runs → chart shows both series with correct data
@@ -111,29 +111,29 @@
 
 **Goal**: Runs survive page reload, can be exported as JSON.
 
-- [ ] **T14** [core] Verify localStorage persistence round-trip
+- [x] **T14** [core] Verify localStorage persistence round-trip
   - Test file: `test/runStore.test.ts` (add to existing)
   - Serialize store → clear → rehydrate → verify all runs intact
   - Test export: `runStore.exportRun(id)` returns valid JSON with config + episodes
 
-- [ ] **T15** [ui] Add sort controls and export button to RunList
+- [x] **T15** [ui] Add sort controls and export button to RunList
   - Add sort dropdown to RunList header
   - Add "Export JSON" button per run → triggers browser download
   - Add "Clear All" button with confirmation dialog
 
 ## Phase 6: Polish & Edge Cases
 
-- [ ] **T16** [edge] Handle zero hidden layers
+- [x] **T16** [edge] Handle zero hidden layers
   - graphToConfig returns `[]` for graph with only input→output edge
   - Show warning tooltip: "No hidden layers — linear model"
   - Agent still creates successfully
 
-- [ ] **T17** [edge] Handle localStorage overflow
+- [x] **T17** [edge] Handle localStorage overflow
   - Wrap `persist` with try/catch
   - On quota exceeded: show notification, auto-prune 10 oldest runs, retry
   - If still failing: disable persistence, warn user, continue training
 
-- [ ] **T18** [polish] Add notifications for agent lifecycle events
+- [x] **T18** [polish] Add notifications for agent lifecycle events
   - Toast/notification on: "Agent recreated with [64, 128, 64]", "Training reset", "Run saved", "Export complete"
   - Use a simple notification system (Zustand store + CSS animation, no new dependency)
 

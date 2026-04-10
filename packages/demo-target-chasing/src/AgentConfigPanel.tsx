@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNetworkStore } from './stores/networkStore';
 
 interface LayerConfig {
   id: string;
@@ -21,13 +22,13 @@ interface AgentConfigPanelProps {
 }
 
 export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
-  // Default configuration
-  const [inputSize, setInputSize] = useState(9);
-  const [actionSize, setActionSize] = useState(4);
-  const [layers, setLayers] = useState<LayerConfig[]>([
-    { id: 'layer1', neurons: 64 },
-    { id: 'layer2', neurons: 64 }
-  ]);
+  const { hiddenLayers, inputSize: storeInputSize, actionSize: storeActionSize, setHiddenLayers, setSizes } = useNetworkStore();
+
+  const [inputSize, setInputSize] = useState(storeInputSize);
+  const [actionSize, setActionSize] = useState(storeActionSize);
+  const [layers, setLayers] = useState<LayerConfig[]>(
+    hiddenLayers.map((n, i) => ({ id: `layer${i}`, neurons: n }))
+  );
   const [epsilon, setEpsilon] = useState(0.9);
   const [epsilonDecay, setEpsilonDecay] = useState(0.97);
   const [minEpsilon, setMinEpsilon] = useState(0.05);
@@ -35,40 +36,52 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
   const [learningRate, setLearningRate] = useState(0.001);
   const [batchSize, setBatchSize] = useState(128);
   const [memorySize, setMemorySize] = useState(100000);
-  
-  // Function to add a new layer
+
+  // Sync from networkStore → local layers state (when graph changes)
+  useEffect(() => {
+    setLayers(hiddenLayers.map((n, i) => ({ id: `layer${i}`, neurons: n })));
+  }, [hiddenLayers]);
+
+  useEffect(() => {
+    setInputSize(storeInputSize);
+    setActionSize(storeActionSize);
+  }, [storeInputSize, storeActionSize]);
+
   const addLayer = () => {
-    const newId = `layer${layers.length + 1}`;
-    setLayers([...layers, { id: newId, neurons: 32 }]);
+    const updated = [...layers, { id: `layer${Date.now()}`, neurons: 32 }];
+    setLayers(updated);
+    setHiddenLayers(updated.map((l) => l.neurons));
   };
-  
-  // Function to remove a layer
+
   const removeLayer = (id: string) => {
     if (layers.length > 1) {
-      setLayers(layers.filter(layer => layer.id !== id));
+      const updated = layers.filter((layer) => layer.id !== id);
+      setLayers(updated);
+      setHiddenLayers(updated.map((l) => l.neurons));
     }
   };
-  
-  // Function to update a layer's neuron count
+
   const updateLayer = (id: string, neurons: number) => {
-    setLayers(layers.map(layer => 
+    const updated = layers.map((layer) =>
       layer.id === id ? { ...layer, neurons } : layer
-    ));
+    );
+    setLayers(updated);
+    setHiddenLayers(updated.map((l) => l.neurons));
   };
-  
-  // Apply configuration
+
   const applyConfig = () => {
+    setSizes(inputSize, actionSize);
     onApplyConfig({
       inputSize,
       actionSize,
-      hiddenLayers: layers.map(layer => layer.neurons),
+      hiddenLayers: layers.map((layer) => layer.neurons),
       epsilon,
       epsilonDecay,
       minEpsilon,
       gamma,
       lr: learningRate,
       batchSize,
-      memorySize
+      memorySize,
     });
   };
   
