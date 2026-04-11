@@ -2,65 +2,66 @@
 
 ## Done
 
-Everything below is shipped, tested, and on `dev`.
-
 - **Core**: TrainingEnv/InferenceEnv interfaces, auto-config (`env.train('dqn')`), IgnitionEnv with train/infer/stop
 - **Algos**: DQN, PPO, Q-Table — all with greedy mode for inference
-- **Infrastructure**: pnpm monorepo, Zod validation, ring buffer, backend selector
+- **Infrastructure**: pnpm monorepo, Zod validation, CI/CD (GitHub Actions), `ignitionai` umbrella package
 - **ONNX**: OnnxAgent, TF.js→ONNX exporter, HF Hub loader
 - **Storage**: HuggingFace Hub provider (save/load/list/delete)
-- **Demos**: GridWorld, CartPole, MountainCar — train + inference mode, live reward chart
-- **Tests**: 149 passing across all packages
+- **Environments**: `@ignitionai/environments` — GridWorld, CartPole, MountainCar
+- **Demos 2D**: GridWorld, CartPole, MountainCar — train + inference mode, live reward chart
+- **Demo 3D**: CartPole 3D (R3F) — metallic cart, pole, rail, professional lighting
+- **184+ tests** passing across all packages
 
 ---
 
-## Phase 1 — Ship It (npm publish + CI/CD)
+## Phase 1 — Wow Demo: Car on Circuit (IN PROGRESS)
 
-> Nobody can use IgnitionAI if they can't install it.
+> A 3D car learns to drive on a circuit. The hero demo.
 
-- [ ] CI/CD: GitHub Actions — tests + build on every PR, block merge on failure
-- [ ] npm publish: `@ignitionai/core`, `@ignitionai/backend-tfjs`, `@ignitionai/backend-onnx`, `@ignitionai/storage`
-- [ ] Extract environments into `@ignitionai/environments` package (GridWorld, CartPole, MountainCar with TrainingEnv interface)
-- [ ] Publish environments to npm
-- [ ] Version 0.1.0 — first public release
-- [ ] CHANGELOG.md
+- [ ] Car on oval circuit with R3F + 3D model (.glb)
+- [ ] Discrete actions: steer left, straight, steer right
+- [ ] Observation: car position, angle, distance to track edges, velocity
+- [ ] Agent learns to stay on track and complete laps
+- [ ] Train → Inference toggle — car drives perfectly after training
+- [ ] Deploy on Vercel as shareable URL
 
-## Phase 2 — The Wow Demo (3D + Physics)
-
-> One killer R3F demo that makes people share it.
-
-- [ ] CartPole 3D: React Three Fiber + Rapier physics — cart on rail, pole balancing, camera follows
-- [ ] Train in browser → switch to inference → pole stays perfectly balanced in 3D
-- [ ] Deploy as a standalone page on Vercel/Netlify — shareable URL
-- [ ] This becomes the homepage hero demo
-
-## Phase 3 — Landing Page & Docs
+## Phase 2 — Landing Page & Docs
 
 > Convert visitors into users.
 
-- [ ] Landing page: hero demo (3D CartPole), "10 lines of code" pitch, install command, 3 demo links
-- [ ] Documentation site: Getting Started, TrainingEnv API reference, algorithm guide, ONNX export guide
-- [ ] README updated with badges, install command, quickstart pointing to docs
-- [ ] SEO: "reinforcement learning javascript", "ml-agents alternative", "train AI browser"
+- [ ] Landing page: hero demo embed, "10 lines of code" pitch, install command
+- [ ] Documentation site: Getting Started, TrainingEnv API, algorithm guide, ONNX export
+- [ ] README updated with badges, quickstart pointing to docs
 
-## Phase 4 — Advanced Algorithms
+## Phase 3 — Advanced Algorithms
 
-> Continuous action spaces unlock real game AI use cases.
+> Continuous action spaces for real game AI.
 
-- [ ] Discussion: DDPG vs SAC vs TD3 — which first? (SAC recommended: more stable, entropy-regularized)
-- [ ] SAC: Soft Actor-Critic for continuous action spaces (e.g. steering angle, throttle)
-- [ ] Navigation 2D demo: continuous actions, obstacle avoidance — proves SAC works
-- [ ] A2C: lightweight alternative to PPO for simpler problems
+- [ ] SAC (Soft Actor-Critic) — continuous steering angle, throttle
+- [ ] Upgrade car demo to continuous actions with SAC
+- [ ] A2C — lightweight alternative to PPO
 
-## Phase 5 — Ecosystem & Growth
+## Phase 4 — Ecosystem & Growth
 
-> Make it easy to adopt, contribute, and build on.
+> Scale adoption.
 
-- [ ] Example gallery: 5+ examples (Three.js, R3F, vanilla canvas, Node.js headless)
-- [ ] ONNX deployment guide: step-by-step for Unity (Sentis), Unreal (NNE), Python
-- [ ] Community templates: `create-ignitionai-app` starter
-- [ ] Blog post / Twitter thread announcing the project
-- [ ] Performance benchmarks: training speed on different backends (WebGPU vs WebGL vs CPU)
+- [ ] npm publish v0.1.0 (all packages + umbrella)
+- [ ] Example gallery: Three.js, R3F, vanilla canvas, Node.js headless
+- [ ] ONNX deployment guides: Unity (Sentis), Unreal (NNE)
+- [ ] `create-ignitionai-app` starter template
+- [ ] Blog post / Twitter launch
+
+---
+
+## Optional — Showcase Demos
+
+> Additional 3D demos for the gallery. Build when time allows.
+
+- [ ] **Drone hover** — 3D drone learns to stabilize mid-air (thrust 4 directions)
+- [ ] **Marble on tilting platform** — tilt to guide a ball to the target
+- [ ] **Rocket landing** — SpaceX-style inverted pendulum in 3D (thrust 4 directions)
+- [ ] **Robot arm** — pick & place with joint rotations
+- [ ] **Snake 3D** — classic snake game rendered in R3F
 
 ---
 
