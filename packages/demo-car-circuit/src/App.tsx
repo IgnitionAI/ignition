@@ -91,7 +91,10 @@ export default function App() {
       </div>
 
       {/* Controls */}
-      <Controls onStart={handleStart} onStop={handleStop} onReset={handleReset} onInfer={handleInfer} />
+      <Controls
+        onStart={handleStart} onStop={handleStop} onReset={handleReset} onInfer={handleInfer}
+        onSpeedChange={(m) => { if (envRef.current) envRef.current.setSpeed(m); }}
+      />
 
       {/* Bottom: code + chart */}
       <div style={{ display: 'flex', gap: 24, padding: '8px 32px 24px', maxWidth: 1000, margin: '0 auto' }}>

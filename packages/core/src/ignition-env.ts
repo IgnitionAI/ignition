@@ -9,6 +9,12 @@ export class IgnitionEnv {
   private isRunning = false;
   public stepCount = 0;
 
+  /** Milliseconds between steps. Lower = faster training. Default 50ms (20 steps/sec). */
+  public stepIntervalMs = 50;
+
+  /** Number of steps to run per tick. >1 = batch multiple steps before yielding to the event loop. */
+  public stepsPerTick = 1;
+
   protected factories: Record<string, AgentFactory> = {};
   protected algorithmDefaults: Record<string, Record<string, unknown>> = {};
   private currentAlgorithm: AlgorithmType | null = null;
@@ -96,10 +102,6 @@ export class IgnitionEnv {
     return result;
   }
 
-  /**
-   * Run one inference step: observe → getAction (greedy) → step.
-   * No remember, no train. Pure exploitation.
-   */
   public async inferStep(): Promise<StepResult> {
     if (!this._agent) {
       throw new Error('[IgnitionEnv] No agent. Call train() first, then infer().');
@@ -126,9 +128,6 @@ export class IgnitionEnv {
     return result;
   }
 
-  /**
-   * Start the inference loop (no learning). Agent must already be trained.
-   */
   public infer(): void {
     if (!this._agent) {
       throw new Error('[IgnitionEnv] No agent. Call train() first to create an agent.');
@@ -136,29 +135,33 @@ export class IgnitionEnv {
     if (this.isRunning) this.stop();
 
     this.isRunning = true;
-    const interval = 50;
 
     const loop = async (): Promise<void> => {
       if (!this.isRunning) return;
-      await this.inferStep();
-      setTimeout(loop, interval);
+      for (let i = 0; i < this.stepsPerTick; i++) {
+        if (!this.isRunning) return;
+        await this.inferStep();
+      }
+      setTimeout(loop, this.stepIntervalMs);
     };
 
-    setTimeout(loop, interval);
+    setTimeout(loop, this.stepIntervalMs);
   }
 
   public start(): void {
     if (this.isRunning) return;
     this.isRunning = true;
-    const interval = 50;
 
     const loop = async (): Promise<void> => {
       if (!this.isRunning) return;
-      await this.step();
-      setTimeout(loop, interval);
+      for (let i = 0; i < this.stepsPerTick; i++) {
+        if (!this.isRunning) return;
+        await this.step();
+      }
+      setTimeout(loop, this.stepIntervalMs);
     };
 
-    setTimeout(loop, interval);
+    setTimeout(loop, this.stepIntervalMs);
   }
 
   public stop(): void {
@@ -169,5 +172,22 @@ export class IgnitionEnv {
     this.env.reset();
     this.currentState = this.env.observe();
     this.stepCount = 0;
+  }
+
+  /**
+   * Set training speed. Multiplier: 1x = normal (50ms, 1 step/tick), 10x = fast, 50x = turbo.
+   */
+  public setSpeed(multiplier: number): void {
+    if (multiplier <= 1) {
+      this.stepIntervalMs = 50;
+      this.stepsPerTick = 1;
+    } else if (multiplier <= 10) {
+      this.stepIntervalMs = 10;
+      this.stepsPerTick = Math.round(multiplier);
+    } else {
+      // Turbo: minimal interval, batch many steps
+      this.stepIntervalMs = 1;
+      this.stepsPerTick = Math.round(multiplier / 2);
+    }
   }
 }
