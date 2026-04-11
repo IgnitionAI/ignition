@@ -1,0 +1,31 @@
+{
+  "name": "ignitionai",
+  "version": "0.1.0",
+  "description": "Train RL agents in the browser. The ML-Agents of JavaScript.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@ignitionai/core": "workspace:*",
+    "@ignitionai/backend-tfjs": "workspace:*",
+    "@ignitionai/backend-onnx": "workspace:*",
+    "@ignitionai/storage": "workspace:*",
+    "@ignitionai/environments": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "reinforcement-learning", "rl", "machine-learning", "tensorflow", "tfjs",
+    "onnx", "dqn", "ppo", "browser", "threejs", "react-three-fiber", "game-ai"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IgnitionAI/ignition"
+  },
+  "homepage": "https://github.com/IgnitionAI/ignition#readme"
+}

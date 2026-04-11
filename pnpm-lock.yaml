@@ -314,6 +314,24 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(@types/node@22.14.1)(@vitest/ui@3.1.1)(tsx@4.19.3)
 
+  packages/ignitionai:
+    dependencies:
+      '@ignitionai/backend-onnx':
+        specifier: workspace:*
+        version: link:../backend-onnx
+      '@ignitionai/backend-tfjs':
+        specifier: workspace:*
+        version: link:../backend-tfjs
+      '@ignitionai/core':
+        specifier: workspace:*
+        version: link:../core
+      '@ignitionai/environments':
+        specifier: workspace:*
+        version: link:../environments
+      '@ignitionai/storage':
+        specifier: workspace:*
+        version: link:../storage
+
   packages/storage:
     dependencies:
       '@huggingface/hub':
