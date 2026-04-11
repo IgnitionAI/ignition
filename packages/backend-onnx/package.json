@@ -38,6 +38,9 @@
     }
   },
   "devDependencies": {
+    "@ignitionai/backend-tfjs": "workspace:*",
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-backend-cpu": "^4.22.0",
     "vitest": "^3.1.1"
   },
   "publishConfig": {
