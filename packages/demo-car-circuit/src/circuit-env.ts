@@ -19,6 +19,7 @@ export class CircuitEnv implements TrainingEnv {
   laps = 0;
   private lastProgress = 0;
   private offTrack = false;
+  private justCompletedLap = false;
 
   constructor(straightLen = 10, radius = 4, halfWidth = 2) {
     this.track = new OvalTrack(straightLen, radius, halfWidth);
@@ -57,10 +58,12 @@ export class CircuitEnv implements TrainingEnv {
     // Check track status
     this.offTrack = !this.track.isOnTrack(this.carX, this.carY);
 
-    // Check lap completion
+    // Check lap completion — fire bonus only once per lap crossing
+    this.justCompletedLap = false;
     const result = this.track.nearestPoint(this.carX, this.carY);
     if (result.progress < 0.1 && this.lastProgress > 0.9) {
       this.laps++;
+      this.justCompletedLap = true;
     }
     this.lastProgress = result.progress;
 
@@ -69,7 +72,7 @@ export class CircuitEnv implements TrainingEnv {
 
   reward(): number {
     if (this.offTrack) return OFF_TRACK_PENALTY;
-    if (this.laps > 0 && this.lastProgress < 0.1) return LAP_BONUS;
+    if (this.justCompletedLap) return LAP_BONUS;
     return 1; // +1 per step on track
   }
 
@@ -88,6 +91,7 @@ export class CircuitEnv implements TrainingEnv {
     this.laps = 0;
     this.lastProgress = 0;
     this.offTrack = false;
+    this.justCompletedLap = false;
   }
 
   private normalizeAngle(a: number): number {
