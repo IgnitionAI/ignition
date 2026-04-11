@@ -51,7 +51,7 @@ export interface StepResult {
 // ─── Agent interfaces ────────────────────────────────────────────────────────
 
 export interface AgentInterface {
-  getAction(observation: number[]): Promise<number | number[]>;
+  getAction(observation: number[], greedy?: boolean): Promise<number | number[]>;
   remember(experience: Experience): void;
   train(): Promise<void>;
   /** Release TF/GPU/WASM resources held by the agent */

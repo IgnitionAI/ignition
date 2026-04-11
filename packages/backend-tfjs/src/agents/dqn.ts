@@ -63,8 +63,8 @@ export class DQNAgent implements AgentInterface {
     this.memory = new ReplayBuffer(memorySize);
   }
 
-  async getAction(state: number[]): Promise<number> {
-    if (Math.random() < this.epsilon) {
+  async getAction(state: number[], greedy?: boolean): Promise<number> {
+    if (!greedy && Math.random() < this.epsilon) {
       return Math.floor(Math.random() * this.actionSize);
     }
 

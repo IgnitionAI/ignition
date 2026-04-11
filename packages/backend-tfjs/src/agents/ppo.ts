@@ -170,7 +170,7 @@ export class PPOAgent implements AgentInterface {
    * Sélectionner une action par échantillonnage stochastique depuis π_θ.
    * Stocke lastLogProb et lastValue pour le prochain remember().
    */
-  async getAction(state: number[]): Promise<number> {
+  async getAction(state: number[], greedy?: boolean): Promise<number> {
     const stateTensor = tf.tensor2d([state]);
     try {
       // Passe avant de l'acteur → probabilités d'action
@@ -182,8 +182,10 @@ export class PPOAgent implements AgentInterface {
       const valueTensor = this.criticNet.predict(stateTensor) as tf.Tensor2D;
       this.lastValue = (valueTensor.arraySync() as number[][])[0][0];
 
-      // Échantillonnage de l'action
-      const action = sampleCategorical(probsData);
+      // Greedy = argmax, sinon échantillonnage stochastique
+      const action = greedy
+        ? probsData.indexOf(Math.max(...probsData))
+        : sampleCategorical(probsData);
 
       // Log-probabilité pour le ratio d'importance lors de l'update
       this.lastLogProb = Math.log(Math.max(probsData[action], 1e-8));

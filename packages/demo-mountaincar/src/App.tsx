@@ -14,7 +14,7 @@ export default function App() {
   const origStepRef = useRef<typeof MountainCarEnv.prototype.step | null>(null);
   const origResetRef = useRef<typeof MountainCarEnv.prototype.reset | null>(null);
 
-  const { setTraining, updatePhysics, recordEpisode, resetStats } = useDemoStore();
+  const { mode, setMode, updatePhysics, recordEpisode, resetStats } = useDemoStore();
 
   const syncState = useCallback(() => {
     const c = carRef.current;
@@ -51,13 +51,20 @@ export default function App() {
   const handleStart = useCallback(() => {
     if (!envRef.current) createEnv();
     envRef.current!.train(useDemoStore.getState().algorithm);
-    setTraining(true);
-  }, [createEnv, setTraining]);
+    setMode('training');
+  }, [createEnv, setMode]);
+
+  const handleInfer = useCallback(() => {
+    if (!envRef.current?.agent) return;
+    envRef.current.stop();
+    envRef.current.infer();
+    setMode('inference');
+  }, [setMode]);
 
   const handleStop = useCallback(() => {
     envRef.current?.stop();
-    setTraining(false);
-  }, [setTraining]);
+    setMode('stopped');
+  }, [setMode]);
 
   const handleReset = useCallback(() => {
     envRef.current?.stop();
@@ -66,9 +73,11 @@ export default function App() {
     origResetRef.current?.();
     episodeRewardRef.current = 0;
     resetStats();
-    setTraining(false);
+    setMode('stopped');
     syncState();
-  }, [resetStats, setTraining, syncState]);
+  }, [resetStats, setMode, syncState]);
+
+  const borderColor = mode === 'training' ? '#22c55e' : mode === 'inference' ? '#3b82f6' : 'transparent';
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a1a', color: '#e2e8f0', fontFamily: 'system-ui, sans-serif' }}>
@@ -78,10 +87,10 @@ export default function App() {
       </header>
       <div style={{ display: 'flex', gap: 24, padding: '16px 32px', maxWidth: 1200, margin: '0 auto', alignItems: 'flex-start' }}>
         <div style={{ flex: '0 0 380px' }}><CodePanel /></div>
-        <div style={{ flex: '0 0 auto' }}><MountainCarCanvas /></div>
+        <div style={{ flex: '0 0 auto', border: `3px solid ${borderColor}`, borderRadius: 10, padding: 2 }}><MountainCarCanvas /></div>
         <div style={{ flex: 1, minWidth: 280 }}><RewardChart /></div>
       </div>
-      <Controls onStart={handleStart} onStop={handleStop} onReset={handleReset} />
+      <Controls onStart={handleStart} onStop={handleStop} onReset={handleReset} onInfer={handleInfer} />
     </div>
   );
 }

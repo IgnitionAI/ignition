@@ -96,6 +96,57 @@ export class IgnitionEnv {
     return result;
   }
 
+  /**
+   * Run one inference step: observe → getAction (greedy) → step.
+   * No remember, no train. Pure exploitation.
+   */
+  public async inferStep(): Promise<StepResult> {
+    if (!this._agent) {
+      throw new Error('[IgnitionEnv] No agent. Call train() first, then infer().');
+    }
+
+    this.stepCount++;
+
+    const action = await this._agent.getAction(this.currentState, true);
+    this.env.step(action);
+
+    const observation = this.env.observe();
+    const reward = this.env.reward();
+    const terminated = this.env.done();
+
+    const result: StepResult = { observation, reward, terminated, truncated: false };
+
+    if (terminated) {
+      this.env.reset();
+      this.currentState = this.env.observe();
+    } else {
+      this.currentState = observation;
+    }
+
+    return result;
+  }
+
+  /**
+   * Start the inference loop (no learning). Agent must already be trained.
+   */
+  public infer(): void {
+    if (!this._agent) {
+      throw new Error('[IgnitionEnv] No agent. Call train() first to create an agent.');
+    }
+    if (this.isRunning) this.stop();
+
+    this.isRunning = true;
+    const interval = 50;
+
+    const loop = async (): Promise<void> => {
+      if (!this.isRunning) return;
+      await this.inferStep();
+      setTimeout(loop, interval);
+    };
+
+    setTimeout(loop, interval);
+  }
+
   public start(): void {
     if (this.isRunning) return;
     this.isRunning = true;
