@@ -10,14 +10,6 @@ interface ControlsProps {
   onSpeedChange: (multiplier: number) => void;
 }
 
-const SPEEDS = [
-  { label: '1x', value: 1 },
-  { label: '5x', value: 5 },
-  { label: '10x', value: 10 },
-  { label: '25x', value: 25 },
-  { label: '50x', value: 50 },
-];
-
 export function Controls({ onStart, onStop, onReset, onInfer, onSpeedChange }: ControlsProps) {
   const { mode, algorithm, setAlgorithm, episodeCount, stepCount, laps } = useDemoStore();
   const [speed, setSpeed] = useState(1);
@@ -42,27 +34,18 @@ export function Controls({ onStart, onStop, onReset, onInfer, onSpeedChange }: C
         <option value="ppo">PPO</option>
       </select>
 
-      {/* Speed control */}
-      <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+      {/* Speed slider */}
+      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
         <span style={{ fontSize: 11, color: '#888' }}>Speed:</span>
-        {SPEEDS.map((s) => (
-          <button
-            key={s.value}
-            onClick={() => handleSpeed(s.value)}
-            style={{
-              padding: '4px 8px',
-              fontSize: 11,
-              fontWeight: speed === s.value ? 700 : 400,
-              background: speed === s.value ? '#6366f1' : 'transparent',
-              color: speed === s.value ? '#fff' : '#888',
-              border: `1px solid ${speed === s.value ? '#6366f1' : '#555'}`,
-              borderRadius: 4,
-              cursor: 'pointer',
-            }}
-          >
-            {s.label}
-          </button>
-        ))}
+        <input
+          type="range"
+          min={1}
+          max={50}
+          value={speed}
+          onChange={(e) => handleSpeed(Number(e.target.value))}
+          style={{ accentColor: '#6366f1', width: 100 }}
+        />
+        <span style={{ fontSize: 11, color: '#e2e8f0', fontWeight: 700, minWidth: 28 }}>{speed}x</span>
       </div>
 
       <span style={{ fontSize: 12, color: '#888' }}>Ep: {episodeCount} | Steps: {stepCount} | Laps: {laps}</span>

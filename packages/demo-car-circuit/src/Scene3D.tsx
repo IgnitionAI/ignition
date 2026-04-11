@@ -1,8 +1,28 @@
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Environment, ContactShadows } from '@react-three/drei';
+import * as THREE from 'three';
 import { Track3D } from './Track3D';
 import { Car3D } from './Car3D';
 import { useDemoStore } from './store';
+
+function ChaseCamera() {
+  const { camera } = useThree();
+  const desiredPos = new THREE.Vector3();
+
+  useFrame(() => {
+    const { carX, carY, carAngle } = useDemoStore.getState();
+    // Behind the car by 4 units, above by 3 units
+    desiredPos.set(
+      carX - Math.cos(carAngle) * 4,
+      3,
+      carY - Math.sin(carAngle) * 4,
+    );
+    camera.position.lerp(desiredPos, 0.06);
+    camera.lookAt(carX, 0.3, carY);
+  });
+
+  return null;
+}
 
 function SceneContent() {
   const { carX, carY, carAngle, mode } = useDemoStore();
@@ -40,15 +60,8 @@ function SceneContent() {
         <meshStandardMaterial color={glowColor} transparent opacity={0.1} emissive={glowColor} emissiveIntensity={0.4} />
       </mesh>
 
-      {/* Camera controls */}
-      <OrbitControls
-        autoRotate={false}
-        enablePan={false}
-        minDistance={8}
-        maxDistance={35}
-        minPolarAngle={Math.PI / 8}
-        maxPolarAngle={Math.PI / 2.5}
-      />
+      {/* Chase camera */}
+      <ChaseCamera />
     </>
   );
 }

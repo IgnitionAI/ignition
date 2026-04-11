@@ -5,6 +5,8 @@ import { Scene3D } from './Scene3D';
 import { RewardChart } from './RewardChart';
 import { CodePanel } from './CodePanel';
 import { Controls } from './Controls';
+import { Minimap } from './Minimap';
+import { HUD } from './HUD';
 import { useDemoStore } from './store';
 
 export default function App() {
@@ -76,18 +78,18 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a1a', color: '#e2e8f0', fontFamily: 'system-ui, sans-serif' }}>
       {/* Header */}
-      <header style={{ textAlign: 'center', padding: '20px 0 4px' }}>
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px' }}>
-          Ignition<span style={{ color: '#6366f1' }}>AI</span> — Car Circuit
+      <header style={{ textAlign: 'center', padding: '12px 0 4px' }}>
+        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>
+          Ignition<span style={{ color: '#6366f1' }}>AI</span>
+          <span style={{ fontSize: 14, fontWeight: 400, color: '#888', marginLeft: 12 }}>Car Circuit</span>
         </h1>
-        <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
-          Train RL agents in the browser. Deploy anywhere.
-        </p>
       </header>
 
-      {/* 3D Scene — hero area */}
-      <div style={{ height: '50vh', minHeight: 350, maxHeight: 500, margin: '0 auto', maxWidth: 1000 }}>
+      {/* 3D Scene — hero area with overlays */}
+      <div style={{ position: 'relative', height: '55vh', minHeight: 400, maxHeight: 550, margin: '0 auto', maxWidth: 1100 }}>
         <Scene3D />
+        <Minimap />
+        <HUD />
       </div>
 
       {/* Controls */}
@@ -97,7 +99,7 @@ export default function App() {
       />
 
       {/* Bottom: code + chart */}
-      <div style={{ display: 'flex', gap: 24, padding: '8px 32px 24px', maxWidth: 1000, margin: '0 auto' }}>
+      <div style={{ display: 'flex', gap: 24, padding: '8px 32px 24px', maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ flex: '0 0 380px' }}>
           <CodePanel />
         </div>

@@ -11,6 +11,7 @@ interface DemoStore {
   rewardHistory: number[];
   episodeCount: number;
   algorithm: AlgorithmType;
+  trail: [number, number][];
 
   updateCar: (s: { carX: number; carY: number; carAngle: number; stepCount: number; laps: number }) => void;
   recordEpisode: (r: number) => void;
@@ -29,12 +30,16 @@ export const useDemoStore = create<DemoStore>((set) => ({
   rewardHistory: [],
   episodeCount: 0,
   algorithm: 'dqn',
+  trail: [],
 
   updateCar: ({ carX, carY, carAngle, stepCount, laps }) =>
-    set({ carX, carY, carAngle, stepCount, laps }),
+    set((s) => ({
+      carX, carY, carAngle, stepCount, laps,
+      trail: [...s.trail.slice(-59), [carX, carY] as [number, number]],
+    })),
   recordEpisode: (r) =>
     set((s) => ({ rewardHistory: [...s.rewardHistory, r], episodeCount: s.episodeCount + 1 })),
   setMode: (mode) => set({ mode }),
   setAlgorithm: (algorithm) => set({ algorithm }),
-  resetStats: () => set({ rewardHistory: [], episodeCount: 0 }),
+  resetStats: () => set({ rewardHistory: [], episodeCount: 0, trail: [] }),
 }));
