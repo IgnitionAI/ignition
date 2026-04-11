@@ -1,4 +1,7 @@
-export class GridWorldEnv {
+import type { TrainingEnv } from '@ignitionai/core';
+
+export class GridWorldEnv implements TrainingEnv {
+  actions = ['up', 'right', 'down', 'left'];
   agentRow = 0;
   agentCol = 0;
   readonly targetRow: number;

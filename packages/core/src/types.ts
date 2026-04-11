@@ -68,6 +68,37 @@ export interface CheckpointableAgent extends AgentInterface {
   saveCheckpoint(repoId: string, token: string, checkpointName: string): Promise<void>;
 }
 
+// ─── Environment interfaces ─────────────────────────────────────────────────
+
+/**
+ * Contract for a training environment. The developer implements this
+ * to describe their game/simulation for RL training.
+ */
+export interface TrainingEnv {
+  /** Available actions: named list or count */
+  actions: string[] | number;
+  /** Return the current observation as a number array */
+  observe(): number[];
+  /** Apply an action to the environment */
+  step(action: number | number[]): void;
+  /** Return the reward for the current state */
+  reward(): number;
+  /** Return true if the episode is over */
+  done(): boolean;
+  /** Reset the environment for a new episode */
+  reset(): void;
+}
+
+/**
+ * Minimal contract for inference (production). No training, no rewards.
+ */
+export interface InferenceEnv {
+  /** Return the current observation */
+  observe(): number[];
+  /** Apply an action */
+  step(action: number | number[]): void;
+}
+
 // ─── Auto-configuration ─────────────────────────────────────────────────────
 
 export type AlgorithmType = 'dqn' | 'ppo' | 'qtable';

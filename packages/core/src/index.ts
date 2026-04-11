@@ -1,7 +1,6 @@
 export const version = '0.1.0';
 
 export { IgnitionEnv } from './ignition-env';
-export type { IgnitionEnvConfig } from './ignition-env';
 
 export type {
   TFBackend,
@@ -11,6 +10,8 @@ export type {
   CheckpointableAgent,
   Experience,
   StepResult,
+  TrainingEnv,
+  InferenceEnv,
   ActionSpace,
   ObservationSpace,
   DiscreteSpace,
@@ -19,9 +20,5 @@ export type {
 } from './types';
 
 export { mergeDefaults } from './defaults';
-
-export {
-  ExperienceSchema,
-  IgnitionEnvConfigSchema,
-} from './schemas';
-export type { IgnitionEnvCallbacks } from './schemas';
+export { validateTrainingEnv, validateInferenceEnv } from './env-validation';
+export { ExperienceSchema } from './schemas';

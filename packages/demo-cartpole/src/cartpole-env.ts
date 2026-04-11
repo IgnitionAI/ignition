@@ -18,7 +18,10 @@ export interface CartPoleState {
   stepCount: number;
 }
 
-export class CartPoleEnv {
+import type { TrainingEnv } from '@ignitionai/core';
+
+export class CartPoleEnv implements TrainingEnv {
+  actions = ['push_left', 'push_right'];
   state: CartPoleState;
 
   constructor() {

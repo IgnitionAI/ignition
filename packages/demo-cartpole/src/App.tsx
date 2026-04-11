@@ -11,6 +11,8 @@ export default function App() {
   const envRef = useRef<IgnitionEnvTFJS | null>(null);
   const poleRef = useRef<CartPoleEnv>(new CartPoleEnv());
   const episodeStepsRef = useRef(0);
+  const origStepRef = useRef<typeof CartPoleEnv.prototype.step | null>(null);
+  const origResetRef = useRef<typeof CartPoleEnv.prototype.reset | null>(null);
 
   const { setTraining, updateState, recordEpisode, resetStats } = useDemoStore();
 
@@ -21,25 +23,25 @@ export default function App() {
   const createEnv = useCallback(() => {
     const pole = poleRef.current;
 
-    const env = new IgnitionEnvTFJS({
-      getObservation: () => pole.observe(),
-      actions: ['push_left', 'push_right'],
-      applyAction: (action) => {
-        pole.step(action);
+    if (!origStepRef.current) {
+      origStepRef.current = pole.step.bind(pole);
+      origResetRef.current = pole.reset.bind(pole);
+
+      pole.step = (action: number | number[]) => {
+        origStepRef.current!(action);
         episodeStepsRef.current++;
         syncState();
-      },
-      computeReward: () => pole.reward(),
-      isTerminated: () => pole.done(),
-      onReset: () => {
+      };
+
+      pole.reset = () => {
         recordEpisode(episodeStepsRef.current);
         episodeStepsRef.current = 0;
-        pole.reset();
+        origResetRef.current!();
         syncState();
-      },
-      stepIntervalMs: 20,
-    });
+      };
+    }
 
+    const env = new IgnitionEnvTFJS(pole);
     envRef.current = env;
     syncState();
     return env;
@@ -47,8 +49,7 @@ export default function App() {
 
   const handleStart = useCallback(() => {
     if (!envRef.current) createEnv();
-    const algo = useDemoStore.getState().algorithm;
-    envRef.current!.train(algo);
+    envRef.current!.train(useDemoStore.getState().algorithm);
     setTraining(true);
   }, [createEnv, setTraining]);
 
@@ -61,7 +62,7 @@ export default function App() {
     envRef.current?.stop();
     envRef.current?.agent?.dispose?.();
     envRef.current = null;
-    poleRef.current.reset();
+    origResetRef.current?.();
     episodeStepsRef.current = 0;
     resetStats();
     setTraining(false);
@@ -71,26 +72,14 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a1a', color: '#e2e8f0', fontFamily: 'system-ui, sans-serif' }}>
       <header style={{ textAlign: 'center', padding: '24px 0 8px' }}>
-        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>
-          Ignition<span style={{ color: '#6366f1' }}>AI</span> — CartPole
-        </h1>
-        <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
-          Balance the pole. Zero config. Watch it learn.
-        </p>
+        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>Ignition<span style={{ color: '#6366f1' }}>AI</span> — CartPole</h1>
+        <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>Balance the pole. Zero config. Watch it learn.</p>
       </header>
-
       <div style={{ display: 'flex', gap: 24, padding: '16px 32px', maxWidth: 1200, margin: '0 auto', alignItems: 'flex-start' }}>
-        <div style={{ flex: '0 0 380px' }}>
-          <CodePanel />
-        </div>
-        <div style={{ flex: '0 0 auto' }}>
-          <CartPoleCanvas />
-        </div>
-        <div style={{ flex: 1, minWidth: 280 }}>
-          <RewardChart />
-        </div>
+        <div style={{ flex: '0 0 380px' }}><CodePanel /></div>
+        <div style={{ flex: '0 0 auto' }}><CartPoleCanvas /></div>
+        <div style={{ flex: 1, minWidth: 280 }}><RewardChart /></div>
       </div>
-
       <Controls onStart={handleStart} onStop={handleStop} onReset={handleReset} />
     </div>
   );

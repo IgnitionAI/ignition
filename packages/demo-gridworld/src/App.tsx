@@ -11,44 +11,44 @@ export default function App() {
   const envRef = useRef<IgnitionEnvTFJS | null>(null);
   const gridRef = useRef<GridWorldEnv>(new GridWorldEnv(7));
   const episodeRewardRef = useRef(0);
+  const origStepRef = useRef<typeof GridWorldEnv.prototype.step | null>(null);
+  const origResetRef = useRef<typeof GridWorldEnv.prototype.reset | null>(null);
 
-  const { algorithm, setTraining, updateGrid, recordEpisode, resetStats, incrementStep } = useDemoStore();
+  const { setTraining, updateGrid, recordEpisode, resetStats, incrementStep } = useDemoStore();
 
   const syncGrid = useCallback(() => {
     const g = gridRef.current;
     updateGrid({
-      agentRow: g.agentRow,
-      agentCol: g.agentCol,
-      targetRow: g.targetRow,
-      targetCol: g.targetCol,
-      trail: [...g.trail],
-      gridSize: g.gridSize,
+      agentRow: g.agentRow, agentCol: g.agentCol,
+      targetRow: g.targetRow, targetCol: g.targetCol,
+      trail: [...g.trail], gridSize: g.gridSize,
     });
   }, [updateGrid]);
 
   const createEnv = useCallback(() => {
     const grid = gridRef.current;
 
-    const env = new IgnitionEnvTFJS({
-      getObservation: () => grid.observe(),
-      actions: ['up', 'right', 'down', 'left'],
-      applyAction: (action) => {
-        grid.step(action);
+    // Wrap step and reset to sync UI
+    if (!origStepRef.current) {
+      origStepRef.current = grid.step.bind(grid);
+      origResetRef.current = grid.reset.bind(grid);
+
+      grid.step = (action: number | number[]) => {
+        origStepRef.current!(action);
         episodeRewardRef.current += grid.reward();
         incrementStep();
         syncGrid();
-      },
-      computeReward: () => grid.reward(),
-      isTerminated: () => grid.done(),
-      onReset: () => {
+      };
+
+      grid.reset = () => {
         recordEpisode(episodeRewardRef.current);
         episodeRewardRef.current = 0;
-        grid.reset();
+        origResetRef.current!();
         syncGrid();
-      },
-      stepIntervalMs: 50,
-    });
+      };
+    }
 
+    const env = new IgnitionEnvTFJS(grid);
     envRef.current = env;
     syncGrid();
     return env;
@@ -56,8 +56,7 @@ export default function App() {
 
   const handleStart = useCallback(() => {
     if (!envRef.current) createEnv();
-    const algo = useDemoStore.getState().algorithm;
-    envRef.current!.train(algo);
+    envRef.current!.train(useDemoStore.getState().algorithm);
     setTraining(true);
   }, [createEnv, setTraining]);
 
@@ -70,7 +69,8 @@ export default function App() {
     envRef.current?.stop();
     envRef.current?.agent?.dispose?.();
     envRef.current = null;
-    gridRef.current.reset();
+    origResetRef.current?.();
+    episodeRewardRef.current = 0;
     resetStats();
     setTraining(false);
     syncGrid();
@@ -79,31 +79,14 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a1a', color: '#e2e8f0', fontFamily: 'system-ui, sans-serif' }}>
       <header style={{ textAlign: 'center', padding: '24px 0 8px' }}>
-        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>
-          Ignition<span style={{ color: '#6366f1' }}>AI</span>
-        </h1>
-        <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
-          Train RL agents in the browser. Zero config.
-        </p>
+        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>Ignition<span style={{ color: '#6366f1' }}>AI</span></h1>
+        <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>Train RL agents in the browser. Zero config.</p>
       </header>
-
       <div style={{ display: 'flex', gap: 24, padding: '16px 32px', maxWidth: 1200, margin: '0 auto', alignItems: 'flex-start' }}>
-        {/* Left: Code */}
-        <div style={{ flex: '0 0 380px' }}>
-          <CodePanel />
-        </div>
-
-        {/* Center: Grid */}
-        <div style={{ flex: '0 0 auto' }}>
-          <GridCanvas />
-        </div>
-
-        {/* Right: Chart */}
-        <div style={{ flex: 1, minWidth: 300 }}>
-          <RewardChart />
-        </div>
+        <div style={{ flex: '0 0 380px' }}><CodePanel /></div>
+        <div style={{ flex: '0 0 auto' }}><GridCanvas /></div>
+        <div style={{ flex: 1, minWidth: 300 }}><RewardChart /></div>
       </div>
-
       <Controls onStart={handleStart} onStop={handleStop} onReset={handleReset} />
     </div>
   );

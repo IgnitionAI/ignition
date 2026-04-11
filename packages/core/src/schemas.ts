@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { AgentInterface, StepResult } from './types';
 
 // ─── Experience ──────────────────────────────────────────────────────────────
 
@@ -12,70 +11,3 @@ export const ExperienceSchema = z.object({
   truncated: z.boolean({ message: 'truncated must be a boolean' }),
   info: z.record(z.unknown()).optional(),
 });
-
-// ─── Callbacks ───────────────────────────────────────────────────────────────
-
-export interface IgnitionEnvCallbacks {
-  onStep?: (result: StepResult, stepCount: number) => void | Promise<void>;
-  onEpisodeEnd?: (stepCount: number) => void | Promise<void>;
-}
-
-// ─── IgnitionEnvConfig ────────────────────────────────────────────────────────
-
-export const IgnitionEnvConfigSchema = z.object({
-  agent: z.custom<AgentInterface>(
-    (val: unknown) => {
-      if (val === undefined) return true; // optional — auto-created by train()
-      if (val === null || typeof val !== 'object') return false;
-      const a = val as AgentInterface;
-      return (
-        typeof a.getAction === 'function' &&
-        typeof a.remember === 'function' &&
-        typeof a.train === 'function'
-      );
-    },
-    { message: 'agent must implement AgentInterface (getAction, remember, train)' }
-  ).optional(),
-  actions: z.union([
-    z.number().int().positive({ message: 'actions must be a positive integer' }),
-    z.array(z.string(), { message: 'actions must be an array of strings' }).min(1, { message: 'at least one action must be defined' }),
-  ]).optional(),
-  getObservation: z.custom<() => number[]>(
-    (val: unknown) => typeof val === 'function',
-    { message: 'getObservation must be a function returning number[]' }
-  ),
-  applyAction: z.custom<(action: number | number[]) => void>(
-    (val: unknown) => typeof val === 'function',
-    { message: 'applyAction must be a function' }
-  ),
-  computeReward: z.custom<() => number>(
-    (val: unknown) => typeof val === 'function',
-    { message: 'computeReward must be a function returning number' }
-  ),
-  isTerminated: z.custom<() => boolean>(
-    (val: unknown) => typeof val === 'function',
-    { message: 'isTerminated must be a function returning boolean' }
-  ),
-  isTruncated: z.custom<() => boolean>(
-    (val: unknown) => typeof val === 'function',
-    { message: 'isTruncated must be a function returning boolean' }
-  ).optional(),
-  callbacks: z.custom<IgnitionEnvCallbacks>(
-    (val: unknown) => val === undefined || (typeof val === 'object' && val !== null),
-    { message: 'callbacks must be an object with onStep/onEpisodeEnd functions' }
-  ).optional(),
-  onReset: z
-    .custom<() => void>(
-      (val: unknown) => typeof val === 'function',
-      { message: 'onReset must be a function' }
-    )
-    .optional(),
-  stepIntervalMs: z
-    .number()
-    .positive({ message: 'stepIntervalMs must be > 0' })
-    .optional(),
-  hfRepoId: z.string().optional(),
-  hfToken: z.string().optional(),
-});
-
-export type IgnitionEnvConfig = z.infer<typeof IgnitionEnvConfigSchema>;

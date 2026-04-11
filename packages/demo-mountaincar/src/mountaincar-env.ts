@@ -7,7 +7,10 @@ const MAX_VEL = 0.07;
 const GOAL_POS = 0.5;
 const MAX_STEPS = 200;
 
-export class MountainCarEnv {
+import type { TrainingEnv } from '@ignitionai/core';
+
+export class MountainCarEnv implements TrainingEnv {
+  actions = ['push_left', 'none', 'push_right'];
   position: number;
   velocity: number;
   stepCount = 0;
