@@ -1,0 +1,4 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0a0a1a; color: #e2e8f0; font-family: system-ui, sans-serif; overflow-x: hidden; }
+button:hover { opacity: 0.9; }
+select:hover { border-color: #6366f1; }
