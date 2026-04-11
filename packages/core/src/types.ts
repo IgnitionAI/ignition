@@ -67,3 +67,13 @@ export interface AgentInterface {
 export interface CheckpointableAgent extends AgentInterface {
   saveCheckpoint(repoId: string, token: string, checkpointName: string): Promise<void>;
 }
+
+// ─── Auto-configuration ─────────────────────────────────────────────────────
+
+export type AlgorithmType = 'dqn' | 'ppo' | 'qtable';
+
+/**
+ * Factory function that creates an agent from a merged config.
+ * Used by IgnitionEnv.train() to auto-create agents.
+ */
+export type AgentFactory = (config: Record<string, unknown>) => AgentInterface;

@@ -25,6 +25,7 @@ export interface IgnitionEnvCallbacks {
 export const IgnitionEnvConfigSchema = z.object({
   agent: z.custom<AgentInterface>(
     (val: unknown) => {
+      if (val === undefined) return true; // optional — auto-created by train()
       if (val === null || typeof val !== 'object') return false;
       const a = val as AgentInterface;
       return (
@@ -34,7 +35,11 @@ export const IgnitionEnvConfigSchema = z.object({
       );
     },
     { message: 'agent must implement AgentInterface (getAction, remember, train)' }
-  ),
+  ).optional(),
+  actions: z.union([
+    z.number().int().positive({ message: 'actions must be a positive integer' }),
+    z.array(z.string(), { message: 'actions must be an array of strings' }).min(1, { message: 'at least one action must be defined' }),
+  ]).optional(),
   getObservation: z.custom<() => number[]>(
     (val: unknown) => typeof val === 'function',
     { message: 'getObservation must be a function returning number[]' }

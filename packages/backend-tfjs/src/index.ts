@@ -8,3 +8,5 @@ export type { TFBackend } from './utils/backend-selector';
 export type { AgentInterface, Experience } from './types';
 export type { DQNConfig, PPOConfig, QTableConfig } from './types';
 export { DQNConfigSchema, PPOConfigSchema, QTableConfigSchema } from './schemas';
+export { IgnitionEnvTFJS, IgnitionEnvTFJS as IgnitionEnv } from './ignition-env-tfjs';
+export { ALGORITHM_DEFAULTS, DQN_DEFAULTS, PPO_DEFAULTS, QTABLE_DEFAULTS } from './defaults';

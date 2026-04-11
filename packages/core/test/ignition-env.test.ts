@@ -157,3 +157,74 @@ describe('IgnitionEnv', () => {
     expect(agent.trainCallCount).toBe(0);
   });
 });
+
+// ─── train() auto-config lifecycle ──────────────────────────────────────────
+
+describe('IgnitionEnv.train() auto-config', () => {
+  it('throws if train() called without actions in config and no agent', () => {
+    const env = new IgnitionEnv({
+      getObservation: () => [1, 2, 3],
+      applyAction: () => {},
+      computeReward: () => 0,
+      isTerminated: () => false,
+    });
+    expect(() => env.train('dqn')).toThrow(/actions.*not provided/i);
+  });
+
+  it('throws if train() called with unknown algorithm and no factory', () => {
+    const env = new IgnitionEnv({
+      getObservation: () => [1, 2],
+      actions: 3,
+      applyAction: () => {},
+      computeReward: () => 0,
+      isTerminated: () => false,
+    });
+    expect(() => env.train('dqn')).toThrow(/Unknown algorithm.*dqn/);
+  });
+
+  it('agent is null before train() when no explicit agent provided', () => {
+    const env = new IgnitionEnv({
+      getObservation: () => [1],
+      actions: 2,
+      applyAction: () => {},
+      computeReward: () => 0,
+      isTerminated: () => false,
+    });
+    expect(env.agent).toBeNull();
+  });
+
+  it('constructs without agent when actions provided', () => {
+    expect(() => new IgnitionEnv({
+      getObservation: () => [1, 2],
+      actions: ['left', 'right'],
+      applyAction: () => {},
+      computeReward: () => 0,
+      isTerminated: () => false,
+    })).not.toThrow();
+  });
+
+  it('step() throws if no agent set', async () => {
+    const env = new IgnitionEnv({
+      getObservation: () => [1],
+      actions: 2,
+      applyAction: () => {},
+      computeReward: () => 0,
+      isTerminated: () => false,
+    });
+    await expect(env.step()).rejects.toThrow(/No agent/);
+  });
+
+  it('existing explicit-agent API still works', async () => {
+    const agent = new MockAgent(0);
+    const env = new IgnitionEnv({
+      agent,
+      getObservation: () => [1],
+      applyAction: () => {},
+      computeReward: () => 1,
+      isTerminated: () => false,
+    });
+    const result = await env.step();
+    expect(result.reward).toBe(1);
+    expect(agent.trainCallCount).toBe(1);
+  });
+});

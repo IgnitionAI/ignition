@@ -6,6 +6,8 @@ export type { IgnitionEnvConfig } from './ignition-env';
 export type {
   TFBackend,
   AgentInterface,
+  AgentFactory,
+  AlgorithmType,
   CheckpointableAgent,
   Experience,
   StepResult,
@@ -15,6 +17,8 @@ export type {
   BoxSpace,
   MultiDiscreteSpace,
 } from './types';
+
+export { mergeDefaults } from './defaults';
 
 export {
   ExperienceSchema,
