@@ -2,8 +2,11 @@
   "name": "@ignitionai/storage",
   "version": "0.1.0",
   "description": "Model storage providers for IgnitionAI (Hugging Face Hub, S3, GCS, local)",
-  "main": "index.ts",
-  "types": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "publishConfig": {
     "access": "public"

@@ -46,6 +46,15 @@ importers:
         specifier: ^3.22.0
         version: 3.24.2
     devDependencies:
+      '@ignitionai/backend-tfjs':
+        specifier: workspace:*
+        version: link:../backend-tfjs
+      '@tensorflow/tfjs':
+        specifier: ^4.22.0
+        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
+      '@tensorflow/tfjs-backend-cpu':
+        specifier: ^4.22.0
+        version: 4.22.0(@tensorflow/tfjs-core@4.22.0(encoding@0.1.13))
       vitest:
         specifier: ^3.1.1
         version: 3.1.1(@types/node@22.14.1)(@vitest/ui@3.1.1)(tsx@4.19.3)
@@ -294,6 +303,16 @@ importers:
       vite:
         specifier: ^6.3.1
         version: 6.3.3(@types/node@22.14.1)(tsx@4.19.3)
+
+  packages/environments:
+    dependencies:
+      '@ignitionai/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      vitest:
+        specifier: ^3.1.1
+        version: 3.1.1(@types/node@22.14.1)(@vitest/ui@3.1.1)(tsx@4.19.3)
 
   packages/storage:
     dependencies:
