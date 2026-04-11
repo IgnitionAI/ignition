@@ -1,0 +1,23 @@
+{
+  "name": "demo-mountaincar",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": { "dev": "vite", "build": "tsc -b && vite build", "test": "vitest run" },
+  "dependencies": {
+    "@ignitionai/backend-tfjs": "workspace:*",
+    "@ignitionai/core": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.3",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "~5.7.2",
+    "vite": "^6.3.1",
+    "vitest": "^3.1.1"
+  }
+}
