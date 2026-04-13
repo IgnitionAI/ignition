@@ -12,20 +12,24 @@ Tutorials are how most people actually learn IgnitionAI. They're different from 
 | Tutorial | Difficulty | Time | Topic |
 |---|---|---|---|
 | **[GridWorld · Start here](/docs/tutorials/grid-world)** | Beginner | ~30 min | Build a custom `TrainingEnv`, train a DQN agent, watch it find the shortest path in a 7×7 grid. |
+| **[CartPole: custom observations](/docs/tutorials/cartpole-observations)** | Beginner+ | ~25 min | What the agent sees is what the agent can learn. Three obs variants, one lesson. |
+| **[MountainCar: reward shaping](/docs/tutorials/mountaincar-shaping)** | Intermediate | ~30 min | The classic sparse-reward trap — watch DQN fail, then fix it with dense shaping. |
+| **[CartPole 3D (R3F)](/docs/tutorials/cartpole-3d)** | Intermediate | ~40 min | Wire the Quickstart CartPole into a React Three Fiber scene with shadows and orbit controls. |
+| **[Car Circuit](/docs/tutorials/car-circuit)** | Advanced | ~60 min | The hero demo: oval track, non-trivial reward, chase cam, the lap-bonus bug you'll write by accident. |
+| **[Export to Unity (ONNX)](/docs/tutorials/onnx-unity)** | Advanced | ~60 min | The full Train → Export → Convert → Deploy pipeline with Unity Sentis. |
 
-## Coming later
+## Suggested order
 
-More tutorials are on the roadmap, each covering one specific skill. If you have a request, open an issue on [GitHub](https://github.com/IgnitionAI/ignition/issues).
+The tutorials are independently runnable, but there's a natural progression:
 
-| Tutorial | Topic |
-|---|---|
-| CartPole with a custom observation space | Adapting `CartPoleEnv` to use a non-default set of observations. |
-| MountainCar with reward shaping | Fixing the sparse-reward version of MountainCar via dense shaping. |
-| CartPole 3D with React Three Fiber | Rendering a trained policy in an R3F scene. |
-| Car Circuit | The "hero demo" from scratch — 3D car, track, physics, chase cam. |
-| Export to Unity via ONNX | Full Train → Export → Convert → Deploy round-trip into a Unity Sentis scene. |
+1. **GridWorld** → custom env basics, zero-config training
+2. **CartPole observations** → how observation design shapes learning
+3. **MountainCar reward shaping** → how reward design shapes learning
+4. **CartPole 3D** → your first R3F integration
+5. **Car Circuit** → the advanced 3D showcase
+6. **Export to Unity** → the deploy story, end-to-end
 
-Each of these will be added as its own documentation PR and will link back here when it ships.
+If you're in a hurry, do **GridWorld → CartPole 3D → Export to Unity**. That's the minimum viable path from "never heard of IgnitionAI" to "shipped a trained policy in a game engine."
 
 ## Prerequisites for every tutorial
 

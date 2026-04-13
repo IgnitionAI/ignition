@@ -24,15 +24,17 @@ When you write:
 
 ```ts
 import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
-import { CartPoleEnv } from '@ignitionai/core'
+import { CartPoleEnv } from './cartpole-env'  // the env you defined yourself
 
 const env = new IgnitionEnvTFJS(new CartPoleEnv())
 env.train('dqn')
 ```
 
+(The `CartPoleEnv` class comes from your own project — see the [Quickstart](/docs/quickstart) for a complete copy-paste definition.)
+
 Here's what happens across the packages:
 
-1. **`@ignitionai/core`** provides `CartPoleEnv` (a built-in `TrainingEnv`), the `TrainingEnv` interface contract itself, and the `IgnitionEnv` base class with the generic training loop.
+1. **`@ignitionai/core`** provides the `TrainingEnv` interface contract and the `IgnitionEnv` base class with the generic training loop.
 2. **`@ignitionai/backend-tfjs`** provides `IgnitionEnvTFJS`, which extends `IgnitionEnv` and registers the TF.js-backed `DQNAgent`, `PPOAgent`, and `QTableAgent` as the available algorithm factories.
 3. When you call `env.train('dqn')`, `core`'s `IgnitionEnv.train()` method is invoked. It looks up the `'dqn'` factory (registered by the TFJS backend), deduces `inputSize` from `observe()` and `actionSize` from `actions`, calls the factory, and starts the training loop.
 4. The training loop lives entirely in `core`. It doesn't know anything about TensorFlow.js — it just calls the generic `AgentInterface` methods (`getAction`, `remember`, `train`) on whatever agent the backend registered.

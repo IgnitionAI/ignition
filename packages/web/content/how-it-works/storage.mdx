@@ -61,7 +61,7 @@ export HF_REPO_ID=your-user/my-rl-agent
 
 ```ts filename="save-and-load.ts"
 import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
-import { CartPoleEnv } from '@ignitionai/core'
+import { CartPoleEnv } from './cartpole-env'   // from the Quickstart
 import { HuggingFaceProvider, parseHFConfig } from '@ignitionai/storage'
 
 // 1. Train an agent

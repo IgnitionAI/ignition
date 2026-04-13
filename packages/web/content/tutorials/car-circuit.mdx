@@ -1,0 +1,267 @@
+---
+title: Car Circuit
+description: The hero demo as a tutorial. A 3D car learns to drive an oval circuit — reward shaping, chase camera, and the "lap bonus fires once per crossing" bug you will definitely write by accident.
+---
+
+# Car Circuit
+
+This tutorial is the most ambitious one we ship. By the end you'll have a 3D car driving an oval circuit under a DQN policy you trained yourself, a chase camera that follows the car, a minimap overlay, and a speed slider from 1× to 50×. It's also the tutorial most likely to take longer than the estimate — budget real time for it.
+
+Estimated time: **50–75 minutes**.
+
+## Prerequisites
+
+- You've done the [CartPole 3D tutorial](/docs/tutorials/cartpole-3d) and the [MountainCar reward shaping tutorial](/docs/tutorials/mountaincar-shaping). Those two are load-bearing here.
+- Vite + React + R3F project, same setup as CartPole 3D.
+
+## Step 1 — Define the oval track
+
+The track is an oval: two straights and two semicircles. Create `src/track.ts`:
+
+```ts filename="src/track.ts"
+export class OvalTrack {
+  readonly straightLength = 6
+  readonly radius = 3
+  readonly trackWidth = 1.2
+
+  // Total path length: 2 straights + 2 semicircles
+  readonly totalLength = this.straightLength * 2 + Math.PI * this.radius * 2
+
+  // Return the "progress" (0..1) of a point on the track,
+  // plus the closest point and a signed lateral distance
+  nearestPoint(x: number, z: number) {
+    // ... geometry details. For brevity we'll stub and explain.
+    // In a real build, compute:
+    //  1. Which of the 4 segments (2 straights, 2 semicircles) is closest
+    //  2. Parameterize that segment, find the closest point on it
+    //  3. Return { progress: 0..1 along the full loop, signed lateral distance }
+    const progress = 0 // placeholder — implement per segment
+    const distance = 0
+    return { progress, distance }
+  }
+
+  isOnTrack(x: number, z: number): boolean {
+    return Math.abs(this.nearestPoint(x, z).distance) < this.trackWidth / 2
+  }
+}
+```
+
+**What to observe**: the class has a clear contract — given a world `(x, z)`, return a progress percentage around the loop and a lateral distance from the centerline. This is the whole API your env needs.
+
+**Why this step exists**: separating track geometry from car physics lets you swap tracks later (figure-8, Silverstone, etc.) without touching the env. For a full working implementation of `nearestPoint`, see `packages/demo-car-circuit/src/track.ts` in the monorepo.
+
+## Step 2 — Define the CarEnv
+
+```ts filename="src/car-env.ts"
+import type { TrainingEnv } from '@ignitionai/core'
+import { OvalTrack } from './track'
+
+const MAX_STEPS = 800
+const DT = 0.1
+const MAX_SPEED = 0.5
+
+export class CarEnv implements TrainingEnv {
+  actions = ['accelerate', 'brake', 'turn_left', 'turn_right']
+
+  carX = 0
+  carZ = 0
+  heading = 0       // radians
+  speed = 0
+  laps = 0
+  stepCount = 0
+  offTrack = false
+
+  private lastProgress = 0
+  private justCompletedLap = false
+  private track = new OvalTrack()
+
+  constructor() { this.reset() }
+
+  observe(): number[] {
+    const { progress, distance } = this.track.nearestPoint(this.carX, this.carZ)
+    return [
+      this.carX / 10,
+      this.carZ / 10,
+      Math.cos(this.heading),
+      Math.sin(this.heading),
+      this.speed / MAX_SPEED,
+      distance / this.track.trackWidth,
+      progress,
+    ]
+  }
+
+  step(action: number | number[]): void {
+    const a = typeof action === 'number' ? action : action[0]
+    if (a === 0) this.speed = Math.min(MAX_SPEED, this.speed + 0.02)
+    else if (a === 1) this.speed = Math.max(0, this.speed - 0.03)
+    else if (a === 2) this.heading += 0.08
+    else if (a === 3) this.heading -= 0.08
+
+    this.carX += Math.cos(this.heading) * this.speed * DT * 10
+    this.carZ += Math.sin(this.heading) * this.speed * DT * 10
+
+    // Lap tracking — fires EXACTLY ONCE per crossing
+    this.justCompletedLap = false
+    const { progress, distance } = this.track.nearestPoint(this.carX, this.carZ)
+    if (progress < 0.1 && this.lastProgress > 0.9) {
+      this.laps++
+      this.justCompletedLap = true
+    }
+    this.lastProgress = progress
+    this.offTrack = Math.abs(distance) > this.track.trackWidth / 2
+    this.stepCount++
+  }
+
+  reward(): number {
+    if (this.offTrack) return -5
+    if (this.justCompletedLap) return 100
+    return this.speed * 2  // dense progress reward
+  }
+
+  done(): boolean {
+    return this.offTrack || this.stepCount >= MAX_STEPS
+  }
+
+  reset(): void {
+    this.carX = this.track.straightLength / 2
+    this.carZ = 0
+    this.heading = 0
+    this.speed = 0
+    this.laps = 0
+    this.stepCount = 0
+    this.offTrack = false
+    this.lastProgress = 0
+    this.justCompletedLap = false
+  }
+}
+```
+
+**What to observe**: the env exposes seven observations — position, heading (as cos/sin to avoid the 0/2π discontinuity), speed, lateral distance, and progress around the loop. The reward has three parts: speed (dense progress), lap bonus (big episodic), and off-track penalty.
+
+**Why this step exists**: you just did half the work. The hardest part is the `justCompletedLap` flag.
+
+## Step 3 — The lap bonus bug (the important lesson)
+
+Look carefully at the lap tracking. Why did we need `justCompletedLap`?
+
+**The naive version** of the lap bonus:
+
+```ts
+reward(): number {
+  if (this.offTrack) return -5
+  if (this.progress < 0.1 && this.lastProgress > 0.9) return 100  // BUG
+  return this.speed * 2
+}
+```
+
+This is wrong. The `reward()` method is called **every step after `step()`**. If you compute the crossing condition inside `reward()`, the agent receives the `+100` bonus on the crossing step **and every subsequent step where the condition is still true**, because `lastProgress` is only updated inside `step()`.
+
+In the demo version of this env, this bug made the agent learn to **circle near the start line forever** to rack up the bonus.
+
+**The fix**: set a one-shot flag during `step()`, read it in `reward()`, and reset it at the top of the next step. That's exactly what `justCompletedLap` does above.
+
+**Why this step exists**: this is a real bug from the real Car Circuit demo. Every creative-RL project hits a variant of it. The meta-lesson: **when a reward signal depends on a *transition*, compute the signal in the step that caused the transition, not in a latched state you read later**.
+
+## Step 4 — Scene: track, car, chase camera
+
+Create `src/Scene3D.tsx`. We'll skim the details — the patterns are identical to CartPole 3D, just with more meshes.
+
+```tsx filename="src/Scene3D.tsx (outline)"
+import { useRef } from 'react'
+import { useFrame, useThree } from '@react-three/fiber'
+import * as THREE from 'three'
+import type { CarEnv } from './car-env'
+
+// Track mesh: flat dark gray ring with lane markings
+export function TrackMesh() {
+  // Use a TorusGeometry for the curves + two PlaneGeometry for the straights
+  // Lane markings: small white boxes at intervals along the centerline
+  return <group>{/* ... */}</group>
+}
+
+// Car mesh: a small box with a direction indicator
+export function CarMesh({ env }: { env: CarEnv }) {
+  const ref = useRef<THREE.Mesh>(null!)
+  useFrame(() => {
+    ref.current.position.set(env.carX, 0.1, env.carZ)
+    ref.current.rotation.y = -env.heading
+  })
+  return (
+    <mesh ref={ref} castShadow>
+      <boxGeometry args={[0.4, 0.15, 0.2]} />
+      <meshStandardMaterial color="#6366F1" metalness={0.6} roughness={0.3} />
+    </mesh>
+  )
+}
+
+// Chase camera: follows the car from behind and above
+export function ChaseCamera({ env }: { env: CarEnv }) {
+  const { camera } = useThree()
+  useFrame(() => {
+    const targetX = env.carX - Math.cos(env.heading) * 2.5
+    const targetZ = env.carZ - Math.sin(env.heading) * 2.5
+    camera.position.lerp(new THREE.Vector3(targetX, 1.5, targetZ), 0.1)
+    camera.lookAt(env.carX, 0.2, env.carZ)
+  })
+  return null
+}
+```
+
+**Why this step exists**: the camera is the single biggest perceived-quality win. A chase cam makes a car env feel like a game. A static cam makes it feel like a spreadsheet. The `lerp(..., 0.1)` smooths the camera motion so it doesn't jitter with the car.
+
+## Step 5 — Train and watch
+
+Hook it up in `App.tsx` exactly like the CartPole 3D tutorial: `envRef` holds the `CarEnv`, `useEffect` starts the trainer, components read state in `useFrame`.
+
+```tsx filename="src/App.tsx (core)"
+const envRef = useRef<CarEnv>(new CarEnv())
+
+useEffect(() => {
+  const trainer = new IgnitionEnvTFJS(envRef.current)
+  trainer.train('dqn')
+  trainer.setSpeed(25)
+  return () => trainer.stop()
+}, [])
+```
+
+Run it. **What to observe**: the car starts wobbling randomly. Within ~2 minutes at `setSpeed(25)` it begins hugging the track. Within ~5 minutes it's completing laps. It will never look as smooth as the full demo in the repo (that one has 500+ episodes baked in) — but you'll see clear learning.
+
+## Step 6 — Speed slider
+
+Add a range slider that calls `trainer.setSpeed()`:
+
+```tsx filename="src/App.tsx (addition)"
+const [speed, setSpeed] = useState(25)
+
+useEffect(() => {
+  trainerRef.current?.setSpeed(speed)
+}, [speed])
+
+// In the JSX:
+<input
+  type="range"
+  min={1}
+  max={50}
+  value={speed}
+  onChange={e => setSpeed(Number(e.target.value))}
+  style={{ position: 'absolute', bottom: 30, left: 30, width: 200 }}
+/>
+```
+
+Drag it from 1 to 50 and watch the car go from a slow crawl to a blur.
+
+## What you just built
+
+- A 3D car env with non-trivial physics and a realistic reward shape.
+- A chase camera that turns a static env into a game.
+- The exact same "lap bonus fires once per crossing" bug the real demo had — and the fix.
+- A speed slider that demonstrates the training-throughput / render-smoothness tradeoff live.
+
+## Next steps
+
+- **[Export to Unity via ONNX](/docs/tutorials/onnx-unity)** — take the car policy you just trained and ship it to a Unity Sentis project.
+- **The real demo** — `pnpm --filter demo-car-circuit dev` in the monorepo runs the full polished version with minimap, HUD, trail, and pre-trained weights.
+
+---
+
+Previous: **[← CartPole 3D](/docs/tutorials/cartpole-3d)** · Next: **[Export to Unity via ONNX →](/docs/tutorials/onnx-unity)**

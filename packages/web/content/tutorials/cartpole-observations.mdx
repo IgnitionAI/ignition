@@ -1,0 +1,137 @@
+---
+title: 'CartPole: custom observations'
+description: What the agent sees is what the agent can learn. Build three variants of CartPole's observation space and watch the effect on training.
+---
+
+# CartPole — Custom observations
+
+You've finished the [GridWorld tutorial](/docs/tutorials/grid-world) and you can write a `TrainingEnv` from scratch. This tutorial teaches a more subtle skill: **how observations shape learning**. A poorly-chosen `observe()` can make the fastest algorithm crawl. A well-chosen one can make a toy algorithm look brilliant. By the end you'll have concrete intuition for picking observation spaces on your own envs.
+
+Estimated time: **20–25 minutes**.
+
+## Prerequisites
+
+- You've completed the [GridWorld tutorial](/docs/tutorials/grid-world) or have equivalent experience writing a custom `TrainingEnv`.
+- You have a Vite + TypeScript project with `@ignitionai/core` and `@ignitionai/backend-tfjs` installed.
+- You have the Quickstart's `CartPoleEnv` (or equivalent inlined cart-pole physics) in your project.
+
+## Step 1 — Start from the full-observation CartPole
+
+First, make sure the Quickstart baseline works. Your `src/cartpole-env.ts` should return all four state variables from `observe()`:
+
+```ts filename="src/cartpole-env.ts (excerpt)"
+observe(): number[] {
+  return [this.x, this.xDot, this.theta, this.thetaDot]
+}
+```
+
+And your `src/main.ts` trains it with `env.train('dqn')`. Run it and note how long training takes to reach the 500-step survival ceiling (usually 30–60 seconds on modern hardware at `setSpeed(10)`).
+
+**Why this step exists**: we need a control. Every experiment in the next steps is compared against this baseline. Write down your baseline time — you'll refer back to it.
+
+## Step 2 — Drop cart-related observations
+
+Create a new file `src/partial-env.ts`:
+
+```ts filename="src/partial-env.ts"
+import { CartPoleEnv } from './cartpole-env'
+
+export class PartialCartPoleEnv extends CartPoleEnv {
+  // Only show the agent the pole angle and angular velocity.
+  // Hide cart position and cart velocity completely.
+  observe(): number[] {
+    const [x, xDot, theta, thetaDot] = super.observe()
+    return [theta, thetaDot]
+  }
+}
+```
+
+Update `src/main.ts` to use it:
+
+```ts filename="src/main.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { PartialCartPoleEnv } from './partial-env'
+
+const env = new IgnitionEnvTFJS(new PartialCartPoleEnv())
+env.train('dqn')
+env.setSpeed(10)
+```
+
+Run it. **What to observe**: training works — the pole can still be balanced from pole angle and angular velocity alone, because the physics equations don't actually depend on cart position. But the agent has to learn a harder policy: it can't know when it's about to hit the `x` boundary (at ±2.4 units). You should see more episodes that end due to cart runaway instead of pole falls, and slightly slower convergence.
+
+**Why this step exists**: this is the most valuable lesson in the tutorial. The pole is *solvable* with fewer observations, but the agent learns a policy that works in the lab and fails at the boundaries. **Missing observations silently limit the policy**. Real envs have this failure mode constantly — the agent works great in training and degrades in deployment because training never exposed it to the edge cases.
+
+## Step 3 — Add noise to the observations
+
+Restore the full four observations but add Gaussian noise:
+
+```ts filename="src/noisy-env.ts"
+import { CartPoleEnv } from './cartpole-env'
+
+function gaussian(): number {
+  // Box–Muller
+  const u1 = Math.random()
+  const u2 = Math.random()
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2)
+}
+
+export class NoisyCartPoleEnv extends CartPoleEnv {
+  observe(): number[] {
+    const [x, xDot, theta, thetaDot] = super.observe()
+    const noise = 0.05   // 5% observation noise
+    return [
+      x + noise * gaussian(),
+      xDot + noise * gaussian(),
+      theta + noise * gaussian(),
+      thetaDot + noise * gaussian(),
+    ]
+  }
+}
+```
+
+Point `main.ts` at `NoisyCartPoleEnv` and train. **What to observe**: training still converges, but the final policy is visibly jittery — the agent over-corrects because it can't fully trust any single observation. Convergence time is longer than the baseline, shorter than `PartialCartPoleEnv`.
+
+**Why this step exists**: real-world sensors are noisy. A camera-based pose estimate, an IMU, a LIDAR distance — all of them have noise. Training with noisy observations is a form of **regularization**: the policy learns to be robust to uncertainty. If you plan to deploy to a real robot, adding noise during training is often the single biggest policy-robustness win.
+
+## Step 4 — Add a redundant observation
+
+Give the agent an extra "helpful" observation it can compute from the existing ones:
+
+```ts filename="src/redundant-env.ts"
+import { CartPoleEnv } from './cartpole-env'
+
+export class RedundantCartPoleEnv extends CartPoleEnv {
+  observe(): number[] {
+    const [x, xDot, theta, thetaDot] = super.observe()
+    // Extra obs: how far the pole's tip has moved from the balanced position
+    const tipOffset = Math.sin(theta) * 0.5 + x
+    return [x, xDot, theta, thetaDot, tipOffset]
+  }
+}
+```
+
+Train it. **What to observe**: training converges at roughly the same speed as the baseline. The extra observation neither helps nor hurts significantly. You might even see a small improvement if you're lucky.
+
+**Why this step exists**: a common mistake is to think "more features = better agent." In practice, **adding redundant features that a neural network could easily derive itself has a neutral-to-slightly-positive effect**. It's never a silver bullet. The exception is when the derived feature is genuinely hard for the network — e.g., a long-range summary of recent history, or a feature that requires external knowledge. Those help. Repeating information the env already provides does not.
+
+## What you just learned
+
+Three concrete lessons, in the order you should internalize them:
+
+1. **Missing observations silently limit the policy.** `PartialCartPoleEnv` looked like it was working, but the agent couldn't learn cart-boundary avoidance because it literally couldn't see the cart. Your env needs to expose every dimension the agent needs to act on.
+
+2. **Noisy observations are a form of regularization.** `NoisyCartPoleEnv` converged slower but produced a more robust policy. If you plan to deploy to hardware, add noise during training.
+
+3. **Redundant features are usually a wash.** `RedundantCartPoleEnv` didn't help meaningfully. Feature engineering in RL is rarely the bottleneck — the bottleneck is almost always the reward signal and the observation coverage.
+
+**The meta-lesson**: before tuning hyperparameters, **audit your observations**. Nine times out of ten, a DQN agent that isn't learning is missing something it should have seen.
+
+## Next steps
+
+- **[MountainCar: reward shaping](/docs/tutorials/mountaincar-shaping)** — the reward-signal equivalent of this tutorial. Observations control *what* the agent can learn; rewards control *why* it learns.
+- **[Algorithms → DQN](/docs/algorithms/dqn)** — Section "Failure 1 — Rewards never go up" is where bad observations usually surface.
+- **[Tutorials index](/docs/tutorials)** — pick your next tutorial.
+
+---
+
+Previous: **[← GridWorld](/docs/tutorials/grid-world)** · Next: **[MountainCar: reward shaping →](/docs/tutorials/mountaincar-shaping)**
