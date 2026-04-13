@@ -1,0 +1,159 @@
+---
+title: DQN — Deep Q-Network
+description: A pedagogical explanation of how DQN works in IgnitionAI — replay buffer, target network, epsilon-greedy exploration, the defaults, and when it fails.
+---
+
+# DQN — Deep Q-Network
+
+DQN is the first algorithm you should try. It's a good default on almost any discrete-action environment, it's sample-efficient thanks to its replay buffer, and it's the most battle-tested algorithm in modern RL. Most of the ML-Agents demos you've seen in Unity use a DQN variant.
+
+This page is deliberately verbose. By the end of it, you should understand *why* DQN works, not just how to call `env.train('dqn')`.
+
+## Intuition — learning the value of each move
+
+Imagine you're playing a game of chess. At any board position, you could ask: **"If I play this move, and then play optimally for the rest of the game, what's the total reward I'll get?"** That number is the **Q-value** of that move, in that position. If you knew the Q-value of every legal move, picking the best move would be trivial — just pick the one with the highest Q.
+
+The catch is that you *don't* know the Q-values. DQN learns them. It starts with a randomly-initialized neural network that maps `(state) → (Q-value for every possible action)`, and it updates the network so its predictions gradually match the actual discounted rewards it observes from playing.
+
+Once the Q-values are accurate, the policy is trivial: **always pick the action with the highest Q**. That's it. That's the whole algorithm.
+
+> **When to use DQN**: discrete action spaces, small-to-medium observation spaces, and reward structures dense enough that you can observe *some* signal within a few hundred episodes. CartPole, GridWorld, MountainCar, Atari, most arcade-style games — DQN handles all of them.
+
+## The core update rule — the Bellman equation
+
+The update DQN performs is a one-step version of the **Bellman equation**:
+
+```text
+Q(state, action) ← reward + γ · max_a' Q(next_state, a')
+```
+
+In plain English: "The value of taking this action in this state should equal the reward I just got, plus the discounted value of the best action I'll take from the next state."
+
+- `γ` (gamma) is the **discount factor** — how much future reward is worth relative to immediate reward. `γ = 0.99` means "reward 100 steps from now is worth 37% of reward right now".
+- `max_a'` means "the highest Q-value available in the next state" — we assume we'll play optimally from there.
+
+DQN turns this into a supervised-learning loss: for each transition `(s, a, r, s')` we observed, the network's prediction `Q(s, a)` should equal `r + γ · max_a' Q(s', a')`. We minimize the squared error between the two.
+
+There's a subtlety hiding in that last sentence — if we compute the target `max_a' Q(s', a')` using the *same* network we're updating, we chase a moving target and training becomes unstable. DQN fixes this with the **target network** trick below.
+
+## The three things DQN adds to vanilla Q-learning
+
+Vanilla Q-learning (the tabular kind) works fine on small grid worlds but falls over the moment you replace the lookup table with a neural network. DQN adds three ingredients to make it work:
+
+### 1. Experience replay buffer
+
+Every step, DQN stores the transition `(state, action, reward, next_state, done)` in a ring buffer. At training time, it samples a *random minibatch* from the buffer instead of training on the most recent transitions. This has two huge effects:
+
+- **Decorrelates training samples.** Consecutive gameplay frames are highly correlated. If you train on them in order, the network overfits to the current trajectory. Random sampling breaks that correlation.
+- **Reuses data.** A single experience gets used for many gradient updates, not just one. This is why DQN is "sample-efficient" — it squeezes every drop of learning out of the data it collected.
+
+In IgnitionAI, the default buffer size is **10 000 transitions**, and training starts once the buffer has enough samples for one minibatch.
+
+### 2. Target network
+
+We said above that using the same network to predict *and* compute the target leads to instability — imagine trying to hit a bullseye that moves every time you pull the bow. DQN's fix is to keep a **second copy of the network** — the *target network* — that is updated less frequently. The target network is used for computing `max_a' Q(s', a')`, so the target is stable for a while.
+
+In IgnitionAI, the target network is synced to the main network every `targetUpdateFrequency` steps. The default is **1000 steps** (a few hundred episodes on most envs). You can tune this lower for faster-learning envs or higher for more stable training.
+
+### 3. Epsilon-greedy exploration
+
+A greedy policy (always pick the argmax Q-value) will get stuck early. The first few random policy rollouts will paint a misleading picture of which actions are "good", and the network will lock in. To force exploration, DQN uses **epsilon-greedy**: with probability `ε`, pick a random action instead of the greedy one.
+
+`ε` starts high (almost pure exploration) and decays over time to a small floor (almost pure exploitation). In IgnitionAI:
+
+- `epsilon = 1.0` at the start (100% random)
+- Every episode, `epsilon *= 0.995` (half-life of ~138 episodes)
+- `minEpsilon = 0.01` is the floor (1% random forever, to avoid hard lock-in)
+
+> **A common mistake**: if you set `minEpsilon = 0`, the agent will eventually stop exploring entirely and can't recover from misleading early estimates. Always leave a small epsilon floor.
+
+## Default hyperparameters
+
+These are the exact values IgnitionAI uses when you call `env.train('dqn')` with no config override. Source: `packages/backend-tfjs/src/agents/dqn.ts`.
+
+| Hyperparameter | Default | What it controls |
+|---|---|---|
+| `hiddenLayers` | `[24, 24]` | Two hidden layers of 24 units each. A tiny MLP that fits CartPole-class problems. |
+| `lr` | `0.001` | Adam learning rate. |
+| `gamma` | `0.99` | Discount factor. |
+| `epsilon` | `1.0` | Starting exploration rate (pure random). |
+| `epsilonDecay` | `0.995` | Multiplicative decay applied every episode. |
+| `minEpsilon` | `0.01` | Floor — exploration never drops below 1%. |
+| `batchSize` | `32` | Minibatch size sampled from the replay buffer per update. |
+| `memorySize` | `10000` | Ring-buffer capacity for experience replay. |
+| `targetUpdateFrequency` | `1000` | Steps between target network syncs. |
+| `backend` | `'auto'` | TF.js backend — auto-selects WebGPU → WebGL → WASM → CPU. |
+
+## Tuning guide — which knobs to turn and in what order
+
+If DQN is working, don't touch anything. If it isn't, tune in this order:
+
+1. **Reward shaping first.** Nine times out of ten, a DQN that doesn't learn has a sparse or uninformative reward. Add dense intermediate rewards (e.g., "distance to goal went down by 0.1 → reward +0.01") and retry. Don't touch hyperparameters until the reward signal is good.
+
+2. **Observation normalization.** Check that `observe()` returns values roughly in `[-1, 1]` or `[0, 1]`. Neural nets hate unbounded inputs. A single feature in the thousands will dominate all others.
+
+3. **Network size.** If the environment has a non-trivial state (more than ~6 features), bump `hiddenLayers` to `[64, 64]` or `[128, 128]`. Tiny networks under-fit fast.
+
+4. **Learning rate.** `0.001` is a good default. If training diverges (rewards crater and stay cratered), drop to `0.0005`. If it's glacial, push to `0.0025`. Never go above `0.01`.
+
+5. **Epsilon decay.** If the agent converges on a dumb policy early, slow the decay (`0.998` instead of `0.995`) to force more exploration. If it wanders forever, speed it up (`0.99`).
+
+6. **Gamma.** Only touch this if you have a clear reason. Lowering to `0.9` makes the agent myopic (short-term greedy); raising to `0.999` makes it plan farther ahead but slows convergence.
+
+## Common failure modes
+
+### Failure 1 — Rewards never go up
+
+**Symptom**: Average reward stays flat or noisy around the random-policy baseline for hundreds of episodes.
+
+**Diagnosis**:
+- Reward is too sparse. If your env only gives `+1` at episode end and `0` otherwise, DQN will struggle to find the signal.
+- Observations are not normalized. Print `observe()` output — if any feature has magnitude > 10, that's your bug.
+- The network is too small for the state.
+
+**Fix**: Add dense rewards (distance-based, progress-based, or shaping rewards), normalize observations, or bump `hiddenLayers` to `[64, 64]`.
+
+### Failure 2 — Rewards go up, then collapse
+
+**Symptom**: The agent learns a reasonable policy, then rewards suddenly crater and never recover. Classic "catastrophic forgetting."
+
+**Diagnosis**: Training is unstable. Usually caused by too-high learning rate or too-frequent target network updates.
+
+**Fix**: Halve the learning rate (`lr: 0.0005`) and double `targetUpdateFrequency`. Retry.
+
+### Failure 3 — Agent gets stuck on a dumb policy
+
+**Symptom**: The agent finds a mediocre strategy in the first 50 episodes and never improves. Common in envs with deceptive local optima (e.g., "stand still" is a locally-optimal move in MountainCar).
+
+**Diagnosis**: Exploration collapsed too fast. Epsilon decayed before the agent found the better policy.
+
+**Fix**: Slow epsilon decay (`epsilonDecay: 0.998`) and/or raise the floor (`minEpsilon: 0.05`). For pathological cases, pre-seed the replay buffer with random exploration for the first 1000 steps.
+
+### Failure 4 — Training is slow
+
+**Symptom**: Training runs correctly but takes 10× longer than you expected.
+
+**Diagnosis**: You're running at real-time speed (default `stepIntervalMs = 50`). That's there so the browser stays responsive.
+
+**Fix**: Call `env.setSpeed(50)` to accelerate training by 50×. Visuals will become choppy but training integrity is preserved. Drop back to `setSpeed(1)` when you want to watch the policy play.
+
+### Failure 5 — Q-values explode
+
+**Symptom**: Q-values grow unbounded over time. Often correlated with divergent rewards or `NaN` losses.
+
+**Diagnosis**: Rewards are too large. DQN's targets are proportional to reward magnitude, and if your reward is ±1000, the network will struggle.
+
+**Fix**: Scale rewards down by 10–100×. A rule of thumb: reward magnitudes should be roughly in `[-10, +10]` after scaling.
+
+## DQN vs PPO — when to switch
+
+DQN is a great default, but it has two blind spots:
+
+- **Continuous action spaces.** DQN's `argmax` requires discrete actions. If your env has "steer between -1 and 1", DQN can't handle it directly. Use PPO.
+- **Very long episodes with delayed credit assignment.** DQN's one-step bootstrap struggles when the reward signal is separated from the relevant action by thousands of steps. PPO's GAE (Generalized Advantage Estimation) handles long horizons better.
+
+If DQN converges and you're happy, stay. If it doesn't, try PPO as your next experiment — it's one word: `env.train('ppo')`.
+
+---
+
+Previous: **[← Algorithms](/docs/algorithms)** · Next: **[PPO →](/docs/algorithms/ppo)**

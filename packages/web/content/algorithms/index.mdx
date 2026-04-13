@@ -1,0 +1,64 @@
+---
+title: Algorithms
+description: IgnitionAI ships three reinforcement learning algorithms — DQN, PPO, and Q-Table. Switch between them with one word.
+---
+
+# Algorithms
+
+IgnitionAI ships three algorithms, all accessible via the same `env.train()` call:
+
+```ts
+env.train('dqn')      // Deep Q-Network — discrete actions, replay buffer, target network
+env.train('ppo')      // Proximal Policy Optimization — on-policy, stable, handles continuous spaces
+env.train('qtable')   // Tabular Q-Learning — small discrete state spaces, no neural net
+```
+
+You don't have to pick the "right" one on the first try. Each algorithm page explains its intuition, its failure modes, and when it's the wrong choice. Swapping algorithms is one word — no config rewrite, no restart ceremony.
+
+## The "which one" chooser
+
+| If your env is... | Use... | Why |
+|---|---|---|
+| Discrete actions, small state space, fully observable | **Q-Table** | Converges in seconds, no neural net, interpretable. |
+| Discrete actions, continuous or large state space | **DQN** | Value-based, sample-efficient via replay buffer, good default. |
+| Continuous actions, or very long episodes | **PPO** | Policy gradient, stable, handles high-dim action spaces. |
+| You're not sure | **DQN** | Good default. Swap to PPO if DQN diverges. |
+
+A longer version of this chooser lives at the top of each algorithm page.
+
+## Quick comparison
+
+| | **Q-Table** | **DQN** | **PPO** |
+|---|---|---|---|
+| **Family** | Tabular | Value-based (off-policy) | Policy gradient (on-policy) |
+| **Function approximator** | Lookup table | Neural network | Two neural networks (actor + critic) |
+| **Data efficiency** | High (tabular) | High (replay buffer) | Lower (on-policy, discards data after update) |
+| **Stability** | Very stable | Moderate | High |
+| **Action spaces** | Discrete | Discrete | Discrete or continuous |
+| **Best for** | Toy/grid worlds | Most game-like envs | Complex policies, robotics |
+
+## The three pages
+
+- **[DQN](/docs/algorithms/dqn)** — replay buffer, target network, epsilon-greedy exploration, and why DQN is the safe default.
+- **[PPO](/docs/algorithms/ppo)** — policy gradient intuition, the clipped surrogate objective, GAE, and when PPO beats DQN.
+- **[Q-Table](/docs/algorithms/q-table)** — when tabular methods are the right call, state discretization, and the tradeoff between table size and generalization.
+
+Every hyperparameter default shown on those pages is pulled directly from `packages/backend-tfjs/src/agents/` at ship time. If you see a drift, file an issue.
+
+## Overriding defaults
+
+You don't have to accept the defaults. If you need fine control, pass a config object:
+
+```ts
+env.train('dqn', {
+  lr: 0.0005,
+  hiddenLayers: [128, 128, 64],
+  gamma: 0.995,
+})
+```
+
+Every config option is validated by Zod at construction time — if you typo a key, you get a clear error, not silent failure.
+
+---
+
+Previous: **[← Quickstart](/docs/quickstart)** · Next: **[DQN →](/docs/algorithms/dqn)**

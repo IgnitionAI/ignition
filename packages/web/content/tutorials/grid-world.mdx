@@ -1,0 +1,267 @@
+---
+title: GridWorld · Start here
+description: Build a custom TrainingEnv from scratch and train a DQN agent to find the shortest path in a 7×7 grid. ~30 minutes, no prior RL knowledge required.
+---
+
+# GridWorld — Start here
+
+This is the tutorial to read first. By the end of it, you'll have:
+
+- A fresh Vite + TypeScript project with IgnitionAI installed.
+- A `GridWorldEnv` class that implements the `TrainingEnv` interface from scratch.
+- A DQN agent training live in your browser and finding the shortest path from the top-left to the bottom-right of a 7×7 grid.
+- A visual indicator so you can see the agent's position updating in real time.
+
+Estimated time: **25–35 minutes** on a machine that already has Node installed.
+
+## Prerequisites
+
+- **Node.js 20 or later.** Check with `node --version`.
+- **npm** (comes with Node) or `pnpm`.
+- **A text editor**. VS Code is what the screenshots use, but anything works.
+- **Zero prior RL knowledge.** We'll explain what matters as we go.
+
+You do **not** need TensorFlow, Python, CUDA, a GPU, or any prior ML experience.
+
+## Step 1 — Create a fresh Vite project
+
+Open a terminal, pick a directory, and run:
+
+```bash
+npm create vite@latest gridworld-rl -- --template vanilla-ts
+cd gridworld-rl
+npm install
+```
+
+Vite gives you a minimal TypeScript project with a dev server. Now install the two IgnitionAI packages:
+
+```bash
+npm install @ignitionai/core @ignitionai/backend-tfjs
+```
+
+**What to observe**: `package.json` should now list both `@ignitionai/core` and `@ignitionai/backend-tfjs` under `dependencies`. If the install failed, you probably have Node < 20 — upgrade and retry.
+
+**Why this step exists**: Vite is the fastest way to get a TypeScript project with hot reload in the browser. IgnitionAI's TF.js backend needs a bundler that can serve ES modules, which Vite handles out of the box.
+
+## Step 2 — Write the `GridWorldEnv` class
+
+Create a new file `src/gridworld-env.ts` and paste this in:
+
+```ts filename="src/gridworld-env.ts"
+import type { TrainingEnv } from '@ignitionai/core'
+
+export class GridWorldEnv implements TrainingEnv {
+  // Four actions: up, right, down, left
+  actions = ['up', 'right', 'down', 'left']
+
+  // Agent starts at the top-left, target at the bottom-right
+  agentRow = 0
+  agentCol = 0
+  readonly targetRow: number
+  readonly targetCol: number
+  readonly gridSize: number
+
+  // How many steps the agent has taken in the current episode
+  stepCount = 0
+  private readonly maxSteps = 100
+
+  constructor(gridSize = 7) {
+    this.gridSize = gridSize
+    this.targetRow = gridSize - 1
+    this.targetCol = gridSize - 1
+  }
+
+  // Return the state the agent sees — normalized to [0, 1]
+  observe(): number[] {
+    const max = this.gridSize - 1
+    return [
+      this.agentRow / max,
+      this.agentCol / max,
+      this.targetRow / max,
+      this.targetCol / max,
+    ]
+  }
+
+  // Apply an action to move the agent
+  step(action: number | number[]): void {
+    const a = typeof action === 'number' ? action : action[0]
+    switch (a) {
+      case 0: this.agentRow = Math.max(0, this.agentRow - 1); break            // up
+      case 1: this.agentCol = Math.min(this.gridSize - 1, this.agentCol + 1); break // right
+      case 2: this.agentRow = Math.min(this.gridSize - 1, this.agentRow + 1); break // down
+      case 3: this.agentCol = Math.max(0, this.agentCol - 1); break            // left
+    }
+    this.stepCount++
+  }
+
+  // +10 for reaching the target, -0.1 per step otherwise (dense reward)
+  reward(): number {
+    if (this.agentRow === this.targetRow && this.agentCol === this.targetCol) return 10
+    return -0.1
+  }
+
+  // Episode ends on success or timeout
+  done(): boolean {
+    if (this.agentRow === this.targetRow && this.agentCol === this.targetCol) return true
+    return this.stepCount >= this.maxSteps
+  }
+
+  // Back to the top-left, fresh step counter
+  reset(): void {
+    this.agentRow = 0
+    this.agentCol = 0
+    this.stepCount = 0
+  }
+}
+```
+
+**What to observe**: This file is about 60 lines. That's your entire game world. No training code, no neural network, no hyperparameters. Just a description of how the grid behaves.
+
+**Why this step exists**: The `TrainingEnv` interface is the contract between your world and IgnitionAI's training loop. The framework doesn't care what's in your `step()` method — it could be a grid, a physics simulation, a chess board, a custom renderer. As long as `observe()` returns numbers and `done()` eventually returns true, you're good.
+
+**Design decisions in this file**:
+
+- **Normalized observations** (dividing by `max`). Neural networks learn faster when inputs are in `[0, 1]` or `[-1, 1]`. This is the #1 rule from the [Core Concepts](/docs/how-it-works/core) page.
+- **Dense reward** (`-0.1` per step instead of just `+10` at the end). Pure "goal-only" rewards are painfully slow for DQN to learn from. Penalizing every step creates a gradient pointing toward "reach the goal quickly."
+- **Timeout via `maxSteps`**. Without this, a wandering agent could run forever in the worst case. 100 steps is plenty for a 7×7 grid where the optimal path is 12 moves.
+
+## Step 3 — Wire up the training loop
+
+Open `src/main.ts` (Vite created this for you) and replace its contents with:
+
+```ts filename="src/main.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { GridWorldEnv } from './gridworld-env'
+
+// Create the world and the trainer
+const world = new GridWorldEnv(7)
+const env = new IgnitionEnvTFJS(world)
+
+// Start training with DQN and sensible defaults
+env.train('dqn')
+
+// Turbo mode — 10× faster than real-time so we see results sooner
+env.setSpeed(10)
+
+// Log progress every 50 steps
+setInterval(() => {
+  console.log(
+    `Step ${env.stepCount}`,
+    `Agent @ (${world.agentRow}, ${world.agentCol})`,
+  )
+}, 500)
+```
+
+**What to observe**: Eight lines of actual code (plus the logging). No neural network shape, no hyperparameters, no training loop — `env.train('dqn')` handles all of that.
+
+**Why this step exists**: The framework's "zero config" promise is visible here. `IgnitionEnvTFJS` inspected `world.observe()` to deduce the network's input size (4 floats), read `world.actions.length` for the output size (4 actions), and built a small DQN agent with the defaults from [the DQN page](/docs/algorithms/dqn). You never touched any of that.
+
+## Step 4 — Run it
+
+Start the Vite dev server:
+
+```bash
+npm run dev
+```
+
+Open the URL it prints (usually `http://localhost:5173`) and **pop the devtools console**. You'll see log lines like:
+
+```text
+Step 50  Agent @ (2, 3)
+Step 100 Agent @ (5, 1)
+Step 150 Agent @ (6, 6)
+Step 200 Agent @ (0, 0)
+Step 250 Agent @ (4, 6)
+...
+```
+
+**What to observe**:
+- For the first few hundred steps, the agent is effectively random — epsilon-greedy starts at 100% random. The agent position jumps around unpredictably.
+- Somewhere around step 1000–2000 (a few seconds at `setSpeed(10)`), the agent starts consistently reaching the goal at `(6, 6)`.
+- After that, the goal-reach events become rhythmic — the agent is finding near-optimal paths.
+
+**Why this step exists**: Watching a trained agent is the payoff. You just built a custom RL environment and trained a neural network to solve it without writing any ML code. That's the whole pitch.
+
+## Step 5 — Add a visual grid (optional but satisfying)
+
+The console logs are fine, but a live grid is much more fun. Add a `<canvas>` to `index.html`:
+
+```html filename="index.html (body)"
+<canvas id="grid" width="350" height="350" style="border: 1px solid #334155"></canvas>
+```
+
+Then update `src/main.ts` to draw the grid every animation frame:
+
+```ts filename="src/main.ts (additions)"
+const canvas = document.getElementById('grid') as HTMLCanvasElement
+const ctx = canvas.getContext('2d')!
+const cellSize = canvas.width / world.gridSize
+
+function draw() {
+  ctx.fillStyle = '#0f172a'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  // grid lines
+  ctx.strokeStyle = '#1e293b'
+  for (let i = 0; i <= world.gridSize; i++) {
+    ctx.beginPath()
+    ctx.moveTo(i * cellSize, 0)
+    ctx.lineTo(i * cellSize, canvas.height)
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.moveTo(0, i * cellSize)
+    ctx.lineTo(canvas.width, i * cellSize)
+    ctx.stroke()
+  }
+
+  // target
+  ctx.fillStyle = '#A5B4FC'
+  ctx.fillRect(world.targetCol * cellSize + 4, world.targetRow * cellSize + 4, cellSize - 8, cellSize - 8)
+
+  // agent
+  ctx.fillStyle = '#6366F1'
+  ctx.beginPath()
+  ctx.arc(
+    world.agentCol * cellSize + cellSize / 2,
+    world.agentRow * cellSize + cellSize / 2,
+    cellSize / 3,
+    0,
+    Math.PI * 2,
+  )
+  ctx.fill()
+
+  requestAnimationFrame(draw)
+}
+draw()
+```
+
+**What to observe**: A 7×7 grid with a pale blue square at the bottom-right (the target) and an indigo dot that jumps around randomly at first, then begins tracing diagonal paths to the target, then quickly locks into near-optimal L-shaped paths.
+
+**Why this step exists**: This is the "training loop vs render loop" split from the [R3F page](/docs/r3f) in action. The `draw()` function runs on `requestAnimationFrame` and reads `world.agentRow` / `world.agentCol` at its own pace. The training loop runs on `setTimeout` and mutates those same fields at its own pace. They don't interfere.
+
+## What you just built
+
+A small but complete reinforcement learning setup:
+
+- A custom `TrainingEnv` with dense reward shaping and step-count timeout.
+- A DQN agent training with IgnitionAI's defaults.
+- A live visualization of the agent's behavior as it learns.
+- A concrete feel for what "decoupled training and render loops" means in practice.
+
+Everything in this tutorial scales up to harder problems. If you swap `GridWorldEnv` for a `MountainCarEnv` or a custom physics sim, the rest of the code barely changes — `env.train('dqn')` still works.
+
+## Next steps
+
+- **Try a different algorithm.** Change `env.train('dqn')` to `env.train('qtable')`. On a 7×7 grid, tabular Q-learning converges almost instantly. Then try `env.train('ppo')` and watch it take longer — PPO is overkill here, and that's the lesson. See [Algorithms](/docs/algorithms) for which is which.
+
+- **Break the reward.** Change the reward to `return 10` only when the goal is reached (remove the `-0.1` per step). Retry. You'll see DQN struggle — this is what "sparse reward" looks like, and it's the single biggest reason agents fail to learn.
+
+- **Make it harder.** Bump the grid size to 15 or 20. You may need to bump `maxSteps` proportionally and give the network more capacity (`env.train('dqn', { hiddenLayers: [64, 64] })`).
+
+- **Write your own env.** Anything you can describe in those five methods, IgnitionAI can train an agent on. Read [How it works → core](/docs/how-it-works/core) for the full interface reference, then [React Three Fiber](/docs/r3f) if you want to put your env in a 3D scene.
+
+- **Check the other tutorials.** More are coming — see the [Tutorials index](/docs/tutorials) for what's on the roadmap.
+
+---
+
+Previous: **[← Tutorials](/docs/tutorials)** · Next: **[Algorithms →](/docs/algorithms)**

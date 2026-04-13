@@ -123,3 +123,12 @@ All four packages declare themselves as publishable scoped packages at version `
 **Decision**: All four backend pages get the same install-command shape — `npm install @ignitionai/<pkg>`. Before shipping the docs, run `npm view @ignitionai/<pkg> version` against each scope to verify the package actually resolves on the public registry. If a package is not yet published (e.g., `backend-onnx` or `storage`), the page must add a callout: *"This package ships with the monorepo; the public npm release is pending. Use `pnpm --filter @ignitionai/<pkg> build` to build from source."*
 **Rationale**: FR-003 requires one page per backend regardless of publish state. FR-009 and SC-004 require every copy-paste code block to work. A callout reconciles both.
 **Alternatives considered**: Hiding unpublished-backend pages until their npm release — rejected because it breaks FR-003 and because users who read the source already know the package exists.
+
+### Verified npm publish state (T008, 2026-04-13)
+
+| Package | Registry state |
+|---|---|
+| `@ignitionai/core` | ✓ Published at `0.1.0` |
+| `@ignitionai/backend-tfjs` | ✓ Published at `0.1.0` |
+| `@ignitionai/backend-onnx` | ✗ Not published — add "publish pending" callout |
+| `@ignitionai/storage` | ✗ Not published — add "publish pending" callout |

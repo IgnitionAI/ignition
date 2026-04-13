@@ -1,8 +1,8 @@
 export default {
   index: 'Introduction',
-  'quick-start': 'Quick Start',
-  concepts: 'Core Concepts',
+  quickstart: 'Quickstart',
   algorithms: 'Algorithms',
-  onnx: 'ONNX Export',
+  'how-it-works': 'How it works',
   r3f: 'React Three Fiber',
+  tutorials: 'Tutorials',
 }

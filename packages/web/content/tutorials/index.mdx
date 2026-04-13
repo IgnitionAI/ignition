@@ -1,0 +1,46 @@
+---
+title: Tutorials
+description: Step-by-step walkthroughs. Start with GridWorld — the simplest full example — then branch out.
+---
+
+# Tutorials
+
+Tutorials are how most people actually learn IgnitionAI. They're different from the [How it works](/docs/how-it-works) pages in one important way: a tutorial builds a working thing from scratch, one step at a time, with every file shown and every decision explained. You don't need to jump around — you start at the top, follow the steps, and at the bottom you have a trained agent.
+
+## Available tutorials
+
+| Tutorial | Difficulty | Time | Topic |
+|---|---|---|---|
+| **[GridWorld · Start here](/docs/tutorials/grid-world)** | Beginner | ~30 min | Build a custom `TrainingEnv`, train a DQN agent, watch it find the shortest path in a 7×7 grid. |
+
+## Coming later
+
+More tutorials are on the roadmap, each covering one specific skill. If you have a request, open an issue on [GitHub](https://github.com/IgnitionAI/ignition/issues).
+
+| Tutorial | Topic |
+|---|---|
+| CartPole with a custom observation space | Adapting `CartPoleEnv` to use a non-default set of observations. |
+| MountainCar with reward shaping | Fixing the sparse-reward version of MountainCar via dense shaping. |
+| CartPole 3D with React Three Fiber | Rendering a trained policy in an R3F scene. |
+| Car Circuit | The "hero demo" from scratch — 3D car, track, physics, chase cam. |
+| Export to Unity via ONNX | Full Train → Export → Convert → Deploy round-trip into a Unity Sentis scene. |
+
+Each of these will be added as its own documentation PR and will link back here when it ships.
+
+## Prerequisites for every tutorial
+
+Before starting any tutorial, make sure you have:
+
+- **Node.js 20 or later.**
+- **A package manager** — `npm`, `pnpm`, or `yarn` all work; the tutorials use `npm` for the install commands.
+- **A bundler that handles ES modules** — Vite (recommended), Next.js, or Webpack 5. The tutorials use Vite.
+- **Basic comfort with TypeScript.** You don't need to be an expert, but if `class Foo implements Bar` makes you panic, read a TypeScript crash course first.
+
+You do **not** need:
+- Prior RL knowledge. The [Algorithms](/docs/algorithms) pages cover the theory; the tutorials cover the practice.
+- A GPU. Everything runs in the browser on whatever WebGPU/WebGL your machine already has.
+- Python. At all. For anything. Except the one-time ONNX conversion step if you're deploying outside the browser.
+
+---
+
+Previous: **[← React Three Fiber](/docs/r3f)** · Next: **[GridWorld · Start here →](/docs/tutorials/grid-world)**
