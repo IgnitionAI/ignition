@@ -14,7 +14,14 @@ const navbar = (
   <Navbar
     logo={
       <span className="flex items-center gap-2 font-semibold">
-        <span aria-hidden>🔥</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/ignition-flame.gif"
+          alt=""
+          width={32}
+          height={32}
+          style={{ display: 'inline-block' }}
+        />
         <span>IgnitionAI</span>
       </span>
     }

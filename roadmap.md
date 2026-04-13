@@ -13,43 +13,55 @@
 - **Infrastructure**: pnpm monorepo, Zod validation, CI/CD, `ignitionai` umbrella package
 - **ONNX**: OnnxAgent, TF.js→ONNX exporter, HF Hub loader
 - **Storage**: HuggingFace Hub provider
-- **Environments**: `@ignitionai/environments` — GridWorld, CartPole, MountainCar
+- **Environments**: `@ignitionai/environments` — GridWorld, CartPole, MountainCar (not yet published on npm)
 - **Demos 2D**: GridWorld, CartPole, MountainCar
 - **Demos 3D**: CartPole 3D, Car on Circuit (chase cam, HUD, minimap, trail, speed slider)
 - **184+ tests** passing
+- **Landing page** (`packages/web`): Cruip Stellar adapted to IgnitionAI brand — indigo palette, flame GIF logo, 3 inline SVG feature diagrams (ONNX pipeline, algorithm cards, R3F), 5-demo grid, real package install command
+- **Documentation site** (`packages/web/content`, Nextra 4): 20 MDX pages — Introduction, Quickstart, verbose DQN/PPO/Q-Table pages with source-cited defaults, one page per backend package (core, backend-tfjs, backend-onnx, storage), R3F integration page, and 6 step-by-step tutorials (GridWorld, CartPole observations, MountainCar reward shaping, CartPole 3D, Car Circuit, ONNX→Unity). Single Vercel deployment serves `/` and `/docs` from one Next.js app. Specs 014–019.
 
 ---
 
-## Phase 1 — Public Launch Prep (2 weeks)
+## Phase 1 — Public Launch Prep
 
 > Everything needed to post "Show HN" without getting roasted.
 
-### 1.1 Landing page
-- [ ] Single-page site at `ignitionai.dev` (or similar domain)
-- [ ] Hero: Car on Circuit demo embedded live
-- [ ] 7-line code snippet with copy button
-- [ ] "Install" command block
-- [ ] 3 sub-demos linked (GridWorld, CartPole, MountainCar)
-- [ ] Deploy on Vercel
+### 1.1 Landing page ✅
+- [x] Single-page site under `packages/web` (Next.js 16 + Tailwind 4)
+- [x] Hero: install command + "Train your first agent" messaging
+- [x] 7-line code snippet in Quickstart section
+- [x] 5-demo grid (GridWorld, CartPole, MountainCar, CartPole 3D, Car Circuit)
+- [x] IgnitionAI brand: flame GIF logo, indigo palette, custom SVG feature diagrams
+- [x] Real package install command (`@ignitionai/core` + `@ignitionai/backend-tfjs`)
+- [ ] Deploy on Vercel (blocker: connect the web package to a Vercel project)
+- [ ] Point a domain (`ignitionai.dev` or `docs.ignitionai.fr`)
 
-### 1.2 Documentation site
-- [ ] Docs at `ignitionai.dev/docs` (Vitepress or Astro Starlight)
-- [ ] Getting Started (5 min tutorial)
-- [ ] `TrainingEnv` API reference
-- [ ] Algorithm guide (when to use DQN vs PPO vs Q-Table)
-- [ ] ONNX export + Unity/Unreal deployment guide
-- [ ] Architecture diagram
+### 1.2 Documentation site ✅
+- [x] Docs at `/docs` via Nextra 4, same Next.js deployment as the landing (single Vercel build)
+- [x] Introduction + Quickstart (<10 line training example, inlined CartPoleEnv)
+- [x] Verbose algorithm pages (DQN, PPO, Q-Table) with source-cited defaults and failure-mode recipes
+- [x] "How it works" — one page per backend package with annotated source walkthroughs
+- [x] React Three Fiber page: why R3F-first + full training-loop/render-loop split
+- [x] 6 step-by-step tutorials: GridWorld, CartPole observations, MountainCar reward shaping, CartPole 3D, Car Circuit, Export to Unity (ONNX)
+- [x] Auto-generated sidebar via `_meta.js` contracts, dark-mode matches landing
+- [x] 23 routes built statically
 
 ### 1.3 README + branding
-- [ ] README with hero GIF of Car Circuit demo
-- [ ] npm badges, license badge, build status
-- [ ] Logo (simple, 5 min in Figma)
-- [ ] Social card image for Twitter/OG
+- [x] README rewritten for v0.1 with current API + all demos
+- [x] npm badges, license badge, test badge
+- [x] Flame GIF logo (IgnitionAI brand asset)
+- [ ] Social card image for Twitter/OG (not yet done)
+- [ ] Hero GIF of Car Circuit demo in README (README currently text-only)
 
 ### 1.4 npm publish v0.1.0
-- [ ] Publish all 6 packages via `scripts/publish.sh`
-- [ ] Verify install in a fresh project
-- [ ] Tag v0.1.0 in git
+- [x] `@ignitionai/core` published at 0.1.0
+- [x] `@ignitionai/backend-tfjs` published at 0.1.0
+- [ ] `@ignitionai/backend-onnx` — built locally, not yet on npm (docs carry "publish pending" callout)
+- [ ] `@ignitionai/storage` — built locally, not yet on npm (docs carry "publish pending" callout)
+- [ ] `@ignitionai/environments` — CartPoleEnv / GridWorldEnv / MountainCarEnv not yet on npm. Quickstart inlines CartPoleEnv to avoid depending on an unpublished package.
+- [ ] Tag v0.1.0 in git after all four @ignitionai/* backend packages are live
+
+**Known framework bug surfaced during docs**: `backend-tfjs/src/defaults.ts:3-13` disagrees with `agents/dqn.ts:43` on `targetUpdateFrequency` (100 vs 1000). Docs cite the runtime value (1000). Needs a cleanup commit in the framework after merge.
 
 ---
 
