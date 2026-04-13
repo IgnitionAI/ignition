@@ -1,0 +1,45 @@
+---
+title: Algorithms
+---
+
+# Algorithms
+
+Switch algorithms with one word:
+
+```ts
+env.train('dqn')      // Deep Q-Network — discrete actions, replay buffer
+env.train('ppo')      // Proximal Policy Optimization — on-policy, stable
+env.train('qtable')   // Tabular Q-Learning — small discrete state spaces
+```
+
+## DQN — Deep Q-Network
+
+Value-based, off-policy. Learns a `Q(s, a)` function via a replay buffer and target network.
+
+**Best for:** most discrete-action problems. Good default.
+
+## PPO — Proximal Policy Optimization
+
+Policy gradient, on-policy. Uses a clipped surrogate objective to stabilize updates.
+
+**Best for:** complex policies, stability-critical training.
+
+## Q-Table
+
+Tabular Q-Learning. No neural network at all — just a lookup table.
+
+**Best for:** small, fully-observable grid worlds.
+
+## Overriding hyperparameters
+
+Defaults are good defaults. If you need fine control:
+
+```ts
+env.train('dqn', {
+  lr: 0.0005,
+  hiddenLayers: [128, 128, 64],
+  epsilon: 1.0,
+  epsilonDecay: 0.995,
+  gamma: 0.99,
+})
+```

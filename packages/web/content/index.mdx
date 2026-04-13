@@ -1,0 +1,33 @@
+---
+title: Introduction
+---
+
+# IgnitionAI
+
+**The ML-Agents of the JavaScript creative ecosystem.** Train reinforcement learning agents directly in the browser. Deploy anywhere via ONNX.
+
+IgnitionAI is an open-source RL framework built for creative developers working with **Three.js**, **React Three Fiber**, and the broader JS/TS stack. Describe your world in a class, call `env.train('dqn')`, and watch your agent learn in real time — no Python, no server, no GPU cluster.
+
+## Why IgnitionAI?
+
+Unity has [ML-Agents](https://github.com/Unity-Technologies/ml-agents). Python has Stable Baselines, RLlib, CleanRL. JavaScript had nothing comparable — until now.
+
+- **Zero config.** Implement 5 methods, call `train()`. The framework figures out the neural network, hyperparameters, and training loop.
+- **Browser-native.** TensorFlow.js with WebGPU → WebGL → WASM → CPU auto-selection. No install, no CUDA, no server.
+- **Train → Deploy pipeline.** Train in JS, export to ONNX, deploy in Unity (Sentis), Unreal (NNE), Python, C++, or edge devices.
+- **Three.js / R3F first.** Built for the JS creative stack. Pair it with your 3D scene and watch your agent learn in 3D.
+- **Production-ready.** TypeScript strict mode, Zod validation, 184+ tests, CI/CD, modular monorepo.
+
+## Install
+
+```bash
+npm install @ignitionai/core @ignitionai/backend-tfjs
+```
+
+## Next steps
+
+- [Quick Start](/docs/quick-start) — train your first agent in 7 lines
+- [Core Concepts](/docs/concepts) — the `TrainingEnv` interface
+- [Algorithms](/docs/algorithms) — DQN, PPO, Q-Table
+- [ONNX Export](/docs/onnx) — deploy anywhere
+- [React Three Fiber](/docs/r3f) — pair it with your 3D scene

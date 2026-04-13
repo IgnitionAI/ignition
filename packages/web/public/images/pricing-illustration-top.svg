@@ -13,11 +13,11 @@
     </filter>
     <linearGradient id="d" x1="69.669%" x2="43.884%" y1="13.591%" y2="100%">
       <stop offset="0%" stop-color="#FAF5FF"/>
-      <stop offset="48.25%" stop-color="#A855F7"/>
+      <stop offset="48.25%" stop-color="#6366F1"/>
       <stop offset="100%" stop-color="#4F46E5"/>
     </linearGradient>
     <linearGradient id="e" x1="19.609%" x2="50%" y1="14.544%" y2="100%">
-      <stop offset="0%" stop-color="#A855F7"/>
+      <stop offset="0%" stop-color="#6366F1"/>
       <stop offset="100%" stop-color="#6366F1" stop-opacity="0"/>
     </linearGradient>
     <path id="c" d="M149 42h93l-52 92c9.648-20.056 10.648-36.722 3-50-17.563-30.492-44-42-44-42Z"/>

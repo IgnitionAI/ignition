@@ -1,0 +1,51 @@
+---
+title: React Three Fiber
+---
+
+# Use with React Three Fiber
+
+Pair IgnitionAI with your R3F scene — the env describes the logic, your meshes render the state.
+
+```tsx
+import { Canvas } from '@react-three/fiber'
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import type { TrainingEnv } from '@ignitionai/core'
+import { useRef, useEffect } from 'react'
+
+class GameEnv implements TrainingEnv {
+  actions = ['left', 'right', 'jump']
+  observe() { return [/* ... */] }
+  step(action) { /* ... */ }
+  reward() { return 0 }
+  done() { return false }
+  reset() { /* ... */ }
+}
+
+function Game() {
+  const envRef = useRef<IgnitionEnvTFJS>()
+
+  useEffect(() => {
+    envRef.current = new IgnitionEnvTFJS(new GameEnv())
+    envRef.current.train('dqn')
+    return () => envRef.current?.stop()
+  }, [])
+
+  return (
+    <Canvas>
+      <PlayerMesh />
+      <EnemyMesh />
+    </Canvas>
+  )
+}
+```
+
+## Why it works
+
+The training loop runs independently of the render loop. Your agent learns while your scene renders at 60fps. Use `env.setSpeed(50)` to accelerate training during dev, then drop to `1` to watch the policy play in real time.
+
+## Live demos
+
+Check out the 3D demos on the landing page:
+
+- **CartPole 3D** — classic cart-pole in R3F with metallic materials and shadows
+- **Car Circuit** — a 3D car learns to drive an oval circuit with chase cam, minimap, and 1×–50× speed slider

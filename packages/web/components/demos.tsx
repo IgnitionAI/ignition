@@ -25,7 +25,7 @@ const DEMOS = [
     description: 'Classic CartPole rendered in 3D with React Three Fiber. Metallic materials and shadows.',
     tech: 'R3F',
     algos: 'DQN · PPO',
-    accent: '#a855f7',
+    accent: '#6366f1',
   },
   {
     title: 'Car Circuit',

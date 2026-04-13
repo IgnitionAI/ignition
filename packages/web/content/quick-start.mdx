@@ -1,0 +1,40 @@
+---
+title: Quick Start
+---
+
+# Quick Start
+
+Train your first agent in 7 lines. No neural network code. No hyperparameters. No config.
+
+## Install
+
+```bash
+npm install @ignitionai/core @ignitionai/backend-tfjs
+```
+
+## Train a CartPole agent
+
+```ts filename="cartpole.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from '@ignitionai/core'
+
+const cartpole = new CartPoleEnv()
+const env = new IgnitionEnvTFJS(cartpole)
+
+env.train('dqn')       // Zero config. It just works.
+// env.infer()         // Switch to inference after training.
+// env.setSpeed(50)    // Turbo training (50× faster).
+```
+
+That's it. The agent starts learning. The pole stays up.
+
+## What just happened?
+
+1. **`CartPoleEnv`** — a built-in `TrainingEnv` that describes the cart-pole world (state, actions, reward, termination).
+2. **`IgnitionEnvTFJS`** — the TensorFlow.js training loop. It deduces `inputSize` from your `observe()` call and `actionSize` from `actions.length`.
+3. **`env.train('dqn')`** — spins up a DQN agent with sensible defaults and runs the training loop.
+
+## Next
+
+- Read [Core Concepts](/docs/concepts) to learn how to describe your own world.
+- Browse the five [live demos](/#demos) on the landing page.

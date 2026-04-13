@@ -16,7 +16,7 @@ export default function Cta02() {
             <svg xmlns="http://www.w3.org/2000/svg" width="434" height="427">
               <defs>
                 <linearGradient id="bs4-a" x1="19.609%" x2="50%" y1="14.544%" y2="100%">
-                  <stop offset="0%" stopColor="#A855F7"></stop>
+                  <stop offset="0%" stopColor="#6366F1"></stop>
                   <stop offset="100%" stopColor="#6366F1" stopOpacity="0"></stop>
                 </linearGradient>
               </defs>

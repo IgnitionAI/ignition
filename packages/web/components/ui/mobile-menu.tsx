@@ -75,19 +75,19 @@ export default function MobileMenu() {
       >
         <ul className="border border-transparent [background:linear-gradient(var(--color-slate-900),var(--color-slate-900))_padding-box,conic-gradient(var(--color-slate-400),var(--color-slate-700)_25%,var(--color-slate-700)_75%,var(--color-slate-400)_100%)_border-box] rounded-lg px-4 py-1.5">
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/about">About</Link>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="#quickstart">Quick Start</Link>
           </li>
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/integrations">Integrations</Link>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="#features">Features</Link>
           </li>
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/pricing">Pricing</Link>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="#demos">Demos</Link>
           </li>
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/customers">Customers</Link>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/docs">Docs</Link>
           </li>
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/changelog">Changelog</Link>
+            <a className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="https://github.com/IgnitionAI/ignition" target="_blank" rel="noopener noreferrer">GitHub</a>
           </li>
         </ul>
       </nav>
