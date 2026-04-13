@@ -64,7 +64,7 @@ input[type="search"]::-webkit-search-results-decoration {
 .form-textarea,
 .form-multiselect,
 .form-select {
-    @apply bg-slate-800 text-slate-200 text-sm px-3 py-1.5 focus:border-purple-500;
+    @apply bg-slate-800 text-slate-200 text-sm px-3 py-1.5 focus:border-indigo-500;
 }
 
 .form-input,
@@ -78,7 +78,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .form-checkbox,
 .form-radio {
-    @apply bg-slate-800 checked:bg-purple-500 checked:border-transparent text-purple-600 rounded-xs focus-visible:not-checked:border-purple-500;
+    @apply bg-slate-800 checked:bg-indigo-500 checked:border-transparent text-indigo-600 rounded-xs focus-visible:not-checked:border-indigo-500;
 }
 
 .form-checkbox {

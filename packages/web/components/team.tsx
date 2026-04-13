@@ -158,7 +158,7 @@ export default function Team() {
       {/* Radial gradient */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
         <div className="absolute flex items-center justify-center top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 w-1/3 aspect-square">
-          <div className="absolute inset-0 translate-z-0 bg-purple-500 rounded-full blur-[120px] opacity-50"></div>
+          <div className="absolute inset-0 translate-z-0 bg-indigo-500 rounded-full blur-[120px] opacity-50"></div>
         </div>
       </div>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -176,7 +176,7 @@ export default function Team() {
                   <Image className="shrink-0" src={item.img} width="48" height="48" alt={item.name} />
                   <div className="grow">
                     <div className="font-bold text-slate-100 mb-0.5">{item.name}</div>
-                    <div className="text-sm text-purple-500 font-medium">{item.role}</div>
+                    <div className="text-sm text-indigo-500 font-medium">{item.role}</div>
                   </div>
                 </div>
                 <a className="shrink-0 text-slate-500 md:opacity-0 group-hover:opacity-100 transition-opacity focus-within:opacity-100 focus:outline-hidden group-hover:before:absolute group-hover:before:inset-0" href={item.twitter} aria-label={`${item.name}'s Twitter`}>

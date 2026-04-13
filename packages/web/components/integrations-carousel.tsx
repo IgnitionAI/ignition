@@ -220,13 +220,13 @@ export default function IntegrationsCarousel() {
       <div className="flex py-8 justify-end">
         <button className="carousel-prev relative z-20 w-12 h-12 flex items-center justify-center group">
           <span className="sr-only">Previous</span>
-          <svg className="w-4 h-4 fill-slate-500 group-hover:fill-purple-500 transition duration-150 ease-in-out" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <svg className="w-4 h-4 fill-slate-500 group-hover:fill-indigo-500 transition duration-150 ease-in-out" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
             <path d="M6.7 14.7l1.4-1.4L3.8 9H16V7H3.8l4.3-4.3-1.4-1.4L0 8z" />
           </svg>
         </button>
         <button className="carousel-next relative z-20 w-12 h-12 flex items-center justify-center group">
           <span className="sr-only">Next</span>
-          <svg className="w-4 h-4 fill-slate-500 group-hover:fill-purple-500 transition duration-150 ease-in-out" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <svg className="w-4 h-4 fill-slate-500 group-hover:fill-indigo-500 transition duration-150 ease-in-out" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
             <path d="M9.3 14.7l-1.4-1.4L12.2 9H0V7h12.2L7.9 2.7l1.4-1.4L16 8z" />
           </svg>
         </button>

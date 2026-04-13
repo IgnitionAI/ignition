@@ -10,8 +10,8 @@ export default function HeroAbout() {
 
     {/* Radial gradient */}
     <div className="absolute flex items-center justify-center top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 pointer-events-none -z-10 w-[800px] aspect-square" aria-hidden="true">
-      <div className="absolute inset-0 translate-z-0 bg-purple-500 rounded-full blur-[120px] opacity-30"></div>
-      <div className="absolute w-64 h-64 translate-z-0 bg-purple-400 rounded-full blur-[80px] opacity-70"></div>
+      <div className="absolute inset-0 translate-z-0 bg-indigo-500 rounded-full blur-[120px] opacity-30"></div>
+      <div className="absolute w-64 h-64 translate-z-0 bg-indigo-400 rounded-full blur-[80px] opacity-70"></div>
     </div>
 
     {/* Particles animation */}
@@ -27,7 +27,7 @@ export default function HeroAbout() {
 
         {/* Hero content */}
         <div className="text-center">
-          <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-purple-500 to-purple-200 pb-3">The folks behind the product</div>
+          <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-3">The folks behind the product</div>
           <h1 className="h1 bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-6">Turning security into innovation</h1>
           {/* Rings illustration */}
           <div className="inline-flex items-center justify-center relative">

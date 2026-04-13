@@ -18,8 +18,8 @@ export default function IntegrationsSingle() {
 
       {/* Radial gradient */}
       <div className="absolute flex items-center justify-center top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 pointer-events-none -z-10 w-[800px] aspect-square" aria-hidden="true">
-        <div className="absolute inset-0 translate-z-0 bg-purple-500 rounded-full blur-[120px] opacity-30"></div>
-        <div className="absolute w-64 h-64 translate-z-0 bg-purple-400 rounded-full blur-[80px] opacity-70"></div>
+        <div className="absolute inset-0 translate-z-0 bg-indigo-500 rounded-full blur-[120px] opacity-30"></div>
+        <div className="absolute w-64 h-64 translate-z-0 bg-indigo-400 rounded-full blur-[80px] opacity-70"></div>
       </div>
 
       {/* Particles animation */}
@@ -46,7 +46,7 @@ export default function IntegrationsSingle() {
                     <div className="sticky top-6">
                       <Link className="flex items-center justify-center w-9 h-9 group border border-transparent rounded-full [background:linear-gradient(var(--color-slate-900),var(--color-slate-900))_padding-box,conic-gradient(var(--color-slate-400),var(--color-slate-700)_25%,var(--color-slate-700)_75%,var(--color-slate-400)_100%)_border-box] relative before:absolute before:inset-0 before:bg-slate-800/30 before:rounded-full before:pointer-events-none" href="/integrations">
                         <span className="sr-only">Go back</span>
-                        <svg className="w-4 h-4 fill-purple-500" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                        <svg className="w-4 h-4 fill-indigo-500" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                           <path d="M6.7 14.7l1.4-1.4L3.8 9H16V7H3.8l4.3-4.3-1.4-1.4L0 8z" />
                         </svg>
                       </Link>
@@ -64,7 +64,7 @@ export default function IntegrationsSingle() {
                       <h1 className="sr-only">GitHub</h1>
 
                       {/* Post content */}
-                      <div className="prose max-w-none text-slate-400 prose-headings:text-slate-50 prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-4 prose-p:leading-relaxed prose-a:text-purple-500 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-50 prose-strong:font-medium prose-blockquote:pl-5 prose-blockquote:xl:-ml-5 prose-blockquote:border-l-2 prose-blockquote:border-purple-500 prose-blockquote:font-medium prose-blockquote:text-slate-300 prose-blockquote:italic">
+                      <div className="prose max-w-none text-slate-400 prose-headings:text-slate-50 prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-4 prose-p:leading-relaxed prose-a:text-indigo-500 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-50 prose-strong:font-medium prose-blockquote:pl-5 prose-blockquote:xl:-ml-5 prose-blockquote:border-l-2 prose-blockquote:border-indigo-500 prose-blockquote:font-medium prose-blockquote:text-slate-300 prose-blockquote:italic">
                         <h2>Overview</h2>
                         <p>
                           This powerful GitHub integration keeps your work in sync in both applications. It links features to Pull Requests so that details update automatically from In Progress to Done as the PR moves from drafted to merged - there is no need to update the issue in Stellar at all.
@@ -82,12 +82,12 @@ export default function IntegrationsSingle() {
                       </div>
                     </article>
 
-                    <aside className="pl-6 border-l-2 border-purple-500">
+                    <aside className="pl-6 border-l-2 border-indigo-500">
                       <p className="inline-flex font-medium italic text-lg bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-4">“ This integration is so perfect it tickles my brain. It ensures that your work is in sync across your entire team. ”</p>
                       <footer className="flex items-center space-x-4">
                         <Image className="shrink-0 rounded-full" src={Avatar} width={32} height={32} alt="Author" />
                         <div className="text-sm font-medium text-slate-300">
-                          Mike Hunt <span className="text-slate-700">-</span> <a className="text-purple-500 hover:underline" href="#0">Thunderbolt</a>
+                          Mike Hunt <span className="text-slate-700">-</span> <a className="text-indigo-500 hover:underline" href="#0">Thunderbolt</a>
                         </div>
                       </footer>
                     </aside>
@@ -117,7 +117,7 @@ export default function IntegrationsSingle() {
                         </div>
                         <button className="btn-sm text-slate-300 hover:text-white transition duration-150 ease-in-out group [background:linear-gradient(var(--color-slate-900),var(--color-slate-900))_padding-box,conic-gradient(var(--color-slate-400),var(--color-slate-700)_25%,var(--color-slate-700)_75%,var(--color-slate-400)_100%)_border-box] relative before:absolute before:inset-0 before:bg-slate-800/70 before:rounded-full before:pointer-events-none">
                           <span className="relative inline-flex items-center">
-                            Install Integration <span className="tracking-normal text-purple-500 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
+                            Install Integration <span className="tracking-normal text-indigo-500 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
                           </span>
                         </button>
                       </div>
@@ -128,7 +128,7 @@ export default function IntegrationsSingle() {
                         </li>
                         <li className="flex items-center justify-between space-x-2 py-3 border-t [border-image:linear-gradient(to_right,--theme(--color-slate-700/.3),--theme(--color-slate-700),--theme(--color-slate-700/.3))1]">
                           <span className="text-slate-400">Website</span>
-                          <a className="text-purple-500 font-medium flex items-center space-x-1" href="#0">
+                          <a className="text-indigo-500 font-medium flex items-center space-x-1" href="#0">
                             <span>github.com</span>
                             <svg className="fill-current" xmlns="http://www.w3.org/2000/svg" width="9" height="9">
                               <path d="m1.285 8.514-.909-.915 5.513-5.523H1.663l.01-1.258h6.389v6.394H6.794l.01-4.226z" />

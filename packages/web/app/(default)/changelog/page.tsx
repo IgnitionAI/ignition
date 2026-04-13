@@ -25,8 +25,8 @@ export default function Changelog() {
 
         {/* Radial gradient */}
         <div className="absolute flex items-center justify-center top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 pointer-events-none -z-10 w-[800px] aspect-square" aria-hidden="true">
-          <div className="absolute inset-0 translate-z-0 bg-purple-500 rounded-full blur-[120px] opacity-30"></div>
-          <div className="absolute w-64 h-64 translate-z-0 bg-purple-400 rounded-full blur-[80px] opacity-70"></div>
+          <div className="absolute inset-0 translate-z-0 bg-indigo-500 rounded-full blur-[120px] opacity-30"></div>
+          <div className="absolute w-64 h-64 translate-z-0 bg-indigo-400 rounded-full blur-[80px] opacity-70"></div>
         </div>
 
         {/* Particles animation */}
@@ -53,7 +53,7 @@ export default function Changelog() {
             {/* Content */}
             <div className="max-w-3xl mx-auto">
               <div className="relative">
-                <div className="absolute h-full top-4 left-[2px] w-0.5 bg-slate-800 [mask-image:linear-gradient(0deg,transparent,var(--color-white)_150px,var(--color-white))] -z-10 overflow-hidden after:absolute after:h-4 after:top-0 after:-translate-y-full after:left-0 after:w-0.5 after:bg-[linear-gradient(180deg,transparent,--theme(--color-purple-500/.65)_25%,--theme(--color-purple-200)_50%,--theme(--color-purple-500/.65)_75%,transparent)] after:animate-shine" aria-hidden="true"></div>
+                <div className="absolute h-full top-4 left-[2px] w-0.5 bg-slate-800 [mask-image:linear-gradient(0deg,transparent,var(--color-white)_150px,var(--color-white))] -z-10 overflow-hidden after:absolute after:h-4 after:top-0 after:-translate-y-full after:left-0 after:w-0.5 after:bg-[linear-gradient(180deg,transparent,--theme(--color-indigo-500/.65)_25%,--theme(--color-indigo-200)_50%,--theme(--color-indigo-500/.65)_75%,transparent)] after:animate-shine" aria-hidden="true"></div>
                 {allUpdates.map((post, postIndex) => (
                   <PostItem key={postIndex} {...post} />
                 ))}
@@ -73,7 +73,7 @@ export default function Changelog() {
                 <li>
                   <a className="btn-sm text-slate-300 hover:text-white transition duration-150 ease-in-out group [background:linear-gradient(var(--color-slate-900),var(--color-slate-900))_padding-box,conic-gradient(var(--color-slate-400),var(--color-slate-700)_25%,var(--color-slate-700)_75%,var(--color-slate-400)_100%)_border-box] relative before:absolute before:inset-0 before:bg-slate-800/30 before:rounded-full before:pointer-events-none" href="#0">
                     <span className="relative inline-flex items-center">
-                      Next Page <span className="tracking-normal text-purple-500 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
+                      Next Page <span className="tracking-normal text-indigo-500 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
                     </span>
                   </a>
                 </li>

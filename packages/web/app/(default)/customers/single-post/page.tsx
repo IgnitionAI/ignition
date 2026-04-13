@@ -16,8 +16,8 @@ export default function CustomerSingle() {
 
       {/* Radial gradient */}
       <div className="absolute flex items-center justify-center top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 pointer-events-none -z-10 w-[800px] aspect-square" aria-hidden="true">
-        <div className="absolute inset-0 translate-z-0 bg-purple-500 rounded-full blur-[120px] opacity-30"></div>
-        <div className="absolute w-64 h-64 translate-z-0 bg-purple-400 rounded-full blur-[80px] opacity-70"></div>
+        <div className="absolute inset-0 translate-z-0 bg-indigo-500 rounded-full blur-[120px] opacity-30"></div>
+        <div className="absolute w-64 h-64 translate-z-0 bg-indigo-400 rounded-full blur-[80px] opacity-70"></div>
       </div>
 
       {/* Particles animation */}
@@ -40,7 +40,7 @@ export default function CustomerSingle() {
                 <article className="pb-12 mb-12 border-b [border-image:linear-gradient(to_right,transparent,var(--color-slate-800),transparent)1]">
 
                   <div className="mb-4">
-                    <Link className="inline-flex text-sm font-medium text-purple-500 group" href="/customers"><span className="tracking-normal group-hover:-translate-x-0.5 transition-transform duration-150 ease-in-out mr-1">&lt;-</span> Go Back</Link>
+                    <Link className="inline-flex text-sm font-medium text-indigo-500 group" href="/customers"><span className="tracking-normal group-hover:-translate-x-0.5 transition-transform duration-150 ease-in-out mr-1">&lt;-</span> Go Back</Link>
                   </div>
 
                   <header>
@@ -55,7 +55,7 @@ export default function CustomerSingle() {
                   </header>
 
                   {/* Post content */}
-                  <div className="prose max-w-none text-slate-400 prose-headings:text-slate-50 prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-4 prose-p:leading-relaxed prose-a:text-purple-500 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-50 prose-strong:font-medium prose-blockquote:pl-5 prose-blockquote:xl:-ml-5 prose-blockquote:border-l-2 prose-blockquote:border-purple-500 prose-blockquote:font-medium prose-blockquote:text-slate-300 prose-blockquote:italic">
+                  <div className="prose max-w-none text-slate-400 prose-headings:text-slate-50 prose-h2:text-xl prose-h2:mt-8 prose-h2:mb-4 prose-p:leading-relaxed prose-a:text-indigo-500 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-50 prose-strong:font-medium prose-blockquote:pl-5 prose-blockquote:xl:-ml-5 prose-blockquote:border-l-2 prose-blockquote:border-indigo-500 prose-blockquote:font-medium prose-blockquote:text-slate-300 prose-blockquote:italic">
                     <p>
                       <a href="#0">Airbnb</a> is an American San Francisco-based company operating an online marketplace for short- and long-term homestays and experiences. The company acts as a broker and charges a commission from each booking. The company was founded in 2008 by Brian Chesky, Nathan Blecharczyk, and Joe Gebbia. Airbnb is a shortened version of its original name, AirBedandBreakfast.com. Airbnb is the most well-known company for short-term housing rentals.
                     </p>
@@ -131,7 +131,7 @@ export default function CustomerSingle() {
                         </li>
                         <li className="flex items-center justify-between space-x-2 py-3 border-t [border-image:linear-gradient(to_right,--theme(--color-slate-700/.3),--theme(--color-slate-700),--theme(--color-slate-700/.3))1]">
                           <span className="text-slate-400">Website</span>
-                          <a className="text-purple-500 font-medium flex items-center space-x-1" href="#0">
+                          <a className="text-indigo-500 font-medium flex items-center space-x-1" href="#0">
                             <span>airbnb.com</span>
                             <svg className="fill-current" xmlns="http://www.w3.org/2000/svg" width="9" height="9">
                               <path d="m1.285 8.514-.909-.915 5.513-5.523H1.663l.01-1.258h6.389v6.394H6.794l.01-4.226z" />

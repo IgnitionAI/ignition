@@ -21,7 +21,7 @@ export default function Faqs() {
         {/* Section header */}
         <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
           <div>
-            <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-purple-500 to-purple-200 pb-3">Getting started with Stellar</div>
+            <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-3">Getting started with Stellar</div>
           </div>
           <h2 className="h2 bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-4">Everything you need to know</h2>
         </div>

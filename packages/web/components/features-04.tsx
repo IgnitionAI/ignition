@@ -29,7 +29,7 @@ export default function Features04() {
             {/* Row */}
             <div className="py-8 first-of-type:pt-0 last-of-type:pb-0">
               <div>
-                <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-purple-500 to-purple-200 pb-6">API Authorization</div>
+                <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-6">API Authorization</div>
               </div>
               <div className="grid md:grid-cols-3 gap-8 md:gap-12 mb-2">
                 {/* Feature */}
@@ -67,7 +67,7 @@ export default function Features04() {
             {/* Row */}
             <div className="py-8">
               <div>
-                <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-purple-500 to-purple-200 pb-6">User Management</div>
+                <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-6">User Management</div>
               </div>
               <div className="grid md:grid-cols-3 gap-8 md:gap-12 mb-2">
                 {/* Feature */}
@@ -105,7 +105,7 @@ export default function Features04() {
             {/* Row */}
             <div className="py-8">
               <div>
-                <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-purple-500 to-purple-200 pb-6">Standard Security</div>
+                <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-6">Standard Security</div>
               </div>
               <div className="grid md:grid-cols-3 gap-8 md:gap-12 mb-2">
                 {/* Feature */}

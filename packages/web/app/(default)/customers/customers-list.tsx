@@ -122,7 +122,7 @@ export default function CustomersList() {
           <Image className="rounded-full" src={CustomerAvatar01} width={32} height={32} alt="Customer Avatar 01" />
         </div>
         <div className="text-sm font-medium text-slate-300">
-          Mike Hunt <span className="text-slate-700">-</span> <a className="text-purple-500 hover:underline" href="#0">Thunderbolt</a>
+          Mike Hunt <span className="text-slate-700">-</span> <a className="text-indigo-500 hover:underline" href="#0">Thunderbolt</a>
         </div>
       </div>
       {/* Testimonial #02 */}
@@ -136,7 +136,7 @@ export default function CustomersList() {
           <Image className="rounded-full" src={CustomerAvatar02} width={32} height={32} alt="Customer Avatar 02" />
         </div>
         <div className="text-sm font-medium text-slate-300">
-          Mirko Mitt <span className="text-slate-700">-</span> <a className="text-purple-500 hover:underline" href="#0">Mildrink</a>
+          Mirko Mitt <span className="text-slate-700">-</span> <a className="text-indigo-500 hover:underline" href="#0">Mildrink</a>
         </div>
       </div>
 
