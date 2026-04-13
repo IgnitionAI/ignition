@@ -1,196 +1,356 @@
 # IgnitionAI
 
-[![NPM Version](https://img.shields.io/npm/v/@ignitionai/backend-tfjs?style=flat-square)](https://www.npmjs.com/package/@ignitionai/backend-tfjs)
-[![License](https://img.shields.io/npm/l/@ignitionai/backend-tfjs?style=flat-square)](https://www.npmjs.com/package/@ignitionai/backend-tfjs)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./LICENSE)
+[![Tests](https://img.shields.io/badge/tests-184%20passing-22c55e?style=flat-square)](https://github.com/IgnitionAI/ignition/actions)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?style=flat-square)](https://www.typescriptlang.org/)
 
-**The ML-Agents of the JavaScript creative ecosystem.**
+> **The ML-Agents of the JavaScript creative ecosystem.**
+> Train reinforcement learning agents directly in the browser. Deploy anywhere via ONNX.
 
-IgnitionAI is an open-source reinforcement learning framework built for creative developers working with Three.js, React Three Fiber, and the broader JS/TS ecosystem. Train RL agents directly in the browser, then export to ONNX and deploy anywhere — Unity, Unreal, native apps, or edge devices.
+IgnitionAI is an open-source RL framework built for creative developers working with **Three.js**, **React Three Fiber**, and the broader JS/TS stack. Describe your world in a class, call `env.train('dqn')`, and watch your agent learn in real time — no Python, no server, no GPU cluster.
+
+---
 
 ## Why IgnitionAI?
 
-Unity has [ML-Agents](https://github.com/Unity-Technologies/ml-agents). JavaScript developers had nothing comparable — until now.
+Unity has [ML-Agents](https://github.com/Unity-Technologies/ml-agents). Python has Stable Baselines, RLlib, CleanRL. JavaScript had nothing comparable — until now.
 
-- **POC in minutes, not days.** Wire up an environment with a few functions, pick an algorithm, and start training.
-- **Train in the browser.** TensorFlow.js backends (WebGPU, WebGL, WASM, CPU) — no Python, no server, no CUDA setup.
-- **Export to ONNX.** Train in JS, export to `.onnx`, deploy in Unity, Unreal, or any ONNX-compatible runtime.
-- **Visualize in 3D.** First-class React Three Fiber integration — watch your agent learn in real time.
-- **Modular by design.** Use only what you need. Swap algorithms, backends, or storage providers independently.
+- **Zero config.** Implement 5 methods, call `train()`. The framework figures out the neural network, hyperparameters, and training loop.
+- **Browser-native.** TensorFlow.js with WebGPU > WebGL > WASM > CPU auto-selection. No install, no CUDA, no server.
+- **Train → Deploy pipeline.** Train in JS, export to ONNX, deploy in Unity (Sentis), Unreal (NNE), Python, C++, or edge devices.
+- **Three.js / R3F first.** Built for the JS creative stack. Pair it with your 3D scene and watch your agent learn in 3D.
+- **Production-ready.** TypeScript strict mode, Zod validation, 184+ tests, CI/CD, modular monorepo.
 
-## Packages
+---
 
-```
-packages/
-  core/             @ignitionai/core            Environment loop, types, Zod schemas
-  backend-tfjs/     @ignitionai/backend-tfjs     DQN, PPO, Q-Table (training)
-  backend-onnx/     @ignitionai/backend-onnx     ONNX inference agent, TF.js-to-ONNX exporter
-  storage/          @ignitionai/storage          Model persistence (Hugging Face Hub)
-  demo-target-chasing/                           3D demo with React Three Fiber
-```
+## Install
 
-## Quick Start
+One package. Everything included.
 
 ```bash
-pnpm install @ignitionai/core @ignitionai/backend-tfjs
+npm install ignitionai
+# or
+pnpm add ignitionai
 ```
 
-### 1. Create an agent
+---
+
+## Quick Start (7 lines)
 
 ```ts
-import { DQNAgent } from '@ignitionai/backend-tfjs';
+import { IgnitionEnvTFJS, CartPoleEnv } from 'ignitionai';
 
-const agent = new DQNAgent({
-  inputSize: 4,
-  actionSize: 2,
-  hiddenLayers: [64, 64],
-  lr: 0.001,
-  gamma: 0.99,
-  epsilon: 1.0,
-  epsilonDecay: 0.995,
-  minEpsilon: 0.01,
-  batchSize: 32,
-  memorySize: 10000,
-});
+const cartpole = new CartPoleEnv();
+const env = new IgnitionEnvTFJS(cartpole);
+
+env.train('dqn');      // Zero config. It just works.
+// env.infer();        // Switch to inference after training.
+// env.setSpeed(50);   // Turbo training (50x faster).
 ```
 
-### 2. Define your environment
+That's it. The agent starts learning. The pole stays up.
+
+---
+
+## Define Your Own Environment
+
+Describe your game world by implementing the `TrainingEnv` interface — 5 methods and an `actions` property.
 
 ```ts
-import { IgnitionEnv } from '@ignitionai/core';
+import { IgnitionEnvTFJS, TrainingEnv } from 'ignitionai';
 
-const env = new IgnitionEnv({
-  agent,
-  getObservation: () => [posX, posY, targetX, targetY],
-  applyAction: (action) => { /* move your agent */ },
-  computeReward: () => {
-    const dist = distance(agent, target);
-    return dist < 0.1 ? 10.0 : -dist;
-  },
-  isTerminated: () => reachedGoal || outOfBounds,
-  onReset: () => { /* reset positions */ },
-});
+class MyGame implements TrainingEnv {
+  // What the agent can do
+  actions = ['left', 'right', 'jump', 'shoot'];
+
+  // What the agent sees (normalized to [-1, 1] ideally)
+  observe(): number[] {
+    return [
+      player.x / WORLD_WIDTH,
+      player.y / WORLD_HEIGHT,
+      enemy.x / WORLD_WIDTH,
+      enemy.y / WORLD_HEIGHT,
+    ];
+  }
+
+  // What happens when the agent acts
+  step(action: number): void {
+    player.do(this.actions[action]);
+  }
+
+  // Is that good or bad?
+  reward(): number {
+    if (player.hitEnemy) return -10;
+    if (player.collectedCoin) return +5;
+    return -distance(player, nearestCoin) * 0.01;
+  }
+
+  // Is the episode over?
+  done(): boolean {
+    return !player.alive || player.won;
+  }
+
+  // Reset the world for a new episode
+  reset(): void {
+    game.restart();
+  }
+}
+
+const env = new IgnitionEnvTFJS(new MyGame());
+env.train();  // DQN with sensible defaults
 ```
 
-### 3. Train
+The framework **deduces** `inputSize` from your first `observe()` call and `actionSize` from `actions.length`. You never touch neural network code.
 
-```ts
-// In a game loop, R3F useFrame, or requestAnimationFrame
-await env.step();
-```
-
-### 4. Export to ONNX and deploy anywhere
-
-```ts
-import { saveForOnnxExport } from '@ignitionai/backend-onnx';
-
-// Export TF.js model to SavedModel format + Python conversion script
-const result = await saveForOnnxExport(agent.model, './export');
-// Then run: python convert_to_onnx.py -> model.onnx
-// Load in Unity, Unreal, or any ONNX runtime
-```
+---
 
 ## Algorithms
 
-| Algorithm | Type | Package | Status |
-|-----------|------|---------|--------|
-| DQN | Value-based, off-policy | `backend-tfjs` | Stable |
-| PPO | Policy gradient, on-policy | `backend-tfjs` | Stable |
-| Q-Table | Tabular, off-policy | `backend-tfjs` | Stable |
-| ONNX Inference | Inference-only | `backend-onnx` | Stable |
+Switch algorithms with one word:
 
-All agents implement the same `AgentInterface` — swap algorithms with zero code changes.
+```ts
+env.train('dqn');      // Deep Q-Network — discrete actions, replay buffer
+env.train('ppo');      // Proximal Policy Optimization — on-policy, stable
+env.train('qtable');   // Tabular Q-Learning — small discrete state spaces
+```
+
+| Algorithm | Type | Best for |
+|---|---|---|
+| **DQN** | Value-based, off-policy | Most discrete-action problems. Good default. |
+| **PPO** | Policy gradient, on-policy | Complex policies, stability-critical training. |
+| **Q-Table** | Tabular | Small, fully-observable grid worlds. |
+
+You can override hyperparameters if you want fine control:
+
+```ts
+env.train('dqn', { lr: 0.0005, hiddenLayers: [128, 128, 64] });
+```
+
+---
+
+## Train in the Browser, Deploy Everywhere
+
+The ONNX bridge is what makes IgnitionAI a serious tool, not a toy:
+
+```ts
+import { saveForOnnxExport } from 'ignitionai';
+
+// 1. Train in the browser
+env.train('dqn');
+// ... wait for convergence ...
+env.stop();
+
+// 2. Export to ONNX
+const { conversionScript } = await saveForOnnxExport(
+  env.agent.model,
+  './export',
+);
+
+// 3. Run the Python conversion script (one-time)
+// bash convert.sh
+
+// 4. Deploy the .onnx model anywhere:
+//    - Unity via Sentis or Barracuda
+//    - Unreal Engine via NNE
+//    - Python / C++ / Rust via ONNX Runtime
+//    - Mobile / edge devices
+```
+
+You can also run inference directly in JS using the trained model:
+
+```ts
+import { OnnxAgent } from 'ignitionai';
+
+const agent = new OnnxAgent({
+  modelPath: './my-model.onnx',
+  actionSize: 4,
+});
+await agent.load();
+const action = await agent.getAction(observation);
+```
+
+---
 
 ## Use with React Three Fiber
 
+Pair IgnitionAI with your R3F scene — the env describes the logic, your meshes render the state.
+
 ```tsx
-import { useFrame } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { IgnitionEnvTFJS, TrainingEnv } from 'ignitionai';
+import { useRef, useEffect } from 'react';
 
-function TrainingScene() {
-  const envRef = useRef(env);
+class GameEnv implements TrainingEnv {
+  actions = ['left', 'right', 'jump'];
+  observe() { return [...]; }
+  step(action) { ... }
+  reward() { return ...; }
+  done() { return ...; }
+  reset() { ... }
+}
 
-  useFrame(async () => {
-    const result = await envRef.current.step();
-    // result.observation, result.reward, result.terminated
-  });
+function Game() {
+  const envRef = useRef<IgnitionEnvTFJS>();
+
+  useEffect(() => {
+    envRef.current = new IgnitionEnvTFJS(new GameEnv());
+    envRef.current.train('dqn');
+    return () => envRef.current?.stop();
+  }, []);
 
   return (
-    <>
-      <AgentMesh position={agentPos} />
-      <TargetMesh position={targetPos} />
-    </>
+    <Canvas>
+      <PlayerMesh />
+      <EnemyMesh />
+    </Canvas>
   );
 }
 ```
 
-## The ONNX Bridge: Train in JS, Deploy Everywhere
+The training loop runs independently of the render loop — the agent learns while your scene renders at 60fps.
 
-This is IgnitionAI's killer feature. The workflow:
+---
 
-1. **Prototype** your environment in Three.js / R3F
-2. **Train** with DQN, PPO, or Q-Table directly in the browser
-3. **Export** to ONNX format
-4. **Deploy** the trained model in:
-   - Unity (via [Barracuda](https://docs.unity3d.com/Packages/com.unity.barracuda@latest) or [Sentis](https://unity.com/products/sentis))
-   - Unreal Engine (via [NNE](https://dev.epicgames.com/documentation/en-us/unreal-engine/neural-network-engine-overview))
-   - Python / C++ / Rust (via [ONNX Runtime](https://onnxruntime.ai/))
-   - Mobile / Edge devices
-
-No need to rewrite your RL logic. Train fast in JS, ship optimized inference everywhere.
-
-## Model Persistence
-
-Save and load models from Hugging Face Hub:
+## Save & Load Models (HuggingFace Hub)
 
 ```ts
-import { HuggingFaceProvider } from '@ignitionai/storage';
+import { HuggingFaceProvider } from 'ignitionai';
 
 const storage = new HuggingFaceProvider({
   token: process.env.HF_TOKEN,
-  repoId: 'your-username/your-model',
+  repoId: 'your-username/your-rl-model',
 });
 
-await storage.save('my-dqn-v1', agent.model);
-const loaded = await storage.load('my-dqn-v1');
+await storage.save('my-agent-v1', env.agent.model);
+const model = await storage.load('my-agent-v1');
 ```
 
-## Running the Demo
+---
+
+## Demos
+
+Five interactive demos showing the framework in action. Each one is a full package you can run locally.
+
+### 2D Demos — Canvas + Charts
+
+| Demo | What it shows | Algorithm |
+|---|---|---|
+| **GridWorld** | Agent finds the shortest path in a 7×7 grid | Q-Table, DQN, PPO |
+| **CartPole** | Classic pole-balancing benchmark with Euler physics | DQN, PPO |
+| **MountainCar** | Agent discovers momentum strategy to climb a hill | DQN, PPO |
+
+### 3D Demos — React Three Fiber
+
+| Demo | What it shows | Tech |
+|---|---|---|
+| **CartPole 3D** | Metallic cart and pole, sunset environment, contact shadows | R3F + drei |
+| **Car Circuit** | 3D car learns to drive an oval circuit — chase cam, HUD, minimap, fading trail, 1x–50x speed slider | R3F + drei |
+
+### Run them locally
 
 ```bash
 git clone https://github.com/IgnitionAI/ignition.git
 cd ignition
 pnpm install
 pnpm -r run build
-cd packages/demo-target-chasing
-pnpm dev
+
+# Pick your demo:
+pnpm --filter demo-gridworld dev       # http://localhost:3001
+pnpm --filter demo-cartpole dev        # http://localhost:3002
+pnpm --filter demo-mountaincar dev     # http://localhost:3003
+pnpm --filter demo-cartpole-3d dev     # http://localhost:3010
+pnpm --filter demo-car-circuit dev     # http://localhost:3020
 ```
 
-Open `http://localhost:5173` — a DQN agent learns to chase a target in a 3D scene with real-time reward/loss/epsilon charts.
+Each demo has: live 3D/2D visualization, Train/Inference/Stop/Reset controls, algorithm picker (DQN/PPO), live reward chart, and a code panel showing the exact API you'd write in your own project.
 
-## Tips
+---
 
-- **Normalize observations** to [0, 1] or [-1, 1] for faster convergence.
-- **Shape your rewards.** Dense rewards (distance-based) beat sparse rewards (goal-only) every time.
-- **Start simple.** Get a DQN working on a toy problem before scaling up.
-- **Use the backend selector** to pick the fastest available backend for your device.
+## Packages
 
-## Roadmap
+IgnitionAI is a pnpm monorepo. The `ignitionai` package is an umbrella that re-exports everything — most users only need that one.
 
-See [roadmap.md](./roadmap.md) for the full development plan.
+```
+ignitionai                  ← single install, everything included
+├── @ignitionai/core           IgnitionEnv, TrainingEnv interface, types
+├── @ignitionai/backend-tfjs   DQN, PPO, Q-Table + IgnitionEnvTFJS
+├── @ignitionai/backend-onnx   OnnxAgent, TF.js → ONNX exporter
+├── @ignitionai/storage        HuggingFace Hub model persistence
+└── @ignitionai/environments   GridWorld, CartPole, MountainCar
+```
+
+You can also install individual packages if you want fine-grained dependency control.
+
+---
+
+## Training Speed Control
+
+IgnitionAI exposes `env.setSpeed(multiplier)` so you can accelerate training dynamically:
+
+```ts
+env.train('dqn');
+env.setSpeed(50);    // Turbo — 50x faster, agent learns in seconds
+// ... agent converges ...
+env.setSpeed(1);     // Back to real-time for visual inspection
+env.infer();
+```
+
+Under the hood: `stepIntervalMs` goes down and `stepsPerTick` batches multiple steps before yielding to the event loop. Visual updates may become choppy at high speeds but training integrity is preserved.
+
+---
+
+## Tips for Good Results
+
+- **Normalize observations** to `[-1, 1]` or `[0, 1]`. Neural networks hate unbounded inputs.
+- **Shape your rewards.** Dense rewards (distance-based) converge faster than sparse rewards (goal-only). Use sparse only when you want to test exploration.
+- **Start simple.** Get DQN working on a small env before scaling up. CartPole is your "hello world".
+- **Let it run.** RL is slower than supervised learning. Be patient or crank the speed slider.
+- **Defaults are good defaults.** If training doesn't converge, first check your env logic — not the hyperparameters.
+
+---
+
+## Project Status
+
+**v0.1 — first public release.**
+
+- Core framework: stable
+- Algorithms (DQN, PPO, Q-Table): stable with convergence tests
+- ONNX export: functional (requires Python conversion step)
+- HuggingFace storage: stable
+- 184+ tests passing across all packages
+- CI/CD: GitHub Actions running tests + build on every PR
+
+See [roadmap.md](./roadmap.md) for what's coming next (SAC, multi-agent, model hub, more demos).
+
+---
 
 ## Contributing
 
-Contributions are welcome! This is an open-source project — if you build creative JS experiences and want better RL tooling, this is for you.
+Contributions are very welcome. If you build creative JS experiences and want better RL tooling, this project is for you.
 
 ```bash
-pnpm install          # install all deps
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+pnpm install
 pnpm -r run build     # build all packages
 pnpm -r run test      # run all tests
 ```
 
+The codebase follows:
+
+- **Spec-driven development** — every feature has a spec in `specs/` (see `specs/012-demo-car-circuit/` for an example)
+- **TDD** — write the failing test, make it pass, refactor
+- **TypeScript strict mode** — no `any`, proper types everywhere
+- **Constitution** — see `.specify/memory/constitution.md`
+
+---
+
 ## License
 
-MIT
+[MIT](./LICENSE) — use it for anything, commercial or otherwise. Attribution appreciated but not required.
 
 ---
 
 Built by [@salim4n](https://github.com/salim4n) / [@IgnitionAI](https://github.com/IgnitionAI)
+
+**Star the repo** ⭐ if you think creative JS devs deserve proper RL tooling.
