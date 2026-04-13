@@ -124,11 +124,16 @@ All four packages declare themselves as publishable scoped packages at version `
 **Rationale**: FR-003 requires one page per backend regardless of publish state. FR-009 and SC-004 require every copy-paste code block to work. A callout reconciles both.
 **Alternatives considered**: Hiding unpublished-backend pages until their npm release — rejected because it breaks FR-003 and because users who read the source already know the package exists.
 
-### Verified npm publish state (T008, 2026-04-13)
+### Verified npm publish state
+
+**Initial check (T008, 2026-04-13 morning)**: only `@ignitionai/core` and `@ignitionai/backend-tfjs` were live. `backend-onnx`, `storage`, and `environments` were all unpublished — docs carried "publish pending" callouts, and the Quickstart inlined a full `CartPoleEnv` to avoid the broken `environments` import.
+
+**Post-publish (2026-04-13 evening)**: all five backend packages are now live on npm at `0.1.0`. The "publish pending" callouts have been removed. The Quickstart now imports `CartPoleEnv` from `@ignitionai/environments` as originally intended.
 
 | Package | Registry state |
 |---|---|
 | `@ignitionai/core` | ✓ Published at `0.1.0` |
 | `@ignitionai/backend-tfjs` | ✓ Published at `0.1.0` |
-| `@ignitionai/backend-onnx` | ✗ Not published — add "publish pending" callout |
-| `@ignitionai/storage` | ✗ Not published — add "publish pending" callout |
+| `@ignitionai/backend-onnx` | ✓ Published at `0.1.0` |
+| `@ignitionai/storage` | ✓ Published at `0.1.0` |
+| `@ignitionai/environments` | ✓ Published at `0.1.0` |

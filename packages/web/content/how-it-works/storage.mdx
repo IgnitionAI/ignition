@@ -9,12 +9,6 @@ description: Persistent model storage for IgnitionAI agents — save and load tr
 
 **Source**: [`packages/storage/src/`](https://github.com/IgnitionAI/ignition/tree/main/packages/storage/src) on GitHub.
 
-import { Callout } from 'nextra/components'
-
-<Callout type="warning">
-**Publish status**: `@ignitionai/storage` ships with the monorepo but is not yet on the public npm registry. Build it from source with `pnpm --filter @ignitionai/storage build`. A public release is tracked in the roadmap.
-</Callout>
-
 ## Public API surface
 
 | Export | Kind | Purpose |
@@ -61,7 +55,7 @@ export HF_REPO_ID=your-user/my-rl-agent
 
 ```ts filename="save-and-load.ts"
 import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
-import { CartPoleEnv } from './cartpole-env'   // from the Quickstart
+import { CartPoleEnv } from '@ignitionai/environments'
 import { HuggingFaceProvider, parseHFConfig } from '@ignitionai/storage'
 
 // 1. Train an agent

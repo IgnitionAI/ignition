@@ -24,18 +24,17 @@ When you write:
 
 ```ts
 import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
-import { CartPoleEnv } from './cartpole-env'  // the env you defined yourself
+import { CartPoleEnv } from '@ignitionai/environments'
 
 const env = new IgnitionEnvTFJS(new CartPoleEnv())
 env.train('dqn')
 ```
 
-(The `CartPoleEnv` class comes from your own project — see the [Quickstart](/docs/quickstart) for a complete copy-paste definition.)
-
 Here's what happens across the packages:
 
-1. **`@ignitionai/core`** provides the `TrainingEnv` interface contract and the `IgnitionEnv` base class with the generic training loop.
-2. **`@ignitionai/backend-tfjs`** provides `IgnitionEnvTFJS`, which extends `IgnitionEnv` and registers the TF.js-backed `DQNAgent`, `PPOAgent`, and `QTableAgent` as the available algorithm factories.
+1. **`@ignitionai/environments`** ships `CartPoleEnv` as a built-in `TrainingEnv` (also `GridWorldEnv` and `MountainCarEnv`).
+2. **`@ignitionai/core`** provides the `TrainingEnv` interface contract and the `IgnitionEnv` base class with the generic training loop.
+3. **`@ignitionai/backend-tfjs`** provides `IgnitionEnvTFJS`, which extends `IgnitionEnv` and registers the TF.js-backed `DQNAgent`, `PPOAgent`, and `QTableAgent` as the available algorithm factories.
 3. When you call `env.train('dqn')`, `core`'s `IgnitionEnv.train()` method is invoked. It looks up the `'dqn'` factory (registered by the TFJS backend), deduces `inputSize` from `observe()` and `actionSize` from `actions`, calls the factory, and starts the training loop.
 4. The training loop lives entirely in `core`. It doesn't know anything about TensorFlow.js — it just calls the generic `AgentInterface` methods (`getAction`, `remember`, `train`) on whatever agent the backend registered.
 
@@ -49,6 +48,8 @@ Each subsequent page in this section does an annotated walkthrough of one packag
 2. **[backend-tfjs](/docs/how-it-works/backend-tfjs)** — how a real algorithm is plugged into the core loop.
 3. **[backend-onnx](/docs/how-it-works/backend-onnx)** — the deploy pipeline.
 4. **[storage](/docs/how-it-works/storage)** — persistence and HF Hub integration.
+
+(There's a fifth package, [`@ignitionai/environments`](https://www.npmjs.com/package/@ignitionai/environments), that ships the built-in envs used in the docs. It's a thin wrapper around the `TrainingEnv` interface and doesn't need its own page — read [any env's source](https://github.com/IgnitionAI/ignition/tree/main/packages/environments/src) to see how the interface is actually implemented.)
 
 ---
 

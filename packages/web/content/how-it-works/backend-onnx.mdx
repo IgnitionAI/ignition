@@ -9,12 +9,6 @@ description: The ONNX bridge — train in the browser with TF.js, export to ONNX
 
 **Source**: [`packages/backend-onnx/src/`](https://github.com/IgnitionAI/ignition/tree/main/packages/backend-onnx/src) on GitHub.
 
-import { Callout } from 'nextra/components'
-
-<Callout type="warning">
-**Publish status**: `@ignitionai/backend-onnx` ships with the monorepo but is not yet on the public npm registry. Build it from source with `pnpm --filter @ignitionai/backend-onnx build`. A public release is tracked in the roadmap.
-</Callout>
-
 ## What "Train → Deploy" means in practice
 
 The pipeline has four stages:
@@ -47,7 +41,7 @@ Nothing new here — you're using `@ignitionai/backend-tfjs` exactly as describe
 
 ```ts filename="train.ts"
 import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
-import { CartPoleEnv } from './cartpole-env'   // from the Quickstart
+import { CartPoleEnv } from '@ignitionai/environments'
 
 const env = new IgnitionEnvTFJS(new CartPoleEnv())
 env.train('dqn')
@@ -135,7 +129,7 @@ Three lines. The model runs at full speed on WebGPU where available, and because
 ```ts filename="play.ts"
 import { IgnitionEnv } from '@ignitionai/core'
 import { OnnxAgent } from '@ignitionai/backend-onnx'
-import { CartPoleEnv } from './cartpole-env'   // from the Quickstart
+import { CartPoleEnv } from '@ignitionai/environments'
 
 const env = new IgnitionEnv(new CartPoleEnv())
 const agent = new OnnxAgent({ modelPath: './model.onnx', actionSize: 2 })

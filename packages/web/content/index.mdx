@@ -45,10 +45,10 @@ None of these is strictly better than the others — they target different audie
 ## Install
 
 ```bash
-npm install @ignitionai/core @ignitionai/backend-tfjs
+npm install @ignitionai/core @ignitionai/backend-tfjs @ignitionai/environments
 ```
 
-Two packages. `core` contains the training loop and interfaces; `backend-tfjs` provides the TensorFlow.js agents (DQN, PPO, Q-Table).
+Three packages to get started. `core` contains the training loop and the `TrainingEnv` interface. `backend-tfjs` provides the TensorFlow.js agents (DQN, PPO, Q-Table). `environments` ships ready-made envs (`CartPoleEnv`, `GridWorldEnv`, `MountainCarEnv`) so you can train something in 30 seconds. Drop `environments` from the list if you'd rather write your own env from scratch — the [tutorials](/docs/tutorials) walk through that exact flow.
 
 ## Where to go next
 

@@ -1,6 +1,6 @@
 export default function QuickStart() {
   const code = `import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
-import { CartPoleEnv } from '@ignitionai/core';
+import { CartPoleEnv } from '@ignitionai/environments';
 
 const cartpole = new CartPoleEnv();
 const env = new IgnitionEnvTFJS(cartpole);

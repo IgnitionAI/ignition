@@ -53,13 +53,14 @@
 - [ ] Social card image for Twitter/OG (not yet done)
 - [ ] Hero GIF of Car Circuit demo in README (README currently text-only)
 
-### 1.4 npm publish v0.1.0
+### 1.4 npm publish v0.1.0 ✅
 - [x] `@ignitionai/core` published at 0.1.0
 - [x] `@ignitionai/backend-tfjs` published at 0.1.0
-- [ ] `@ignitionai/backend-onnx` — built locally, not yet on npm (docs carry "publish pending" callout)
-- [ ] `@ignitionai/storage` — built locally, not yet on npm (docs carry "publish pending" callout)
-- [ ] `@ignitionai/environments` — CartPoleEnv / GridWorldEnv / MountainCarEnv not yet on npm. Quickstart inlines CartPoleEnv to avoid depending on an unpublished package.
-- [ ] Tag v0.1.0 in git after all four @ignitionai/* backend packages are live
+- [x] `@ignitionai/backend-onnx` published at 0.1.0
+- [x] `@ignitionai/storage` published at 0.1.0
+- [x] `@ignitionai/environments` published at 0.1.0 (ships `CartPoleEnv`, `GridWorldEnv`, `MountainCarEnv`)
+- [x] Docs updated post-publish: "publish pending" callouts removed, Quickstart imports `CartPoleEnv` from `@ignitionai/environments` directly
+- [ ] Tag v0.1.0 in git once the post-publish commit is merged
 
 **Known framework bug surfaced during docs**: `backend-tfjs/src/defaults.ts:3-13` disagrees with `agents/dqn.ts:43` on `targetUpdateFrequency` (100 vs 1000). Docs cite the runtime value (1000). Needs a cleanup commit in the framework after merge.
 

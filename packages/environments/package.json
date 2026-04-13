@@ -4,7 +4,9 @@
   "description": "Reference training environments for IgnitionAI — GridWorld, CartPole, MountainCar",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "vitest run"
@@ -21,6 +23,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/IgnitionAI/ignition"
+    "url": "git+https://github.com/IgnitionAI/ignition.git"
   }
 }

@@ -9,18 +9,12 @@ This tutorial is the entire IgnitionAI deploy story in one page. You'll train a 
 
 Estimated time: **50–75 minutes**. Most of it is installing Python and Unity if you don't already have them.
 
-import { Callout } from 'nextra/components'
-
-<Callout type="warning">
-**Publish status**: `@ignitionai/backend-onnx` ships with the monorepo but is not yet on the public npm registry. For now, clone the [IgnitionAI repo](https://github.com/IgnitionAI/ignition) and run `pnpm --filter @ignitionai/backend-onnx build`, then link it into your project with `pnpm pack` + `npm install ./ignitionai-backend-onnx-0.1.0.tgz`. A public release is tracked in the roadmap.
-</Callout>
-
 ## Prerequisites
 
 - You've done the [Quickstart](/docs/quickstart) and trained a CartPole policy. You have `src/cartpole-env.ts` + `src/main.ts` working.
 - **Python 3.9+** with `pip`. Check with `python --version`.
 - **Unity 2022.3 LTS or newer** with the **Sentis** package. If you don't have Unity, this tutorial doubles as a reason to install it.
-- Built `@ignitionai/backend-onnx` locally (per the callout above).
+- `@ignitionai/backend-onnx` installed: `npm install @ignitionai/backend-onnx`.
 
 ## Stage 1 — Train the model
 
