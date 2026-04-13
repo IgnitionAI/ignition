@@ -1,0 +1,50 @@
+---
+title: Tutorials
+description: Step-by-step walkthroughs. Start with GridWorld — the simplest full example — then branch out.
+---
+
+# Tutorials
+
+Tutorials are how most people actually learn IgnitionAI. They're different from the [How it works](/docs/how-it-works) pages in one important way: a tutorial builds a working thing from scratch, one step at a time, with every file shown and every decision explained. You don't need to jump around — you start at the top, follow the steps, and at the bottom you have a trained agent.
+
+## Available tutorials
+
+| Tutorial | Difficulty | Time | Topic |
+|---|---|---|---|
+| **[GridWorld · Start here](/docs/tutorials/grid-world)** | Beginner | ~30 min | Build a custom `TrainingEnv`, train a DQN agent, watch it find the shortest path in a 7×7 grid. |
+| **[CartPole: custom observations](/docs/tutorials/cartpole-observations)** | Beginner+ | ~25 min | What the agent sees is what the agent can learn. Three obs variants, one lesson. |
+| **[MountainCar: reward shaping](/docs/tutorials/mountaincar-shaping)** | Intermediate | ~30 min | The classic sparse-reward trap — watch DQN fail, then fix it with dense shaping. |
+| **[CartPole 3D (R3F)](/docs/tutorials/cartpole-3d)** | Intermediate | ~40 min | Wire the Quickstart CartPole into a React Three Fiber scene with shadows and orbit controls. |
+| **[Car Circuit](/docs/tutorials/car-circuit)** | Advanced | ~60 min | The hero demo: oval track, non-trivial reward, chase cam, the lap-bonus bug you'll write by accident. |
+| **[Export to Unity (ONNX)](/docs/tutorials/onnx-unity)** | Advanced | ~60 min | The full Train → Export → Convert → Deploy pipeline with Unity Sentis. |
+
+## Suggested order
+
+The tutorials are independently runnable, but there's a natural progression:
+
+1. **GridWorld** → custom env basics, zero-config training
+2. **CartPole observations** → how observation design shapes learning
+3. **MountainCar reward shaping** → how reward design shapes learning
+4. **CartPole 3D** → your first R3F integration
+5. **Car Circuit** → the advanced 3D showcase
+6. **Export to Unity** → the deploy story, end-to-end
+
+If you're in a hurry, do **GridWorld → CartPole 3D → Export to Unity**. That's the minimum viable path from "never heard of IgnitionAI" to "shipped a trained policy in a game engine."
+
+## Prerequisites for every tutorial
+
+Before starting any tutorial, make sure you have:
+
+- **Node.js 20 or later.**
+- **A package manager** — `npm`, `pnpm`, or `yarn` all work; the tutorials use `npm` for the install commands.
+- **A bundler that handles ES modules** — Vite (recommended), Next.js, or Webpack 5. The tutorials use Vite.
+- **Basic comfort with TypeScript.** You don't need to be an expert, but if `class Foo implements Bar` makes you panic, read a TypeScript crash course first.
+
+You do **not** need:
+- Prior RL knowledge. The [Algorithms](/docs/algorithms) pages cover the theory; the tutorials cover the practice.
+- A GPU. Everything runs in the browser on whatever WebGPU/WebGL your machine already has.
+- Python. At all. For anything. Except the one-time ONNX conversion step if you're deploying outside the browser.
+
+---
+
+Previous: **[← React Three Fiber](/docs/r3f)** · Next: **[GridWorld · Start here →](/docs/tutorials/grid-world)**

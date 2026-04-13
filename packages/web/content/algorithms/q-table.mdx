@@ -1,0 +1,133 @@
+---
+title: Q-Table — Tabular Q-Learning
+description: When a neural network is overkill — IgnitionAI's Q-Table agent learns exact values for every state-action pair, with no training and no guessing.
+---
+
+# Q-Table — Tabular Q-Learning
+
+Q-Table is the algorithm you should use when the problem is small enough that you don't need a neural network at all. It's the oldest idea in RL (Watkins, 1989), it converges provably to the optimal policy under mild conditions, and it gets you a result in seconds on a GridWorld-class problem.
+
+It's also the best place to build intuition for DQN, because DQN is "Q-Table, but with a neural network approximating the table."
+
+## Intuition — a lookup table of Q-values
+
+Remember the definition of a Q-value from the [DQN page](/docs/algorithms/dqn): *"the total discounted reward you'll get if you take this action in this state and then play optimally forever."*
+
+If your state space is small enough that you can enumerate every (state, action) pair — say, a 7×7 grid with 4 actions, that's 196 pairs — you don't need a neural network to represent `Q(s, a)`. You just need a table. Every cell in the table stores one floating-point Q-value. You update cells directly using the same Bellman equation DQN uses, except there's no gradient, no loss, and no network weights to worry about.
+
+The result: Q-Table converges in a handful of seconds on small grid worlds, uses no matrix math, and gives you a fully interpretable policy (you can literally print the table).
+
+> **When to use Q-Table**: Small discrete state spaces. Full observability. Discrete actions. GridWorld, tic-tac-toe, small pathfinding problems. If you can draw your entire state space on a piece of paper, Q-Table is probably a better choice than DQN.
+
+## The update rule
+
+Same Bellman equation as DQN, applied directly to the table:
+
+```text
+Q[state, action] ← (1 - α) · Q[state, action] + α · (reward + γ · max_a' Q[next_state, a'])
+```
+
+Where:
+- `α` is the **learning rate** — how much the new estimate overwrites the old one. Bigger `α` = faster but noisier learning.
+- `γ` is the discount factor, same as DQN.
+- `max_a' Q[next_state, a']` is "the best value available from the next state" — the optimistic estimate of future reward.
+
+That's it. No gradient descent, no minibatch, no replay buffer. Every step updates exactly one cell of the table.
+
+## State discretization — the bridge between tabular and continuous
+
+There's a catch. Tabular methods require a **discrete, enumerable** state space. What if your env's state is `[cart position, cart velocity, pole angle, pole angular velocity]` — four continuous floats?
+
+You **discretize**. You chop each continuous dimension into a fixed number of bins, and then every continuous state maps to a discrete "bucket" (bin index tuple). The number of discrete states is `bins^dimensions`.
+
+IgnitionAI's default is `stateBins = 10`. So for CartPole's 4D state, the table has `10^4 = 10 000` states × 2 actions = **20 000 Q-values**. Still trivial for a laptop. For an 8D state, you'd have 10^8 = **100 million** cells, which is where tabular methods stop working and you should switch to DQN.
+
+The **low/high** bounds of each dimension must be provided so the binning knows where to cut. In the `CartPoleEnv`, these are baked into the env class. For your own envs, you pass `stateLow` and `stateHigh` arrays with the expected min/max of each observation dimension. Observations outside those bounds are clipped.
+
+## The tradeoff — table size vs generalization
+
+Bigger `stateBins` → finer-grained buckets → more accurate policy, but also:
+
+- **More cells to fill.** A table with 10 000 cells needs 10 000 updates minimum to visit each cell once. For a table with 10 million cells, you'll never visit them all.
+- **No generalization.** Neighboring buckets don't share knowledge. A neural net would generalize — learning `Q(s, a)` for one cell would improve the prediction for similar cells. A table cannot.
+
+The rule of thumb: **start with `stateBins = 10` and scale down if training is too slow or up if the policy is too coarse.**
+
+A Q-Table with `stateBins = 5` on CartPole learns in seconds but the policy is jerky. With `stateBins = 20` it's smoother but takes minutes. At `stateBins = 50` it's barely faster than DQN and loses tabular's main advantage.
+
+## Default hyperparameters
+
+Source: `packages/backend-tfjs/src/agents/qtable.ts`.
+
+| Hyperparameter | Default | What it controls |
+|---|---|---|
+| `stateBins` | `10` | Number of discrete bins per continuous observation dimension. |
+| `lr` | `0.1` | Learning rate (α). Much larger than DQN's `0.001` — tabular updates are direct, not gradient-based. |
+| `gamma` | `0.99` | Discount factor. |
+| `epsilon` | `1.0` | Starting exploration rate. |
+| `epsilonDecay` | `0.995` | Per-episode multiplicative decay. |
+| `minEpsilon` | `0.01` | Exploration floor. |
+
+Note the learning rate of `0.1` — in tabular learning, `α` is a direct blending factor, not a neural-net step size. `α = 0.1` means "replace 10% of the old Q-value with the new estimate each step." Neural net learning rates are much smaller because the updates are distributed across thousands of weights.
+
+## Tuning guide
+
+1. **Define `stateLow` and `stateHigh` accurately.** If your observation bounds are wrong, whole regions of state space will be clipped and the policy will have blind spots. The built-in `CartPoleEnv` sets these for you; your own env will need to.
+
+2. **Pick `stateBins` by size check.** Compute `stateBins ^ observationDims`. If it's under ~100 000, Q-Table is fine. If it's over 10 million, switch to DQN.
+
+3. **Bump `lr` up for tabular speed.** `0.1` is conservative. If training is slow, try `0.2` or `0.5`. Tabular methods are robust to aggressive learning rates in a way neural networks are not.
+
+4. **Same epsilon rules as DQN.** Slow the decay if the policy locks in early; raise the floor if exploration collapses.
+
+5. **Gamma.** If episodes are short and rewards are dense, `0.99` is fine. For very short episodes (< 20 steps), try `0.95` — you don't need to plan far ahead.
+
+## Common failure modes
+
+### Failure 1 — Policy is extremely jerky
+
+**Symptom**: The agent oscillates between actions rapidly, even in simple states.
+
+**Diagnosis**: `stateBins` is too coarse. Two very different states (e.g., pole at +5° vs pole at -5°) are mapping to the same bucket and the table is averaging over both.
+
+**Fix**: Raise `stateBins` from `10` to `20`. If that hurts training time noticeably, you've hit tabular's limit — switch to DQN.
+
+### Failure 2 — Training never finishes
+
+**Symptom**: Reward creeps up for a while, then stalls. Visiting the remaining cells takes forever.
+
+**Diagnosis**: Table is too big. You're trying to visit `stateBins ^ dims` cells with only a few thousand episodes.
+
+**Fix**: Lower `stateBins`, or switch to DQN. There's no shame in this — Q-Table has a size ceiling and DQN was invented precisely to break it.
+
+### Failure 3 — Observations outside declared bounds
+
+**Symptom**: Silent bugs where the agent never learns about certain states. Hard to diagnose because the table just doesn't have those cells.
+
+**Diagnosis**: `stateLow` / `stateHigh` don't match the actual observation range.
+
+**Fix**: Print `observe()` output over an episode. Find the min and max per dimension. Update the bounds.
+
+### Failure 4 — Agent gets stuck on a dumb policy
+
+**Symptom**: Same as DQN Failure 3 — epsilon decayed too fast and the policy locked in.
+
+**Fix**: Same remedy: slow `epsilonDecay` and raise `minEpsilon`.
+
+## Q-Table vs DQN — when to switch
+
+Stay on Q-Table if:
+- Your state space has fewer than about 5 continuous dimensions (or equivalent discrete size).
+- You want interpretability — a printable table beats a black-box network for debugging.
+- You want convergence in seconds, not minutes.
+
+Switch to DQN if:
+- Your state space is too big for a table to cover.
+- Observations are high-dimensional (vision, raw sensors).
+- You need generalization between similar states.
+
+Both algorithms use the same Bellman update. Moving from Q-Table to DQN is strictly "add neural network approximation and a replay buffer." If you understand one, you already understand the core of the other.
+
+---
+
+Previous: **[← PPO](/docs/algorithms/ppo)** · Next: **[How it works →](/docs/how-it-works)**

@@ -1,0 +1,158 @@
+---
+title: '@ignitionai/storage'
+description: Persistent model storage for IgnitionAI agents — save and load trained weights from HuggingFace Hub with one line.
+---
+
+# @ignitionai/storage
+
+**Single responsibility**: persist and fetch trained agent weights. The first implementation targets HuggingFace Hub; the `ModelStorageProvider` interface is the extension point for other backends (S3, IPFS, local filesystem, whatever you need).
+
+**Source**: [`packages/storage/src/`](https://github.com/IgnitionAI/ignition/tree/main/packages/storage/src) on GitHub.
+
+import { Callout } from 'nextra/components'
+
+<Callout type="warning">
+**Publish status**: `@ignitionai/storage` ships with the monorepo but is not yet on the public npm registry. Build it from source with `pnpm --filter @ignitionai/storage build`. A public release is tracked in the roadmap.
+</Callout>
+
+## Public API surface
+
+| Export | Kind | Purpose |
+|---|---|---|
+| `ModelStorageProvider` | interface | The contract any storage backend must implement. |
+| `ModelInfo` | type | Metadata for a stored model (`modelId`, `uri`, `createdAt`, `metadata`). |
+| `HuggingFaceProvider` | class | Concrete implementation backed by HuggingFace Hub. |
+| `HFStorageConfig` | type | Config for `HuggingFaceProvider` (`token`, `repoId`). |
+| `hfStorageConfigSchema` | Zod schema | Validation for `HFStorageConfig`. |
+| `parseHFConfig` | function | Parses and validates the HF config from environment variables. |
+
+## The `ModelStorageProvider` interface
+
+This is the contract. Anything implementing it is a valid storage backend:
+
+```ts
+export interface ModelStorageProvider {
+  save(modelId: string, model: tf.LayersModel, metadata?: Record<string, unknown>): Promise<void>
+  load(modelId: string): Promise<tf.LayersModel>
+  list(): Promise<ModelInfo[]>
+  delete(modelId: string): Promise<void>
+  exists(modelId: string): Promise<boolean>
+}
+```
+
+Five methods. That's the whole surface area. If you wanted to add, say, an S3 backend, you'd implement those five methods and publish it as `@ignitionai/storage-s3`. The rest of the framework doesn't need to change.
+
+## HuggingFace Hub — the first implementation
+
+`HuggingFaceProvider` wraps the `huggingface.js` client and saves / loads TF.js models directly from a HF repo. HF Hub is a natural fit for RL weights because it already handles versioning, public/private visibility, and a web UI for browsing.
+
+### Setup
+
+1. Create a HuggingFace account and a new model repository (e.g., `your-user/my-rl-agent`).
+2. Generate an access token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) with **Write** access to the repo.
+3. Set the token and repo as environment variables (or pass them inline):
+
+```bash
+export HF_TOKEN=hf_...
+export HF_REPO_ID=your-user/my-rl-agent
+```
+
+### A complete save / load round-trip
+
+```ts filename="save-and-load.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from './cartpole-env'   // from the Quickstart
+import { HuggingFaceProvider, parseHFConfig } from '@ignitionai/storage'
+
+// 1. Train an agent
+const cartpole = new CartPoleEnv()
+const env = new IgnitionEnvTFJS(cartpole)
+env.train('dqn')
+// ... wait for convergence ...
+env.stop()
+
+// 2. Save the trained model
+const storage = new HuggingFaceProvider(parseHFConfig(process.env))
+
+await storage.save('cartpole-dqn-v1', env.agent.model, {
+  algorithm: 'dqn',
+  episodesTrained: 500,
+  meanReward: 195.4,
+})
+
+// 3. Later — load the same model into a fresh agent
+const loadedModel = await storage.load('cartpole-dqn-v1')
+console.log('Model loaded, input shape:', loadedModel.inputs[0].shape)
+```
+
+Four lines to save. Two lines to load. The metadata object is stored alongside the weights and is returned by `list()`.
+
+### Listing and deleting
+
+```ts filename="manage.ts"
+import { HuggingFaceProvider, parseHFConfig } from '@ignitionai/storage'
+
+const storage = new HuggingFaceProvider(parseHFConfig(process.env))
+
+// See what's in the repo
+const models = await storage.list()
+for (const model of models) {
+  console.log(`${model.modelId} — created ${model.createdAt}`)
+  console.log(`  metadata: ${JSON.stringify(model.metadata)}`)
+}
+
+// Check if a specific model exists
+if (await storage.exists('cartpole-dqn-v1')) {
+  // Delete it
+  await storage.delete('cartpole-dqn-v1')
+}
+```
+
+## Security note — tokens
+
+The HF token has **Write** access to the repo, so treat it like a password:
+
+- Never hard-code it into source files.
+- In Node, read from `process.env.HF_TOKEN`.
+- In the browser, do **not** use a write-enabled token at all — use a read-only token (or no token at all for public repos) for the load path, and do your writes from a backend.
+- `parseHFConfig` will throw if the token is missing or malformed, so you'll notice the misconfiguration immediately.
+
+## Using it alongside the ONNX path
+
+The HF Hub flow is for TF.js-native weights (training + checkpointing). If you want to *deploy* a trained model, you can either:
+
+- **Save the TF.js weights via `@ignitionai/storage`** — fastest for iterating between train and test runs in JS.
+- **Export to ONNX via `@ignitionai/backend-onnx`** — necessary for deploying to Unity, Unreal, Python, or mobile.
+
+These aren't mutually exclusive. A common workflow is: save TF.js checkpoints to HF during training (fast iteration), and export the final version to ONNX once you're happy with it (deploy).
+
+## Adding your own storage backend
+
+To add an S3 backend:
+
+```ts filename="s3-provider.ts"
+import type { ModelStorageProvider, ModelInfo } from '@ignitionai/storage'
+import * as tf from '@tensorflow/tfjs'
+
+export class S3Provider implements ModelStorageProvider {
+  constructor(private bucket: string, private region: string) {}
+
+  async save(modelId: string, model: tf.LayersModel, metadata?: Record<string, unknown>): Promise<void> {
+    // ... serialize model, upload to S3 ...
+  }
+
+  async load(modelId: string): Promise<tf.LayersModel> {
+    // ... download from S3, deserialize ...
+  }
+
+  async list(): Promise<ModelInfo[]> { /* ... */ return [] }
+  async delete(modelId: string): Promise<void> { /* ... */ }
+  async exists(modelId: string): Promise<boolean> { /* ... */ return false }
+}
+```
+
+Five methods, zero changes to any other package. That's the shape of every good extension point in IgnitionAI.
+
+---
+
+Previous: **[← @ignitionai/backend-onnx](/docs/how-it-works/backend-onnx)** · Next: **[React Three Fiber →](/docs/r3f)**

@@ -1,0 +1,55 @@
+---
+title: How it works — Monorepo map
+description: The IgnitionAI monorepo has four packages, each with a single responsibility. This page is the map.
+---
+
+# How it works — Monorepo map
+
+IgnitionAI is a pnpm monorepo. Its architecture is deliberately boring: four packages, each with one job, each depending only on packages "below" it in the stack. This page is the map — each subsequent page in this section dives into one of the packages.
+
+## The four packages
+
+| Package | Single responsibility | Depends on |
+|---|---|---|
+| **[`@ignitionai/core`](/docs/how-it-works/core)** | The training loop, the `TrainingEnv` interface, shared types, and the algorithm-agnostic `IgnitionEnv` base class. Zero heavy dependencies. | Nothing |
+| **[`@ignitionai/backend-tfjs`](/docs/how-it-works/backend-tfjs)** | TensorFlow.js implementations of DQN, PPO, and Q-Table. Exposes `IgnitionEnvTFJS`, the concrete training env you actually instantiate. | `core` |
+| **[`@ignitionai/backend-onnx`](/docs/how-it-works/backend-onnx)** | Inference-only backend via ONNX Runtime Web. Turns a trained TF.js model into an `.onnx` file and runs inference against it. | `core` |
+| **[`@ignitionai/storage`](/docs/how-it-works/storage)** | Persistent model storage. The first implementation is HuggingFace Hub; the `ModelStorageProvider` interface is the extension point for future backends. | `core` |
+
+Dependencies flow one way: `storage`, `backend-onnx`, and `backend-tfjs` all depend on `core`. There are no circular dependencies, and `core` is deliberately thin so the other packages can import it without dragging in TF.js or ONNX Runtime.
+
+## How the pieces fit at runtime
+
+When you write:
+
+```ts
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from './cartpole-env'  // the env you defined yourself
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('dqn')
+```
+
+(The `CartPoleEnv` class comes from your own project — see the [Quickstart](/docs/quickstart) for a complete copy-paste definition.)
+
+Here's what happens across the packages:
+
+1. **`@ignitionai/core`** provides the `TrainingEnv` interface contract and the `IgnitionEnv` base class with the generic training loop.
+2. **`@ignitionai/backend-tfjs`** provides `IgnitionEnvTFJS`, which extends `IgnitionEnv` and registers the TF.js-backed `DQNAgent`, `PPOAgent`, and `QTableAgent` as the available algorithm factories.
+3. When you call `env.train('dqn')`, `core`'s `IgnitionEnv.train()` method is invoked. It looks up the `'dqn'` factory (registered by the TFJS backend), deduces `inputSize` from `observe()` and `actionSize` from `actions`, calls the factory, and starts the training loop.
+4. The training loop lives entirely in `core`. It doesn't know anything about TensorFlow.js — it just calls the generic `AgentInterface` methods (`getAction`, `remember`, `train`) on whatever agent the backend registered.
+
+This separation is why you could, in principle, write a `@ignitionai/backend-rust-wasm` package with the same interface and swap it in with zero changes to `core`. The framework is designed to be extensible along that axis.
+
+## Reading the source
+
+Each subsequent page in this section does an annotated walkthrough of one package's most important file. If you want to contribute or just understand the internals, the recommended reading order is:
+
+1. **[core](/docs/how-it-works/core)** — start here. The `TrainingEnv` interface and the `IgnitionEnv` base class are where everything else hooks in.
+2. **[backend-tfjs](/docs/how-it-works/backend-tfjs)** — how a real algorithm is plugged into the core loop.
+3. **[backend-onnx](/docs/how-it-works/backend-onnx)** — the deploy pipeline.
+4. **[storage](/docs/how-it-works/storage)** — persistence and HF Hub integration.
+
+---
+
+Previous: **[← Q-Table](/docs/algorithms/q-table)** · Next: **[@ignitionai/core →](/docs/how-it-works/core)**

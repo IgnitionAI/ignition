@@ -1,0 +1,41 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "IgnitionAI landing page + documentation site",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@mdx-js/loader": "^3.1.0",
+    "@mdx-js/react": "^3.1.0",
+    "@next/mdx": "15.1.6",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^22.13.0",
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3",
+    "aos": "3.0.0-beta.6",
+    "date-fns": "^4.1.0",
+    "next": "16.0.10",
+    "next-mdx-remote-client": "^1.1.4",
+    "nextra": "^4.6.1",
+    "nextra-theme-docs": "^4.6.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "rehype-pretty-code": "^0.14.0",
+    "swiper": "^8.4.7",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/postcss": "^4.0.3",
+    "@tailwindcss/typography": "^0.5.16",
+    "@types/aos": "^3.0.7",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^4.0.3"
+  }
+}

@@ -1,0 +1,63 @@
+---
+title: Introduction
+description: IgnitionAI is an open-source reinforcement learning framework for JavaScript — train agents in the browser, deploy anywhere via ONNX.
+---
+
+# IgnitionAI
+
+**IgnitionAI is a reinforcement learning framework for JavaScript developers.** Describe your game world as a class, call `env.train('dqn')`, and watch a neural network learn to play it — live, in your browser, with no Python, no server, and no GPU cluster.
+
+The framework is the JavaScript answer to Unity's ML-Agents. It's built for the people who already ship creative work in the JS/TS stack: Three.js authors, React Three Fiber devs, generative-art hackers, game-jam builders, and anyone who wants to add a learning agent to an interactive scene without leaving their existing toolchain.
+
+## Why IgnitionAI exists
+
+Unity has [ML-Agents](https://github.com/Unity-Technologies/ml-agents). Python has Stable Baselines, RLlib, and CleanRL. JavaScript had nothing comparable — until now.
+
+If you work in the JS creative ecosystem, your options for adding RL to your projects have historically been:
+
+- **Write everything in Python and bridge it back via WebSockets.** Works, but breaks your toolchain and adds a server to a project that was supposed to run entirely in the browser.
+- **Hand-roll a training loop on top of TensorFlow.js.** Possible, but you're now maintaining your own RL library on top of your game.
+- **Give up and use a scripted AI.** Most people pick this one.
+
+IgnitionAI closes that gap. You implement a handful of methods describing your world, you pick an algorithm, and the framework handles the neural network, the replay buffer, the exploration schedule, the training loop, and the backend selection.
+
+## What makes it different
+
+- **Zero config.** Implement five methods (`observe`, `step`, `reward`, `done`, `reset`) plus an `actions` list. The framework deduces the network shape from your first observation. You never touch neural-network code unless you want to.
+- **Browser-native.** TensorFlow.js auto-selects WebGPU → WebGL → WASM → CPU. No install, no CUDA, no server. Everything runs where your game runs.
+- **Train → Deploy pipeline.** Train in the browser, export to ONNX, and deploy the `.onnx` file in Unity (Sentis), Unreal (NNE), Python, C++, or edge devices. IgnitionAI is a serious tool, not a toy.
+- **R3F-first.** The training loop is decoupled from the render loop, so your `<Canvas>` stays at 60 fps while the agent learns in the background. You can also call `env.setSpeed(50)` to fast-forward training and then drop back to real-time to watch the policy play.
+- **Production-ready.** TypeScript strict mode, Zod validation, 184+ tests, CI/CD, modular monorepo. The framework is small but not fragile.
+
+## How it compares
+
+| | **IgnitionAI** | **Unity ML-Agents** | **Python (SB3 / RLlib)** |
+|---|---|---|---|
+| Language | TypeScript / JavaScript | C# + Python | Python |
+| Where training runs | Browser | Unity editor + Python sidecar | Python process |
+| Install | `npm install` | Unity + Python toolchain | pip + CUDA |
+| Primary audience | JS/TS creative devs | Unity game devs | ML researchers |
+| Deploy target | Browser, ONNX anywhere | Sentis / Barracuda | Production servers |
+| GPU required | No | Optional | Usually yes |
+
+None of these is strictly better than the others — they target different audiences. If you already work in JS, IgnitionAI meets you where you are.
+
+## Install
+
+```bash
+npm install @ignitionai/core @ignitionai/backend-tfjs
+```
+
+Two packages. `core` contains the training loop and interfaces; `backend-tfjs` provides the TensorFlow.js agents (DQN, PPO, Q-Table).
+
+## Where to go next
+
+- **[Quickstart](/docs/quickstart)** — train your first agent in under 10 lines. Start here.
+- **[Algorithms](/docs/algorithms)** — the "verbose" pedagogical explanations of DQN, PPO, and Q-Table, with every default hyperparameter and when to use each.
+- **[How it works](/docs/how-it-works)** — the architecture: one page per backend package, with annotated walkthroughs of the source.
+- **[React Three Fiber](/docs/r3f)** — why IgnitionAI is built for R3F, and a complete `<Canvas>` + `TrainingEnv` example.
+- **[Tutorials](/docs/tutorials)** — start with the GridWorld tutorial for a full step-by-step walkthrough.
+
+---
+
+Next: **[Quickstart →](/docs/quickstart)**

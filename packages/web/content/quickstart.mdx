@@ -1,0 +1,158 @@
+---
+title: Quickstart
+description: Train your first RL agent in the browser in under 10 lines of code. No neural network boilerplate, no hyperparameter tuning, no config.
+---
+
+# Quickstart
+
+By the end of this page, you will have trained a reinforcement-learning agent to balance a pole in the browser. The entire setup is 9 lines of code. You will not configure a neural network, pick hyperparameters, or write a training loop.
+
+## Install
+
+```bash
+npm install @ignitionai/core @ignitionai/backend-tfjs
+```
+
+You need:
+- Node.js 20 or later
+- A bundler that can serve ES modules (Vite, Next.js, Webpack 5, etc.)
+
+## Step 1 — Define the environment
+
+IgnitionAI doesn't ship built-in envs on npm yet — you write yours, and the framework learns to play it. Here's a complete cart-pole env. Copy it into `src/cartpole-env.ts`:
+
+```ts filename="src/cartpole-env.ts"
+import type { TrainingEnv } from '@ignitionai/core'
+
+const GRAVITY = 9.8
+const CART_MASS = 1.0
+const POLE_MASS = 0.1
+const TOTAL_MASS = CART_MASS + POLE_MASS
+const POLE_HALF_LENGTH = 0.5
+const POLE_MASS_LENGTH = POLE_MASS * POLE_HALF_LENGTH
+const FORCE_MAG = 10.0
+const DT = 0.02
+const THETA_LIMIT = (12 * Math.PI) / 180
+const X_LIMIT = 2.4
+const MAX_STEPS = 500
+
+export class CartPoleEnv implements TrainingEnv {
+  actions = ['push_left', 'push_right']
+  private x = 0
+  private xDot = 0
+  private theta = 0
+  private thetaDot = 0
+  private stepCount = 0
+
+  constructor() { this.reset() }
+
+  observe(): number[] {
+    return [this.x, this.xDot, this.theta, this.thetaDot]
+  }
+
+  step(action: number | number[]): void {
+    const a = typeof action === 'number' ? action : action[0]
+    const force = a === 1 ? FORCE_MAG : -FORCE_MAG
+    const cosTheta = Math.cos(this.theta)
+    const sinTheta = Math.sin(this.theta)
+    const temp = (force + POLE_MASS_LENGTH * this.thetaDot ** 2 * sinTheta) / TOTAL_MASS
+    const thetaAcc =
+      (GRAVITY * sinTheta - cosTheta * temp) /
+      (POLE_HALF_LENGTH * (4 / 3 - (POLE_MASS * cosTheta ** 2) / TOTAL_MASS))
+    const xAcc = temp - (POLE_MASS_LENGTH * thetaAcc * cosTheta) / TOTAL_MASS
+    this.x += DT * this.xDot
+    this.xDot += DT * xAcc
+    this.theta += DT * this.thetaDot
+    this.thetaDot += DT * thetaAcc
+    this.stepCount++
+  }
+
+  reward(): number {
+    return this.done() ? 0 : 1
+  }
+
+  done(): boolean {
+    return (
+      Math.abs(this.theta) > THETA_LIMIT ||
+      Math.abs(this.x) > X_LIMIT ||
+      this.stepCount >= MAX_STEPS
+    )
+  }
+
+  reset(): void {
+    this.x = (Math.random() - 0.5) * 0.1
+    this.xDot = (Math.random() - 0.5) * 0.1
+    this.theta = (Math.random() - 0.5) * 0.1
+    this.thetaDot = (Math.random() - 0.5) * 0.1
+    this.stepCount = 0
+  }
+}
+```
+
+This is roughly 60 lines, most of which is physics. The RL-relevant surface area is the six `TrainingEnv` methods at the top — that's your contract with the framework.
+
+## Step 2 — Train it
+
+Now create `src/main.ts`:
+
+```ts filename="src/main.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from './cartpole-env'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+
+env.train('dqn')       // Zero config. It just works.
+// env.infer()         // Switch to inference after training.
+// env.setSpeed(50)    // Turbo training — 50× faster.
+```
+
+**Five lines.** That's the entire training setup. No neural network code, no hyperparameter tuning, no config files.
+
+Open the page in your browser, pop the devtools console, and you'll see reward logs scrolling as the agent learns. Within a few dozen seconds on most machines, the pole will start staying up.
+
+## What just happened
+
+Let's map each line of the example to a concept you'll see explained in more depth elsewhere in the docs.
+
+### Line 1 — `import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'`
+
+`IgnitionEnvTFJS` is the **training environment** that runs on TensorFlow.js. It owns the training loop, the agent instance, and the TF.js backend selection. You'll see its internals in [How it works → backend-tfjs](/docs/how-it-works/backend-tfjs).
+
+### Line 2 — `import { CartPoleEnv } from './cartpole-env'`
+
+`CartPoleEnv` is the `TrainingEnv` you just wrote. It describes the classic cart-pole world: a cart that can move left or right, a pole balanced on top, Euler-integrated physics, and a done condition when the pole tips past 12° or the cart leaves the track. The `TrainingEnv` interface is what you'll implement for your own worlds. See [How it works → core](/docs/how-it-works/core) for the full interface.
+
+### Line 4 — `new IgnitionEnvTFJS(new CartPoleEnv())`
+
+You instantiate your env and wrap it in `IgnitionEnvTFJS`. **At this point, the framework calls `cartpole.observe()` once, inspects the array length, and deduces the neural network's input size. It also reads `cartpole.actions.length` to deduce the output size.** You never touch `inputSize` or `actionSize` explicitly — this is what "zero config" means in practice.
+
+### Line 6 — `env.train('dqn')`
+
+This starts training with the **Deep Q-Network** algorithm and IgnitionAI's default hyperparameters. Under the hood, the framework:
+
+1. Builds a small MLP matching the deduced input/output sizes (hidden layers `[24, 24]` by default).
+2. Allocates a replay buffer (10 000 experiences).
+3. Initializes epsilon-greedy exploration (`epsilon = 1.0`, decaying 0.5% per episode to a floor of `0.01`).
+4. Kicks off a `setTimeout`-yielding training loop at 50 ms per step so the browser stays responsive.
+
+You can read the full set of defaults on the [DQN](/docs/algorithms/dqn) page. If you want PPO instead, it's one word: `env.train('ppo')`.
+
+### Line 7 — `env.infer()` (commented out)
+
+Once your agent has converged, switch from training mode to inference mode. The epsilon exploration drops to zero, gradients stop flowing, and the policy plays deterministically. Read more in [How it works → core](/docs/how-it-works/core).
+
+### Line 8 — `env.setSpeed(50)` (commented out)
+
+By default the training loop yields every 50 ms so the browser can render your scene at 60 fps. `setSpeed(50)` accelerates training by running 50 steps per tick and dropping the interval to 1 ms. Visuals get choppy but training integrity is preserved. You'll want this during dev — drop back to `setSpeed(1)` when you want to watch the agent play in real time.
+
+## Where to go next
+
+You have three reasonable paths from here:
+
+1. **Understand what `env.train('dqn')` actually did.** → [Algorithms](/docs/algorithms). The DQN, PPO, and Q-Table pages are deliberately verbose and explain the math without demanding a PhD.
+2. **Write your own environment.** → [How it works → core](/docs/how-it-works/core) walks through the `TrainingEnv` interface with a worked example.
+3. **Follow a complete tutorial from scratch.** → [Tutorials → GridWorld](/docs/tutorials/grid-world) is a step-by-step build of a custom env.
+
+---
+
+Previous: **[← Introduction](/docs)** · Next: **[Algorithms →](/docs/algorithms)**
