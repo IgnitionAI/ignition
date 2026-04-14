@@ -8,4 +8,5 @@ export default {
   'cartpole-3d': 'CartPole 3D (R3F)',
   'car-circuit': 'Car Circuit',
   'onnx-unity': 'Export to Unity (ONNX)',
+  'drone-navigation': 'Drone Navigation (physics)',
 }
