@@ -6,13 +6,18 @@
  * self-contained Next.js deployment with all demos embedded.
  */
 import { execSync } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(__dirname, '../../..')
 const webPublicDemos = join(repoRoot, 'packages/web/public/demos')
+
+console.log('[build-demos] script started')
+console.log('[build-demos] repoRoot:', repoRoot)
+console.log('[build-demos] webPublicDemos:', webPublicDemos)
+console.log('[build-demos] cwd:', process.cwd())
 
 const DEMOS = [
   { slug: 'gridworld',   pkg: '@ignitionai/demo-gridworld',   dir: 'packages/demo-gridworld'   },
@@ -52,4 +57,13 @@ for (const demo of DEMOS) {
   cpSync(distDir, outDir, { recursive: true })
 }
 
+// Write a manifest so we can verify from the deployed site which commit produced these demos
+const manifest = {
+  builtAt: new Date().toISOString(),
+  commit: process.env.VERCEL_GIT_COMMIT_SHA || process.env.GITHUB_SHA || 'local',
+  demos: DEMOS.map((d) => d.slug),
+}
+writeFileSync(join(webPublicDemos, 'manifest.json'), JSON.stringify(manifest, null, 2))
+
 console.log('\n✓ All demos built and copied to packages/web/public/demos/')
+console.log('[build-demos] final listing:', readdirSync(webPublicDemos))
