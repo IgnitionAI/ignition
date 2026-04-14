@@ -38,6 +38,26 @@ if (existsSync(webPublicDemos)) {
 }
 mkdirSync(webPublicDemos, { recursive: true })
 
+// ---------------------------------------------------------------------------
+// 1. Build the library packages first.
+//
+// Each demo's build is `tsc -b && vite build`. TypeScript resolves
+// `@ignitionai/core` via the package.json "types" field, which points at
+// `dist/index.d.ts`. If we don't build the libraries first, tsc sees an
+// empty module and every import fails. Vite's source aliases don't help
+// because tsc runs before Vite. Ordering is enforced by pnpm's topological
+// resolution across the --filter list.
+// ---------------------------------------------------------------------------
+console.log('\n=== Building library packages (topo order) ===')
+run(
+  'pnpm --filter @ignitionai/core ' +
+  '--filter @ignitionai/backend-tfjs ' +
+  '--filter @ignitionai/backend-onnx ' +
+  '--filter @ignitionai/storage ' +
+  '--filter @ignitionai/environments ' +
+  'build',
+)
+
 for (const demo of DEMOS) {
   const demoDir = join(repoRoot, demo.dir)
   const distDir = join(demoDir, 'dist')
