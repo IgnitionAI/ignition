@@ -51,7 +51,15 @@ export default function App() {
 
   const handleTrain = useCallback(() => {
     const trainer = startTrainer()
-    trainer.train('dqn')
+    // Bigger network + slower epsilon decay + higher floor — the DQN
+    // defaults ([24, 24]) are too small for 13 observations × 8 actions.
+    // With these overrides the drone starts showing stable hovers
+    // around episode 200–400 instead of 1000+.
+    trainer.train('dqn', {
+      hiddenLayers: [64, 64],
+      minEpsilon: 0.05,
+      epsilonDecay: 0.998,
+    })
     trainer.setSpeed(25)
     setMode('training')
   }, [setMode, startTrainer])
