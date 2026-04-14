@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" fill="none">
+  <defs>
+    <linearGradient id="flame-outer" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#A5B4FC"/>
+      <stop offset="45%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </linearGradient>
+    <linearGradient id="flame-inner" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="55%" stop-color="#C7D2FE"/>
+      <stop offset="100%" stop-color="#818CF8"/>
+    </linearGradient>
+    <filter id="flame-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+  </defs>
+
+  <g>
+    <path
+      d="M19 2
+         C 20.5 7, 26 9.5, 27.5 14.5
+         C 29 19.5, 27.5 24, 24.5 27
+         C 22.5 29, 20.5 30, 19 30
+         C 17.5 30, 15.5 29, 13.5 27
+         C 10.5 24, 9 19.5, 10.5 14.5
+         C 12 9.5, 17.5 7, 19 2 Z"
+      fill="url(#flame-outer)"
+      filter="url(#flame-glow)"
+      opacity="0.9"
+    >
+      <animate attributeName="opacity" values="0.75;1;0.75" dur="2.4s" repeatCount="indefinite"/>
+    </path>
+
+    <path
+      d="M19 2
+         C 20.5 7, 26 9.5, 27.5 14.5
+         C 29 19.5, 27.5 24, 24.5 27
+         C 22.5 29, 20.5 30, 19 30
+         C 17.5 30, 15.5 29, 13.5 27
+         C 10.5 24, 9 19.5, 10.5 14.5
+         C 12 9.5, 17.5 7, 19 2 Z"
+      fill="url(#flame-outer)"
+    />
+
+    <path
+      d="M19 9
+         C 20 12, 23 13.5, 23.5 16.5
+         C 24 19.5, 22.5 22, 20.5 23.5
+         C 19.5 24.2, 19 25, 19 25
+         C 19 25, 18.5 24.2, 17.5 23.5
+         C 15.5 22, 14 19.5, 14.5 16.5
+         C 15 13.5, 18 12, 19 9 Z"
+      fill="url(#flame-inner)"
+    >
+      <animate attributeName="opacity" values="0.85;1;0.85" dur="1.6s" repeatCount="indefinite"/>
+    </path>
+
+    <circle cx="19" cy="21" r="1.4" fill="#F8FAFC">
+      <animate attributeName="r" values="1.2;1.8;1.2" dur="1.6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="1.6s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>
