@@ -80,7 +80,19 @@ export default function App() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a1a', color: '#e2e8f0', fontFamily: 'system-ui, sans-serif' }}>
-      <header style={{ textAlign: 'center', padding: '24px 0 8px' }}>
+      <header style={{ textAlign: 'center', padding: '24px 0 8px', position: 'relative' }}>
+        <a
+          href="/"
+          style={{
+            position: 'absolute', left: 24, top: 28,
+            color: '#94a3b8', fontSize: 13, textDecoration: 'none',
+            padding: '6px 12px', border: '1px solid #334155', borderRadius: 8,
+            background: '#0f172a',
+          }}
+          aria-label="Back to IgnitionAI landing page"
+        >
+          ← IgnitionAI
+        </a>
         <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700 }}>Ignition<span style={{ color: '#6366f1' }}>AI</span> — CartPole</h1>
         <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>Balance the pole. Zero config. Watch it learn.</p>
       </header>

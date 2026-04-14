@@ -66,9 +66,22 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a1a', color: '#e2e8f0', fontFamily: 'system-ui, sans-serif' }}>
       {/* Header */}
-      <header style={{ textAlign: 'center', padding: '20px 0 4px' }}>
+      <header style={{ textAlign: 'center', padding: '20px 0 4px', position: 'relative' }}>
+        <a
+          href="/"
+          style={{
+            position: 'absolute', left: 24, top: 24,
+            color: '#94a3b8', fontSize: 13, textDecoration: 'none',
+            padding: '6px 12px', border: '1px solid #334155', borderRadius: 8,
+            background: '#0f172a',
+          }}
+          aria-label="Back to IgnitionAI landing page"
+        >
+          ← IgnitionAI
+        </a>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 800, letterSpacing: '-0.5px' }}>
           Ignition<span style={{ color: '#6366f1' }}>AI</span>
+          <span style={{ fontSize: 14, fontWeight: 400, color: '#888', marginLeft: 12 }}>CartPole 3D</span>
         </h1>
         <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
           Train RL agents in the browser. Deploy anywhere.

@@ -1,3 +1,4 @@
+import type React from 'react';
 import { useDemoStore } from './store';
 
 export function CodePanel() {
@@ -36,7 +37,7 @@ env.train('${algorithm}');`;
   );
 }
 
-function highlightLine(line: string): JSX.Element {
+function highlightLine(line: string): React.JSX.Element {
   // Minimal syntax highlighting via regex
   const highlighted = line
     .replace(/(import|from|const|new)/g, '<kw>$1</kw>')
@@ -45,7 +46,7 @@ function highlightLine(line: string): JSX.Element {
     .replace(/(\.\w+)\(/g, '<fn>$1</fn>(');
 
   const parts = highlighted.split(/(<\/?(?:kw|str|cmt|fn)>)/);
-  const elements: JSX.Element[] = [];
+  const elements: React.JSX.Element[] = [];
   let currentTag: string | null = null;
 
   const colors: Record<string, string> = {

@@ -78,7 +78,19 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a1a', color: '#e2e8f0', fontFamily: 'system-ui, sans-serif' }}>
       {/* Header */}
-      <header style={{ textAlign: 'center', padding: '12px 0 4px' }}>
+      <header style={{ textAlign: 'center', padding: '12px 0 4px', position: 'relative' }}>
+        <a
+          href="/"
+          style={{
+            position: 'absolute', left: 24, top: 14,
+            color: '#94a3b8', fontSize: 13, textDecoration: 'none',
+            padding: '6px 12px', border: '1px solid #334155', borderRadius: 8,
+            background: '#0f172a',
+          }}
+          aria-label="Back to IgnitionAI landing page"
+        >
+          ← IgnitionAI
+        </a>
         <h1 style={{ margin: 0, fontSize: 22, fontWeight: 800 }}>
           Ignition<span style={{ color: '#6366f1' }}>AI</span>
           <span style={{ fontSize: 14, fontWeight: 400, color: '#888', marginLeft: 12 }}>Car Circuit</span>

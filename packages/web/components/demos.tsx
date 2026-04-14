@@ -1,5 +1,6 @@
 const DEMOS = [
   {
+    slug: 'gridworld',
     title: 'GridWorld',
     description: 'Agent finds the shortest path in a 7×7 grid. Your first RL "hello world".',
     tech: '2D Canvas',
@@ -7,6 +8,7 @@ const DEMOS = [
     accent: '#22c55e',
   },
   {
+    slug: 'cartpole',
     title: 'CartPole',
     description: 'Classic pole-balancing benchmark with Euler physics. Converges fast.',
     tech: '2D Canvas',
@@ -14,6 +16,7 @@ const DEMOS = [
     accent: '#3b82f6',
   },
   {
+    slug: 'mountaincar',
     title: 'MountainCar',
     description: 'Sparse reward challenge. Agent discovers the counterintuitive momentum strategy.',
     tech: '2D Canvas',
@@ -21,6 +24,7 @@ const DEMOS = [
     accent: '#f59e0b',
   },
   {
+    slug: 'cartpole-3d',
     title: 'CartPole 3D',
     description: 'Classic CartPole rendered in 3D with React Three Fiber. Metallic materials and shadows.',
     tech: 'R3F',
@@ -28,6 +32,7 @@ const DEMOS = [
     accent: '#6366f1',
   },
   {
+    slug: 'car-circuit',
     title: 'Car Circuit',
     description: 'A 3D car learns to drive an oval circuit. Chase cam, minimap, trail, 1×–50× speed. The hero demo.',
     tech: 'R3F',
@@ -59,10 +64,13 @@ export default function Demos() {
           {/* Demo grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {DEMOS.map((demo) => (
-              <div
+              <a
                 key={demo.title}
+                href={`/demos/${demo.slug}/`}
+                target="_blank"
+                rel="noopener noreferrer"
                 data-aos="fade-up"
-                className={`relative group p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-indigo-500/50 transition-colors ${
+                className={`relative group block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-indigo-500/50 transition-colors ${
                   demo.featured ? 'lg:col-span-2' : ''
                 }`}
               >
@@ -88,7 +96,7 @@ export default function Demos() {
                     View →
                   </span>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
 

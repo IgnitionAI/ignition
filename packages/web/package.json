@@ -5,9 +5,11 @@
   "description": "IgnitionAI landing page + documentation site",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/build-demos.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:demos": "node scripts/build-demos.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
