@@ -34,10 +34,18 @@ const DEMOS = [
   {
     slug: 'car-circuit',
     title: 'Car Circuit',
-    description: 'A 3D car learns to drive an oval circuit. Chase cam, minimap, trail, 1×–50× speed. The hero demo.',
+    description: 'A 3D car learns to drive an oval circuit. Chase cam, minimap, trail, 1×–50× speed.',
     tech: 'R3F',
     algos: 'DQN · PPO',
     accent: '#ec4899',
+  },
+  {
+    slug: 'drone-navigation',
+    title: 'Drone Navigation',
+    description: 'A quadcopter learns to fly to moving target points. Rigid-body physics, 8 thrust combos, real gravity and torque. The hero demo.',
+    tech: 'R3F · Physics',
+    algos: 'DQN',
+    accent: '#a855f7',
     featured: true,
   },
 ]

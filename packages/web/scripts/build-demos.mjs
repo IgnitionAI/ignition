@@ -20,11 +20,12 @@ console.log('[build-demos] webPublicDemos:', webPublicDemos)
 console.log('[build-demos] cwd:', process.cwd())
 
 const DEMOS = [
-  { slug: 'gridworld',   pkg: '@ignitionai/demo-gridworld',   dir: 'packages/demo-gridworld'   },
-  { slug: 'cartpole',    pkg: '@ignitionai/demo-cartpole',    dir: 'packages/demo-cartpole'    },
-  { slug: 'mountaincar', pkg: '@ignitionai/demo-mountaincar', dir: 'packages/demo-mountaincar' },
-  { slug: 'cartpole-3d', pkg: '@ignitionai/demo-cartpole-3d', dir: 'packages/demo-cartpole-3d' },
-  { slug: 'car-circuit', pkg: '@ignitionai/demo-car-circuit', dir: 'packages/demo-car-circuit' },
+  { slug: 'gridworld',        pkg: 'demo-gridworld',        dir: 'packages/demo-gridworld'        },
+  { slug: 'cartpole',         pkg: 'demo-cartpole',         dir: 'packages/demo-cartpole'         },
+  { slug: 'mountaincar',      pkg: 'demo-mountaincar',      dir: 'packages/demo-mountaincar'      },
+  { slug: 'cartpole-3d',      pkg: 'demo-cartpole-3d',      dir: 'packages/demo-cartpole-3d'      },
+  { slug: 'car-circuit',      pkg: 'demo-car-circuit',      dir: 'packages/demo-car-circuit'      },
+  { slug: 'drone-navigation', pkg: 'demo-drone-navigation', dir: 'packages/demo-drone-navigation' },
 ]
 
 function run(cmd, env) {
