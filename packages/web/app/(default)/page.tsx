@@ -8,6 +8,7 @@ import QuickStart from '@/components/quickstart'
 import Features from '@/components/features'
 import Features02 from '@/components/features-02'
 import Demos from '@/components/demos'
+import Changelog from '@/components/changelog'
 import Cta from '@/components/cta'
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
       <Features />
       <Features02 />
       <Demos />
+      <Changelog />
       <Cta />
     </>
   )

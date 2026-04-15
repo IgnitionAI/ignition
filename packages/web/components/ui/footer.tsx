@@ -64,6 +64,9 @@ export default function Footer() {
                 <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://www.npmjs.com/package/@ignitionai/backend-tfjs" target="_blank" rel="noopener noreferrer">@ignitionai/backend-tfjs</a>
               </li>
               <li>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="/changelog">Changelog</a>
+              </li>
+              <li>
                 <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/blob/main/roadmap.md" target="_blank" rel="noopener noreferrer">Roadmap</a>
               </li>
               <li>
