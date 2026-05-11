@@ -59,6 +59,8 @@ import { saveForOnnxExport } from '@ignitionai/backend-onnx'
 const { savedModelPath, conversionScript } = await saveForOnnxExport(
   env.agent.model,
   './export',
+  undefined,   // onnxOutputPath (optional)
+  15,          // opset version (default: 13, recommended: 15+)
 )
 
 console.log(`SavedModel written to: ${savedModelPath}`)
@@ -103,9 +105,21 @@ Once you have the `.onnx` file, the world opens up. Non-exhaustive deploy target
 
 The same `.onnx` file works everywhere. That's the whole point of the ONNX format.
 
+### Bundle size — inference-only runtime
+
+The `@ignitionai/backend-onnx` inference code (OnnxAgent + universal runtime) adds **~2KB gzipped** to your bundle. The ONNX Runtime itself (`onnxruntime-web` or `onnxruntime-node`) is loaded as an optional peer dependency and is **not** bundled by default — you bring your own runtime matching your target platform.
+
+| What you ship | Size (gzipped) |
+|---|---|
+| IgnitionAI inference code | ~2 KB |
+| `onnxruntime-web` (browser) | ~800 KB |
+| `onnxruntime-node` (Node) | ~15 MB |
+
+For browser deployments, the ~800KB ONNX Runtime is a one-time cost — it serves every ONNX model you load, regardless of architecture.
+
 ## Stage 5 — Run inference in JS via `OnnxAgent`
 
-If you want to run the trained model back in the browser without the training dependencies, `OnnxAgent` is a drop-in `AgentInterface` that uses ONNX Runtime Web:
+If you want to run the trained model back in the browser without the training dependencies, `OnnxAgent` is a drop-in `AgentInterface` that auto-detects the environment and loads the correct ONNX Runtime (Web in browser, Node in server):
 
 ```ts filename="infer.ts"
 import { OnnxAgent } from '@ignitionai/backend-onnx'

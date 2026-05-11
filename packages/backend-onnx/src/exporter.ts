@@ -23,7 +23,7 @@ import * as path from 'path';
  * python -m tf2onnx.convert \
  *   --saved-model ./exports/my_model_savedmodel \
  *   --output ./exports/my_model.onnx \
- *   --opset 13
+ *   --opset ${opset}
  * ```
  *
  * **Step 3 (JS)** — Load with OnnxAgent:
@@ -55,6 +55,7 @@ export async function saveForOnnxExport(
   model: { save: (url: string) => Promise<unknown> },
   outputDir: string,
   onnxOutputPath?: string,
+  opset = 13,
 ): Promise<ExportResult> {
   const resolvedDir = path.resolve(outputDir);
   const savedModelDir = resolvedDir + '_savedmodel';
@@ -62,7 +63,7 @@ export async function saveForOnnxExport(
 
   await model.save(`file://${resolvedDir}`);
 
-  const conversionScript = generateConversionScript(resolvedDir, savedModelDir, onnxPath);
+  const conversionScript = generateConversionScript(resolvedDir, savedModelDir, onnxPath, opset);
 
   return { modelDir: resolvedDir, conversionScript };
 }
@@ -79,6 +80,7 @@ export function generateConversionScript(
   tfjsModelDir: string,
   savedModelDir: string,
   onnxOutputPath: string,
+  opset = 13,
 ): string {
   return `#!/bin/bash
 # IgnitionAI — TF.js to ONNX conversion script
@@ -99,7 +101,7 @@ echo "🔄 Step 2: TF SavedModel → ONNX"
 python -m tf2onnx.convert \\
   --saved-model "${savedModelDir}" \\
   --output "${onnxOutputPath}" \\
-  --opset 13
+  --opset ${opset}
 
 echo "✅ Done! ONNX model saved to: ${onnxOutputPath}"
 echo ""

@@ -1,7 +1,7 @@
 {
   "name": "@ignitionai/backend-onnx",
   "version": "0.1.0",
-  "description": "ONNX inference backend for IgnitionAI \u2014 cross-platform, production-ready RL inference",
+  "description": "ONNX inference backend for IgnitionAI — cross-platform, production-ready RL inference",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -24,8 +24,9 @@
   "author": "salim4n (@IgnitionAI)",
   "license": "MIT",
   "dependencies": {
-    "@ignitionai/core": "workspace:*",
     "@huggingface/hub": "^1.1.2",
+    "@ignitionai/core": "workspace:*",
+    "onnxruntime-common": "^1.17.0",
     "onnxruntime-node": "^1.17.0",
     "zod": "^3.22.0"
   },
@@ -41,6 +42,7 @@
     "@ignitionai/backend-tfjs": "workspace:*",
     "@tensorflow/tfjs": "^4.22.0",
     "@tensorflow/tfjs-backend-cpu": "^4.22.0",
+    "esbuild": "^0.28.0",
     "vitest": "^3.1.1"
   },
   "publishConfig": {
@@ -48,8 +50,19 @@
   },
   "exports": {
     ".": {
-      "types": "dist/index.d.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "require": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js",
+      "require": "./dist/runtime.js"
+    },
+    "./web": {
+      "types": "./dist/runtime-universal.d.ts",
+      "import": "./dist/runtime-universal.js",
+      "require": "./dist/runtime-universal.js"
     }
   }
 }

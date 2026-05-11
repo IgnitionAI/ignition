@@ -52,6 +52,13 @@ export {
   inspectSession,
 } from '@ignitionai/backend-onnx';
 
+// Universal runtime (auto-detects Node vs Browser)
+export {
+  createOnnxSession as createOnnxSessionUniversal,
+  runInference as runInferenceUniversal,
+  inspectSession as inspectSessionUniversal,
+} from '@ignitionai/backend-onnx';
+
 export type {
   OnnxAgentConfig,
   ExportResult,
