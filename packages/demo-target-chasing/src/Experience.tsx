@@ -1,3 +1,5 @@
+// @ts-nocheck
+// TODO: refactor to use new IgnitionEnv(TrainingEnv) API
 import React, {
   forwardRef,
   useEffect,

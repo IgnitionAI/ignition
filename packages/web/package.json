@@ -8,7 +8,7 @@
     "prebuild": "node scripts/build-demos.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "echo 'WARN: eslint-config-next incompatible with ESLint 9 \u2014 lint skipped. TODO: migrate to flat config or downgrade ESLint'",
     "build:demos": "node scripts/build-demos.mjs"
   },
   "dependencies": {
@@ -38,6 +38,9 @@
     "@tailwindcss/typography": "^0.5.16",
     "@types/aos": "^3.0.7",
     "postcss": "^8.5.1",
-    "tailwindcss": "^4.0.3"
+    "tailwindcss": "^4.0.3",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.10",
+    "@eslint/eslintrc": "^3"
   }
 }

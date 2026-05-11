@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import { OvalTrack } from './track';
+import '@react-three/fiber';  // extends JSX types for Three.js elements
 
 const track = new OvalTrack(10, 4, 2);
 
@@ -109,9 +110,12 @@ export function Track3D() {
       ))}
 
       {/* Outer edge line */}
-      <line geometry={outerGeo}>
-        <lineBasicMaterial color="#6366f1" linewidth={2} />
-      </line>
+      {
+        // @ts-ignore — R3F <line> vs SVG <line> type conflict
+        <line geometry={outerGeo}>
+          <lineBasicMaterial color="#6366f1" linewidth={2} />
+        </line>
+      }
 
       {/* Outer edge glow strip */}
       {outerEdge.slice(0, -1).map((pt, i) => {
