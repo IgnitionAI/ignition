@@ -1,6 +1,6 @@
 import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Text } from '@react-three/drei'
+import { OrbitControls, Text, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useMazeStore } from './store'
 import { MAZE_LAYOUT, CELL_SIZE } from './maze-env'
@@ -86,43 +86,34 @@ function Exit({ x, z }: { x: number; z: number }) {
 
 function Agent() {
   const { agentPos, agentAngle, hasKey } = useMazeStore()
-  const bodyRef = useRef<THREE.Group>(null)
+  const groupRef = useRef<THREE.Group>(null)
+  const { scene } = useGLTF('./robot.glb')
 
   useFrame(() => {
-    if (bodyRef.current) {
+    if (groupRef.current) {
       const targetX = agentPos.x * CELL_SIZE
       const targetZ = agentPos.z * CELL_SIZE
-      bodyRef.current.position.x += (targetX - bodyRef.current.position.x) * 0.2
-      bodyRef.current.position.z += (targetZ - bodyRef.current.position.z) * 0.2
-      bodyRef.current.rotation.y = -agentAngle + Math.PI / 2
+      groupRef.current.position.x += (targetX - groupRef.current.position.x) * 0.2
+      groupRef.current.position.z += (targetZ - groupRef.current.position.z) * 0.2
+      // RobotExpressive faces +Z by default; rotate to match maze angle
+      groupRef.current.rotation.y = -agentAngle + Math.PI
     }
   })
 
   return (
-    <group ref={bodyRef} position={[agentPos.x * CELL_SIZE, CELL_SIZE * 0.35, agentPos.z * CELL_SIZE]}>
-      {/* Body */}
-      <mesh castShadow>
-        <sphereGeometry args={[0.35, 16, 16]} />
-        <meshStandardMaterial color={hasKey ? '#fbbf24' : '#3b82f6'} />
-      </mesh>
-      {/* Eyes */}
-      <mesh position={[0.15, 0.1, 0.25]}>
-        <sphereGeometry args={[0.06, 8, 8]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      <mesh position={[-0.15, 0.1, 0.25]}>
-        <sphereGeometry args={[0.06, 8, 8]} />
-        <meshStandardMaterial color="#ffffff" />
-      </mesh>
-      {/* Pupils */}
-      <mesh position={[0.15, 0.1, 0.3]}>
-        <sphereGeometry args={[0.03, 8, 8]} />
-        <meshStandardMaterial color="#000000" />
-      </mesh>
-      <mesh position={[-0.15, 0.1, 0.3]}>
-        <sphereGeometry args={[0.03, 8, 8]} />
-        <meshStandardMaterial color="#000000" />
-      </mesh>
+    <group
+      ref={groupRef}
+      position={[agentPos.x * CELL_SIZE, 0, agentPos.z * CELL_SIZE]}
+      scale={0.5}
+    >
+      <primitive object={scene.clone()} castShadow />
+      {/* Key glow indicator */}
+      {hasKey && (
+        <mesh position={[0, 1.2, 0]}>
+          <sphereGeometry args={[0.1, 8, 8]} />
+          <meshStandardMaterial color="#fbbf24" emissive="#f59e0b" emissiveIntensity={2} />
+        </mesh>
+      )}
     </group>
   )
 }
