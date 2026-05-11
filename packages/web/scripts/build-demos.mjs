@@ -26,6 +26,7 @@ const DEMOS = [
   { slug: 'cartpole-3d',      pkg: 'demo-cartpole-3d',      dir: 'packages/demo-cartpole-3d'      },
   { slug: 'car-circuit',      pkg: 'demo-car-circuit',      dir: 'packages/demo-car-circuit'      },
   { slug: 'drone-navigation', pkg: 'demo-drone-navigation', dir: 'packages/demo-drone-navigation' },
+  { slug: 'maze-3d',          pkg: 'demo-maze-3d',          dir: 'packages/demo-maze-3d'          },
 ]
 
 function run(cmd, env) {

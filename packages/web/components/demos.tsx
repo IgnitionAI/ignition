@@ -49,6 +49,14 @@ const DEMOS = [
     accent: '#a855f7',
     featured: true,
   },
+  {
+    slug: 'maze-3d',
+    title: 'Maze 3D',
+    description: 'A robot navigates a 3D maze to find keys, avoid traps, and reach the exit. Raycast observations, pathfinding challenge.',
+    tech: 'R3F',
+    algos: 'DQN · Q-Table',
+    accent: '#14b8a6',
+  },
 ]
 
 export default function Demos() {
