@@ -15,7 +15,10 @@ description: Persistent model storage for IgnitionAI agents — save and load tr
 |---|---|---|
 | `ModelStorageProvider` | interface | The contract any storage backend must implement. |
 | `ModelInfo` | type | Metadata for a stored model (`modelId`, `uri`, `createdAt`, `metadata`). |
-| `HuggingFaceProvider` | class | Concrete implementation backed by HuggingFace Hub. |
+| `HuggingFaceProvider` | class | Cloud persistence via HuggingFace Hub. |
+| `IndexedDBProvider` | class | Browser persistence for large models (recommended). |
+| `LocalStorageProvider` | class | Browser persistence for small models & metadata. |
+| `DownloadProvider` | class | Export model as downloadable file (write-only). |
 | `HFStorageConfig` | type | Config for `HuggingFaceProvider` (`token`, `repoId`). |
 | `hfStorageConfigSchema` | Zod schema | Validation for `HFStorageConfig`. |
 | `parseHFConfig` | function | Parses and validates the HF config from environment variables. |
@@ -36,7 +39,63 @@ export interface ModelStorageProvider {
 
 Five methods. That's the whole surface area. If you wanted to add, say, an S3 backend, you'd implement those five methods and publish it as `@ignitionai/storage-s3`. The rest of the framework doesn't need to change.
 
-## HuggingFace Hub — the first implementation
+## Browser-local providers
+
+For development and small models, you don't need a cloud account. Three browser-native providers ship out of the box:
+
+| Provider | Best for | Size limit | Load support |
+|---|---|---|---|
+| `IndexedDBProvider` | Large TF.js models | ~50-100 MB (browser quota) | ✅ Yes |
+| `LocalStorageProvider` | Small models, configs, metadata | ~5 MB | ✅ Yes |
+| `DownloadProvider` | Exporting for external use | No limit (user's disk) | ❌ No |
+
+### IndexedDB — the recommended default
+
+```ts filename="browser-save.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from '@ignitionai/environments'
+import { IndexedDBProvider } from '@ignitionai/storage'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('dqn', { storageProvider: new IndexedDBProvider() })
+
+// Later — save the current checkpoint
+await env.save('cartpole-dqn-v1', { reward: 195.4 })
+
+// Even later — load it back
+await env.load('cartpole-dqn-v1')
+```
+
+`env.save()` serializes the model weights **and** the agent's internal state (`epsilon`, `trainStepCounter`, `bestReward`). `env.load()` restores both. No manual bookkeeping.
+
+### LocalStorage — for configs and Q-Tables
+
+```ts filename="localstorage-save.ts"
+import { LocalStorageProvider } from '@ignitionai/storage'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('qtable', { storageProvider: new LocalStorageProvider() })
+
+await env.save('cartpole-qtable-v1')
+```
+
+Q-Table agents serialize their entire table as JSON, so `LocalStorageProvider` is a perfect fit. For neural-network agents, prefer `IndexedDBProvider` — TF.js weights can easily exceed the 5 MB localStorage limit.
+
+### Download — export for external use
+
+```ts filename="download.ts"
+import { DownloadProvider } from '@ignitionai/storage'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('dqn')
+
+// Triggers a browser download of model.json + weights.bin
+await env.save('my-model', { download: true })
+```
+
+`DownloadProvider` is write-only. Use it when you want to hand off a trained model to someone else or archive it outside the browser.
+
+## HuggingFace Hub — cloud persistence
 
 `HuggingFaceProvider` wraps the `huggingface.js` client and saves / loads TF.js models directly from a HF repo. HF Hub is a natural fit for RL weights because it already handles versioning, public/private visibility, and a web UI for browsing.
 
@@ -61,22 +120,21 @@ import { HuggingFaceProvider, parseHFConfig } from '@ignitionai/storage'
 // 1. Train an agent
 const cartpole = new CartPoleEnv()
 const env = new IgnitionEnvTFJS(cartpole)
-env.train('dqn')
+env.train('dqn', {
+  storageProvider: new HuggingFaceProvider(parseHFConfig(process.env))
+})
 // ... wait for convergence ...
 env.stop()
 
-// 2. Save the trained model
-const storage = new HuggingFaceProvider(parseHFConfig(process.env))
-
-await storage.save('cartpole-dqn-v1', env.agent.model, {
-  algorithm: 'dqn',
+// 2. Save the trained model (weights + agent state + metadata)
+await env.save('cartpole-dqn-v1', {
   episodesTrained: 500,
   meanReward: 195.4,
 })
 
 // 3. Later — load the same model into a fresh agent
-const loadedModel = await storage.load('cartpole-dqn-v1')
-console.log('Model loaded, input shape:', loadedModel.inputs[0].shape)
+await env.load('cartpole-dqn-v1')
+console.log('Model loaded, epsilon:', (env.agent as any).epsilon)
 ```
 
 Four lines to save. Two lines to load. The metadata object is stored alongside the weights and is returned by `list()`.

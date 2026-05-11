@@ -34,6 +34,27 @@ env.train('dqn')       // Zero config. It just works.
 
 **Seven lines.** That's the entire training setup. No neural network code, no hyperparameter tuning, no config files.
 
+## Save and load your agent
+
+Training takes time. Don't throw it away. Add two lines to persist the model:
+
+```ts filename="src/main.ts"
+import { IndexedDBProvider } from '@ignitionai/storage'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('dqn', { storageProvider: new IndexedDBProvider() })
+
+// ... training converges ...
+
+await env.save('cartpole-best', { meanReward: 195.4 })
+
+// Later — on page reload, or in another session:
+await env.load('cartpole-best')
+env.infer()  // Watch the trained agent play
+```
+
+`save()` stores the model weights **and** the agent's internal state (`epsilon`, step counter, best reward). `load()` restores everything. No manual bookkeeping.
+
 Open the page in your browser, pop the devtools console, and you'll see reward logs scrolling as the agent learns. Within a few dozen seconds on most machines, the pole will start staying up.
 
 That's it. If you want to understand *how* to write your own `TrainingEnv` from scratch (instead of using the built-in `CartPoleEnv`), jump to the [GridWorld tutorial](/docs/tutorials/grid-world) — it walks through the full 5-method interface.
