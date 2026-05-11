@@ -1,8 +1,9 @@
 import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Text, useGLTF } from '@react-three/drei'
+import { OrbitControls, Text } from '@react-three/drei'
 import * as THREE from 'three'
 import { useMazeStore } from './store'
+import RobotPrefab from './RobotPrefab'
 import { MAZE_LAYOUT, CELL_SIZE } from './maze-env'
 
 function Wall({ x, z }: { x: number; z: number }) {
@@ -87,7 +88,6 @@ function Exit({ x, z }: { x: number; z: number }) {
 function Agent() {
   const { agentPos, agentAngle, hasKey } = useMazeStore()
   const groupRef = useRef<THREE.Group>(null)
-  const { scene } = useGLTF('./robot.glb')
 
   useFrame(() => {
     if (groupRef.current) {
@@ -95,8 +95,7 @@ function Agent() {
       const targetZ = agentPos.z * CELL_SIZE
       groupRef.current.position.x += (targetX - groupRef.current.position.x) * 0.2
       groupRef.current.position.z += (targetZ - groupRef.current.position.z) * 0.2
-      // RobotExpressive faces +Z by default; rotate to match maze angle
-      groupRef.current.rotation.y = -agentAngle + Math.PI
+      groupRef.current.rotation.y = -agentAngle + Math.PI / 2
     }
   })
 
@@ -104,16 +103,8 @@ function Agent() {
     <group
       ref={groupRef}
       position={[agentPos.x * CELL_SIZE, 0, agentPos.z * CELL_SIZE]}
-      scale={0.5}
     >
-      <primitive object={scene.clone()} castShadow />
-      {/* Key glow indicator */}
-      {hasKey && (
-        <mesh position={[0, 1.2, 0]}>
-          <sphereGeometry args={[0.1, 8, 8]} />
-          <meshStandardMaterial color="#fbbf24" emissive="#f59e0b" emissiveIntensity={2} />
-        </mesh>
-      )}
+      <RobotPrefab hasKey={hasKey} isWalking={true} />
     </group>
   )
 }
@@ -143,10 +134,10 @@ function Scene() {
       <Agent />
 
       <OrbitControls
-        target={[MAZE_LAYOUT[0].length * CELL_SIZE * 0.5, 0, MAZE_LAYOUT.length * CELL_SIZE * 0.5]}
+        target={[2, 0.5, 2]}
         maxPolarAngle={Math.PI / 2.2}
-        minDistance={5}
-        maxDistance={25}
+        minDistance={2}
+        maxDistance={15}
       />
     </>
   )
@@ -154,7 +145,7 @@ function Scene() {
 
 export default function Maze3D() {
   return (
-    <Canvas shadows camera={{ position: [5, 8, 12], fov: 50 }}>
+    <Canvas shadows camera={{ position: [3, 6, 7], fov: 50 }}>
       <color attach="background" args={['#020617']} />
       <fog attach="fog" args={['#020617', 15, 35]} />
       <Scene />
