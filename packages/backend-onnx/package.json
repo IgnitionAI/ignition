@@ -1,7 +1,7 @@
 {
   "name": "@ignitionai/backend-onnx",
   "version": "0.1.0",
-  "description": "ONNX inference backend for IgnitionAI — cross-platform, production-ready RL inference",
+  "description": "ONNX inference backend for IgnitionAI \u2014 cross-platform, production-ready RL inference",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -45,5 +45,11 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "dist/index.d.ts",
+      "require": "./dist/index.js"
+    }
   }
 }
