@@ -29,6 +29,10 @@ export class IgnitionEnv {
     return this._agent;
   }
 
+  set agent(value: AgentInterface | null) {
+    this._agent = value;
+  }
+
   public train(algorithm?: AlgorithmType, overrides?: Record<string, unknown>): void {
     const algo = algorithm ?? 'dqn';
 
@@ -189,5 +193,38 @@ export class IgnitionEnv {
       this.stepIntervalMs = 1;
       this.stepsPerTick = Math.round(multiplier / 2);
     }
+  }
+
+  // ── Persistence ───────────────────────────────────────────────────────────
+
+  /**
+   * Save the current agent model + training state.
+   * Requires the agent to implement `save()`.
+   */
+  async save(modelId: string, metadata?: Record<string, unknown>): Promise<string | void> {
+    if (!this._agent?.save) {
+      throw new Error('[IgnitionEnv] Agent does not support persistence. Use a backend that implements save().');
+    }
+    const meta = {
+      algorithm: this.currentAlgorithm,
+      stepCount: this.stepCount,
+      ...(this._agent.getState?.() ?? {}),
+      ...metadata,
+    };
+    return this._agent.save(modelId, meta);
+  }
+
+  /**
+   * Load a previously saved agent model + training state.
+   * Requires the agent to implement `load()`.
+   */
+  async load(modelId: string): Promise<void> {
+    if (!this._agent?.load) {
+      throw new Error('[IgnitionEnv] Agent does not support persistence. Use a backend that implements load().');
+    }
+    await this._agent.load(modelId);
+    // Restore agent internal state if getState/setState are available
+    // (state is typically embedded in metadata and restored by the agent's load())
+    this.stepCount = 0;
   }
 }

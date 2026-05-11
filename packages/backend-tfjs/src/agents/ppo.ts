@@ -125,6 +125,9 @@ export class PPOAgent implements AgentInterface {
   private readonly entropyCoef: number;
   private readonly valueLossCoef: number;
   private readonly actionSize: number;
+  private config: PPOConfig;
+  private trainStepCounter = 0;
+  private bestReward = -Infinity;
 
   constructor(config: PPOConfig) {
     const result = PPOConfigSchema.safeParse(config);
@@ -160,6 +163,7 @@ export class PPOAgent implements AgentInterface {
 
     this.actorOptimizer = tf.train.adam(lr);
     this.criticOptimizer = tf.train.adam(lr);
+    this.config = config;
   }
 
   // -------------------------------------------------------------------------
@@ -417,6 +421,45 @@ export class PPOAgent implements AgentInterface {
   // -------------------------------------------------------------------------
   // Utilitaires
   // -------------------------------------------------------------------------
+
+  // ── Persistence ─────────────────────────────────────────────────────────
+
+  getState(): Record<string, unknown> {
+    return {
+      trainStepCounter: this.trainStepCounter,
+      bestReward: this.bestReward,
+    };
+  }
+
+  setState(state: Record<string, unknown>): void {
+    if (typeof state.trainStepCounter === 'number') this.trainStepCounter = state.trainStepCounter;
+    if (typeof state.bestReward === 'number') this.bestReward = state.bestReward;
+  }
+
+  async save(modelId: string, metadata?: Record<string, unknown>): Promise<string> {
+    const provider = this.config.storageProvider;
+    if (!provider) {
+      throw new Error('[PPO] No storageProvider configured. Pass one in PPOConfig.');
+    }
+    // Save actor
+    const actorUri = await provider.save(`${modelId}/actor`, this.actorNet, { ...metadata, network: 'actor' });
+    // Save critic
+    const criticUri = await provider.save(`${modelId}/critic`, this.criticNet, { ...metadata, network: 'critic' });
+    console.log(`[PPO] ✅ Saved actor: ${actorUri}, critic: ${criticUri}`);
+    return actorUri;
+  }
+
+  async load(modelId: string): Promise<void> {
+    const provider = this.config.storageProvider;
+    if (!provider) {
+      throw new Error('[PPO] No storageProvider configured. Pass one in PPOConfig.');
+    }
+    const actor = await provider.load(`${modelId}/actor`);
+    const critic = await provider.load(`${modelId}/critic`);
+    this.actorNet = actor as tf.Sequential;
+    this.criticNet = critic as tf.Sequential;
+    console.log(`[PPO] ✅ Loaded model ${modelId}`);
+  }
 
   dispose(): void {
     this.actorNet?.dispose();

@@ -178,4 +178,55 @@ export class QTableAgent implements AgentInterface {
   get currentEpsilon(): number {
     return this.epsilon;
   }
+
+  // ── Persistence ─────────────────────────────────────────────────────────
+
+  getState(): Record<string, unknown> {
+    return {
+      epsilon: this.epsilon,
+    };
+  }
+
+  setState(state: Record<string, unknown>): void {
+    if (typeof state.epsilon === 'number') this.epsilon = state.epsilon;
+  }
+
+  /**
+   * Serialize the Q-table to a JSON-compatible object.
+   * Stores in localStorage under the given modelId.
+   */
+  async save(modelId: string, metadata?: Record<string, unknown>): Promise<string> {
+    const payload = {
+      qTable: Array.from(this.qTable.entries()),
+      config: {
+        inputSize: this.inputSize,
+        actionSize: this.actionSize,
+        stateBins: this.stateBins,
+        stateLow: this.stateLow,
+        stateHigh: this.stateHigh,
+        lr: this.lr,
+        gamma: this.gamma,
+        epsilonDecay: this.epsilonDecay,
+        minEpsilon: this.minEpsilon,
+      },
+      state: this.getState(),
+      metadata,
+      savedAt: new Date().toISOString(),
+    };
+    const json = JSON.stringify(payload);
+    localStorage.setItem(`ignition:qtable:${modelId}`, json);
+    console.log(`[QTable] ✅ Saved to localStorage (ignition:qtable:${modelId})`);
+    return `localstorage://qtable/${modelId}`;
+  }
+
+  async load(modelId: string): Promise<void> {
+    const json = localStorage.getItem(`ignition:qtable:${modelId}`);
+    if (!json) {
+      throw new Error(`[QTable] No saved model found for "${modelId}"`);
+    }
+    const payload = JSON.parse(json);
+    this.qTable = new Map(payload.qTable);
+    this.setState(payload.state ?? {});
+    console.log(`[QTable] ✅ Loaded from localStorage (${modelId})`);
+  }
 }

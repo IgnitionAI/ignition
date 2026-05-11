@@ -58,6 +58,20 @@ export interface AgentInterface {
   dispose?(): void;
   /** Reset agent internal state (epsilon, memory, counters…) */
   reset?(): void;
+
+  // ── Persistence (optional) ───────────────────────────────────────────────
+
+  /** Save the agent's model and state. Returns URI or void. */
+  save?(modelId: string, metadata?: Record<string, unknown>): Promise<string | void>;
+
+  /** Load a previously saved model and state. */
+  load?(modelId: string): Promise<void>;
+
+  /** Serialize internal state (epsilon, stepCount, etc.) for checkpointing. */
+  getState?(): Record<string, unknown>;
+
+  /** Restore internal state from a serialized object. */
+  setState?(state: Record<string, unknown>): void;
 }
 
 /**

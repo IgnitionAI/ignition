@@ -202,6 +202,29 @@ export class DQNAgent implements AgentInterface {
     await this.updateTargetModel();
   }
 
+  getState(): Record<string, unknown> {
+    return {
+      epsilon: this.epsilon,
+      trainStepCounter: this.trainStepCounter,
+      bestReward: this.bestReward,
+    };
+  }
+
+  setState(state: Record<string, unknown>): void {
+    if (typeof state.epsilon === 'number') this.epsilon = state.epsilon;
+    if (typeof state.trainStepCounter === 'number') this.trainStepCounter = state.trainStepCounter;
+    if (typeof state.bestReward === 'number') this.bestReward = state.bestReward;
+  }
+
+  // Adapter methods for AgentInterface persistence
+  async save(modelId: string, metadata?: Record<string, unknown>): Promise<string> {
+    return this.saveModel(modelId, metadata);
+  }
+
+  async load(modelId: string): Promise<void> {
+    return this.loadModel(modelId);
+  }
+
   dispose(): void {
     console.log(`[DQN] Disposing model...`);
     this.model?.dispose();

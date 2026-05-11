@@ -123,6 +123,7 @@ export const PPOConfigSchema = z.object({
     .number()
     .positive({ message: 'valueLossCoef must be > 0' })
     .optional(),
+  storageProvider: z.any().optional(), // ModelStorageProvider instance
 });
 
 export type PPOConfig = z.infer<typeof PPOConfigSchema>;
@@ -174,6 +175,7 @@ export const QTableConfigSchema = z.object({
     .min(0, { message: 'minEpsilon must be >= 0' })
     .max(1, { message: 'minEpsilon must be <= 1' })
     .optional(),
+  storageProvider: z.any().optional(), // ModelStorageProvider instance
 });
 
 export type QTableConfig = z.infer<typeof QTableConfigSchema>;
