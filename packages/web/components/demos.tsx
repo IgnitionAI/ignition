@@ -1,3 +1,4 @@
+import { MobileInferenceBadge } from './mobile-inference-badge'
 const DEMOS = [
   {
     slug: 'gridworld',
@@ -67,6 +68,9 @@ export default function Demos() {
             <p className="text-lg text-slate-400">
               Five interactive environments showing IgnitionAI in action. Each runs in your browser, trains locally, and demonstrates a different RL challenge.
             </p>
+            <div className="mt-3 flex justify-center">
+              <MobileInferenceBadge />
+            </div>
           </div>
 
           {/* Demo grid */}

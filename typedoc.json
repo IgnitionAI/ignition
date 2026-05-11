@@ -1,0 +1,41 @@
+{
+  "entryPoints": [
+    "packages/core/src/index.ts",
+    "packages/backend-tfjs/src/index.ts",
+    "packages/backend-onnx/src/index.ts",
+    "packages/storage/src/index.ts",
+    "packages/environments/src/index.ts"
+  ],
+  "entryPointStrategy": "resolve",
+  "out": "packages/web/content/api",
+  "plugin": [
+    "typedoc-plugin-markdown"
+  ],
+  "readme": "none",
+  "githubPages": false,
+  "hideGenerator": true,
+  "sortEntryPoints": true,
+  "sort": [
+    "source-order"
+  ],
+  "kindSortOrder": [
+    "Document",
+    "Project",
+    "Module",
+    "Namespace",
+    "Enum",
+    "EnumMember",
+    "Class",
+    "Interface",
+    "TypeAlias",
+    "Constructor",
+    "Property",
+    "Variable",
+    "Function",
+    "Method",
+    "Parameter",
+    "TypeParameter",
+    "Accessor",
+    "Reference"
+  ]
+}

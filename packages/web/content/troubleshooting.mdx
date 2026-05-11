@@ -1,0 +1,111 @@
+---
+title: Troubleshooting
+---
+
+# Troubleshooting
+
+Common issues and how to fix them.
+
+## WebGPU not available
+
+**Symptom:** `Error: WebGPU is not supported on this device` or training is extremely slow.
+
+**Cause:** WebGPU is still rolling out. It requires:
+- Chrome 113+ on Windows / macOS / Linux
+- A compatible GPU (Intel, AMD, NVIDIA)
+
+**Fix:** The framework auto-falls back to WebGL → CPU → WASM. You don't need to do anything. But if you want to force a specific backend:
+
+```ts
+import { setBackend } from '@ignitionai/backend-tfjs'
+
+await setBackend('webgl')  // or 'cpu', 'wasm'
+```
+
+**Check your backend:**
+```ts
+import * as tf from '@tensorflow/tfjs'
+console.log(tf.getBackend())  // 'webgpu' | 'webgl' | 'cpu'
+```
+
+## Training is slow
+
+**Symptom:** Less than 10 steps per second.
+
+**Causes & fixes:**
+
+| Cause | Fix |
+|---|---|
+| Running on CPU | Use `setBackend('webgpu')` or `setBackend('webgl')` |
+| Browser throttling | Switch to the active tab — background tabs are throttled |
+| Too many demos open | Close other RL tabs; TF.js contexts compete for GPU |
+| Small model, low FPS | Use `env.setSpeed(50)` to batch steps |
+
+## Out of memory
+
+**Symptom:** `Error: Failed to create GPU buffer` or page crash.
+
+**Cause:** TF.js allocates GPU memory for every tensor. Large replay buffers or big models can exhaust VRAM.
+
+**Fix:**
+```ts
+env.train('dqn', {
+  memorySize: 5000,   // default: 10000 — reduce if needed
+  batchSize: 16,      // default: 32
+})
+```
+
+Or dispose agents explicitly:
+```ts
+env.agent?.dispose?.()
+```
+
+## ONNX model won't load
+
+**Symptom:** `ONNX output tensor "dense_3" not found`.
+
+**Cause:** The `inputName` / `outputName` in `OnnxAgentConfig` doesn't match the ONNX graph.
+
+**Fix:** Inspect the model first:
+```ts
+import { createOnnxSession, inspectSession } from '@ignitionai/backend-onnx'
+
+const session = await createOnnxSession('./model.onnx')
+console.log(inspectSession(session))
+// → { inputs: ['dense_input'], outputs: ['dense_3'] }
+```
+
+Then pass the correct names:
+```ts
+const agent = new OnnxAgent({
+  modelPath: './model.onnx',
+  actionSize: 2,
+  inputName: 'dense_input',
+  outputName: 'dense_3',
+})
+```
+
+## IndexedDB quota exceeded
+
+**Symptom:** `QuotaExceededError` when calling `env.save()`.
+
+**Cause:** Browser storage limits vary (Chrome: ~60% of disk, Safari: ~1GB).
+
+**Fix:**
+1. Use `DownloadProvider` to export the model to disk instead of browser storage.
+2. Or delete old checkpoints:
+```ts
+const provider = new IndexedDBProvider()
+const models = await provider.list()
+for (const m of models) {
+  await provider.delete(m.modelId)
+}
+```
+
+## Still stuck?
+
+Open an issue on [GitHub](https://github.com/IgnitionAI/ignition/issues) with:
+1. Browser & OS version
+2. `tf.getBackend()` output
+3. Minimal reproduction code
+4. Error stack trace
