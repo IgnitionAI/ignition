@@ -3,7 +3,8 @@ import { useDemoStore } from './store';
 
 export function RewardChart() {
   const { rewardHistory } = useDemoStore();
-  const data = rewardHistory.slice(-300).map((r, i) => ({ episode: rewardHistory.length - 300 + i + 1, reward: r }));
+  const firstEpisode = Math.max(0, rewardHistory.length - 300) + 1;
+  const data = rewardHistory.slice(-300).map((r, i) => ({ episode: firstEpisode + i, reward: r }));
 
   if (data.length === 0) {
     return <div style={{ color: '#666', fontSize: 13, textAlign: 'center', paddingTop: 80 }}>Press Start to begin training</div>;

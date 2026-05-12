@@ -7,7 +7,6 @@ const MAX_POINTS = 300;
 
 export function RewardChart() {
   const { rewardHistory } = useDemoStore();
-
   const firstEpisode = Math.max(0, rewardHistory.length - MAX_POINTS) + 1;
   const data = rewardHistory
     .slice(-MAX_POINTS)
@@ -15,23 +14,23 @@ export function RewardChart() {
 
   if (data.length === 0) {
     return (
-      <div style={{ color: '#666', fontSize: 13, textAlign: 'center', paddingTop: 80 }}>
-        Press Start to begin training
+      <div style={{ color: '#6b7280', fontSize: 13, textAlign: 'center', paddingTop: 78 }}>
+        Press Train to begin
       </div>
     );
   }
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={220}>
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" />
-        <XAxis dataKey="episode" stroke="#666" fontSize={11} />
-        <YAxis stroke="#666" fontSize={11} />
+        <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+        <XAxis dataKey="episode" stroke="#6b7280" fontSize={11} />
+        <YAxis stroke="#6b7280" fontSize={11} />
         <Tooltip
-          contentStyle={{ background: '#1a1a2e', border: '1px solid #333', fontSize: 12 }}
-          labelStyle={{ color: '#e2e8f0' }}
+          contentStyle={{ background: '#111827', border: '1px solid #374151', fontSize: 12 }}
+          labelStyle={{ color: '#e5e7eb' }}
         />
-        <Line type="monotone" dataKey="reward" stroke="#6366f1" dot={false} strokeWidth={2} />
+        <Line type="monotone" dataKey="reward" stroke="#22c55e" dot={false} strokeWidth={2} />
       </LineChart>
     </ResponsiveContainer>
   );

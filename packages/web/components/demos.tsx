@@ -1,12 +1,13 @@
 import { MobileInferenceBadge } from './mobile-inference-badge'
 const DEMOS = [
   {
-    slug: 'gridworld',
-    title: 'GridWorld',
-    description: 'Agent finds the shortest path in a 7×7 grid. Your first RL "hello world".',
-    tech: '2D Canvas',
+    slug: 'maze',
+    title: 'Maze',
+    description: 'A low-poly humanoid trains in a Rapier 3D arena with prefab walls, sensor rays, doors, and moving hazards.',
+    tech: 'R3F · Rapier',
     algos: 'Q-Table · DQN · PPO',
     accent: '#22c55e',
+    featured: true,
   },
   {
     slug: 'cartpole',
@@ -47,7 +48,6 @@ const DEMOS = [
     tech: 'R3F · Physics',
     algos: 'DQN',
     accent: '#a855f7',
-    featured: true,
   },
   {
     slug: 'maze-3d',
@@ -74,7 +74,7 @@ export default function Demos() {
               Watch agents learn in real time
             </h2>
             <p className="text-lg text-slate-400">
-              Five interactive environments showing IgnitionAI in action. Each runs in your browser, trains locally, and demonstrates a different RL challenge.
+              Six interactive environments showing IgnitionAI in action. Each runs in your browser, trains locally, and demonstrates a different RL challenge.
             </p>
             <div className="mt-3 flex justify-center">
               <MobileInferenceBadge />
@@ -87,8 +87,6 @@ export default function Demos() {
               <a
                 key={demo.title}
                 href={`/demos/${demo.slug}/`}
-                target="_blank"
-                rel="noopener noreferrer"
                 data-aos="fade-up"
                 className={`relative group block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-indigo-500/50 transition-colors ${
                   demo.featured ? 'lg:col-span-2' : ''

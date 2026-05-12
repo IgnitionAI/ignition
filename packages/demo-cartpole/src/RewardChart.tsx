@@ -4,8 +4,9 @@ import { useDemoStore } from './store';
 export function RewardChart() {
   const { rewardHistory } = useDemoStore();
 
+  const firstEpisode = Math.max(0, rewardHistory.length - 300) + 1;
   const data = rewardHistory.slice(-300).map((reward, i) => ({
-    episode: rewardHistory.length - 300 + i + 1,
+    episode: firstEpisode + i,
     steps: reward,
   }));
 

@@ -8,15 +8,7 @@ export function CodePanel() {
 import { GridWorldEnv } from './gridworld-env';
 
 const grid = new GridWorldEnv(7);
-
-const env = new IgnitionEnv({
-  getObservation: () => grid.observe(),
-  actions: ['up', 'right', 'down', 'left'],
-  applyAction: (a) => grid.step(a),
-  computeReward: () => grid.reward(),
-  isTerminated: () => grid.done(),
-  onReset: () => grid.reset(),
-});
+const env = new IgnitionEnv(grid);
 
 env.train('${algorithm}');`;
 
