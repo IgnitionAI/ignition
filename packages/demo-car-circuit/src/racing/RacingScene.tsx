@@ -1,7 +1,9 @@
-import { Suspense, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, useProgress } from "@react-three/drei";
 import * as THREE from "three";
+import { referenceAction } from "./reference";
+import { RaceWorld } from "./race";
 import { DrivingWorld, DRIVING_CONTRACT, RacingTrack } from "./driving";
 
 export function Vehicle({
@@ -73,6 +75,7 @@ function Road({ track }: { track: RacingTrack }) {
     g.computeVertexNormals();
     return g;
   }, [track]);
+  useEffect(() => () => geometry.dispose(), [geometry]);
   return (
     <>
       <mesh geometry={geometry} receiveShadow>
@@ -126,11 +129,15 @@ function Driver({
   keys,
   paused,
   onStats,
+  race,
+  reference = false,
 }: {
   world: DrivingWorld;
   keys: Set<string>;
   paused: boolean;
   onStats: (speed: number) => void;
+  race?: RaceWorld;
+  reference?: boolean;
 }) {
   const { active: loading } = useProgress();
   const accumulator = useRef(0),
@@ -151,7 +158,14 @@ function Driver({
             : keys.has("ArrowUp") || keys.has("KeyW") || keys.has("KeyZ")
               ? 1
               : 0;
-        world.step((throttle + 1) * 3 + steer + 1);
+        const action = (throttle + 1) * 3 + steer + 1;
+        if (race)
+          race.step(
+            race.drivers.map((d, i) =>
+              reference || i > 0 ? referenceAction(d.world) : action,
+            ),
+          );
+        else world.step(action);
         accumulator.current -= DRIVING_CONTRACT.dt;
       }
     } else accumulator.current = 0;
@@ -180,6 +194,8 @@ export function RacingScene(props: {
   paused: boolean;
   model: string;
   onStats: (speed: number) => void;
+  race?: RaceWorld;
+  reference?: boolean;
 }) {
   return (
     <Canvas shadows camera={{ fov: 55, near: 0.1, far: 600 }} dpr={[1, 1.5]}>
@@ -204,7 +220,11 @@ export function RacingScene(props: {
       {Array.from({ length: 24 }, (_, i) => {
         const a = (i * Math.PI * 2) / 24;
         return (
-          <mesh key={i} position={[Math.cos(a) * 190, 0, Math.sin(a) * 180]} scale={[1.4, 0.45, 1.2]}>
+          <mesh
+            key={i}
+            position={[Math.cos(a) * 190, 0, Math.sin(a) * 180]}
+            scale={[1.4, 0.45, 1.2]}
+          >
             <sphereGeometry args={[32 + (i % 4) * 7, 10, 6]} />
             <meshStandardMaterial color={i % 2 ? "#677b6a" : "#7d8c71"} />
           </mesh>
@@ -213,6 +233,13 @@ export function RacingScene(props: {
       <Road track={props.world.track} />
       <Suspense fallback={null}>
         <Vehicle world={props.world} model={props.model} />
+        {props.race?.drivers.slice(1).map((d) => (
+          <Vehicle
+            key={d.id}
+            world={d.world}
+            model={d.id % 2 ? "sedan-sports" : "race"}
+          />
+        ))}
       </Suspense>
       <Driver {...props} />
     </Canvas>

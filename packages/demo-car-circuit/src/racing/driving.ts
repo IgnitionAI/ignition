@@ -134,10 +134,14 @@ export class DrivingWorld {
       Math.min(
         DRIVING_CONTRACT.maxSpeed,
         c.speed +
-          (acceleration - 0.7 - c.speed * 0.045 - (offRoad ? c.speed * 0.8 : 0)) * dt,
+          (acceleration -
+            0.7 -
+            c.speed * 0.045 -
+            (offRoad ? c.speed * 0.8 : 0)) *
+            dt,
       ),
     );
-    c.angle += c.steering * c.speed * 0.035 * dt;
+    c.angle += c.steering * c.speed * 0.12 * dt;
     c.x += Math.cos(c.angle) * c.speed * dt;
     c.z += Math.sin(c.angle) * c.speed * dt;
     this.ticks++;

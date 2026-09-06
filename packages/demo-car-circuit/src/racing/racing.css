@@ -397,3 +397,54 @@
     padding-top: 16px;
   }
 }
+
+.race-countdown {
+  position: absolute;
+  inset: 35% 0 auto;
+  text-align: center;
+  color: #edff7a;
+  font-size: 100px;
+  font-weight: 800;
+  pointer-events: none;
+}
+.race-timing {
+  position: absolute;
+  top: 85px;
+  right: 24px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  background: #17211ddd;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.race-header nav button:not(:disabled) {
+  opacity: 1;
+  cursor: pointer;
+  color: var(--race-text);
+}
+@media (min-width: 601px) {
+  .race-sidebar {
+    height: calc(100vh - 76px);
+    overflow-y: auto;
+  }
+}
+@media (max-width: 600px) {
+  .race-header {
+    height: auto;
+    min-height: 100px;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  .race-header nav {
+    display: flex;
+    order: 3;
+    width: 100%;
+    height: 30px;
+  }
+}
+
+.pause-overlay ol { list-style:none; width:min(360px,80%); padding:0; margin:20px 0; counter-reset:position; }
+.pause-overlay li { counter-increment:position; display:flex; align-items:center; gap:18px; background:#182329; padding:12px 18px; margin:4px 0; font-variant-numeric:tabular-nums; border:1px solid #394449; }
+.pause-overlay li::before { content:counter(position); color:var(--race-accent); font-weight:bold; }

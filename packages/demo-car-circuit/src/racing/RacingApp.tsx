@@ -1,5 +1,6 @@
 import { Component, useEffect, useRef, useState, type ReactNode } from "react";
 import { useProgress } from "@react-three/drei";
+import { RaceWorld } from "./race";
 import { DrivingWorld } from "./driving";
 import { RacingScene } from "./RacingScene";
 import "./racing.css";
@@ -105,7 +106,22 @@ function Loading({ label }: { label: string }) {
 export default function RacingApp() {
   const [lang, setLang] = useState<"fr" | "en">("fr"),
     t = copy[lang];
-  const [world] = useState(() => new DrivingWorld());
+  const [world, setWorld] = useState(() => new DrivingWorld());
+  const [race, setRace] = useState<RaceWorld>();
+  const [reference, setReference] = useState(false);
+  const [, updateHUD] = useState(0);
+  const resetSession = (competitive: boolean, references = false) => {
+    const next = competitive
+      ? new RaceWorld({ count: references ? 4 : 1 })
+      : undefined;
+    setReference(references);
+    setRace(next);
+    setWorld(next ? next.drivers[0].world : new DrivingWorld());
+    keys.clear();
+    setSpeed(0);
+    setPaused(true);
+    setStarted(false);
+  };
   const keys = useRef(new Set<string>()).current;
   const [started, setStarted] = useState(false),
     [paused, setPaused] = useState(true),
@@ -164,11 +180,19 @@ export default function RacingApp() {
           ignition<span> / RACING</span>
         </a>
         <nav aria-label="Modes">
-          <span className="active">{t.drive}</span>
+          <button
+            className={!race ? "active" : ""}
+            onClick={() => resetSession(false)}
+          >
+            {t.drive}
+          </button>
           <button disabled title={t.coming}>
             {t.training}
           </button>
-          <button disabled title={t.coming}>
+          <button
+            className={race ? "active" : ""}
+            onClick={() => resetSession(true)}
+          >
             {t.race}
           </button>
         </nav>
@@ -234,14 +258,25 @@ export default function RacingApp() {
             className="reset-button"
             onClick={() => {
               keys.clear();
-              world.reset();
-              setSpeed(0);
-              setPaused(true);
-              setStarted(false);
+              resetSession(!!race, reference);
             }}
           >
             {t.reset}
           </button>
+          {race && (
+            <button
+              className="reset-button"
+              onClick={() => resetSession(true, !reference)}
+            >
+              {reference
+                ? lang === "fr"
+                  ? "Piloter en solo"
+                  : "Drive solo"
+                : lang === "fr"
+                  ? "Observer 4 références à règles"
+                  : "Watch 4 rule-based references"}
+            </button>
+          )}
           <div className="race-controls">
             <div className="vehicle-label">{t.controls}</div>
             <p>
@@ -273,7 +308,12 @@ export default function RacingApp() {
               keys={keys}
               paused={paused}
               model={model}
-              onStats={setSpeed}
+              race={race}
+              reference={reference}
+              onStats={(value) => {
+                setSpeed(value);
+                updateHUD((n) => n + 1);
+              }}
             />
           </SceneBoundary>
           <Loading label={t.loading} />
@@ -283,9 +323,48 @@ export default function RacingApp() {
           </div>
           <div className="session-pill">
             <i />
-            {t.mode}
+            {race
+              ? `${reference ? (lang === "fr" ? "RÉFÉRENCES À RÈGLES" : "RULE-BASED REFERENCES") : t.race} · ${Math.min(3, race.drivers[0].laps + 1)}/3`
+              : t.mode}
           </div>
-          {started && paused && (
+          {race && started && !paused && race.countdown > 0 && (
+            <div className="race-countdown" role="status">
+              {Math.ceil(race.countdown)}
+            </div>
+          )}
+          {race && (
+            <div className="race-timing">
+              {(race.elapsedTicks / 60).toFixed(1)} s · +
+              {race.drivers[0].penaltySeconds} s
+            </div>
+          )}
+          {race?.finished && (
+            <div className="pause-overlay">
+              <h2>{lang === "fr" ? "Résultat" : "Result"}</h2>
+              <p>
+                {race.drivers[0].finishSeconds === null
+                  ? lang === "fr"
+                    ? "Temps limite atteint"
+                    : "Time limit reached"
+                  : `${race.drivers[0].finishSeconds.toFixed(2)} s · 3/3`}
+              </p>
+              <p>
+                {lang === "fr" ? "Remises en piste" : "Rescues"}:{" "}
+                {race.drivers[0].rescues} (+{race.drivers[0].penaltySeconds} s)
+              </p>
+              <ol>
+                {race.standings.map((d) => (
+                  <li key={d.id}>
+                    #{d.id + 1} · {d.finishSeconds?.toFixed(2) ?? "DNF"} s
+                  </li>
+                ))}
+              </ol>
+              <button onClick={() => resetSession(true, reference)}>
+                {t.reset}
+              </button>
+            </div>
+          )}
+          {started && paused && !race?.finished && (
             <div className="pause-overlay">
               <h2>{t.paused}</h2>
               <p>{t.pausedHint}</p>
