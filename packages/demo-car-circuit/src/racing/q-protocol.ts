@@ -1,0 +1,23 @@
+/** Fixed before running either algorithm. Last scheduled checkpoint, no evaluation selection. */
+export const Q_PROTOCOL = Object.freeze({
+  id: 'racing-q-learning-v2',
+  seeds: [11, 29, 47, 73, 101],
+  evaluationSeeds: [211, 307, 419, 509, 601],
+  transitions: 20000,
+  actionRepeat: 6,
+  trafficAfterTransitions: 10000,
+  episodeTransitions: 600,
+  termination: 'finish only; off-road recovery follows RaceWorld',
+  truncation: '600 decisions, race time limit, or solo-to-traffic curriculum boundary',
+  trainEvery: 4,
+  hiddenLayers: [32, 32],
+  learningRate: 0.001,
+  batchSize: 32,
+  memorySize: 10000,
+  gamma: 0.99,
+  epsilonDecay: 0.9995,
+  minEpsilon: 0.05,
+  targetUpdateFrequency: 100,
+  evaluation: '5 seeds x 2 tracks x solo/traffic = 20 full races per trained policy',
+  selection: 'last scheduled checkpoint; all failures retained',
+});

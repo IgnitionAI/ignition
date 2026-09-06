@@ -1,6 +1,8 @@
 import * as tf from "@tensorflow/tfjs";
 import { useEffect, useRef, useState } from "react";
-import { LearnedDriver } from "./learned-driver";
+import { trainQDriver } from "./q-training";
+import { Q_PROTOCOL } from "./q-protocol";
+import { LearnedDriver, type DriverCheckpoint } from "./learned-driver";
 import {
   trainDriver,
   evaluateDriver,
@@ -37,7 +39,9 @@ export default function TrainingPanel({
     [reports, setReports] = useState<DriverEvaluation[]>([]);
   const [selected, setSelected] = useState(""),
     [saved, setSaved] = useState("");
+  const [algorithm, setAlgorithm] = useState<DriverCheckpoint["algorithm"]>("imitation-mlp");
   const [ready, setReady] = useState(false);
+  const activeAlgorithm = agent.current?.algorithm ?? algorithm;
   const busy = !ready || status === "training" || status === "evaluating";
   useEffect(() => {
     let mounted = true;
@@ -56,9 +60,8 @@ export default function TrainingPanel({
     return () => {
       mounted = false;
       controller.current?.abort();
-      const old = agent.current;
       void (operation.current ?? Promise.resolve()).finally(() =>
-        old?.dispose(),
+        agent.current?.dispose(),
       );
     };
   }, []);
@@ -66,7 +69,7 @@ export default function TrainingPanel({
     if (busy) return;
     if (fresh || !agent.current) {
       agent.current?.dispose();
-      agent.current = new LearnedDriver(seed);
+      agent.current = new LearnedDriver(seed, algorithm);
       setReports([]);
       setSaved("");
     }
@@ -75,17 +78,23 @@ export default function TrainingPanel({
 
     const driver = agent.current;
     setSeed(driver.seed);
-    setProgress({round:0,loss:null,samples:driver.samples,traffic:driver.updates>=24});
+    setAlgorithm(driver.algorithm);
+    setProgress({round:0,loss:null,samples:driver.samples,traffic:driver.algorithm === "imitation-mlp" ? driver.updates>=24 : driver.samples>=Q_PROTOCOL.trafficAfterTransitions});
     controller.current = new AbortController();
     setError("");
     setStatus("training");
-    operation.current = trainDriver(driver, {
-      seed: driver.seed,
-      rounds: 16,
+    const common = {
       signal: controller.current.signal,
-      onWorld: (r) => onWorld(r.drivers[0].world),
+      onWorld: (r: import("./race").RaceWorld) => onWorld(r.drivers[0].world),
       onProgress: setProgress,
-    })
+    };
+    operation.current = (driver.algorithm === "imitation-mlp"
+      ? trainDriver(driver, { ...common, seed:driver.seed, rounds:16 })
+      : trainQDriver(driver.exportCheckpoint(), common).then(checkpoint => {
+        const updated = LearnedDriver.fromCheckpoint(checkpoint);
+        driver.dispose();
+        agent.current = updated;
+      }))
       .catch((e) => setError(String(e)))
       .finally(() => setStatus("idle"));
   };
@@ -103,7 +112,7 @@ export default function TrainingPanel({
       try {
         for (const test of [false, true])
           for (const traffic of [false, true])
-            for (const evaluationSeed of [101, 307, 509]) {
+            for (const evaluationSeed of frozen.algorithm === "imitation-mlp" ? [101, 307, 509] : Q_PROTOCOL.evaluationSeeds) {
               results.push(
                 await evaluateDriver(frozen, {
                   seed: evaluationSeed,
@@ -129,7 +138,7 @@ export default function TrainingPanel({
       const id = `driver-${agent.current.seed}-${Date.now()}`;
       saveDriver({
         id,
-        name: `Pilote ${agent.current.seed} · ${agent.current.updates}`,
+        name: `${agent.current.algorithm} · ${agent.current.seed} · ${agent.current.updates}`,
         checkpoint: agent.current.exportCheckpoint(),
         reports,
       });
@@ -153,12 +162,13 @@ export default function TrainingPanel({
       agent.current?.dispose();
       agent.current = loaded;
       setSeed(loaded.seed);
+      setAlgorithm(loaded.algorithm);
       setReports(record.reports);
       setProgress({
         round: 0,
         loss: null as number | null,
         samples: loaded.samples,
-        traffic: loaded.updates >= 24,
+        traffic: loaded.algorithm === "imitation-mlp" ? loaded.updates >= 24 : loaded.samples >= Q_PROTOCOL.trafficAfterTransitions,
       });
       setError("");
       setSaved(
@@ -181,10 +191,21 @@ export default function TrainingPanel({
           : "A real driver.\nMeasured progress."}
       </h1>
       <p className="race-intro">
-        {fr
+        {algorithm !== "imitation-mlp" ? (fr ? "DQN / Double DQN · apprentissage par récompenses sur Alpine Park. Budget : 20 000 transitions. Les résultats restent à mesurer ; ce pilote peut ne pas finir une course." : "DQN / Double DQN · reward learning at Alpine Park. Budget: 20,000 transitions. Results must be measured; this driver may not finish a race.") : fr
           ? "Imitation · réseau de neurones. Il apprend sur Alpine Park, seul puis avec du trafic de référence figé. En course, seul le réseau décide."
           : "Imitation · neural network. Learn at Alpine Park, solo then with frozen reference traffic. Only the network decides during races."}
       </p>
+      <p><a style={{color:"#e6ee58"}} href={`${import.meta.env.BASE_URL}reports/racing-q-v2/index.html`}>
+        {fr ? "DQN / Double DQN : voir les résultats comparés ↗" : "DQN / Double DQN: compare measured results ↗"}
+      </a></p>
+      <label>
+        {fr ? "Méthode du nouveau pilote" : "New driver method"}
+        <select value={algorithm} disabled={busy} onChange={e=>setAlgorithm(e.target.value as DriverCheckpoint["algorithm"])}>
+          <option value="imitation-mlp">Imitation MLP</option>
+          <option value="dqn">DQN</option>
+          <option value="double-dqn">Double DQN</option>
+        </select>
+      </label>
       <label>
         {fr ? "Graine" : "Seed"}{" "}
         <input
@@ -232,14 +253,14 @@ export default function TrainingPanel({
                 ? "Prêt"
                 : "Ready"}
         </strong>
+        <p>{activeAlgorithm}</p>
         <p>
-          {progress.round}/16 · {progress.samples.toLocaleString(lang)}{" "}
-          {fr ? "exemples" : "samples"}
+          {fr ? "Session" : "Session"} : {progress.round}/{activeAlgorithm === "imitation-mlp" ? 16 : Q_PROTOCOL.transitions} · {progress.samples.toLocaleString(lang)}{" "}
+          {activeAlgorithm === "imitation-mlp" ? (fr ? "exemples" : "samples") : "transitions"}
         </p>
-        <p>
-          {fr ? "Erreur d’imitation" : "Imitation loss"}:{" "}
-          {progress.loss === null ? "—" : progress.loss.toFixed(4)}
-        </p>
+        {activeAlgorithm === "imitation-mlp" && <p>
+          {fr ? "Erreur d’imitation" : "Imitation loss"}: {progress.loss === null ? "—" : progress.loss.toFixed(4)}
+        </p>}
         <small>
           {progress.traffic
             ? fr

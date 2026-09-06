@@ -12,7 +12,7 @@ export function seededRandom(seed: number) {
 }
 export interface TrainingProgress {
   round: number;
-  loss: number;
+  loss: number | null;
   samples: number;
   traffic: boolean;
 }
@@ -113,10 +113,10 @@ export async function evaluateDriver(
   const random = seededRandom(seed),
     car = race.drivers[0].world.car;
   car.angle += (random() - 0.5) * 0.06;
-  let steps = 0;
+  let steps = 0, action = 4;
   while (!race.finished && race.drivers[0].finishSeconds === null) {
     if (signal?.aborted) throw new Error("Evaluation cancelled");
-    const action = driver.action(observeDriver(race));
+    if (steps % driver.decisionInterval === 0) action = driver.action(observeDriver(race));
     race.step(
       race.drivers.map((d, i) => (i === 0 ? action : referenceAction(d.world))),
     );

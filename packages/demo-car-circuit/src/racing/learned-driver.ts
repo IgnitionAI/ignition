@@ -1,11 +1,12 @@
 import * as tf from "@tensorflow/tfjs";
 import { DRIVING_CONTRACT } from "./driving";
 import { OBSERVATION_CONTRACT, OBSERVATION_SIZE } from "./observations";
+import { Q_PROTOCOL } from "./q-protocol";
 import { LEARNING_PROTOCOL } from "./learning-protocol";
 
 export interface DriverCheckpoint {
   format: "ignition-driver-v1";
-  algorithm: "imitation-mlp";
+  algorithm: "imitation-mlp" | "dqn" | "double-dqn";
   driving: string;
   observation: string;
   protocol: string;
@@ -14,7 +15,7 @@ export interface DriverCheckpoint {
   samples: number;
   createdAt: string;
   weights: { shape: number[]; values: number[] }[];
-  configuration?: {hiddenLayers:number[]; learningRate:number; batchSize:number; epochsPerRound:number; samplesPerRound:number};
+  configuration?: Record<string, unknown>;
   evaluation?: unknown;
 }
 const SHAPES = [[20, 32], [32], [32, 32], [32], [32, 9], [9]];
@@ -24,7 +25,7 @@ export class LearnedDriver {
   private optimizer: tf.Optimizer;
   updates = 0;
   samples = 0;
-  constructor(readonly seed: number) {
+  constructor(readonly seed: number, readonly algorithm: DriverCheckpoint["algorithm"] = "imitation-mlp") {
     if (!Number.isSafeInteger(seed) || seed < 1 || seed > 1000000)
       throw new Error("Seed must be an integer from 1 to 1000000");
     this.model = tf.sequential();
@@ -32,30 +33,31 @@ export class LearnedDriver {
       tf.layers.dense({
         inputShape: [OBSERVATION_SIZE],
         units: 32,
-        activation: "tanh",
+        activation: algorithm === "imitation-mlp" ? "tanh" : "relu",
         kernelInitializer: tf.initializers.glorotUniform({ seed }),
       }),
     );
     this.model.add(
       tf.layers.dense({
         units: 32,
-        activation: "tanh",
+        activation: algorithm === "imitation-mlp" ? "tanh" : "relu",
         kernelInitializer: tf.initializers.glorotUniform({ seed: seed + 1 }),
       }),
     );
     this.model.add(
       tf.layers.dense({
         units: 9,
-        activation: "softmax",
+        activation: algorithm === "imitation-mlp" ? "softmax" : "linear",
         kernelInitializer: tf.initializers.glorotUniform({ seed: seed + 2 }),
       }),
     );
-    this.optimizer = tf.train.adam(0.003);
+    this.optimizer = tf.train.adam(algorithm === "imitation-mlp" ? 0.003 : Q_PROTOCOL.learningRate);
     this.model.compile({
       optimizer: this.optimizer,
-      loss: "categoricalCrossentropy",
+      loss: algorithm === "imitation-mlp" ? "categoricalCrossentropy" : "meanSquaredError",
     });
   }
+  get decisionInterval() { return this.algorithm === "imitation-mlp" ? 1 : Q_PROTOCOL.actionRepeat; }
   action(observation: number[]): number {
     if (
       observation.length !== OBSERVATION_SIZE ||
@@ -74,6 +76,7 @@ export class LearnedDriver {
     actions: number[],
     epochs = 1,
   ): Promise<number> {
+    if (this.algorithm !== "imitation-mlp") throw new Error("Use Q-learning training for this driver");
     if (
       !observations.length ||
       observations.length !== actions.length ||
@@ -99,12 +102,12 @@ export class LearnedDriver {
   }
   exportCheckpoint(): DriverCheckpoint {
     return {
-      configuration: {hiddenLayers:[32,32],learningRate:.003,batchSize:128,epochsPerRound:3,samplesPerRound:4096},
+      configuration: this.algorithm === "imitation-mlp" ? {hiddenLayers:[32,32],learningRate:.003,batchSize:128,epochsPerRound:3,samplesPerRound:4096} : {...Q_PROTOCOL},
       format: "ignition-driver-v1",
-      algorithm: "imitation-mlp",
+      algorithm: this.algorithm,
       driving: DRIVING_CONTRACT.id,
       observation: OBSERVATION_CONTRACT,
-      protocol: LEARNING_PROTOCOL.id,
+      protocol: this.algorithm === "imitation-mlp" ? LEARNING_PROTOCOL.id : Q_PROTOCOL.id,
       seed: this.seed,
       updates: this.updates,
       samples: this.samples,
@@ -119,10 +122,10 @@ export class LearnedDriver {
     if (
       !c ||
       c.format !== "ignition-driver-v1" ||
-      c.algorithm !== "imitation-mlp" ||
+      !["imitation-mlp", "dqn", "double-dqn"].includes(c.algorithm) ||
       c.driving !== DRIVING_CONTRACT.id ||
       c.observation !== OBSERVATION_CONTRACT ||
-      c.protocol !== LEARNING_PROTOCOL.id
+      c.protocol !== (c.algorithm === "imitation-mlp" ? LEARNING_PROTOCOL.id : Q_PROTOCOL.id)
     )
       throw new Error("Incompatible driver contract");
     if (
@@ -146,7 +149,7 @@ export class LearnedDriver {
       )
     )
       throw new Error("Invalid driver weights");
-    const driver = new LearnedDriver(c.seed);
+    const driver = new LearnedDriver(c.seed, c.algorithm);
     const weights = c.weights.map((w) => tf.tensor(w.values, w.shape));
     try {
       driver.model.setWeights(weights);

@@ -11,6 +11,7 @@ export interface RaceEntry {
 /** Owns separately loaded, frozen copies; no reference controller or training path. */
 export class LearnedRace {
   readonly race: RaceWorld;
+  private readonly previousActions: number[] = [];
   private readonly policies: LearnedDriver[] = [];
   constructor(
     readonly entries: readonly RaceEntry[],
@@ -50,7 +51,12 @@ export class LearnedRace {
     const actions = this.race.drivers.map((_d, i) =>
       this.human && i === 0
         ? humanAction
-        : this.policies[i - (this.human ? 1 : 0)].action(observations[i]),
+        : (() => {
+          const policy=this.policies[i-(this.human?1:0)];
+          if(this.race.elapsedTicks % policy.decisionInterval===0 || this.previousActions[i]===undefined)
+            this.previousActions[i]=policy.action(observations[i]);
+          return this.previousActions[i];
+        })(),
     );
     this.race.step(actions);
   }

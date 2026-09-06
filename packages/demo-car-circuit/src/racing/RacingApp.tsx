@@ -457,7 +457,7 @@ export default function RacingApp() {
                   <li key={d.id}>
                     {learned?.competitors[d.id]?.name ?? `#${d.id + 1}`}{" "}
                     {learned && <small>({learned.competitors[d.id].id})</small>}{" "}
-                    · {d.finishSeconds?.toFixed(2) ?? "DNF"} s
+                    · {d.finishSeconds === null ? "DNF" : `${d.finishSeconds.toFixed(2)} s`}
                   </li>
                 ))}
               </ol>
@@ -498,8 +498,8 @@ export default function RacingApp() {
                 : "Learned networks racing · frozen weights"
               : trainingMode
                 ? lang === "fr"
-                  ? "Aperçu des trajectoires collectées · apprentissage solo puis trafic"
-                  : "Collected trajectories · solo then traffic learning"
+                  ? "Trajectoires collectées pendant l’apprentissage"
+                  : "Trajectories collected during learning"
                 : t.hint}
           </div>
           <div className="speedometer">
