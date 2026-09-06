@@ -13,6 +13,8 @@ import { DrivingWorld } from "./driving";
 import { RacingScene } from "./RacingScene";
 import "./racing.css";
 
+import type { LearnedRace } from "./learned-race";
+const RaceGarage = lazy(() => import("./RaceGarage"));
 const TrainingPanel = lazy(() => import("./TrainingPanel"));
 
 const copy = {
@@ -120,9 +122,17 @@ export default function RacingApp() {
   const [race, setRace] = useState<RaceWorld>();
   const [reference, setReference] = useState(false);
   const [trainingMode, setTrainingMode] = useState(false);
+  const [garageMode, setGarageMode] = useState(false);
+  const [learned, setLearned] = useState<LearnedRace>();
+  const [follow, setFollow] = useState(0);
+  const displayedDriver = race?.drivers[learned ? follow : 0];
+  useEffect(() => () => learned?.dispose(), [learned]);
   const [, updateHUD] = useState(0);
   const resetSession = (competitive: boolean, references = false) => {
     setTrainingMode(false);
+    setGarageMode(false);
+    setLearned(undefined);
+    setFollow(0);
     const next = competitive
       ? new RaceWorld({ count: references ? 4 : 1 })
       : undefined;
@@ -193,7 +203,7 @@ export default function RacingApp() {
         </a>
         <nav aria-label="Modes">
           <button
-            className={!race && !trainingMode ? "active" : ""}
+            className={!race && !trainingMode && !garageMode ? "active" : ""}
             onClick={() => resetSession(false)}
           >
             {t.drive}
@@ -206,13 +216,21 @@ export default function RacingApp() {
               setRace(undefined);
               setStarted(false);
               setTrainingMode(true);
+              setGarageMode(false);
+              setLearned(undefined);
+              setFollow(0);
             }}
           >
             {t.training}
           </button>
           <button
-            className={race ? "active" : ""}
-            onClick={() => resetSession(true)}
+            className={race || garageMode ? "active" : ""}
+            onClick={() => {
+              keys.clear();
+              setPaused(true);
+              setTrainingMode(false);
+              setGarageMode(true);
+            }}
           >
             {t.race}
           </button>
@@ -230,7 +248,24 @@ export default function RacingApp() {
       </header>
       <main className="race-layout">
         <aside className="race-sidebar">
-          {trainingMode ? (
+          {garageMode ? (
+            <Suspense fallback={<p>{t.loading}</p>}>
+              <RaceGarage
+                lang={lang}
+                onPractice={(r) => resetSession(true, r)}
+                onStart={(session) => {
+                  keys.clear();
+                  setLearned(session);
+                  setRace(session.race);
+                  setWorld(session.race.drivers[0].world);
+                  setFollow(0);
+                  setStarted(true);
+                  setPaused(false);
+                  setReference(false);
+                }}
+              />
+            </Suspense>
+          ) : trainingMode ? (
             <Suspense fallback={<p>{t.loading}</p>}>
               <TrainingPanel lang={lang} onWorld={setWorld} />
             </Suspense>
@@ -333,12 +368,13 @@ export default function RacingApp() {
         <section className="race-viewport" aria-label={t.track}>
           <SceneBoundary message={t.error} retry={t.retry}>
             <RacingScene
-              world={world}
+              world={learned ? learned.race.drivers[follow].world : world}
               keys={keys}
               paused={paused}
               model={model}
               race={race}
               reference={reference}
+              learned={learned}
               onStats={(value) => {
                 setSpeed(value);
                 updateHUD((n) => n + 1);
@@ -346,6 +382,27 @@ export default function RacingApp() {
             />
           </SceneBoundary>
           <Loading label={t.loading} />
+          {learned && (
+            <div className="spectator-controls">
+              <label>
+                {lang === "fr" ? "Caméra" : "Camera"}
+                <select
+                  value={follow}
+                  onChange={(e) => setFollow(Number(e.target.value))}
+                >
+                  {learned.entries.map((entry, i) => (
+                    <option key={i} value={i}>
+                      {entry.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button onClick={() => setPaused(!paused)}>
+                {paused ? t.resume : t.pause}
+              </button>
+            </div>
+          )}
+
           <div className="track-label">
             <span>{t.track}</span>
             <small>{t.layout}</small>
@@ -353,7 +410,7 @@ export default function RacingApp() {
           <div className="session-pill">
             <i />
             {race
-              ? `${reference ? (lang === "fr" ? "RÉFÉRENCES À RÈGLES" : "RULE-BASED REFERENCES") : t.race} · ${Math.min(3, race.drivers[0].laps + 1)}/3`
+              ? `${reference ? (lang === "fr" ? "RÉFÉRENCES À RÈGLES" : "RULE-BASED REFERENCES") : t.race} · ${Math.min(3, race.drivers[learned ? follow : 0].laps + 1)}/3`
               : trainingMode
                 ? t.training
                 : t.mode}
@@ -366,31 +423,45 @@ export default function RacingApp() {
           {race && (
             <div className="race-timing">
               {(race.elapsedTicks / 60).toFixed(1)} s · +
-              {race.drivers[0].penaltySeconds} s
+              {race.drivers[learned ? follow : 0].penaltySeconds} s
             </div>
           )}
-          {race?.finished && (
+          {race?.finished && displayedDriver && (
             <div className="pause-overlay">
               <h2>{lang === "fr" ? "Résultat" : "Result"}</h2>
+              {learned && <p>{learned.entries[follow].name}</p>}
               <p>
-                {race.drivers[0].finishSeconds === null
+                {displayedDriver.finishSeconds === null
                   ? lang === "fr"
                     ? "Temps limite atteint"
                     : "Time limit reached"
-                  : `${race.drivers[0].finishSeconds.toFixed(2)} s · 3/3`}
+                  : `${displayedDriver.finishSeconds.toFixed(2)} s · 3/3`}
               </p>
               <p>
                 {lang === "fr" ? "Remises en piste" : "Rescues"}:{" "}
-                {race.drivers[0].rescues} (+{race.drivers[0].penaltySeconds} s)
+                {displayedDriver.rescues} (+
+                {race.drivers[learned ? follow : 0].penaltySeconds} s)
               </p>
               <ol>
                 {race.standings.map((d) => (
                   <li key={d.id}>
-                    #{d.id + 1} · {d.finishSeconds?.toFixed(2) ?? "DNF"} s
+                    {learned?.entries[d.id]?.name ?? `#${d.id + 1}`}{" "}
+                    {learned && <small>({learned.entries[d.id].id})</small>} ·{" "}
+                    {d.finishSeconds?.toFixed(2) ?? "DNF"} s
                   </li>
                 ))}
               </ol>
-              <button onClick={() => resetSession(true, reference)}>
+              <button
+                onClick={() => {
+                  if (learned) {
+                    setGarageMode(true);
+                    setPaused(true);
+                    setStarted(false);
+                    setLearned(undefined);
+                    setRace(undefined);
+                  } else resetSession(true, reference);
+                }}
+              >
                 {t.reset}
               </button>
             </div>
@@ -411,11 +482,15 @@ export default function RacingApp() {
             </div>
           )}
           <div className="driving-hint">
-            {trainingMode
+            {learned
               ? lang === "fr"
-                ? "Aperçu des trajectoires collectées · apprentissage solo puis trafic"
-                : "Collected trajectories · solo then traffic learning"
-              : t.hint}
+                ? "Course de réseaux appris · poids figés"
+                : "Learned networks racing · frozen weights"
+              : trainingMode
+                ? lang === "fr"
+                  ? "Aperçu des trajectoires collectées · apprentissage solo puis trafic"
+                  : "Collected trajectories · solo then traffic learning"
+                : t.hint}
           </div>
           <div className="speedometer">
             <span>{t.speed}</span>

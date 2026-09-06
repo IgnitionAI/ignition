@@ -16,7 +16,9 @@ Evaluation reconstructs a separate frozen network and checks both circuits, solo
 
 `src/public/drivers/` contains all three scheduled training seeds and their complete reports, including failures. Aggregate measured success is 29/36; no checkpoint was selected by test-track performance. These imitation drivers are imperfect and often make contact in traffic. Run `pnpm dlx tsx scripts/train-racing.mts` at the root to reproduce native training/evaluation (requires the installed TFJS Node addon).
 
-Player-versus-trained-driver inference and races between saved learned drivers are the next slices.
+Course now opens a garage for two to four learned competitors. Select a local saved checkpoint or any of the three supplied trained networks, choose each vehicle independently, and start the AI race. The camera selector follows each driver's own speed, lap and penalty metrics. Results identify each checkpoint. Each race owns separately loaded frozen networks and disposes them on session changes. Missing bundled files are reported without hiding available local drivers; no rule-based substitute is used.
+
+Browser proof: supplied checkpoints 29 and 11 both completed three laps, in 105.45 s and 118.92 s respectively. The public integration test verifies completion with unchanged weights. Player-versus-trained-driver keyboard inference is the next slice.
 
 The frozen racing evaluation protocol names Alpine Park for training, Harbour for held-out testing, and seeds 101/307/509 before learned checkpoint selection. The original constant-speed evaluation has its separate version.
 

@@ -2,6 +2,7 @@ import { Suspense, useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, useProgress } from "@react-three/drei";
 import * as THREE from "three";
+import type { LearnedRace } from "./learned-race";
 import { referenceAction } from "./reference";
 import { RaceWorld } from "./race";
 import { DrivingWorld, DRIVING_CONTRACT, RacingTrack } from "./driving";
@@ -131,6 +132,7 @@ function Driver({
   onStats,
   race,
   reference = false,
+  learned,
 }: {
   world: DrivingWorld;
   keys: Set<string>;
@@ -138,6 +140,7 @@ function Driver({
   onStats: (speed: number) => void;
   race?: RaceWorld;
   reference?: boolean;
+  learned?: LearnedRace;
 }) {
   const { active: loading } = useProgress();
   const accumulator = useRef(0),
@@ -159,7 +162,8 @@ function Driver({
               ? 1
               : 0;
         const action = (throttle + 1) * 3 + steer + 1;
-        if (race)
+        if (learned) learned.step(action);
+        else if (race)
           race.step(
             race.drivers.map((d, i) =>
               reference || i > 0 ? referenceAction(d.world) : action,
@@ -196,6 +200,7 @@ export function RacingScene(props: {
   onStats: (speed: number) => void;
   race?: RaceWorld;
   reference?: boolean;
+  learned?: LearnedRace;
 }) {
   return (
     <Canvas shadows camera={{ fov: 55, near: 0.1, far: 600 }} dpr={[1, 1.5]}>
@@ -232,14 +237,20 @@ export function RacingScene(props: {
       })}
       <Road track={props.world.track} />
       <Suspense fallback={null}>
-        <Vehicle world={props.world} model={props.model} />
-        {props.race?.drivers.slice(1).map((d) => (
-          <Vehicle
-            key={d.id}
-            world={d.world}
-            model={d.id % 2 ? "sedan-sports" : "race"}
-          />
-        ))}
+        {props.race ? (
+          props.race.drivers.map((d) => (
+            <Vehicle
+              key={d.id}
+              world={d.world}
+              model={
+                props.learned?.entries[d.id]?.model ??
+                (d.id % 2 ? "sedan-sports" : props.model)
+              }
+            />
+          ))
+        ) : (
+          <Vehicle world={props.world} model={props.model} />
+        )}
       </Suspense>
       <Driver {...props} />
     </Canvas>
