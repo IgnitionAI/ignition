@@ -1,9 +1,19 @@
-import { Component, useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  lazy,
+  Suspense,
+  Component,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { useProgress } from "@react-three/drei";
 import { RaceWorld } from "./race";
 import { DrivingWorld } from "./driving";
 import { RacingScene } from "./RacingScene";
 import "./racing.css";
+
+const TrainingPanel = lazy(() => import("./TrainingPanel"));
 
 const copy = {
   fr: {
@@ -109,8 +119,10 @@ export default function RacingApp() {
   const [world, setWorld] = useState(() => new DrivingWorld());
   const [race, setRace] = useState<RaceWorld>();
   const [reference, setReference] = useState(false);
+  const [trainingMode, setTrainingMode] = useState(false);
   const [, updateHUD] = useState(0);
   const resetSession = (competitive: boolean, references = false) => {
+    setTrainingMode(false);
     const next = competitive
       ? new RaceWorld({ count: references ? 4 : 1 })
       : undefined;
@@ -181,12 +193,21 @@ export default function RacingApp() {
         </a>
         <nav aria-label="Modes">
           <button
-            className={!race ? "active" : ""}
+            className={!race && !trainingMode ? "active" : ""}
             onClick={() => resetSession(false)}
           >
             {t.drive}
           </button>
-          <button disabled title={t.coming}>
+          <button
+            className={trainingMode ? "active" : ""}
+            onClick={() => {
+              keys.clear();
+              setPaused(true);
+              setRace(undefined);
+              setStarted(false);
+              setTrainingMode(true);
+            }}
+          >
             {t.training}
           </button>
           <button
@@ -209,97 +230,105 @@ export default function RacingApp() {
       </header>
       <main className="race-layout">
         <aside className="race-sidebar">
-          <div className="eyebrow">{t.tag}</div>
-          <h1>
-            {t.title.split("\n").map((s, i) => (
-              <span key={i}>
-                {s}
-                <br />
-              </span>
-            ))}
-          </h1>
-          <p className="race-intro">{t.intro}</p>
-          <div className="vehicle-label">{t.vehicle}</div>
-          <div className="vehicle-options">
-            {[
-              ["race", t.racecar, "01"],
-              ["sedan-sports", t.sedan, "02"],
-            ].map(([id, label, index]) => (
+          {trainingMode ? (
+            <Suspense fallback={<p>{t.loading}</p>}>
+              <TrainingPanel lang={lang} onWorld={setWorld} />
+            </Suspense>
+          ) : (
+            <>
+              <div className="eyebrow">{t.tag}</div>
+              <h1>
+                {t.title.split("\n").map((s, i) => (
+                  <span key={i}>
+                    {s}
+                    <br />
+                  </span>
+                ))}
+              </h1>
+              <p className="race-intro">{t.intro}</p>
+              <div className="vehicle-label">{t.vehicle}</div>
+              <div className="vehicle-options">
+                {[
+                  ["race", t.racecar, "01"],
+                  ["sedan-sports", t.sedan, "02"],
+                ].map(([id, label, index]) => (
+                  <button
+                    key={id}
+                    className={model === id ? "selected" : ""}
+                    onClick={() => {
+                      keys.clear();
+                      setPaused(true);
+                      setModel(id);
+                    }}
+                    aria-pressed={model === id}
+                  >
+                    <span>{index}</span>
+                    {label}
+                    <b>{model === id ? "↗" : "+"}</b>
+                  </button>
+                ))}
+              </div>
+              <p className="muted">{t.equal}</p>
               <button
-                key={id}
-                className={model === id ? "selected" : ""}
+                className="drive-button"
                 onClick={() => {
                   keys.clear();
-                  setPaused(true);
-                  setModel(id);
+                  setStarted(true);
+                  setPaused(!paused);
+                  (document.activeElement as HTMLElement)?.blur();
                 }}
-                aria-pressed={model === id}
               >
-                <span>{index}</span>
-                {label}
-                <b>{model === id ? "↗" : "+"}</b>
+                {!started ? t.start : paused ? t.resume : t.pause}
+                <span>↗</span>
               </button>
-            ))}
-          </div>
-          <p className="muted">{t.equal}</p>
-          <button
-            className="drive-button"
-            onClick={() => {
-              keys.clear();
-              setStarted(true);
-              setPaused(!paused);
-              (document.activeElement as HTMLElement)?.blur();
-            }}
-          >
-            {!started ? t.start : paused ? t.resume : t.pause}
-            <span>↗</span>
-          </button>
-          <button
-            className="reset-button"
-            onClick={() => {
-              keys.clear();
-              resetSession(!!race, reference);
-            }}
-          >
-            {t.reset}
-          </button>
-          {race && (
-            <button
-              className="reset-button"
-              onClick={() => resetSession(true, !reference)}
-            >
-              {reference
-                ? lang === "fr"
-                  ? "Piloter en solo"
-                  : "Drive solo"
-                : lang === "fr"
-                  ? "Observer 4 références à règles"
-                  : "Watch 4 rule-based references"}
-            </button>
+              <button
+                className="reset-button"
+                onClick={() => {
+                  keys.clear();
+                  resetSession(!!race, reference);
+                }}
+              >
+                {t.reset}
+              </button>
+              {race && (
+                <button
+                  className="reset-button"
+                  onClick={() => resetSession(true, !reference)}
+                >
+                  {reference
+                    ? lang === "fr"
+                      ? "Piloter en solo"
+                      : "Drive solo"
+                    : lang === "fr"
+                      ? "Observer 4 références à règles"
+                      : "Watch 4 rule-based references"}
+                </button>
+              )}
+              <div className="race-controls">
+                <div className="vehicle-label">{t.controls}</div>
+                <p>
+                  <kbd>↑ / Z / W</kbd>
+                  <span>{t.gas}</span>
+                </p>
+                <p>
+                  <kbd>↓ / S</kbd>
+                  <span>{t.brake}</span>
+                </p>
+                <p>
+                  <kbd>← →</kbd>
+                  <span>{t.steer}</span>
+                </p>
+                <p>
+                  <kbd>ESC</kbd>
+                  <span>{t.pause}</span>
+                </p>
+              </div>
+              <div className="local-badge">
+                <i />
+                {t.local}
+              </div>
+            </>
           )}
-          <div className="race-controls">
-            <div className="vehicle-label">{t.controls}</div>
-            <p>
-              <kbd>↑ / Z / W</kbd>
-              <span>{t.gas}</span>
-            </p>
-            <p>
-              <kbd>↓ / S</kbd>
-              <span>{t.brake}</span>
-            </p>
-            <p>
-              <kbd>← →</kbd>
-              <span>{t.steer}</span>
-            </p>
-            <p>
-              <kbd>ESC</kbd>
-              <span>{t.pause}</span>
-            </p>
-          </div>
-          <div className="local-badge">
-            <i />
-            {t.local}
-          </div>
         </aside>
         <section className="race-viewport" aria-label={t.track}>
           <SceneBoundary message={t.error} retry={t.retry}>
@@ -325,7 +354,9 @@ export default function RacingApp() {
             <i />
             {race
               ? `${reference ? (lang === "fr" ? "RÉFÉRENCES À RÈGLES" : "RULE-BASED REFERENCES") : t.race} · ${Math.min(3, race.drivers[0].laps + 1)}/3`
-              : t.mode}
+              : trainingMode
+                ? t.training
+                : t.mode}
           </div>
           {race && started && !paused && race.countdown > 0 && (
             <div className="race-countdown" role="status">
@@ -379,7 +410,13 @@ export default function RacingApp() {
               </button>
             </div>
           )}
-          <div className="driving-hint">{t.hint}</div>
+          <div className="driving-hint">
+            {trainingMode
+              ? lang === "fr"
+                ? "Aperçu des trajectoires collectées · apprentissage solo puis trafic"
+                : "Collected trajectories · solo then traffic learning"
+              : t.hint}
+          </div>
           <div className="speedometer">
             <span>{t.speed}</span>
             <strong>{Math.round(speed).toString().padStart(3, "0")}</strong>

@@ -445,6 +445,79 @@
   }
 }
 
-.pause-overlay ol { list-style:none; width:min(360px,80%); padding:0; margin:20px 0; counter-reset:position; }
-.pause-overlay li { counter-increment:position; display:flex; align-items:center; gap:18px; background:#182329; padding:12px 18px; margin:4px 0; font-variant-numeric:tabular-nums; border:1px solid #394449; }
-.pause-overlay li::before { content:counter(position); color:var(--race-accent); font-weight:bold; }
+.pause-overlay ol {
+  list-style: none;
+  width: min(360px, 80%);
+  padding: 0;
+  margin: 20px 0;
+  counter-reset: position;
+}
+.pause-overlay li {
+  counter-increment: position;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #182329;
+  padding: 12px 18px;
+  margin: 4px 0;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid #394449;
+}
+.pause-overlay li::before {
+  content: counter(position);
+  color: var(--race-accent);
+  font-weight: bold;
+}
+
+.training-panel label {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  margin: 16px 0;
+}
+.training-panel input,
+.training-panel select {
+  width: 100%;
+  background: var(--race-panel);
+  color: var(--race-text);
+  border: 1px solid var(--race-line);
+  padding: 10px;
+}
+.training-actions {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+}
+.training-actions button {
+  border: 1px solid var(--race-line);
+  padding: 12px;
+  background: var(--race-panel);
+  color: var(--race-text);
+  text-align: left;
+}
+.training-actions .drive-button {
+  background: var(--race-accent);
+  color: var(--race-bg);
+}
+.training-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.training-metrics {
+  border: 1px solid var(--race-line);
+  padding: 16px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.training-metrics p {
+  margin: 8px 0;
+  color: var(--race-muted);
+}
+.training-metrics ul {
+  padding-left: 16px;
+  font-size: 10px;
+}
+.training-panel [role="alert"] {
+  color: #ffb3a2;
+  font-size: 12px;
+}
