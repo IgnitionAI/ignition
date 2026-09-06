@@ -16,6 +16,7 @@ export class LearnedRace {
     readonly entries: readonly RaceEntry[],
     readonly human = false,
     test = false,
+    readonly humanModel: RaceEntry["model"] = "race",
   ) {
     if (entries.length < (human ? 1 : 2) || entries.length > (human ? 3 : 4))
       throw new Error("Select 2–4 learned drivers, or 1–3 human opponents");
@@ -30,6 +31,16 @@ export class LearnedRace {
       this.dispose();
       throw error;
     }
+  }
+  get competitors() {
+    const learned = this.entries.map(({ id, name, model }) => ({
+      id,
+      name,
+      model,
+    }));
+    return this.human
+      ? [{ id: "player", name: "Player", model: this.humanModel }, ...learned]
+      : learned;
   }
   step(humanAction = 4) {
     if (this.race.finished) return;

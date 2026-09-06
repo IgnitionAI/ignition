@@ -37,3 +37,18 @@ it("rejects a missing or incompatible opponent instead of substituting reference
       ]),
   ).toThrow(/contract/);
 });
+
+it("applies human commands on the same clock while the saved opponent uses its own policy", () => {
+  const session = new LearnedRace([entries[0]], true);
+  const before = session.snapshots().map((p) => p.weights);
+  for (let i = 0; i < 240; i++) session.step(7);
+  expect(session.race.drivers[0].world.car.speed).toBeGreaterThan(5);
+  expect(session.race.drivers[0].world.ticks).toBe(
+    session.race.drivers[1].world.ticks,
+  );
+  const speed = session.race.drivers[0].world.car.speed;
+  for (let i = 0; i < 20; i++) session.step(1);
+  expect(session.race.drivers[0].world.car.speed).toBeLessThan(speed);
+  expect(session.snapshots().map((p) => p.weights)).toEqual(before);
+  session.dispose();
+});

@@ -9,15 +9,19 @@ export default function RaceGarage({
   lang,
   onStart,
   onPractice,
+  onConfigure,
 }: {
   lang: "fr" | "en";
   onStart: (race: LearnedRace) => void;
   onPractice: (references: boolean) => void;
+  onConfigure: () => void;
 }) {
   const fr = lang === "fr";
   const [drivers, setDrivers] = useState<SavedDriver[]>([]),
     [error, setError] = useState(""),
     [ready, setReady] = useState(false);
+  const [human, setHuman] = useState(false);
+  const [humanModel, setHumanModel] = useState<"race" | "sedan-sports">("race");
   const [slots, setSlots] = useState(["bundled-11", "bundled-29"]);
   const [models, setModels] = useState<("race" | "sedan-sports")[]>([
     "race",
@@ -60,7 +64,7 @@ export default function RaceGarage({
           checkpoint: saved.checkpoint,
         };
       });
-      const session = new LearnedRace(entries);
+      const session = new LearnedRace(entries, human, false, humanModel);
       onStart(session);
       setError("");
       (document.activeElement as HTMLElement)?.blur();
@@ -69,7 +73,7 @@ export default function RaceGarage({
     }
   };
   return (
-    <div className="training-panel">
+    <div className="training-panel" onFocusCapture={onConfigure}>
       <div className="eyebrow">
         {fr ? "LA GRILLE DE DÉPART" : "THE STARTING GRID"}
       </div>
@@ -77,12 +81,59 @@ export default function RaceGarage({
         {fr ? "Les pilotes\nentrent en piste." : "Drivers take\nthe track."}
       </h1>
       <p className="race-intro">
-        {fr
-          ? "Choisissez 2 à 4 checkpoints. Chaque voiture utilise sa propre copie figée du réseau appris."
-          : "Choose 2–4 checkpoints. Every car uses its own frozen copy of the learned network."}
+        {human
+          ? fr
+            ? "Affrontez 1 à 3 pilotes entraînés. Votre voiture utilise exactement la même physique."
+            : "Race 1–3 trained drivers. Your car uses exactly the same physics."
+          : fr
+            ? "Choisissez 2 à 4 checkpoints. Chaque voiture utilise sa propre copie figée du réseau appris."
+            : "Choose 2–4 checkpoints. Every car uses its own frozen copy of the learned network."}
       </p>
       <label>
-        {fr ? "Nombre de pilotes" : "Driver count"}
+        {fr ? "Mode" : "Mode"}
+        <select
+          value={human ? "human" : "ai"}
+          onChange={(e) => {
+            const isHuman = e.target.value === "human";
+            setHuman(isHuman);
+            setSlots(isHuman ? ["bundled-11"] : ["bundled-11", "bundled-29"]);
+          }}
+        >
+          <option value="ai">{fr ? "Course IA" : "AI race"}</option>
+          <option value="human">
+            {fr ? "Jouer contre les IA" : "Play against AI"}
+          </option>
+        </select>
+      </label>
+      {human && (
+        <>
+          <label>
+            {fr ? "Votre véhicule" : "Your vehicle"}
+            <select
+              value={humanModel}
+              onChange={(e) =>
+                setHumanModel(e.target.value as "race" | "sedan-sports")
+              }
+            >
+              <option value="race">Formule R</option>
+              <option value="sedan-sports">Sport GT</option>
+            </select>
+          </label>
+          <p className="race-intro">
+            {fr
+              ? "↑ / Z / W : accélérer · ↓ / S : freiner · ← → / Q D : tourner · Échap : pause. Les sorties coûtent 2 s ; une remise en piste ajoute 5 s."
+              : "↑ / W: accelerate · ↓ / S: brake · ← → / A D: steer · Escape: pause. Off-road costs 2 s; a rescue adds 5 s."}
+          </p>
+        </>
+      )}
+      <label>
+        {human
+          ? fr
+            ? "Adversaires"
+            : "Opponents"
+          : fr
+            ? "Nombre de pilotes"
+            : "Driver count"}
         <select
           value={slots.length}
           onChange={(e) =>
@@ -94,7 +145,7 @@ export default function RaceGarage({
             )
           }
         >
-          {[2, 3, 4].map((n) => (
+          {(human ? [1, 2, 3] : [2, 3, 4]).map((n) => (
             <option key={n} value={n}>
               {n}
             </option>
@@ -153,7 +204,13 @@ export default function RaceGarage({
       })}
       <div className="training-actions">
         <button className="drive-button" disabled={!ready} onClick={start}>
-          {fr ? "Lancer la course IA" : "Start AI race"}
+          {human
+            ? fr
+              ? "Prendre le départ"
+              : "Start racing"
+            : fr
+              ? "Lancer la course IA"
+              : "Start AI race"}
         </button>
       </div>
       <p className="race-intro">

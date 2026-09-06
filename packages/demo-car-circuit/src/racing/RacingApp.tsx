@@ -10,6 +10,7 @@ import {
 import { useProgress } from "@react-three/drei";
 import { RaceWorld } from "./race";
 import { DrivingWorld } from "./driving";
+import { RaceMap } from "./RaceMap";
 import { RacingScene } from "./RacingScene";
 import "./racing.css";
 
@@ -251,6 +252,10 @@ export default function RacingApp() {
           {garageMode ? (
             <Suspense fallback={<p>{t.loading}</p>}>
               <RaceGarage
+                onConfigure={() => {
+                  keys.clear();
+                  setPaused(true);
+                }}
                 lang={lang}
                 onPractice={(r) => resetSession(true, r)}
                 onStart={(session) => {
@@ -382,22 +387,24 @@ export default function RacingApp() {
             />
           </SceneBoundary>
           <Loading label={t.loading} />
+          {race && <RaceMap race={race} follow={learned ? follow : 0} />}
           {learned && (
             <div className="spectator-controls">
               <label>
                 {lang === "fr" ? "Caméra" : "Camera"}
                 <select
+                  disabled={learned.human}
                   value={follow}
                   onChange={(e) => setFollow(Number(e.target.value))}
                 >
-                  {learned.entries.map((entry, i) => (
+                  {learned.competitors.map((entry, i) => (
                     <option key={i} value={i}>
-                      {entry.name}
+                      {entry.id === "player" ? (lang === "fr" ? "Vous" : "You") : entry.name}
                     </option>
                   ))}
                 </select>
               </label>
-              <button onClick={() => setPaused(!paused)}>
+              <button onClick={() => {keys.clear();setPaused(!paused);(document.activeElement as HTMLElement)?.blur();}}>
                 {paused ? t.resume : t.pause}
               </button>
             </div>
@@ -422,14 +429,17 @@ export default function RacingApp() {
           )}
           {race && (
             <div className="race-timing">
-              {(race.elapsedTicks / 60).toFixed(1)} s · +
-              {race.drivers[learned ? follow : 0].penaltySeconds} s
+              {race.standings.findIndex(
+                (d) => d.id === (learned ? follow : 0),
+              ) + 1}
+              /{race.drivers.length} · {(race.elapsedTicks / 60).toFixed(1)} s ·
+              +{race.drivers[learned ? follow : 0].penaltySeconds} s
             </div>
           )}
           {race?.finished && displayedDriver && (
             <div className="pause-overlay">
               <h2>{lang === "fr" ? "Résultat" : "Result"}</h2>
-              {learned && <p>{learned.entries[follow].name}</p>}
+              {learned && <p>{learned.competitors[follow].name}</p>}
               <p>
                 {displayedDriver.finishSeconds === null
                   ? lang === "fr"
@@ -445,9 +455,9 @@ export default function RacingApp() {
               <ol>
                 {race.standings.map((d) => (
                   <li key={d.id}>
-                    {learned?.entries[d.id]?.name ?? `#${d.id + 1}`}{" "}
-                    {learned && <small>({learned.entries[d.id].id})</small>} ·{" "}
-                    {d.finishSeconds?.toFixed(2) ?? "DNF"} s
+                    {learned?.competitors[d.id]?.name ?? `#${d.id + 1}`}{" "}
+                    {learned && <small>({learned.competitors[d.id].id})</small>}{" "}
+                    · {d.finishSeconds?.toFixed(2) ?? "DNF"} s
                   </li>
                 ))}
               </ol>
@@ -482,7 +492,7 @@ export default function RacingApp() {
             </div>
           )}
           <div className="driving-hint">
-            {learned
+            {learned && !learned.human
               ? lang === "fr"
                 ? "Course de réseaux appris · poids figés"
                 : "Learned networks racing · frozen weights"

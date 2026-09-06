@@ -18,7 +18,9 @@ Evaluation reconstructs a separate frozen network and checks both circuits, solo
 
 Course now opens a garage for two to four learned competitors. Select a local saved checkpoint or any of the three supplied trained networks, choose each vehicle independently, and start the AI race. The camera selector follows each driver's own speed, lap and penalty metrics. Results identify each checkpoint. Each race owns separately loaded frozen networks and disposes them on session changes. Missing bundled files are reported without hiding available local drivers; no rule-based substitute is used.
 
-Browser proof: supplied checkpoints 29 and 11 both completed three laps, in 105.45 s and 118.92 s respectively. The public integration test verifies completion with unchanged weights. Player-versus-trained-driver keyboard inference is the next slice.
+Browser proof: supplied checkpoints 29 and 11 both completed three laps, in 105.45 s and 118.92 s respectively. The public integration test verifies completion with unchanged weights. In the garage, choose Play against AI to drive with one to three learned opponents. Choose your vehicle independently; arrows/WASD/ZQSD use the same nine-action physics as the networks. Opening garage controls pauses the race. The HUD adds position, laps, penalties and a live map; the camera remains on the player.
+
+Current player verification: shared-clock acceleration/braking and frozen-opponent tests pass; browser acceleration and Escape pause were observed. A browser run completing all three human laps remains unverified and is not claimed by the AI-only race proof.
 
 The frozen racing evaluation protocol names Alpine Park for training, Harbour for held-out testing, and seeds 101/307/509 before learned checkpoint selection. The original constant-speed evaluation has its separate version.
 

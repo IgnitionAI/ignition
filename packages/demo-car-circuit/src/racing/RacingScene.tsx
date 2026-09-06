@@ -243,7 +243,7 @@ export function RacingScene(props: {
               key={d.id}
               world={d.world}
               model={
-                props.learned?.entries[d.id]?.model ??
+                props.learned?.competitors[d.id]?.model ??
                 (d.id % 2 ? "sedan-sports" : props.model)
               }
             />
