@@ -45,3 +45,7 @@ Final rendered V3 report opened through the Training link. Report, raw JSON and 
 - All eight production demo HTML files reference their correct `/demos/<slug>/assets/` base.
 
 To complete #17: open local Circuit, choose Course → Play against AI, Sport GT and supplied imitation V2 checkpoint 29, then finish all three laps. Record checkpoint ID, result, penalties and replay/pause behavior. The available CUA key API emits short presses and has no key-hold operation. Automatic approval review rejected direct CDP key input in favour of CUA. The required human race has not been substituted with scripted AI driving.
+
+## Training UX follow-up
+
+The reported difficulty was clarified as an unclear workflow, not a failed training computation. Reproduced the old interface: “Nouveau pilote” trained 16 sessions but returned to “Prêt”, without a clear next action or snapshot explanation. The revised guided flow was exercised in the browser: train → 9/12 evaluated → save → garage checkpoint `driver-11-1788719094256` → player mode with the same checkpoint still selected. Existing training algorithms and protocols are unchanged. Circuit TypeScript checking, 61 Circuit tests and production build passed; the new entry screen was visually checked on localhost3030. The test driver in that origin was saved before refreshing.

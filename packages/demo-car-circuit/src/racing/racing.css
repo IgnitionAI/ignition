@@ -533,3 +533,14 @@
 .result-driver { flex: 1; min-width: 0; text-align: left; overflow-wrap: anywhere; }
 .result-driver small { display: block; color: var(--race-muted); font-size: 11px; margin-top: 4px; }
 .result-time { white-space: nowrap; }
+
+.training-steps { list-style:none; display:grid; grid-template-columns:repeat(2,1fr); gap:8px; padding:0; font-size:11px; color:var(--race-muted); }
+.training-steps [aria-current="step"] { color:var(--race-accent); font-weight:700; }
+.training-guide { border-left:3px solid var(--race-accent); padding:14px; background:#1b272b; line-height:1.5; font-size:13px; }
+.training-guide strong { font-size:16px; }
+.training-guide progress { display:block; width:100%; margin:12px 0; accent-color:var(--race-accent); }
+.training-preview-note { font-size:12px; color:var(--race-muted); line-height:1.6; }
+.training-details { border-top:1px solid var(--race-line); padding:14px 0; font-size:12px; line-height:1.6; }
+.training-details summary { cursor:pointer; color:var(--race-text); }
+.training-details a { color:var(--race-accent); }
+.training-details button { background:#26343a; border:1px solid #536065; color:white; padding:10px; }

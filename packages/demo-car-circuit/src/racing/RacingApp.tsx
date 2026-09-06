@@ -124,6 +124,7 @@ export default function RacingApp() {
   const [reference, setReference] = useState(false);
   const [trainingMode, setTrainingMode] = useState(false);
   const [garageMode, setGarageMode] = useState(false);
+  const [preferredDriver, setPreferredDriver] = useState<string>();
   const [learned, setLearned] = useState<LearnedRace>();
   const [follow, setFollow] = useState(0);
   const displayedDriver = race?.drivers[learned ? follow : 0];
@@ -252,6 +253,7 @@ export default function RacingApp() {
           {garageMode ? (
             <Suspense fallback={<p>{t.loading}</p>}>
               <RaceGarage
+                initialDriverId={preferredDriver}
                 onConfigure={() => {
                   keys.clear();
                   setPaused(true);
@@ -272,7 +274,7 @@ export default function RacingApp() {
             </Suspense>
           ) : trainingMode ? (
             <Suspense fallback={<p>{t.loading}</p>}>
-              <TrainingPanel lang={lang} onWorld={setWorld} />
+              <TrainingPanel lang={lang} onWorld={setWorld} onRace={(id) => { setPreferredDriver(id); setTrainingMode(false); setGarageMode(true); setWorld(new DrivingWorld()); setSpeed(0); setPaused(true); keys.clear(); }} />
             </Suspense>
           ) : (
             <>
@@ -412,7 +414,7 @@ export default function RacingApp() {
 
           <div className="track-label">
             <span>{t.track}</span>
-            <small>{t.layout}</small>
+            <small>{trainingMode ? (lang === "fr" ? "Aperçu par session · apprentissage accéléré" : "Session snapshot · accelerated learning") : t.layout}</small>
           </div>
           <div className="session-pill">
             <i />

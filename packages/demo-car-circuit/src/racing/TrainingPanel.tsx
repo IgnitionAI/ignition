@@ -18,9 +18,11 @@ const backendReady = tf.setBackend("cpu");
 export default function TrainingPanel({
   lang,
   onWorld,
+  onRace,
 }: {
   lang: "fr" | "en";
   onWorld: (world: DrivingWorld) => void;
+  onRace: (id: string) => void;
 }) {
   const fr = lang === "fr";
   const agent = useRef<LearnedDriver | undefined>(undefined);
@@ -40,6 +42,7 @@ export default function TrainingPanel({
   const [selected, setSelected] = useState(""),
     [saved, setSaved] = useState("");
   const [algorithm, setAlgorithm] = useState<DriverCheckpoint["algorithm"]>("imitation-mlp");
+  const [savedId, setSavedId] = useState("");
   const [ready, setReady] = useState(false);
   const activeAlgorithm = agent.current?.algorithm ?? algorithm;
   const busy = !ready || status === "training" || status === "evaluating";
@@ -75,6 +78,7 @@ export default function TrainingPanel({
     }
     setReports([]);
     setSaved("");
+    setSavedId("");
 
     const driver = agent.current;
     setSeed(driver.seed);
@@ -106,6 +110,7 @@ export default function TrainingPanel({
     controller.current = new AbortController();
     setError("");
     setStatus("evaluating");
+    setSavedId("");
     setReports([]);
     operation.current = (async () => {
       const results: DriverEvaluation[] = [];
@@ -144,6 +149,7 @@ export default function TrainingPanel({
       });
       setRecords(listDrivers());
       setSelected(id);
+      setSavedId(id);
       setSaved(
         fr
           ? "Pilote sauvegardé dans ce navigateur."
@@ -161,6 +167,7 @@ export default function TrainingPanel({
       const loaded = LearnedDriver.fromCheckpoint(record.checkpoint);
       agent.current?.dispose();
       agent.current = loaded;
+      setSavedId(record.id);
       setSeed(loaded.seed);
       setAlgorithm(loaded.algorithm);
       setReports(record.reports);
@@ -180,153 +187,58 @@ export default function TrainingPanel({
       setError(String(e));
     }
   };
+  const trained = !!agent.current?.samples;
+  const totalTests = activeAlgorithm === "imitation-mlp" ? 12 : 20;
+  const tested = reports.length === totalTests;
+  const budget = activeAlgorithm === "imitation-mlp" ? 16 : Q_PROTOCOL.transitions;
+  const step = savedId ? 4 : tested ? 3 : trained && status !== "training" ? 2 : 1;
+  const heading = !ready ? (fr ? "Préparation…" : "Preparing…")
+    : status === "training" ? (fr ? "Votre pilote apprend" : "Your driver is learning")
+    : status === "evaluating" ? (fr ? "Votre pilote passe les tests" : "Testing your driver")
+    : savedId ? (fr ? "Votre pilote est dans le garage" : "Your driver is in the garage")
+    : tested ? (fr ? "Tests terminés" : "Tests complete")
+    : trained ? (fr ? "Votre pilote peut être testé" : "Your driver is ready to test")
+    : (fr ? "Créez votre premier pilote" : "Create your first driver");
   return (
     <div className="training-panel">
-      <div className="eyebrow">
-        {fr ? "APPRENDRE À PILOTER" : "LEARN TO DRIVE"}
-      </div>
-      <h1>
-        {fr
-          ? "Un vrai pilote.\nDes progrès mesurés."
-          : "A real driver.\nMeasured progress."}
-      </h1>
-      <p className="race-intro">
-        {algorithm !== "imitation-mlp" ? (fr ? "DQN / Double DQN · apprentissage par récompenses sur Alpine Park. Budget : 20 000 transitions. Les résultats restent à mesurer ; ce pilote peut ne pas finir une course." : "DQN / Double DQN · reward learning at Alpine Park. Budget: 20,000 transitions. Results must be measured; this driver may not finish a race.") : fr
-          ? "Imitation · réseau de neurones. Il apprend sur Alpine Park, seul puis avec du trafic de référence figé. En course, seul le réseau décide."
-          : "Imitation · neural network. Learn at Alpine Park, solo then with frozen reference traffic. Only the network decides during races."}
-      </p>
-      <p><a style={{color:"#e6ee58"}} href={`${import.meta.env.BASE_URL}reports/racing-q-v3/index.html`}>
-        {fr ? "DQN / Double DQN : voir les résultats comparés ↗" : "DQN / Double DQN: compare measured results ↗"}
-      </a></p>
-      <label>
-        {fr ? "Méthode du nouveau pilote" : "New driver method"}
-        <select value={algorithm} disabled={busy} onChange={e=>setAlgorithm(e.target.value as DriverCheckpoint["algorithm"])}>
-          <option value="imitation-mlp">Imitation MLP</option>
-          <option value="dqn">DQN</option>
-          <option value="double-dqn">Double DQN</option>
-        </select>
-      </label>
-      <label>
-        {fr ? "Graine" : "Seed"}{" "}
-        <input
-          type="number"
-          min="1"
-          max="1000000"
-          value={seed}
-          disabled={busy}
-          onChange={(e) =>
-            setSeed(
-              Math.max(
-                1,
-                Math.min(1000000, Math.round(Number(e.target.value)) || 1),
-              ),
-            )
-          }
-        />
-      </label>
-      <div className="training-actions">
-        <button
-          className="drive-button"
-          disabled={busy}
-          onClick={() => start(true)}
-        >
-          {fr ? "Nouveau pilote" : "New driver"}
-        </button>
-        <button disabled={busy || !agent.current} onClick={() => start(false)}>
-          {fr ? "Reprendre les poids" : "Resume weights"}
-        </button>
-        <button disabled={!busy} onClick={() => controller.current?.abort()}>
-          {fr ? "Arrêter" : "Stop"}
-        </button>
-      </div>
-      <div className="training-metrics" role="status">
-        <strong>
-          {status === "training"
-            ? fr
-              ? "Entraînement"
-              : "Training"
-            : status === "evaluating"
-              ? fr
-                ? "Évaluation figée"
-                : "Frozen evaluation"
-              : fr
-                ? "Prêt"
-                : "Ready"}
-        </strong>
-        <p>{activeAlgorithm}</p>
-        <p>
-          {fr ? "Session" : "Session"} : {progress.round}/{activeAlgorithm === "imitation-mlp" ? 16 : Q_PROTOCOL.transitions} · {progress.samples.toLocaleString(lang)}{" "}
-          {activeAlgorithm === "imitation-mlp" ? (fr ? "exemples" : "samples") : "transitions"}
-        </p>
-        {activeAlgorithm === "imitation-mlp" && <p>
-          {fr ? "Erreur d’imitation" : "Imitation loss"}: {progress.loss === null ? "—" : progress.loss.toFixed(4)}
-        </p>}
-        <small>
-          {progress.traffic
-            ? fr
-              ? "Trafic de référence"
-              : "Reference traffic"
-            : "Solo"}
-        </small>
+      <div className="eyebrow">{fr ? "VOTRE PILOTE IA" : "YOUR AI DRIVER"}</div>
+      <h1>{fr ? "Apprendre. Tester. Courir." : "Learn. Test. Race."}</h1>
+      <ol className="training-steps" aria-label={fr ? "Étapes" : "Steps"}>
+        {(fr ? ["Entraîner", "Tester", "Sauver", "Courir"] : ["Train", "Test", "Save", "Race"]).map((label,i)=><li key={label} aria-current={step===i+1 ? "step" : undefined}>{i+1}. {label}</li>)}
+      </ol>
+      <div className="training-guide" role="status">
+        <strong>{heading}</strong>
+        <p>{status === "training"
+          ? (fr ? "Il s’exerce en accéléré, d’abord seul puis avec d’autres voitures. Attendez la fin ou arrêtez pour garder ses progrès." : "It practices at accelerated speed, first alone and then in traffic. Wait or stop to keep its progress.")
+          : status === "evaluating"
+          ? (fr ? `${reports.length}/${totalTests} courses testées. Ses connaissances ne changent pas pendant les tests.` : `${reports.length}/${totalTests} races tested. Its weights stay frozen during testing.`)
+          : savedId ? (fr ? "Passez à la course : votre pilote sera déjà sélectionné sur la grille." : "Open racing: your driver will already be selected on the grid.")
+          : tested ? (fr ? `${reports.filter(r=>r.success).length}/${totalTests} courses réussies. Sauvegardez le pilote pour le retrouver en course.` : `${reports.filter(r=>r.success).length}/${totalTests} successful races. Save the driver to race it.`)
+          : trained ? (fr ? "L’entraînement a produit un pilote, pas une garantie de réussite. Testez-le sur les deux circuits." : "Training produced a driver, not a guarantee of success. Test it on both tracks.")
+          : (fr ? "Un clic lance l’apprentissage. Vous pourrez ensuite tester votre pilote et courir contre lui." : "One click starts learning. Then test your driver and race against it.")}</p>
+        {status === "training" && <><progress aria-label={fr ? "Progression de l’entraînement" : "Training progress"} max={budget} value={progress.round}/><span>{Math.round(progress.round/budget*100)} % · {fr ? (progress.traffic ? "Avec du trafic" : "Conduite en solo") : (progress.traffic ? "With traffic" : "Solo driving")}</span></>}
+        {status === "evaluating" && <progress aria-label={fr ? "Progression des tests" : "Evaluation progress"} max={totalTests} value={reports.length}/>}
       </div>
       <div className="training-actions">
-        <button disabled={busy || !agent.current} onClick={evaluate}>
-          {fr ? "Évaluer les deux circuits" : "Evaluate both tracks"}
+        <button className="drive-button" disabled={busy} onClick={()=>savedId ? onRace(savedId) : tested ? save() : trained ? evaluate() : start(true)}>
+          {savedId ? (fr ? "Faire courir mon pilote →" : "Race my driver →") : tested ? (fr ? "Sauvegarder mon pilote" : "Save my driver") : trained ? (fr ? "Tester mon pilote" : "Test my driver") : (fr ? "Entraîner mon pilote" : "Train my driver")}
         </button>
-        <button disabled={busy || !agent.current} onClick={save}>
-          {fr ? "Sauvegarder" : "Save"}
-        </button>
+        {busy && ready && <button onClick={()=>controller.current?.abort()}>{fr ? "Arrêter" : "Stop"}</button>}
       </div>
-      {reports.length > 0 && (
-        <div className="training-metrics">
-          <strong>
-            {reports.filter((r) => r.success).length}/{reports.length}{" "}
-            {fr ? "courses réussies" : "successful races"}
-          </strong>
-          <p>
-            {fr
-              ? "Réussite = 3 tours, aucune remise en piste, pénalité ≤ 10 s."
-              : "Success = 3 laps, no rescue, penalty ≤ 10 s."}
-          </p>
-          <ul>
-            {reports.map((r) => (
-              <li key={`${r.test}-${r.traffic}-${r.seed}`}>
-                {r.test ? "Harbour" : "Alpine"} · {r.traffic ? "×4" : "solo"} ·{" "}
-                {r.seed}:{" "}
-                {r.completed
-                  ? `${r.finishSeconds?.toFixed(1)} s`
-                  : fr
-                    ? "inachevé"
-                    : "unfinished"}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <label>
-        {fr ? "Garage local" : "Local garage"}
-        <select
-          value={selected}
-          disabled={busy}
-          onChange={(e) => setSelected(e.target.value)}
-        >
-          <option value="">
-            {fr ? "Choisir un pilote" : "Choose a driver"}
-          </option>
-          {records.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.name}
-            </option>
-          ))}
-        </select>
-      </label>
-      <button
-        className="reset-button"
-        disabled={busy || !selected}
-        onClick={load}
-      >
-        {fr ? "Recharger ce pilote" : "Load this driver"}
-      </button>
+      <p className="training-preview-note">{fr ? "La voiture à droite est un aperçu de trajectoire par session, pas une course en direct. Pour voir votre pilote conduire en continu, terminez ces étapes puis lancez une course." : "The car is a trajectory snapshot per session, not a live race. To watch continuous driving, complete these steps and launch a race."}</p>
+      {!trained && <label>{fr ? "Comment apprendre ?" : "How should it learn?"}<select value={algorithm} disabled={busy} onChange={e=>setAlgorithm(e.target.value as DriverCheckpoint["algorithm"])}>
+        <option value="imitation-mlp">{fr ? "Imiter un pilote de référence" : "Imitate a reference driver"}</option><option value="dqn">DQN · {fr ? "essais et récompenses" : "trial and reward"}</option><option value="double-dqn">Double DQN · {fr ? "essais et récompenses" : "trial and reward"}</option>
+      </select></label>}
+      {reports.length > 0 && <details className="training-details"><summary>{fr ? "Voir les résultats des courses" : "Race test results"} ({reports.length}/{totalTests})</summary><p>{fr ? "Réussite : 3 tours, sans remise en piste et avec au plus 10 s de pénalité." : "Success: 3 laps, no rescue and at most 10 s penalty."}</p><ul>{reports.map(r=><li key={`${r.test}-${r.traffic}-${r.seed}`}>{r.test ? "Harbour" : "Alpine"} · {r.traffic ? (fr ? "trafic" : "traffic") : "solo"} · {r.seed} : {r.success ? "✓" : "×"} {r.completed ? `${r.finishSeconds?.toFixed(1)} s` : (fr ? "non terminé" : "unfinished")}</li>)}</ul></details>}
+      <details className="training-details"><summary>{fr ? "Réglages et détails techniques" : "Settings and technical details"}</summary>
+        {trained && <label>{fr ? "Méthode d’un nouveau pilote" : "New driver method"}<select value={algorithm} disabled={busy} onChange={e=>setAlgorithm(e.target.value as DriverCheckpoint["algorithm"])}><option value="imitation-mlp">Imitation</option><option value="dqn">DQN</option><option value="double-dqn">Double DQN</option></select></label>}
+        <label>{fr ? "Graine de départ" : "Starting seed"}<input type="number" min="1" max="1000000" value={seed} disabled={busy} onChange={e=>setSeed(Math.max(1,Math.min(1000000,Math.round(Number(e.target.value))||1)))}/></label>
+        <p>{activeAlgorithm} · {progress.samples.toLocaleString(lang)} {fr ? "exemples / transitions" : "samples / transitions"}</p>
+        {progress.loss !== null && <p>{fr ? "Erreur d’imitation" : "Imitation loss"} : {progress.loss.toFixed(4)}</p>}
+        {trained && <div className="training-actions"><button disabled={busy} onClick={()=>start(false)}>{fr ? "Continuer l’entraînement" : "Continue training"}</button><button disabled={busy} onClick={()=>start(true)}>{fr ? "Recommencer avec un nouveau pilote" : "Start a new driver"}</button><button disabled={busy} onClick={save}>{fr ? "Sauvegarder sans attendre les tests" : "Save without waiting for tests"}</button><button disabled={busy} onClick={evaluate}>{fr ? "Refaire les tests" : "Run tests again"}</button></div>}
+        <p><a href={`${import.meta.env.BASE_URL}reports/racing-q-v3/index.html`}>{fr ? "Comparer DQN et Double DQN ↗" : "Compare DQN and Double DQN ↗"}</a></p>
+      </details>
+      <details className="training-details"><summary>{fr ? "Retrouver un pilote sauvegardé" : "Load a saved driver"}</summary><label>{fr ? "Garage local" : "Local garage"}<select value={selected} disabled={busy} onChange={e=>setSelected(e.target.value)}><option value="">{fr ? "Choisir un pilote" : "Choose a driver"}</option>{records.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}</select></label><button disabled={busy || !selected} onClick={load}>{fr ? "Charger ce pilote" : "Load this driver"}</button></details>
       {saved && <p role="status">{saved}</p>}
       {error && <p role="alert">{error}</p>}
     </div>

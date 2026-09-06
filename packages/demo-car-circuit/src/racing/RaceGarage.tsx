@@ -10,11 +10,13 @@ export default function RaceGarage({
   onStart,
   onPractice,
   onConfigure,
+  initialDriverId,
 }: {
   lang: "fr" | "en";
   onStart: (race: LearnedRace) => void;
   onPractice: (references: boolean) => void;
   onConfigure: () => void;
+  initialDriverId?: string;
 }) {
   const fr = lang === "fr";
   const [drivers, setDrivers] = useState<SavedDriver[]>([]),
@@ -22,7 +24,7 @@ export default function RaceGarage({
     [ready, setReady] = useState(false);
   const [human, setHuman] = useState(false);
   const [humanModel, setHumanModel] = useState<"race" | "sedan-sports">("race");
-  const [slots, setSlots] = useState(["bundled-11", "bundled-29"]);
+  const [slots, setSlots] = useState([initialDriverId ?? "bundled-11", "bundled-29"]);
   const [models, setModels] = useState<("race" | "sedan-sports")[]>([
     "race",
     "sedan-sports",
@@ -96,7 +98,7 @@ export default function RaceGarage({
           onChange={(e) => {
             const isHuman = e.target.value === "human";
             setHuman(isHuman);
-            setSlots(isHuman ? ["bundled-11"] : ["bundled-11", "bundled-29"]);
+            setSlots(current => isHuman ? [current[0]] : [current[0], "bundled-29"]);
           }}
         >
           <option value="ai">{fr ? "Course IA" : "AI race"}</option>
