@@ -73,6 +73,7 @@ export type DQNConfig = z.infer<typeof DQNConfigSchema>;
 // ─── PPOConfig ────────────────────────────────────────────────────────────────
 
 export const PPOConfigSchema = z.object({
+  rolloutSize: z.number().int().positive().optional(),
   backend: TFBackendSchema,
   inputSize: z
     .number()

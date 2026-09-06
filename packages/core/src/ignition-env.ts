@@ -80,7 +80,8 @@ export class IgnitionEnv {
 
     const observation = this.env.observe();
     const reward = this.env.reward();
-    const terminated = this.env.done();
+    const truncated = this.env.truncated?.() ?? false;
+    const terminated = this.env.terminated?.() ?? (this.env.done() && !truncated);
 
     const experience: Experience = {
       state: this.currentState,
@@ -88,15 +89,15 @@ export class IgnitionEnv {
       reward,
       nextState: observation,
       terminated,
-      truncated: false,
+      truncated,
     };
 
     this._agent.remember(experience);
-    await this._agent.train();
+    if (this._agent.shouldTrain?.() ?? true) await this._agent.train();
 
-    const result: StepResult = { observation, reward, terminated, truncated: false };
+    const result: StepResult = { observation, reward, terminated, truncated };
 
-    if (terminated) {
+    if (terminated || truncated) {
       this.env.reset();
       this.currentState = this.env.observe();
     } else {
@@ -113,16 +114,18 @@ export class IgnitionEnv {
 
     this.stepCount++;
 
+    this._agent.discardRollout?.();
     const action = await this._agent.getAction(this.currentState, true);
     this.env.step(action);
 
     const observation = this.env.observe();
     const reward = this.env.reward();
-    const terminated = this.env.done();
+    const truncated = this.env.truncated?.() ?? false;
+    const terminated = this.env.terminated?.() ?? (this.env.done() && !truncated);
 
-    const result: StepResult = { observation, reward, terminated, truncated: false };
+    const result: StepResult = { observation, reward, terminated, truncated };
 
-    if (terminated) {
+    if (terminated || truncated) {
       this.env.reset();
       this.currentState = this.env.observe();
     } else {
@@ -173,6 +176,7 @@ export class IgnitionEnv {
   }
 
   public reset(): void {
+    this._agent?.discardRollout?.();
     this.env.reset();
     this.currentState = this.env.observe();
     this.stepCount = 0;

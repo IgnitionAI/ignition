@@ -354,3 +354,30 @@ The codebase follows:
 Built by [@salim4n](https://github.com/salim4n) / [@IgnitionAI](https://github.com/IgnitionAI)
 
 **Star the repo** ⭐ if you think creative JS devs deserve proper RL tooling.
+
+## PPO rollout and episode boundaries
+
+The public training loop collects **128 transitions** before an automatic PPO
+update. Configure this with `env.train('ppo', { rolloutSize: 256 })`.
+`batchSize` controls optimizer minibatches, independently of `rolloutSize`.
+Calling `agent.train()` explicitly still updates all currently collected data,
+including a partial rollout. A singleton or constant-advantage batch keeps its
+raw advantages rather than removing its learning signal through normalization.
+
+`TrainingEnv.done()` remains required for compatibility. Existing environments
+continue to treat `done()` as a terminal condition. To distinguish external time
+limits, optionally provide `truncated(): boolean`. In that case termination
+falls back to `done() && !truncated()`. An optional `terminated(): boolean`
+overrides that fallback; when both explicit flags are true, termination takes
+precedence for value bootstrapping. Either flag resets the episode, retaining
+its final observation in the returned transition.
+
+PPO bootstraps nonterminal rollout ends and truncations from their actual next
+observation; its advantage trace stops at either episode boundary. DQN and
+Q-table also bootstrap truncations. Inference never trains. Manual environment
+reset and inference steps discard incomplete PPO rollouts; stop/resume alone
+retains them. Loading a PPO checkpoint discards pending transitions.
+
+Custom agents can optionally implement `shouldTrain()` to control automatic
+update cadence and `discardRollout()` to discard on-policy data when the training
+trajectory is interrupted. Agents without these hooks retain per-step updates.

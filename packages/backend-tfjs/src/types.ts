@@ -21,6 +21,8 @@ export interface DQNConfig {
 }
 
 export interface PPOConfig {
+  /** Transitions collected before automatic training (default: 128). */
+  rolloutSize?: number;
   backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;        // Dimension du vecteur d'état
   actionSize: number;       // Nombre d'actions discrètes

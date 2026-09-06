@@ -103,8 +103,8 @@ export class DQNAgent implements AgentInterface {
     const nextQArray = nextQValues.arraySync() as number[][];
 
     const updatedQ = qArray.map((q, i) => {
-      const { action, reward, terminated, truncated } = batch[i];
-      const done = terminated || truncated;
+      const { action, reward, terminated } = batch[i];
+      const done = terminated;
       const a = action as number;
       q[a] = done ? reward : reward + this.gamma * Math.max(...nextQArray[i]);
       return q;

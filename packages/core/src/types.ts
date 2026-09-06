@@ -54,6 +54,10 @@ export interface AgentInterface {
   getAction(observation: number[], greedy?: boolean): Promise<number | number[]>;
   remember(experience: Experience): void;
   train(): Promise<void>;
+  /** Whether the collected transitions are ready for an automatic update. */
+  shouldTrain?(): boolean;
+  /** Discard on-policy data when execution leaves the training trajectory. */
+  discardRollout?(): void;
   /** Release TF/GPU/WASM resources held by the agent */
   dispose?(): void;
   /** Reset agent internal state (epsilon, memory, counters…) */
@@ -99,6 +103,10 @@ export interface TrainingEnv {
   reward(): number;
   /** Return true if the episode is over */
   done(): boolean;
+  /** Optional explicit terminal condition; overrides legacy done(). */
+  terminated?(): boolean;
+  /** Optional external episode limit (default: false). */
+  truncated?(): boolean;
   /** Reset the environment for a new episode */
   reset(): void;
 }
