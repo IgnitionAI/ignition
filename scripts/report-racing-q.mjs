@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
-const source='.scratch/circuit-racing/q-comparison-v2';
-const destination='packages/demo-car-circuit/src/public/reports/racing-q-v2';
+const source='.scratch/circuit-racing/q-comparison-v3';
+const destination='packages/demo-car-circuit/src/public/reports/racing-q-v3';
 const manifest=JSON.parse(await readFile(`${source}/protocol.json`,'utf8'));
 const reports=[];
 for(const algorithm of ['dqn','double-dqn'])for(const seed of manifest.protocol.seeds){
@@ -31,7 +31,7 @@ const rows=reports.map(r=>`<tr><td>${r.algorithm}</td><td>${r.seed}</td><td>${r.
 for(const r of reports)await copyFile(`${source}/${r.algorithm}-${r.seed}.json`,`${destination}/${r.algorithm}-${r.seed}.json`);
 const html=`<!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DQN / Double DQN — Circuit Racing</title><style>
 *{box-sizing:border-box}body{margin:0;background:#101517;color:#e8ecea;font:16px/1.65 system-ui,sans-serif}main{max-width:1080px;margin:auto;padding:48px 24px}a{color:#e6ee58}h1{font-size:clamp(32px,5vw,54px);line-height:1.1;letter-spacing:-.04em}h2{margin-top:44px;font-size:24px}.eyebrow{color:#e6ee58;font-size:12px;letter-spacing:.16em}.muted{color:#a7b4b0}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}.card{padding:24px;border:1px solid #37403d}.score{font-size:44px;color:#e6ee58;font-weight:700}.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}td,th{text-align:left;padding:14px 12px;border-bottom:1px solid #37403d;white-space:nowrap}th{color:#a7b4b0;font-size:13px}code{overflow-wrap:anywhere}.note{padding:20px;border-left:3px solid #e6ee58;background:#1b2222}li{margin-bottom:8px}</style>
-<main><a href="../../">← Circuit Racing</a><p class="eyebrow">EXPÉRIENCE REPRODUCTIBLE · RACING Q-LEARNING V2</p><h1>DQN et Double DQN,<br>à budget égal.</h1><p class="muted">Cinq graines par méthode · 20 courses figées par pilote · 20 000 transitions d’entraînement · ${manifest.backend}, TensorFlow.js ${manifest.tfjs}</p>
+<main><a href="../../">← Circuit Racing</a><p class="eyebrow">EXPÉRIENCE REPRODUCTIBLE · RACING Q-LEARNING V3</p><h1>DQN et Double DQN,<br>à budget égal.</h1><p class="muted">Cinq graines par méthode · 20 courses figées par pilote · 20 000 transitions d’entraînement · ${manifest.backend}, TensorFlow.js ${manifest.tfjs}</p>
 <div class="cards">${stats.map(s=>`<section class="card"><h2 style="margin:0">${s.algorithm==='dqn'?'DQN':'Double DQN'}</h2><div class="score">${s.success}/100</div><p>courses réussies · ${s.completed}/100 terminées</p><p class="muted">Réussite par graine : moyenne ${f(s.mean)} %, écart-type ${f(s.std)} points ; ${f(s.min)}–${f(s.max)} %.</p></section>`).join('')}</div>
 <p class="note">Ces résultats décrivent ce circuit, ce curriculum et ce budget. Ils ne démontrent pas une supériorité générale de l’un des algorithmes. Les graines d’évaluation ne varient que légèrement le cap initial ; ces courses ne constituent pas 200 scénarios indépendants. Tous les checkpoints finaux et tous les échecs sont conservés.</p>
 <h2>Chaque graine, sans sélection</h2><div class="scroll"><table><thead><tr><th>Méthode</th><th>Graine</th><th>Réussies</th><th>Terminées</th><th>Entraînement</th><th>Évaluation</th><th>Checkpoint</th></tr></thead><tbody>${rows}</tbody></table></div>

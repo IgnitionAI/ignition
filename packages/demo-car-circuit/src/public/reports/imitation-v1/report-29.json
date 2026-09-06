@@ -1,9 +1,9 @@
 {
   "protocol": {
-    "id": "racing-learning-v2",
-    "driving": "circuit-racing-v2",
+    "id": "racing-learning-v1",
+    "driving": "circuit-racing-v1",
     "observation": "racing-observation-v1",
-    "race": "circuit-race-v2",
+    "race": "circuit-race-v1",
     "trainingSeeds": [
       11,
       29,
@@ -32,8 +32,8 @@
     "success": false,
     "laps": 0,
     "finishSeconds": null,
-    "penaltySeconds": 300,
-    "rescues": 60,
+    "penaltySeconds": 0,
+    "rescues": 0,
     "contacts": 0
   },
   "reports": [
@@ -44,7 +44,7 @@
       "completed": true,
       "success": true,
       "laps": 3,
-      "finishSeconds": 80.1,
+      "finishSeconds": 76.3,
       "penaltySeconds": 0,
       "rescues": 0,
       "contacts": 0
@@ -56,7 +56,7 @@
       "completed": true,
       "success": true,
       "laps": 3,
-      "finishSeconds": 80.06666666666666,
+      "finishSeconds": 76.38333333333333,
       "penaltySeconds": 0,
       "rescues": 0,
       "contacts": 0
@@ -68,7 +68,7 @@
       "completed": true,
       "success": true,
       "laps": 3,
-      "finishSeconds": 80.01666666666667,
+      "finishSeconds": 76.31666666666666,
       "penaltySeconds": 0,
       "rescues": 0,
       "contacts": 0
@@ -80,10 +80,10 @@
       "completed": true,
       "success": true,
       "laps": 3,
-      "finishSeconds": 127.81666666666666,
+      "finishSeconds": 280.1,
       "penaltySeconds": 0,
       "rescues": 0,
-      "contacts": 3989
+      "contacts": 12380
     },
     {
       "seed": 307,
@@ -92,10 +92,10 @@
       "completed": true,
       "success": true,
       "laps": 3,
-      "finishSeconds": 115.05,
+      "finishSeconds": 205.21666666666667,
       "penaltySeconds": 0,
       "rescues": 0,
-      "contacts": 3678
+      "contacts": 7884
     },
     {
       "seed": 509,
@@ -104,21 +104,21 @@
       "completed": true,
       "success": true,
       "laps": 3,
-      "finishSeconds": 113.95,
+      "finishSeconds": 191.88333333333333,
       "penaltySeconds": 0,
       "rescues": 0,
-      "contacts": 3435
+      "contacts": 7466
     },
     {
       "seed": 101,
       "test": true,
       "traffic": false,
-      "completed": false,
-      "success": false,
-      "laps": 0,
-      "finishSeconds": null,
-      "penaltySeconds": 135,
-      "rescues": 27,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 95.5,
+      "penaltySeconds": 0,
+      "rescues": 0,
       "contacts": 0
     },
     {
@@ -127,10 +127,10 @@
       "traffic": false,
       "completed": false,
       "success": false,
-      "laps": 0,
+      "laps": 1,
       "finishSeconds": null,
-      "penaltySeconds": 135,
-      "rescues": 27,
+      "penaltySeconds": 0,
+      "rescues": 0,
       "contacts": 0
     },
     {
@@ -139,10 +139,10 @@
       "traffic": false,
       "completed": false,
       "success": false,
-      "laps": 0,
+      "laps": 1,
       "finishSeconds": null,
-      "penaltySeconds": 135,
-      "rescues": 27,
+      "penaltySeconds": 0,
+      "rescues": 0,
       "contacts": 0
     },
     {
@@ -152,10 +152,10 @@
       "completed": true,
       "success": true,
       "laps": 3,
-      "finishSeconds": 169.01666666666665,
+      "finishSeconds": 181.03333333333333,
       "penaltySeconds": 0,
       "rescues": 0,
-      "contacts": 3045
+      "contacts": 5814
     },
     {
       "seed": 307,
@@ -164,10 +164,10 @@
       "completed": true,
       "success": true,
       "laps": 3,
-      "finishSeconds": 187.16666666666666,
+      "finishSeconds": 185.18333333333334,
       "penaltySeconds": 0,
       "rescues": 0,
-      "contacts": 2892
+      "contacts": 6554
     },
     {
       "seed": 509,
@@ -176,11 +176,11 @@
       "completed": true,
       "success": true,
       "laps": 3,
-      "finishSeconds": 164.96666666666667,
+      "finishSeconds": 196.35,
       "penaltySeconds": 0,
       "rescues": 0,
-      "contacts": 2626
+      "contacts": 7100
     }
   ],
-  "seconds": 38.444
+  "seconds": 32.045
 }

@@ -1,6 +1,6 @@
 /** Fixed before running either algorithm. Last scheduled checkpoint, no evaluation selection. */
 export const Q_PROTOCOL = Object.freeze({
-  id: 'racing-q-learning-v2',
+  id: 'racing-q-learning-v3',
   seeds: [11, 29, 47, 73, 101],
   evaluationSeeds: [211, 307, 419, 509, 601],
   transitions: 20000,

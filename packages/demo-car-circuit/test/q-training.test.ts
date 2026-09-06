@@ -28,7 +28,7 @@ it('keeps a recoverable off-road excursion alive until the common race rescue',(
   d.world.car.x=1000;d.world.car.z=1000;d.world.car.speed=0;
   env.step(4);
   expect(env.terminated()).toBe(false);expect(env.truncated()).toBe(false);
-  for(let i=1;i<50;i++)env.step(4);
+  for(let i=1;i<51;i++)env.step(4);
   expect(d.rescues).toBe(1);expect(d.penaltySeconds).toBeGreaterThanOrEqual(7);
   expect(env.done()).toBe(false);
 });

@@ -1,10 +1,13 @@
 import { CatmullRomCurve3, Vector3 } from "three";
 
 export const DRIVING_CONTRACT = Object.freeze({
-  id: "circuit-racing-v1",
+  id: "circuit-racing-v2",
   dt: 1 / 60,
   actionCount: 9,
   maxSpeed: 32,
+  carRadius: 1.2,
+  barrierOffset: 7,
+  barrierThickness: 0.45,
 });
 export interface RoadSample {
   x: number;
@@ -118,6 +121,18 @@ export class DrivingWorld {
     this.car = this.start();
     this.ticks = 0;
   }
+  /** Project the collision circle inside the continuous rail and remove outward velocity. */
+  constrainToTrack(): boolean {
+    const c = this.car, p = this.track.nearest(c.x, c.z);
+    const limit = DRIVING_CONTRACT.barrierOffset - DRIVING_CONTRACT.barrierThickness / 2 - DRIVING_CONTRACT.carRadius;
+    if (p.distance <= limit) return false;
+    const nx = (c.x - p.x) / p.distance, nz = (c.z - p.z) / p.distance;
+    c.x = p.x + nx * limit;
+    c.z = p.z + nz * limit;
+    const outward = Math.max(0, Math.cos(c.angle) * nx + Math.sin(c.angle) * nz);
+    c.speed *= Math.max(0, 1 - outward * outward);
+    return true;
+  }
   step(action: number) {
     if (!Number.isInteger(action) || action < 0 || action >= 9)
       throw new Error("Driving action must be an integer in [0,8]");
@@ -144,6 +159,8 @@ export class DrivingWorld {
     c.angle += c.steering * c.speed * 0.12 * dt;
     c.x += Math.cos(c.angle) * c.speed * dt;
     c.z += Math.sin(c.angle) * c.speed * dt;
+    const boundaryContact = this.constrainToTrack();
     this.ticks++;
+    return boundaryContact;
   }
 }

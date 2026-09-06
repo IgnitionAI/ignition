@@ -1,10 +1,11 @@
 import { DrivingWorld, RacingTrack, DRIVING_CONTRACT } from "./driving";
 
 export const RACE_PROTOCOL = Object.freeze({
-  id: "circuit-race-v1",
+  id: "circuit-race-v2",
   laps: 3,
   checkpoints: 20,
   rescueTicks: 300,
+  immobilizationRadius: 1,
   rescuePenalty: 5,
   offroadPenalty: 2,
   maxTicks: 60 * 300,
@@ -20,6 +21,8 @@ export interface RaceDriver {
   lastProgress: number;
   safeProgress: number;
   offroadTicks: number;
+  stationaryTicks: number;
+  motionAnchor: { x: number; z: number };
   penaltySeconds: number;
   rescues: number;
   collisions: number;
@@ -56,6 +59,8 @@ export class RaceWorld {
         lastProgress: this.track.nearest(world.car.x, world.car.z).progress,
         safeProgress: 0,
         offroadTicks: 0,
+        stationaryTicks: 0,
+        motionAnchor: { x: world.car.x, z: world.car.z },
         penaltySeconds: 0,
         rescues: 0,
         collisions: 0,
@@ -91,6 +96,32 @@ export class RaceWorld {
       return b.gates - a.gates || remaining(a) - remaining(b) || a.id - b.id;
     });
   }
+  private resolveContacts(railContacts: Set<number>) {
+    const pairs = new Set<string>();
+    const diameter = 2 * DRIVING_CONTRACT.carRadius;
+    // Bounded constraint passes keep a rail projection from undoing separation.
+    // Contact metrics and impact damping count once per pair, not per solver pass.
+    for (let iteration = 0; iteration < 16; iteration++) {
+      const moved = new Set<number>();
+      for (let i = 0; i < this.drivers.length; i++) for (let j = i + 1; j < this.drivers.length; j++) {
+        const da = this.drivers[i], db = this.drivers[j];
+        if (da.finishSeconds !== null || db.finishSeconds !== null) continue;
+        const a = da.world.car, b = db.world.car, dx = b.x - a.x, dz = b.z - a.z, dist = Math.hypot(dx, dz);
+        if (dist >= diameter - 1e-4) continue;
+        const nx = dist > 1e-6 ? dx / dist : 1, nz = dist > 1e-6 ? dz / dist : 0, push = (diameter - dist) / 2;
+        a.x -= nx * push; a.z -= nz * push;
+        b.x += nx * push; b.z += nz * push;
+        moved.add(i); moved.add(j);
+        const pair = `${i}:${j}`;
+        if (!pairs.has(pair)) {
+          pairs.add(pair); a.speed *= 0.7; b.speed *= 0.7;
+          da.collisions++; db.collisions++;
+        }
+      }
+      if (moved.size === 0) break;
+      for (const id of moved) if (this.drivers[id].world.constrainToTrack()) railContacts.add(id);
+    }
+  }
   step(actions: readonly number[]) {
     if (
       actions.length !== this.drivers.length ||
@@ -101,31 +132,11 @@ export class RaceWorld {
     this.ticks++;
     if (this.ticks <= this.countdownTicks) return;
     this.elapsedTicks++;
+    const railContacts = new Set<number>();
     for (const d of this.drivers)
-      if (d.finishSeconds === null) d.world.step(actions[d.id]);
-    for (let i = 0; i < this.drivers.length; i++)
-      for (let j = i + 1; j < this.drivers.length; j++) {
-        const da = this.drivers[i],
-          db = this.drivers[j];
-        if (da.finishSeconds !== null || db.finishSeconds !== null) continue;
-        const a = da.world.car,
-          b = db.world.car,
-          dx = b.x - a.x,
-          dz = b.z - a.z,
-          dist = Math.hypot(dx, dz);
-        if (dist >= 2.4) continue;
-        const nx = dist > 1e-6 ? dx / dist : 1,
-          nz = dist > 1e-6 ? dz / dist : 0,
-          push = (2.4 - dist) / 2;
-        a.x -= nx * push;
-        a.z -= nz * push;
-        b.x += nx * push;
-        b.z += nz * push;
-        a.speed *= 0.7;
-        b.speed *= 0.7;
-        da.collisions++;
-        db.collisions++;
-      }
+      if (d.finishSeconds === null && d.world.step(actions[d.id])) railContacts.add(d.id);
+    this.resolveContacts(railContacts);
+    for (const id of railContacts) this.drivers[id].collisions++;
     for (const d of this.drivers) {
       if (d.finishSeconds !== null) continue;
       const c = d.world.car,
@@ -151,11 +162,18 @@ export class RaceWorld {
             this.elapsedTicks * DRIVING_CONTRACT.dt + d.penaltySeconds;
       }
       d.lastProgress = p.progress;
+      if (d.finishSeconds !== null) continue;
       if (p.distance > this.track.width / 2 && d.offroadTicks === 0)
         d.penaltySeconds += RACE_PROTOCOL.offroadPenalty;
       d.offroadTicks =
         p.distance > this.track.width / 2 ? d.offroadTicks + 1 : 0;
-      if (d.offroadTicks >= RACE_PROTOCOL.rescueTicks) {
+      // A moving excursion is recoverable. Rescue only a car remaining within
+      // one metre for five seconds, including a car pinned against traffic/rails.
+      if (Math.hypot(c.x - d.motionAnchor.x, c.z - d.motionAnchor.z) >= RACE_PROTOCOL.immobilizationRadius) {
+        d.motionAnchor = { x: c.x, z: c.z };
+        d.stationaryTicks = 0;
+      } else d.stationaryTicks++;
+      if (d.stationaryTicks >= RACE_PROTOCOL.rescueTicks) {
         const safe = this.track.sample(d.safeProgress);
         c.x = safe.x;
         c.z = safe.z;
@@ -164,6 +182,8 @@ export class RaceWorld {
         c.steering = 0;
         d.lastProgress = safe.progress;
         d.offroadTicks = 0;
+        d.stationaryTicks = 0;
+        d.motionAnchor = { x: c.x, z: c.z };
         d.rescues++;
         d.penaltySeconds += RACE_PROTOCOL.rescuePenalty;
       }

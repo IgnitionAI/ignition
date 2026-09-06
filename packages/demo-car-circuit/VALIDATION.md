@@ -1,6 +1,6 @@
 # Local validation — 6 September 2026
 
-Status: implementation and automated/local-browser checks delivered; **full human-driven race acceptance remains open**. No push, merge, deployment or issue closure is implied.
+Status: **acceptance remains open**. Parent-spec review found missing boundary collisions and rescue based on time off-road instead of prolonged immobilization. These rules are being corrected; existing learning and runtime results below describe the old race contract and must be renewed. A full human-driven race also remains unverified. No push, merge, deployment or issue closure is implied.
 
 ## Scope and evidence
 

@@ -132,3 +132,8 @@ it('keeps tensor usage stable across checkpoint exports and frozen inference',()
   expect(tf.memory().numTensors).toBe(before);
   driver.dispose();
 });
+
+it('rejects archived race-V1 checkpoints after the boundary/recovery contract change', () => {
+  const old = JSON.parse(readFileSync(new URL('../src/public/reports/imitation-v1/driver-11.json',import.meta.url),'utf8'));
+  expect(() => LearnedDriver.fromCheckpoint(old)).toThrow(/contract/i);
+});

@@ -1,12 +1,14 @@
 # Circuit Racing
 
+Rule correction in progress: driving/race V2 add boundary collisions and immobilization rescue. Previously reported imitation V1 and Q V2 results below describe the old rules; new training and acceptance evidence are pending. Old checkpoints are rejected instead of silently relabelled.
+
 Run `pnpm --filter demo-car-circuit dev` from the workspace root, then open the displayed local URL. Run tests from the root with `pnpm exec vitest run packages/demo-car-circuit/test` (the Vite root is `src`).
 
 The first racing slice provides two imported Kenney Car Kit vehicles (CC0), Alpine Park, a following camera and deterministic arcade driving at 60 simulation ticks per second. Accelerate with arrows/WASD/ZQSD, brake with Down/S, steer with Left/Right or A/Q/D. Escape, losing focus and changing vehicle pause the session. Both vehicles share identical physics.
 
 Asset license and provenance are in `src/public/models/`. The versioned nine-action driving contract is in `src/racing/driving.ts`. The legacy constant-speed environment and its evaluation tests remain available; its checkpoints are not compatible with the racing contract.
 
-Course mode adds a three-second countdown, three laps through 20 ordered checkpoints, standings and results. Up to four cars use a shared decision batch and physics clock. Ordered gates reject skipped checkpoints; brief cuts between gates are penalized rather than physically forbidden. Off-road excursions cost two seconds; a five-second off-road timeout rescues the vehicle to its last validated checkpoint and adds five seconds. Car contacts separate their collision bodies and reduce speed. A race stops at five simulated minutes or when all drivers finish. Equal times are ordered by stable driver ID.
+Course mode adds a three-second countdown, three laps through 20 ordered checkpoints, standings and results. Up to four cars use a shared decision batch and physics clock. Ordered gates reject skipped checkpoints; brief cuts between gates are penalized rather than physically forbidden. Off-road excursions cost two seconds. Remaining within one metre for five seconds, on or off the road, rescues the vehicle to its last validated checkpoint and adds five seconds. Moving off-road does not trigger a rescue. Continuous rails at seven metres from the centreline contain the shared 1.2-metre collision radius, removing outward impact speed. Car contacts separate their collision bodies and reduce speed. A race stops at five simulated minutes or when all drivers finish. Equal times are ordered by stable driver ID.
 
 The observation mode explicitly uses four **rule-based reference controllers**, not learned policies. The Train mode now creates a real imitation MLP, aggregates trajectories on Alpine Park, and switches from solo to frozen reference traffic after eight rounds. A new run uses 16 rounds of 4,096 examples and three Adam epochs per round (learning rate 0.003, batch size 128, two 32-unit tanh layers, nine-way softmax). The seed fixes initialization and sampling; the 20-element observation contains driving state, track anticipation and up to three opponents.
 

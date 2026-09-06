@@ -121,8 +121,8 @@ export default function RaceGarage({
           </label>
           <p className="race-intro">
             {fr
-              ? "↑ / Z / W : accélérer · ↓ / S : freiner · ← → / Q D : tourner · Échap : pause. Les sorties coûtent 2 s ; une remise en piste ajoute 5 s."
-              : "↑ / W: accelerate · ↓ / S: brake · ← → / A D: steer · Escape: pause. Off-road costs 2 s; a rescue adds 5 s."}
+              ? "↑ / Z / W : accélérer · ↓ / S : freiner · ← → / Q D : tourner · Échap : pause. Les sorties coûtent 2 s. Rester dans un rayon de 1 m pendant 5 s déclenche une remise (+5 s)."
+              : "↑ / W: accelerate · ↓ / S: brake · ← → / A D: steer · Escape: pause. Off-road costs 2 s. Staying within 1 m for 5 s triggers a rescue (+5 s)."}
           </p>
         </>
       )}

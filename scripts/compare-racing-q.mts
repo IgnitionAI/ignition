@@ -8,7 +8,7 @@ import { LearnedDriver } from '../packages/demo-car-circuit/src/racing/learned-d
 const { trainQDriver } = createRequire(import.meta.url)('../packages/demo-car-circuit/src/racing/q-training.ts');
 import { evaluateDriver } from '../packages/demo-car-circuit/src/racing/training';
 import { Q_PROTOCOL } from '../packages/demo-car-circuit/src/racing/q-protocol';
-const folder='.scratch/circuit-racing/q-comparison-v2';
+const folder='.scratch/circuit-racing/q-comparison-v3';
 await mkdir(folder,{recursive:true});
 const sourceFiles=['packages/demo-car-circuit/src/racing/q-training.ts','packages/demo-car-circuit/src/racing/q-protocol.ts','packages/demo-car-circuit/src/racing/learned-driver.ts','packages/demo-car-circuit/src/racing/training.ts','packages/demo-car-circuit/src/racing/driving.ts','packages/demo-car-circuit/src/racing/race.ts','packages/demo-car-circuit/src/racing/observations.ts','packages/demo-car-circuit/src/racing/reference.ts','packages/backend-tfjs/src/agents/dqn.ts','packages/backend-tfjs/src/model/BuildMLP.ts','packages/backend-tfjs/src/memory/ReplayBuffer.ts'];
 const hashes=Object.fromEntries(await Promise.all(sourceFiles.map(async p=>[p,createHash('sha256').update(await readFile(p)).digest('hex')])));

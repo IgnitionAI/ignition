@@ -4,7 +4,7 @@ import { RACE_PROTOCOL } from "./race";
 
 /** Fixed before training runs; held-out results must never choose the checkpoint. */
 export const LEARNING_PROTOCOL = Object.freeze({
-  id: "racing-learning-v1",
+  id: "racing-learning-v2",
   driving: DRIVING_CONTRACT.id,
   observation: OBSERVATION_CONTRACT,
   race: RACE_PROTOCOL.id,

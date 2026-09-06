@@ -86,25 +86,7 @@ function Road({ track }: { track: RacingTrack }) {
           roughness={0.94}
         />
       </mesh>
-      {Array.from({ length: 80 }, (_, i) => {
-        const p = track.sample(i / 80),
-          side = i % 2 ? 1 : -1;
-        return (
-          <mesh
-            key={i}
-            position={[
-              p.x - Math.sin(p.angle) * 7 * side,
-              0.5,
-              p.z + Math.cos(p.angle) * 7 * side,
-            ]}
-            rotation={[0, -p.angle, 0]}
-            castShadow
-          >
-            <boxGeometry args={[3.7, 1, 0.45]} />
-            <meshStandardMaterial color={i % 6 === 0 ? "#e7d741" : "#ced3ca"} />
-          </mesh>
-        );
-      })}
+      <Rails track={track} />
       {Array.from({ length: 10 }, (_, i) => {
         const p = track.sample(0);
         return (
@@ -124,6 +106,29 @@ function Road({ track }: { track: RacingTrack }) {
       })}
     </>
   );
+}
+/** Continuous rails share their offset and thickness with the collision contract. */
+function Rails({ track }: { track: RacingTrack }) {
+  const geometry = useMemo(() => {
+    const positions: number[] = [];
+    const { barrierOffset, barrierThickness } = DRIVING_CONTRACT;
+    for (const side of [-1, 1]) for (let i = 0; i < 400; i++) {
+      const endpoints = [track.sample(i / 400), track.sample((i + 1) / 400)];
+      const vertices = endpoints.flatMap(p => [0, 1].flatMap(y => [-1, 1].map(edge => {
+        const offset = side * barrierOffset + edge * barrierThickness / 2;
+        return [p.x - Math.sin(p.angle) * offset, y, p.z + Math.cos(p.angle) * offset];
+      })));
+      for (const face of [[0,4,6,2], [1,3,7,5], [2,6,7,3]]) {
+        for (const index of [face[0],face[1],face[2],face[0],face[2],face[3]]) positions.push(...vertices[index]);
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    g.computeVertexNormals();
+    return g;
+  }, [track]);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return <mesh geometry={geometry} castShadow receiveShadow><meshStandardMaterial color="#ced3ca" side={THREE.DoubleSide} /></mesh>;
 }
 function Driver({
   world,

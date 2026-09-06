@@ -31,3 +31,12 @@ it('can recover from a stationary off-road position', () => {
   for (let i=0;i<60;i++) world.step(7);
   expect(world.car.speed).toBeGreaterThan(1);
 });
+
+
+it.each([-1, 1])('contains a car hitting boundary side %s and dissipates impact speed', side => {
+  const world = new DrivingWorld(), p = world.track.sample(0.1);
+  Object.assign(world.car, {x:p.x-Math.sin(p.angle)*5.5*side, z:p.z+Math.cos(p.angle)*5.5*side, angle:p.angle+side*Math.PI/2, speed:20});
+  world.step(7);
+  expect(world.track.nearest(world.car.x,world.car.z).distance).toBeLessThanOrEqual(5.576);
+  expect(world.car.speed).toBeLessThan(2);
+});
