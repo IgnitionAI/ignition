@@ -381,3 +381,29 @@ retains them. Loading a PPO checkpoint discards pending transitions.
 Custom agents can optionally implement `shouldTrain()` to control automatic
 update cadence and `discardRollout()` to discard on-policy data when the training
 trajectory is interrupted. Agents without these hooks retain per-step updates.
+
+## Circuit evaluation (local demo API)
+
+The Circuit demo exposes `evaluateCircuit(policy, { policyId, circuit })` from
+its evaluation module. Pass a versioned policy identifier and `training` or
+`test`. The evaluator requests greedy actions through `IgnitionEnv.inferStep()`
+and never invokes the supplied policy's `train()` or `remember()`. Evaluate a
+checkpoint that is not being trained concurrently.
+
+Protocol `circuit-evaluation-v1` fixes two distinct oval geometries, three starting
+waypoints, a 1,500-transition limit per episode and a three-lap success criterion.
+It returns a JSON-serializable versioned report with per-episode outcomes,
+transition counts, completed laps and simulated lap times (50 ms per step).
+These are simulated times, not browser execution times. Preserve the report with
+its checkpoint and avoid training or selecting models on the reserved test track.
+
+The existing three-argument `CircuitEnv` constructor remains supported. Its
+optional fourth argument configures `maxSteps`, `targetLaps` and `startWaypoint`.
+Terminal failure/success and external time limits are distinct; `lastEpisode`
+retains the final metrics after an automatic reset. Completed laps require net
+forward progress from the selected starting position, rather than merely
+crossing the start line.
+
+This protocol evaluates the existing driving environment. The planned Circuit
+Racing experience (imported 3D vehicles, AI races and human-versus-trained-AI)
+will require its own versioned driving and evaluation contract.
