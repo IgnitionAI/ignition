@@ -17,8 +17,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       - uses: actions/setup-node@v4
         with:
@@ -32,4 +30,4 @@ jobs:
         run: pnpm -r run build
 
       - name: Run all tests
-        run: pnpm -r run test
+        run: pnpm exec vitest run
