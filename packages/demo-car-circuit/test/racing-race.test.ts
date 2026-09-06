@@ -120,3 +120,23 @@ it('keeps colliding cars separated when one is pinned against a rail', () => {
   for(const d of race.drivers) expect(race.track.nearest(d.world.car.x,d.world.car.z).distance).toBeLessThanOrEqual(5.576);
   expect(race.drivers.map(d=>d.collisions)).toEqual([2,1]);
 });
+
+
+it('lets ghost cars overlap without pushing or slowing each other', () => {
+  const race = new RaceWorld({count:2,countdown:0,ghost:true});
+  const solo = new RaceWorld({countdown:0});
+  for(const d of race.drivers) Object.assign(d.world.car,solo.drivers[0].world.car);
+  for(let i=0;i<90;i++) {race.step([7,7]);solo.step([7]);}
+  for(const d of race.drivers) {
+    expect(d.world.car).toEqual(solo.drivers[0].world.car);
+    expect(d.collisions).toBe(0);
+  }
+});
+it('keeps rail collisions active in ghost races', () => {
+  const race = new RaceWorld({countdown:0,ghost:true}), d=race.drivers[0], p=race.track.sample(.1);
+  Object.assign(d.world.car,{x:p.x-Math.sin(p.angle)*5.5,z:p.z+Math.cos(p.angle)*5.5,angle:p.angle+Math.PI/2,speed:20});
+  race.step([7]);
+  expect(race.track.nearest(d.world.car.x,d.world.car.z).distance).toBeLessThanOrEqual(5.576);
+  expect(d.world.car.speed).toBeLessThan(2);
+  expect(d.collisions).toBe(1);
+});

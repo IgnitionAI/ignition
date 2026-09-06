@@ -33,15 +33,19 @@ export class RaceWorld {
   readonly track: RacingTrack;
   readonly drivers: RaceDriver[];
   readonly countdownTicks: number;
+  readonly ghost: boolean;
+  get rulesId() { return this.ghost ? "circuit-race-v2-ghost-v1" : RACE_PROTOCOL.id; }
   ticks = 0;
   elapsedTicks = 0;
   constructor({
     count = 1,
     test = false,
     countdown = 3,
-  }: { count?: number; test?: boolean; countdown?: number } = {}) {
+    ghost = false,
+  }: { count?: number; test?: boolean; countdown?: number; ghost?: boolean } = {}) {
     if (!Number.isInteger(count) || count < 1 || count > 4)
       throw new Error("Race needs 1–4 drivers");
+    this.ghost = ghost;
     this.track = new RacingTrack(test);
     this.countdownTicks = Math.round(countdown / DRIVING_CONTRACT.dt);
     this.drivers = Array.from({ length: count }, (_, id) => {
@@ -135,7 +139,7 @@ export class RaceWorld {
     const railContacts = new Set<number>();
     for (const d of this.drivers)
       if (d.finishSeconds === null && d.world.step(actions[d.id])) railContacts.add(d.id);
-    this.resolveContacts(railContacts);
+    if (!this.ghost) this.resolveContacts(railContacts);
     for (const id of railContacts) this.drivers[id].collisions++;
     for (const d of this.drivers) {
       if (d.finishSeconds !== null) continue;

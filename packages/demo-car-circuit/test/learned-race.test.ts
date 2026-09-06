@@ -52,3 +52,9 @@ it("applies human commands on the same clock while the saved opponent uses its o
   expect(session.snapshots().map((p) => p.weights)).toEqual(before);
   session.dispose();
 });
+
+
+it.each([false,true])('uses ghost mode for learned races, including human=%s', human => {
+  const session=new LearnedRace(human ? [entries[0]] : entries,human);
+  try {expect(session.race.ghost).toBe(true);} finally {session.dispose();}
+});

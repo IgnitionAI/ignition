@@ -24,6 +24,7 @@ export class LearnedRace {
     this.race = new RaceWorld({
       count: entries.length + (human ? 1 : 0),
       test,
+      ghost: true,
     });
     try {
       for (const entry of entries)

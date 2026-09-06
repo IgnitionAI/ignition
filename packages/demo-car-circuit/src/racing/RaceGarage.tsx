@@ -91,6 +91,7 @@ export default function RaceGarage({
             ? "Choisissez 2 à 4 checkpoints. Chaque voiture utilise sa propre copie figée du réseau appris."
             : "Choose 2–4 checkpoints. Every car uses its own frozen copy of the learned network."}
       </p>
+      <p className="ghost-notice">{fr ? "Mode fantôme : les voitures se traversent sans se bloquer. Les barrières restent solides." : "Ghost mode: cars pass through each other without blocking. Track barriers remain solid."}</p>
       <label>
         {fr ? "Mode" : "Mode"}
         <select
@@ -197,7 +198,7 @@ export default function RaceGarage({
               <small>
                 {selected.reports.filter((r) => r.success).length}/
                 {selected.reports.length}{" "}
-                {fr ? "évaluations réussies" : "successful evaluations"} ·{" "}
+                {fr ? "évaluations avec contacts réussies" : "successful contact evaluations"} ·{" "}
                 {selected.id}
               </small>
             )}

@@ -136,7 +136,7 @@ export default function RacingApp() {
     setLearned(undefined);
     setFollow(0);
     const next = competitive
-      ? new RaceWorld({ count: references ? 4 : 1 })
+      ? new RaceWorld({ count: references ? 4 : 1, ghost: true })
       : undefined;
     setReference(references);
     setRace(next);
@@ -438,11 +438,13 @@ export default function RacingApp() {
               +{race.drivers[learned ? follow : 0].penaltySeconds} s
               <br />
               <span>{lang === "fr" ? "Tour" : "Lap"} {Math.min(3, race.drivers[learned ? follow : 0].laps + 1)}/3</span>
+              {race.ghost && <small className="ghost-race-label">{lang === "fr" ? "MODE FANTÔME" : "GHOST MODE"}</small>}
             </div>
           )}
           {race?.finished && displayedDriver && (
             <div className="pause-overlay">
               <h2>{lang === "fr" ? "Résultat" : "Result"}</h2>
+              {race.ghost && <p>{lang === "fr" ? "Course en mode fantôme" : "Ghost race"}</p>}
               {learned && <p>{learned.competitors[follow].name}</p>}
               <p>
                 {displayedDriver.finishSeconds === null
