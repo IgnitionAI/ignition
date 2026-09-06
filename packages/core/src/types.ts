@@ -123,7 +123,7 @@ export interface InferenceEnv {
 
 // ─── Auto-configuration ─────────────────────────────────────────────────────
 
-export type AlgorithmType = 'dqn' | 'ppo' | 'qtable';
+export type AlgorithmType = 'dqn' | 'double-dqn' | 'ppo' | 'qtable';
 
 /**
  * Factory function that creates an agent from a merged config.

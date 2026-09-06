@@ -93,27 +93,31 @@ export class DQNAgent implements AgentInterface {
     const states = batch.map(e => e.state);
     const nextStates = batch.map(e => e.nextState);
 
-    const stateTensor = tf.tensor2d(states);
-    const nextStateTensor = tf.tensor2d(nextStates);
-
-    const qValues = this.model.predict(stateTensor) as tf.Tensor2D;
-    const nextQValues = this.targetModel.predict(nextStateTensor) as tf.Tensor2D;
-
-    const qArray = qValues.arraySync() as number[][];
-    const nextQArray = nextQValues.arraySync() as number[][];
-
-    const updatedQ = qArray.map((q, i) => {
-      const { action, reward, terminated } = batch[i];
-      const done = terminated;
-      const a = action as number;
-      q[a] = done ? reward : reward + this.gamma * Math.max(...nextQArray[i]);
-      return q;
+    const { stateTensor, targetTensor } = tf.tidy(() => {
+      const stateTensor = tf.tensor2d(states);
+      const nextStateTensor = tf.tensor2d(nextStates);
+      const qValues = this.model.predict(stateTensor) as tf.Tensor2D;
+      const nextQValues = this.targetModel.predict(nextStateTensor) as tf.Tensor2D;
+      const qArray = qValues.arraySync() as number[][];
+      const nextQArray = nextQValues.arraySync() as number[][];
+      const onlineNextArray = this.config.doubleQ
+        ? (this.model.predict(nextStateTensor) as tf.Tensor2D).arraySync() as number[][]
+        : undefined;
+      const updatedQ = qArray.map((q, i) => {
+        const { action, reward, terminated } = batch[i];
+        const online = onlineNextArray?.[i];
+        const selectedAction = online ? online.indexOf(Math.max(...online)) : -1;
+        const bootstrap = online ? nextQArray[i][selectedAction] : Math.max(...nextQArray[i]);
+        q[action as number] = terminated ? reward : reward + this.gamma * bootstrap;
+        return q;
+      });
+      return { stateTensor, targetTensor: tf.tensor2d(updatedQ) };
     });
-
-    const targetTensor = tf.tensor2d(updatedQ);
-    await this.model.fit(stateTensor, targetTensor, { epochs: 1, verbose: 0 });
-
-    tf.dispose([stateTensor, nextStateTensor, qValues, nextQValues, targetTensor]);
+    try {
+      await this.model.fit(stateTensor, targetTensor, { epochs: 1, verbose: 0 });
+    } finally {
+      tf.dispose([stateTensor, targetTensor]);
+    }
 
     if (this.epsilon > this.minEpsilon) {
       this.epsilon *= this.epsilonDecay;
@@ -185,7 +189,7 @@ export class DQNAgent implements AgentInterface {
     if (!provider) {
       throw new Error('[DQN] No storageProvider configured. Pass one in DQNConfig.');
     }
-    return provider.save(modelId, this.model, metadata);
+    return provider.save(modelId, this.model, { ...metadata, algorithm: this.config.doubleQ ? 'double-dqn' : 'dqn' });
   }
 
   /**

@@ -5,7 +5,7 @@ description: A pedagogical explanation of how DQN works in IgnitionAI — replay
 
 # DQN — Deep Q-Network
 
-DQN is the first algorithm you should try. It's a good default on almost any discrete-action environment, it's sample-efficient thanks to its replay buffer, and it's the most battle-tested algorithm in modern RL. Most of the ML-Agents demos you've seen in Unity use a DQN variant.
+DQN learns action values for discrete-action environments using a replay buffer and a target network. Its results depend on the observations, reward design and training budget.
 
 This page is deliberately verbose. By the end of it, you should understand *why* DQN works, not just how to call `env.train('dqn')`.
 
@@ -53,7 +53,7 @@ In IgnitionAI, the default buffer size is **10 000 transitions**, and training s
 
 We said above that using the same network to predict *and* compute the target leads to instability — imagine trying to hit a bullseye that moves every time you pull the bow. DQN's fix is to keep a **second copy of the network** — the *target network* — that is updated less frequently. The target network is used for computing `max_a' Q(s', a')`, so the target is stable for a while.
 
-In IgnitionAI, the target network is synced to the main network every `targetUpdateFrequency` steps. The default is **1000 steps** (a few hundred episodes on most envs). You can tune this lower for faster-learning envs or higher for more stable training.
+In IgnitionAI, the target network is synced to the main network every `targetUpdateFrequency` steps. The default is **100 training updates** through `IgnitionEnv`, or **1000** when constructing `DQNAgent` directly. You can tune this lower for faster-learning envs or higher for more stable training.
 
 ### 3. Epsilon-greedy exploration
 
@@ -62,27 +62,47 @@ A greedy policy (always pick the argmax Q-value) will get stuck early. The first
 `ε` starts high (almost pure exploration) and decays over time to a small floor (almost pure exploitation). In IgnitionAI:
 
 - `epsilon = 1.0` at the start (100% random)
-- Every episode, `epsilon *= 0.995` (half-life of ~138 episodes)
+- Every successful training update, `epsilon *= 0.995` (half-life of ~138 updates)
 - `minEpsilon = 0.01` is the floor (1% random forever, to avoid hard lock-in)
 
 > **A common mistake**: if you set `minEpsilon = 0`, the agent will eventually stop exploring entirely and can't recover from misleading early estimates. Always leave a small epsilon floor.
 
 ## Default hyperparameters
 
-These are the exact values IgnitionAI uses when you call `env.train('dqn')` with no config override. Source: `packages/backend-tfjs/src/agents/dqn.ts`.
+These are the values used by `env.train('dqn')`, from `packages/backend-tfjs/src/defaults.ts`. Direct `DQNAgent` construction uses `[24, 24]` hidden layers and a target update frequency of 1000 instead.
 
 | Hyperparameter | Default | What it controls |
 |---|---|---|
-| `hiddenLayers` | `[24, 24]` | Two hidden layers of 24 units each. A tiny MLP that fits CartPole-class problems. |
+| `hiddenLayers` | `[64, 64]` | Two hidden layers of 64 units each. |
 | `lr` | `0.001` | Adam learning rate. |
 | `gamma` | `0.99` | Discount factor. |
 | `epsilon` | `1.0` | Starting exploration rate (pure random). |
-| `epsilonDecay` | `0.995` | Multiplicative decay applied every episode. |
+| `epsilonDecay` | `0.995` | Multiplicative decay applied every training update. |
 | `minEpsilon` | `0.01` | Floor — exploration never drops below 1%. |
 | `batchSize` | `32` | Minibatch size sampled from the replay buffer per update. |
 | `memorySize` | `10000` | Ring-buffer capacity for experience replay. |
-| `targetUpdateFrequency` | `1000` | Steps between target network syncs. |
+| `targetUpdateFrequency` | `100` | Training updates between target network syncs. |
 | `backend` | `'auto'` | TF.js backend — auto-selects WebGPU → WebGL → WASM → CPU. |
+
+## Double DQN
+
+Select Double DQN through the same public API:
+
+```ts
+env.train('double-dqn', { backend: 'cpu' });
+// Direct construction: new DQNAgent({ inputSize, actionSize, doubleQ: true })
+```
+
+DQN uses the maximum next-state value from the target network. Double DQN instead selects an action with the online network and evaluates that action with the target network:
+
+```text
+nextAction = argmax_a Q_online(nextState, a)
+target = reward + gamma * Q_target(nextState, nextAction)
+```
+
+Both use only the reward after a true termination and preserve bootstrap after a time-limit truncation. Replay, optimization and target synchronization are otherwise shared. This separation follows [van Hasselt, Guez and Silver, Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/abs/1509.06461). It does not guarantee better results on every environment.
+
+Provider-based saves include the effective `algorithm` (`dqn` or `double-dqn`) in metadata. Inference uses greedy action selection for both. To resume training, construct the matching algorithm before loading: the current storage API loads weights, not the algorithm choice or optimizer/replay state. Existing DQN calls retain their default behavior.
 
 ## Tuning guide — which knobs to turn and in what order
 

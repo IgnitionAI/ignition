@@ -5,6 +5,8 @@ import type { ModelStorageProvider } from '@ignitionai/storage';
 export type { AgentInterface, Experience } from '@ignitionai/core';
 
 export interface DQNConfig {
+  /** Online action selection with target-network evaluation (default: false). */
+  doubleQ?: boolean;
   backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;              // Dimension du vecteur d'état
   actionSize: number;             // Nombre d'actions discrètes
