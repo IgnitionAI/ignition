@@ -7,6 +7,7 @@ const TFBackendSchema = z.enum(['webgpu', 'webgl', 'cpu', 'wasm', 'node', 'auto'
 export const DQNConfigSchema = z
   .object({
     doubleQ: z.boolean().optional(),
+    seed: z.number().int().min(1).max(1000000).optional(),
     backend: TFBackendSchema,
     inputSize: z
       .number()

@@ -14,13 +14,15 @@ export function buildQNetwork(
   inputSize: number,
   outputSize: number,
   hiddenLayers: number[] = [24, 24],
-  lr: number = 0.001
+  lr: number = 0.001,
+  seed?: number
 ): tf.Sequential {
   const model = tf.sequential();
 
   // Input layer
   model.add(tf.layers.dense({
     inputShape: [inputSize],
+    ...(seed === undefined ? {} : {kernelInitializer: tf.initializers.glorotUniform({seed})}),
     units: hiddenLayers[0],
     activation: 'relu',
   }));
@@ -29,6 +31,7 @@ export function buildQNetwork(
   for (let i = 1; i < hiddenLayers.length; i++) {
     model.add(tf.layers.dense({
       units: hiddenLayers[i],
+      ...(seed === undefined ? {} : {kernelInitializer: tf.initializers.glorotUniform({seed: seed + i})}),
       activation: 'relu',
     }));
   }
@@ -36,6 +39,7 @@ export function buildQNetwork(
   // Output layer (linear activation for Q-values)
   model.add(tf.layers.dense({
     units: outputSize,
+    ...(seed === undefined ? {} : {kernelInitializer: tf.initializers.glorotUniform({seed: seed + hiddenLayers.length})}),
     activation: 'linear',
   }));
 
