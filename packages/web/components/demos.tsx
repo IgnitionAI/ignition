@@ -1,64 +1,4 @@
-import { MobileInferenceBadge } from './mobile-inference-badge'
-const DEMOS = [
-  {
-    slug: 'maze',
-    title: 'Maze',
-    description: 'A low-poly humanoid trains in a Rapier 3D arena with prefab walls, sensor rays, doors, and moving hazards.',
-    tech: 'R3F · Rapier',
-    algos: 'Q-Table · DQN · PPO',
-    accent: '#22c55e',
-    featured: true,
-  },
-  {
-    slug: 'cartpole',
-    title: 'CartPole',
-    description: 'Classic pole-balancing benchmark with Euler physics. Converges fast.',
-    tech: '2D Canvas',
-    algos: 'DQN · PPO',
-    accent: '#3b82f6',
-  },
-  {
-    slug: 'mountaincar',
-    title: 'MountainCar',
-    description: 'Sparse reward challenge. Agent discovers the counterintuitive momentum strategy.',
-    tech: '2D Canvas',
-    algos: 'DQN · PPO',
-    accent: '#f59e0b',
-  },
-  {
-    slug: 'cartpole-3d',
-    title: 'CartPole 3D',
-    description: 'Classic CartPole rendered in 3D with React Three Fiber. Metallic materials and shadows.',
-    tech: 'R3F',
-    algos: 'DQN · PPO',
-    accent: '#6366f1',
-  },
-  {
-    slug: 'car-circuit',
-    title: 'Car Circuit',
-    description: 'A 3D car learns to drive an oval circuit. Chase cam, minimap, trail, 1×–50× speed.',
-    tech: 'R3F',
-    algos: 'DQN · PPO',
-    accent: '#ec4899',
-  },
-  {
-    slug: 'drone-navigation',
-    title: 'Drone Navigation',
-    description: 'A quadcopter learns to fly to moving target points. Rigid-body physics, 8 thrust combos, real gravity and torque. The hero demo.',
-    tech: 'R3F · Physics',
-    algos: 'DQN',
-    accent: '#a855f7',
-  },
-  {
-    slug: 'maze-3d',
-    title: 'Maze 3D',
-    description: 'A robot navigates a 3D maze to find keys, avoid traps, and reach the exit. Raycast observations, pathfinding challenge.',
-    tech: 'R3F',
-    algos: 'DQN · Q-Table',
-    accent: '#14b8a6',
-  },
-]
-
+import DEMOS from '../data/demos.json'
 export default function Demos() {
   return (
     <section id="demos" className="relative">
@@ -74,11 +14,9 @@ export default function Demos() {
               Watch agents learn in real time
             </h2>
             <p className="text-lg text-slate-400">
-              Six interactive environments showing IgnitionAI in action. Each runs in your browser, trains locally, and demonstrates a different RL challenge.
+              {DEMOS.length} interactive environments showing IgnitionAI in action. Each runs in your browser. Circuit Racing supports keyboard play against learned drivers; the other environments explore reinforcement learning.
             </p>
-            <div className="mt-3 flex justify-center">
-              <MobileInferenceBadge />
-            </div>
+
           </div>
 
           {/* Demo grid */}
