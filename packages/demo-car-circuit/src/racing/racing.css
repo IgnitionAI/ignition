@@ -529,3 +529,7 @@
 
 .race-map { position:absolute; left:28px; bottom:110px; width:180px; height:124px; background:#152126dc; border:1px solid #556368; border-radius:12px; padding:8px; pointer-events:none; }
 @media(max-width:600px) { .race-map { width:120px;height:84px;left:16px;bottom:16px; } }
+
+.result-driver { flex: 1; min-width: 0; text-align: left; overflow-wrap: anywhere; }
+.result-driver small { display: block; color: var(--race-muted); font-size: 11px; margin-top: 4px; }
+.result-time { white-space: nowrap; }

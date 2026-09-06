@@ -102,7 +102,7 @@ target = reward + gamma * Q_target(nextState, nextAction)
 
 Both use only the reward after a true termination and preserve bootstrap after a time-limit truncation. Replay, optimization and target synchronization are otherwise shared. This separation follows [van Hasselt, Guez and Silver, Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/abs/1509.06461). It does not guarantee better results on every environment.
 
-Circuit Racing exposes both methods in its training selector. Its [fixed-budget racing comparison](/demos/car-circuit/reports/racing-q-v2/index.html) includes every seed, failure and final checkpoint.
+Circuit Racing exposes both methods in its training selector. Its [fixed-budget racing comparison](/demos/car-circuit/reports/racing-q-v3/index.html) includes every seed, failure and final checkpoint.
 
 Provider-based saves include the effective `algorithm` (`dqn` or `double-dqn`) in metadata. Inference uses greedy action selection for both. To resume training, construct the matching algorithm before loading: the current storage API loads weights, not the algorithm choice or optimizer/replay state. Existing DQN calls retain their default behavior.
 

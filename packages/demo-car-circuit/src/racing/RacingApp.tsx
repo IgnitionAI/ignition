@@ -434,6 +434,8 @@ export default function RacingApp() {
               ) + 1}
               /{race.drivers.length} · {(race.elapsedTicks / 60).toFixed(1)} s ·
               +{race.drivers[learned ? follow : 0].penaltySeconds} s
+              <br />
+              <span>{lang === "fr" ? "Tour" : "Lap"} {Math.min(3, race.drivers[learned ? follow : 0].laps + 1)}/3</span>
             </div>
           )}
           {race?.finished && displayedDriver && (
@@ -455,9 +457,11 @@ export default function RacingApp() {
               <ol>
                 {race.standings.map((d) => (
                   <li key={d.id}>
-                    {learned?.competitors[d.id]?.name ?? `#${d.id + 1}`}{" "}
-                    {learned && <small>({learned.competitors[d.id].id})</small>}{" "}
-                    · {d.finishSeconds === null ? "DNF" : `${d.finishSeconds.toFixed(2)} s`}
+                    <span className="result-driver">
+                      {learned?.competitors[d.id]?.name ?? `#${d.id + 1}`}
+                      {learned && <small>{learned.competitors[d.id].id}</small>}
+                    </span>
+                    <span className="result-time">{d.finishSeconds === null ? "DNF" : `${d.finishSeconds.toFixed(2)} s`}</span>
                   </li>
                 ))}
               </ol>

@@ -195,7 +195,7 @@ export default function TrainingPanel({
           ? "Imitation · réseau de neurones. Il apprend sur Alpine Park, seul puis avec du trafic de référence figé. En course, seul le réseau décide."
           : "Imitation · neural network. Learn at Alpine Park, solo then with frozen reference traffic. Only the network decides during races."}
       </p>
-      <p><a style={{color:"#e6ee58"}} href={`${import.meta.env.BASE_URL}reports/racing-q-v2/index.html`}>
+      <p><a style={{color:"#e6ee58"}} href={`${import.meta.env.BASE_URL}reports/racing-q-v3/index.html`}>
         {fr ? "DQN / Double DQN : voir les résultats comparés ↗" : "DQN / Double DQN: compare measured results ↗"}
       </a></p>
       <label>
