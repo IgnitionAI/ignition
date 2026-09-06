@@ -5,6 +5,8 @@ description: The hero demo as a tutorial. A 3D car learns to drive an oval circu
 
 # Car Circuit
 
+> This tutorial uses the legacy oval teaching environment. The live [Circuit Racing demo](/demos/car-circuit/) now has imported vehicles, nine driving actions and twenty observations. Its learned checkpoints are incompatible with this example; see the [current catalogue](/docs/demos).
+
 This tutorial is the most ambitious one we ship. By the end you'll have a 3D car driving an oval circuit under a DQN policy you trained yourself, a chase camera that follows the car, a minimap overlay, and a speed slider from 1× to 50×. It's also the tutorial most likely to take longer than the estimate — budget real time for it.
 
 Estimated time: **50–75 minutes**.
@@ -260,7 +262,7 @@ Drag it from 1 to 50 and watch the car go from a slow crawl to a blur.
 ## Next steps
 
 - **[Export to Unity via ONNX](/docs/tutorials/onnx-unity)** — take the car policy you just trained and ship it to a Unity Sentis project.
-- **The real demo** — `pnpm --filter demo-car-circuit dev` in the monorepo runs the full polished version with minimap, HUD, trail, and pre-trained weights.
+- **The real demo** — `pnpm --filter demo-car-circuit dev` in the monorepo runs Circuit Racing with imported vehicles, local learned checkpoints and frozen-policy races.
 
 ---
 

@@ -5,6 +5,10 @@ import type { ModelStorageProvider } from '@ignitionai/storage';
 export type { AgentInterface, Experience } from '@ignitionai/core';
 
 export interface DQNConfig {
+  /** Online action selection with target-network evaluation (default: false). */
+  doubleQ?: boolean;
+  /** Reproducible initialization, exploration and replay sampling when supplied. */
+  seed?: number;
   backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;              // Dimension du vecteur d'état
   actionSize: number;             // Nombre d'actions discrètes
@@ -21,6 +25,8 @@ export interface DQNConfig {
 }
 
 export interface PPOConfig {
+  /** Transitions collected before automatic training (default: 128). */
+  rolloutSize?: number;
   backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;        // Dimension du vecteur d'état
   actionSize: number;       // Nombre d'actions discrètes

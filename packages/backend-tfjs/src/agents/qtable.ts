@@ -140,8 +140,8 @@ export class QTableAgent implements AgentInterface {
   async train(): Promise<void> {
     if (!this.lastExperience) return;
 
-    const { state, action, reward, nextState, terminated, truncated } = this.lastExperience;
-    const done = terminated || truncated;
+    const { state, action, reward, nextState, terminated } = this.lastExperience;
+    const done = terminated;
     const a = action as number;
     const sIdx = this.stateToIndex(state);
     const sNextIdx = this.stateToIndex(nextState);

@@ -1,0 +1,1 @@
+Historical imitation V1 checkpoints and reports. Race V1 lacked boundary collisions and rescued any five-second off-road excursion. These weights are incompatible with race/driving V2; no current acceptance claim.

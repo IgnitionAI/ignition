@@ -1,0 +1,186 @@
+{
+  "protocol": {
+    "id": "racing-learning-v1",
+    "driving": "circuit-racing-v1",
+    "observation": "racing-observation-v1",
+    "race": "circuit-race-v1",
+    "trainingSeeds": [
+      11,
+      29,
+      47
+    ],
+    "checkpointSelection": "last scheduled update on training circuit only",
+    "evaluationSeeds": [
+      101,
+      307,
+      509
+    ],
+    "success": {
+      "completedLaps": 3,
+      "maxRescues": 0,
+      "maxPenalties": 10,
+      "minimumCompletionRate": 0.8
+    },
+    "evaluation": "All three training seeds on both circuits, solo and three frozen rule-based traffic drivers. Report every run, including failures."
+  },
+  "rounds": 16,
+  "untrained": {
+    "seed": 101,
+    "test": false,
+    "traffic": false,
+    "completed": false,
+    "success": false,
+    "laps": 0,
+    "finishSeconds": null,
+    "penaltySeconds": 0,
+    "rescues": 0,
+    "contacts": 0
+  },
+  "reports": [
+    {
+      "seed": 101,
+      "test": false,
+      "traffic": false,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 81.3,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 0
+    },
+    {
+      "seed": 307,
+      "test": false,
+      "traffic": false,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 81.28333333333333,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 0
+    },
+    {
+      "seed": 509,
+      "test": false,
+      "traffic": false,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 81.26666666666667,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 0
+    },
+    {
+      "seed": 101,
+      "test": false,
+      "traffic": true,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 180.5,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 7039
+    },
+    {
+      "seed": 307,
+      "test": false,
+      "traffic": true,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 143.9,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 5016
+    },
+    {
+      "seed": 509,
+      "test": false,
+      "traffic": true,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 210.95,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 8493
+    },
+    {
+      "seed": 101,
+      "test": true,
+      "traffic": false,
+      "completed": false,
+      "success": false,
+      "laps": 0,
+      "finishSeconds": null,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 0
+    },
+    {
+      "seed": 307,
+      "test": true,
+      "traffic": false,
+      "completed": false,
+      "success": false,
+      "laps": 0,
+      "finishSeconds": null,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 0
+    },
+    {
+      "seed": 509,
+      "test": true,
+      "traffic": false,
+      "completed": false,
+      "success": false,
+      "laps": 0,
+      "finishSeconds": null,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 0
+    },
+    {
+      "seed": 101,
+      "test": true,
+      "traffic": true,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 209.4,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 7883
+    },
+    {
+      "seed": 307,
+      "test": true,
+      "traffic": true,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 216.85,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 8379
+    },
+    {
+      "seed": 509,
+      "test": true,
+      "traffic": true,
+      "completed": true,
+      "success": true,
+      "laps": 3,
+      "finishSeconds": 172,
+      "penaltySeconds": 0,
+      "rescues": 0,
+      "contacts": 5980
+    }
+  ],
+  "seconds": 32.18
+}

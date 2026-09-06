@@ -8,7 +8,7 @@ export class ReplayBuffer {
   private _size = 0;
   private readonly capacity: number;
 
-  constructor(capacity = 10000) {
+  constructor(capacity = 10000, private readonly random: () => number = Math.random) {
     this.capacity = capacity;
     this.buffer = new Array(capacity);
   }
@@ -24,7 +24,7 @@ export class ReplayBuffer {
     const n = Math.min(batchSize, this._size);
     const sampled: Experience[] = [];
     for (let i = 0; i < n; i++) {
-      sampled.push(this.buffer[Math.floor(Math.random() * this._size)]);
+      sampled.push(this.buffer[Math.floor(this.random() * this._size)]);
     }
     return sampled;
   }

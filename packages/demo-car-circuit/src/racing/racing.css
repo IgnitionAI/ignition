@@ -1,0 +1,550 @@
+:root {
+  --race-bg: #121619;
+  --race-panel: #1b2024;
+  --race-line: #323a3f;
+  --race-text: #f3f1e8;
+  --race-muted: #9ca6aa;
+  --race-accent: #e6ee58;
+  --race-space: 4px;
+}
+* {
+  box-sizing: border-box;
+}
+.racing-app {
+  background: var(--race-bg);
+  color: var(--race-text);
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.racing-app button,
+.racing-app a {
+  font: inherit;
+}
+.racing-app button {
+  cursor: pointer;
+}
+.racing-app button:focus-visible,
+.racing-app a:focus-visible {
+  outline: 3px solid var(--race-accent);
+  outline-offset: 4px;
+}
+.race-header {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--race-line);
+  padding: 0 32px;
+  gap: 24px;
+}
+.race-brand {
+  color: var(--race-text);
+  font-size: 24px;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: -1px;
+}
+.race-brand span {
+  font-size: 12px;
+  color: var(--race-accent);
+  letter-spacing: 2px;
+  margin-left: 16px;
+}
+.race-header nav {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  height: 100%;
+}
+.race-header nav .active {
+  border-bottom: 3px solid var(--race-accent);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+.race-header nav button {
+  background: none;
+  border: 0;
+  color: var(--race-muted);
+  font-size: 14px;
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.language {
+  color: var(--race-text);
+  background: none;
+  border: 1px solid var(--race-line);
+  padding: 8px 12px;
+  font-size: 12px !important;
+}
+.race-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: calc(100vh - 76px);
+}
+.race-sidebar {
+  padding: 40px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--race-line);
+}
+.eyebrow {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--race-accent);
+}
+.race-sidebar h1 {
+  font-size: 32px;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  margin: 20px 0;
+}
+.race-intro {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--race-muted);
+  margin: 0 0 32px;
+}
+.vehicle-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--race-muted);
+  margin-bottom: 12px;
+}
+.vehicle-options {
+  display: grid;
+  gap: 8px;
+}
+.vehicle-options button {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 12px;
+  border: 1px solid var(--race-line);
+  background: var(--race-panel);
+  color: var(--race-text);
+  font-size: 13px;
+}
+.vehicle-options button.selected {
+  border-color: var(--race-accent);
+}
+.vehicle-options button span {
+  font-size: 10px;
+  color: var(--race-muted);
+}
+.vehicle-options b {
+  margin-left: auto;
+  color: var(--race-accent);
+}
+.muted {
+  font-size: 10px;
+  color: var(--race-muted);
+  margin: 12px 0 24px;
+}
+.drive-button {
+  display: flex;
+  justify-content: space-between;
+  background: var(--race-accent);
+  color: var(--race-bg);
+  border: 0;
+  padding: 18px 16px;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+}
+.reset-button {
+  border: 0;
+  background: none;
+  color: var(--race-muted);
+  padding: 16px;
+  font-size: 11px !important;
+}
+.race-controls {
+  margin-top: 24px;
+  border-top: 1px solid var(--race-line);
+  padding-top: 24px;
+}
+.race-controls p {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--race-muted);
+  margin: 8px 0;
+}
+.race-controls kbd {
+  background: var(--race-panel);
+  border: 1px solid var(--race-line);
+  padding: 5px 8px;
+  color: var(--race-text);
+  min-width: 76px;
+  text-align: center;
+  font-size: 10px;
+}
+.local-badge {
+  margin-top: auto;
+  padding-top: 32px;
+  color: var(--race-muted);
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+.local-badge i,
+.session-pill i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--race-accent);
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.race-viewport {
+  position: relative;
+  min-width: 0;
+  height: calc(100vh - 76px);
+  min-height: 560px;
+  overflow: hidden;
+}
+.track-label {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  background: #172127e6;
+  padding: 14px 20px;
+  border-left: 3px solid var(--race-accent);
+}
+.track-label span {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+.track-label small {
+  display: block;
+  color: #bac4c6;
+  font-size: 10px;
+  margin-top: 6px;
+}
+.session-pill {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  background: #172127e6;
+  padding: 14px;
+}
+.driving-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 28px;
+  background: #172127e6;
+  padding: 14px 20px;
+  font-size: 11px;
+  color: #cdd6d7;
+  max-width: 55%;
+}
+.speedometer {
+  position: absolute;
+  bottom: 28px;
+  right: 28px;
+  background: #172127f2;
+  padding: 20px 24px;
+  width: 164px;
+}
+.speedometer > span {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--race-muted);
+}
+.speedometer strong {
+  display: block;
+  font-size: 56px;
+  line-height: 1.1;
+  letter-spacing: -4px;
+  font-variant-numeric: tabular-nums;
+  font-style: italic;
+}
+.speedometer small {
+  font-size: 10px;
+  color: var(--race-muted);
+}
+.speed-track {
+  height: 3px;
+  background: var(--race-line);
+  margin-top: 16px;
+  overflow: hidden;
+}
+.speed-track i {
+  height: 100%;
+  display: block;
+  background: var(--race-accent);
+}
+.pause-overlay,
+.race-error {
+  position: absolute;
+  inset: 0;
+  background: #111820a8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+}
+.pause-overlay h2 {
+  font-size: 36px;
+  margin: 0 0 8px;
+  letter-spacing: -1px;
+}
+.pause-overlay p {
+  color: #cad1d1;
+  font-size: 13px;
+}
+.pause-overlay button,
+.race-error button {
+  background: var(--race-accent);
+  border: 0;
+  padding: 16px 28px;
+  margin-top: 16px;
+  color: #121619;
+}
+.race-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: #1b2024;
+  z-index: 5;
+  font-size: 13px;
+}
+.race-loading progress {
+  accent-color: var(--race-accent);
+  width: 220px;
+}
+@media (max-width: 900px) {
+  .race-layout {
+    grid-template-columns: 250px 1fr;
+  }
+  .race-sidebar {
+    padding: 28px 20px;
+  }
+  .race-header {
+    padding: 0 20px;
+  }
+  .race-header nav {
+    gap: 16px;
+  }
+  .session-pill {
+    display: none;
+  }
+  .race-sidebar h1 {
+    font-size: 28px;
+  }
+  .driving-hint {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .race-layout {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .race-viewport {
+    height: 55vh;
+    min-height: 360px;
+  }
+  .race-header {
+    height: 60px;
+    padding: 0 16px;
+  }
+  .race-brand {
+    font-size: 20px;
+  }
+  .race-brand span {
+    font-size: 9px;
+    margin-left: 8px;
+  }
+  .race-header nav {
+    display: none;
+  }
+  .race-sidebar {
+    border: 0;
+    padding: 24px;
+  }
+  .race-sidebar h1 {
+    font-size: 28px;
+  }
+  .track-label {
+    top: 16px;
+    left: 16px;
+  }
+  .speedometer {
+    bottom: 16px;
+    right: 16px;
+    width: 128px;
+    padding: 12px 16px;
+  }
+  .speedometer strong {
+    font-size: 44px;
+  }
+  .race-controls {
+    margin-top: 8px;
+  }
+  .local-badge {
+    padding-top: 16px;
+  }
+}
+
+.race-countdown {
+  position: absolute;
+  inset: 35% 0 auto;
+  text-align: center;
+  color: #edff7a;
+  font-size: 100px;
+  font-weight: 800;
+  pointer-events: none;
+}
+.race-timing {
+  position: absolute;
+  top: 85px;
+  right: 24px;
+  color: white;
+  font-variant-numeric: tabular-nums;
+  background: #17211ddd;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.race-header nav button:not(:disabled) {
+  opacity: 1;
+  cursor: pointer;
+  color: var(--race-text);
+}
+@media (min-width: 601px) {
+  .race-sidebar {
+    height: calc(100vh - 76px);
+    overflow-y: auto;
+  }
+}
+@media (max-width: 600px) {
+  .race-header {
+    height: auto;
+    min-height: 100px;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  .race-header nav {
+    display: flex;
+    order: 3;
+    width: 100%;
+    height: 30px;
+  }
+}
+
+.pause-overlay ol {
+  list-style: none;
+  width: min(360px, 80%);
+  padding: 0;
+  margin: 20px 0;
+  counter-reset: position;
+}
+.pause-overlay li {
+  counter-increment: position;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #182329;
+  padding: 12px 18px;
+  margin: 4px 0;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid #394449;
+}
+.pause-overlay li::before {
+  content: counter(position);
+  color: var(--race-accent);
+  font-weight: bold;
+}
+
+.training-panel label {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  margin: 16px 0;
+}
+.training-panel input,
+.training-panel select {
+  width: 100%;
+  background: var(--race-panel);
+  color: var(--race-text);
+  border: 1px solid var(--race-line);
+  padding: 10px;
+}
+.training-actions {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0;
+}
+.training-actions button {
+  border: 1px solid var(--race-line);
+  padding: 12px;
+  background: var(--race-panel);
+  color: var(--race-text);
+  text-align: left;
+}
+.training-actions .drive-button {
+  background: var(--race-accent);
+  color: var(--race-bg);
+}
+.training-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.training-metrics {
+  border: 1px solid var(--race-line);
+  padding: 16px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.training-metrics p {
+  margin: 8px 0;
+  color: var(--race-muted);
+}
+.training-metrics ul {
+  padding-left: 16px;
+  font-size: 10px;
+}
+.training-panel [role="alert"] {
+  color: #ffb3a2;
+  font-size: 12px;
+}
+
+.grid-driver { border-top:1px solid var(--race-line); padding:8px 0 16px; }
+.grid-driver small { color:var(--race-muted); font-size:10px; overflow-wrap:anywhere; }
+.spectator-controls { position:absolute; left:28px; top:110px; display:flex; gap:8px; align-items:center; background:#172127ed; color:white; padding:10px; font-size:11px; z-index:3; }
+.spectator-controls select,.spectator-controls button { background:#26343a; color:white; border:1px solid #536065; padding:8px; margin-left:8px; }
+
+.race-map { position:absolute; left:28px; bottom:110px; width:180px; height:124px; background:#152126dc; border:1px solid #556368; border-radius:12px; padding:8px; pointer-events:none; }
+@media(max-width:600px) { .race-map { width:120px;height:84px;left:16px;bottom:16px; } }
+
+.result-driver { flex: 1; min-width: 0; text-align: left; overflow-wrap: anywhere; }
+.result-driver small { display: block; color: var(--race-muted); font-size: 11px; margin-top: 4px; }
+.result-time { white-space: nowrap; }
+
+.training-steps { list-style:none; display:grid; grid-template-columns:repeat(2,1fr); gap:8px; padding:0; font-size:11px; color:var(--race-muted); }
+.training-steps [aria-current="step"] { color:var(--race-accent); font-weight:700; }
+.training-guide { border-left:3px solid var(--race-accent); padding:14px; background:#1b272b; line-height:1.5; font-size:13px; }
+.training-guide strong { font-size:16px; }
+.training-guide progress { display:block; width:100%; margin:12px 0; accent-color:var(--race-accent); }
+.training-preview-note { font-size:12px; color:var(--race-muted); line-height:1.6; }
+.training-details { border-top:1px solid var(--race-line); padding:14px 0; font-size:12px; line-height:1.6; }
+.training-details summary { cursor:pointer; color:var(--race-text); }
+.training-details a { color:var(--race-accent); }
+.training-details button { background:#26343a; border:1px solid #536065; color:white; padding:10px; }
+
+.ghost-notice { color:var(--race-accent); border-left:2px solid currentColor; padding-left:10px; font-size:12px; line-height:1.5; }
+.ghost-race-label { display:block; color:#e6ee58; font-size:10px; letter-spacing:.08em; margin-top:6px; }
+@media(max-width:900px) { .race-timing { top:170px; } }

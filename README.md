@@ -229,40 +229,17 @@ const model = await storage.load('my-agent-v1');
 
 ## Demos
 
-Five interactive demos showing the framework in action. Each one is a full package you can run locally.
+The [shared demo catalogue](packages/web/data/demos.json) supplies the homepage, documentation and static build with the same routes and metadata. See the documentation catalogue at `/docs/demos` when running the web app locally.
 
-### 2D Demos — Canvas + Charts
-
-| Demo | What it shows | Algorithm |
-|---|---|---|
-| **GridWorld** | Agent finds the shortest path in a 7×7 grid | Q-Table, DQN, PPO |
-| **CartPole** | Classic pole-balancing benchmark with Euler physics | DQN, PPO |
-| **MountainCar** | Agent discovers momentum strategy to climb a hill | DQN, PPO |
-
-### 3D Demos — React Three Fiber
-
-| Demo | What it shows | Tech |
-|---|---|---|
-| **CartPole 3D** | Metallic cart and pole, sunset environment, contact shadows | R3F + drei |
-| **Car Circuit** | 3D car learns to drive an oval circuit — chase cam, HUD, minimap, fading trail, 1x–50x speed slider | R3F + drei |
-
-### Run them locally
+**Circuit Racing** features two licensed 3D vehicles, a shared arcade simulation, learned imitation drivers, local checkpoints and races. Its evaluation reports include failures. The keyboard player mode shares the same physics as its opponents.
 
 ```bash
-git clone https://github.com/IgnitionAI/ignition.git
-cd ignition
 pnpm install
-pnpm -r run build
-
-# Pick your demo:
-pnpm --filter demo-gridworld dev       # http://localhost:3001
-pnpm --filter demo-cartpole dev        # http://localhost:3002
-pnpm --filter demo-mountaincar dev     # http://localhost:3003
-pnpm --filter demo-cartpole-3d dev     # http://localhost:3010
-pnpm --filter demo-car-circuit dev     # http://localhost:3020
+pnpm --filter demo-car-circuit dev
+# Other package names and available methods: packages/web/data/demos.json
 ```
 
-Each demo has: live 3D/2D visualization, Train/Inference/Stop/Reset controls, algorithm picker (DQN/PPO), live reward chart, and a code panel showing the exact API you'd write in your own project.
+The build currently excludes Target Chasing pending a separate compatibility check. The old oval Circuit tutorial remains a teaching example and uses an incompatible observation/action contract.
 
 ---
 
@@ -354,3 +331,57 @@ The codebase follows:
 Built by [@salim4n](https://github.com/salim4n) / [@IgnitionAI](https://github.com/IgnitionAI)
 
 **Star the repo** ⭐ if you think creative JS devs deserve proper RL tooling.
+
+## PPO rollout and episode boundaries
+
+The public training loop collects **128 transitions** before an automatic PPO
+update. Configure this with `env.train('ppo', { rolloutSize: 256 })`.
+`batchSize` controls optimizer minibatches, independently of `rolloutSize`.
+Calling `agent.train()` explicitly still updates all currently collected data,
+including a partial rollout. A singleton or constant-advantage batch keeps its
+raw advantages rather than removing its learning signal through normalization.
+
+`TrainingEnv.done()` remains required for compatibility. Existing environments
+continue to treat `done()` as a terminal condition. To distinguish external time
+limits, optionally provide `truncated(): boolean`. In that case termination
+falls back to `done() && !truncated()`. An optional `terminated(): boolean`
+overrides that fallback; when both explicit flags are true, termination takes
+precedence for value bootstrapping. Either flag resets the episode, retaining
+its final observation in the returned transition.
+
+PPO bootstraps nonterminal rollout ends and truncations from their actual next
+observation; its advantage trace stops at either episode boundary. DQN and
+Q-table also bootstrap truncations. Inference never trains. Manual environment
+reset and inference steps discard incomplete PPO rollouts; stop/resume alone
+retains them. Loading a PPO checkpoint discards pending transitions.
+
+Custom agents can optionally implement `shouldTrain()` to control automatic
+update cadence and `discardRollout()` to discard on-policy data when the training
+trajectory is interrupted. Agents without these hooks retain per-step updates.
+
+## Circuit evaluation (local demo API)
+
+The Circuit demo exposes `evaluateCircuit(policy, { policyId, circuit })` from
+its evaluation module. Pass a versioned policy identifier and `training` or
+`test`. The evaluator requests greedy actions through `IgnitionEnv.inferStep()`
+and never invokes the supplied policy's `train()` or `remember()`. Evaluate a
+checkpoint that is not being trained concurrently.
+
+Protocol `circuit-evaluation-v1` fixes two distinct oval geometries, three starting
+waypoints, a 1,500-transition limit per episode and a three-lap success criterion.
+It returns a JSON-serializable versioned report with per-episode outcomes,
+transition counts, completed laps and simulated lap times (50 ms per step).
+These are simulated times, not browser execution times. Preserve the report with
+its checkpoint and avoid training or selecting models on the reserved test track.
+
+The existing three-argument `CircuitEnv` constructor remains supported. Its
+optional fourth argument configures `maxSteps`, `targetLaps` and `startWaypoint`.
+Terminal failure/success and external time limits are distinct; `lastEpisode`
+retains the final metrics after an automatic reset. Completed laps require net
+forward progress from the selected starting position, rather than merely
+crossing the start line.
+
+This is the historical oval protocol. The current Circuit Racing experience uses
+its own `circuit-racing-v1`, `racing-observation-v1` and `circuit-race-v1` contracts.
+See [Circuit Racing](packages/demo-car-circuit/README.md) for current behavior,
+learned checkpoint reports and validation boundaries.

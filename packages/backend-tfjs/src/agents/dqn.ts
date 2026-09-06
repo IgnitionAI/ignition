@@ -22,6 +22,7 @@ export class DQNAgent implements AgentInterface {
   private trainStepCounter = 0;
   private actionSize: number;
   private bestReward = -Infinity;
+  private random: () => number = Math.random;
 
   constructor(private config: DQNConfig) {
     const result = DQNConfigSchema.safeParse(config);
@@ -48,6 +49,13 @@ export class DQNAgent implements AgentInterface {
       console.warn('[DQNAgent] Backend init warning:', err)
     );
 
+    if (config.seed !== undefined) {
+      let state = config.seed >>> 0;
+      this.random = () => {
+        state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+        return state / 4294967296;
+      };
+    }
     this.actionSize = actionSize;
     this.gamma = gamma;
     this.epsilon = epsilon;
@@ -56,16 +64,16 @@ export class DQNAgent implements AgentInterface {
     this.batchSize = batchSize;
     this.targetUpdateFrequency = targetUpdateFrequency;
 
-    this.model = buildQNetwork(inputSize, actionSize, hiddenLayers, lr);
-    this.targetModel = buildQNetwork(inputSize, actionSize, hiddenLayers, lr);
+    this.model = buildQNetwork(inputSize, actionSize, hiddenLayers, lr, config.seed);
+    this.targetModel = buildQNetwork(inputSize, actionSize, hiddenLayers, lr, config.seed);
     this.updateTargetModel();
 
-    this.memory = new ReplayBuffer(memorySize);
+    this.memory = new ReplayBuffer(memorySize, this.random);
   }
 
   async getAction(state: number[], greedy?: boolean): Promise<number> {
-    if (!greedy && Math.random() < this.epsilon) {
-      return Math.floor(Math.random() * this.actionSize);
+    if (!greedy && this.random() < this.epsilon) {
+      return Math.floor(this.random() * this.actionSize);
     }
 
     const stateTensor = tf.tensor2d([state]);
@@ -93,27 +101,31 @@ export class DQNAgent implements AgentInterface {
     const states = batch.map(e => e.state);
     const nextStates = batch.map(e => e.nextState);
 
-    const stateTensor = tf.tensor2d(states);
-    const nextStateTensor = tf.tensor2d(nextStates);
-
-    const qValues = this.model.predict(stateTensor) as tf.Tensor2D;
-    const nextQValues = this.targetModel.predict(nextStateTensor) as tf.Tensor2D;
-
-    const qArray = qValues.arraySync() as number[][];
-    const nextQArray = nextQValues.arraySync() as number[][];
-
-    const updatedQ = qArray.map((q, i) => {
-      const { action, reward, terminated, truncated } = batch[i];
-      const done = terminated || truncated;
-      const a = action as number;
-      q[a] = done ? reward : reward + this.gamma * Math.max(...nextQArray[i]);
-      return q;
+    const { stateTensor, targetTensor } = tf.tidy(() => {
+      const stateTensor = tf.tensor2d(states);
+      const nextStateTensor = tf.tensor2d(nextStates);
+      const qValues = this.model.predict(stateTensor) as tf.Tensor2D;
+      const nextQValues = this.targetModel.predict(nextStateTensor) as tf.Tensor2D;
+      const qArray = qValues.arraySync() as number[][];
+      const nextQArray = nextQValues.arraySync() as number[][];
+      const onlineNextArray = this.config.doubleQ
+        ? (this.model.predict(nextStateTensor) as tf.Tensor2D).arraySync() as number[][]
+        : undefined;
+      const updatedQ = qArray.map((q, i) => {
+        const { action, reward, terminated } = batch[i];
+        const online = onlineNextArray?.[i];
+        const selectedAction = online ? online.indexOf(Math.max(...online)) : -1;
+        const bootstrap = online ? nextQArray[i][selectedAction] : Math.max(...nextQArray[i]);
+        q[action as number] = terminated ? reward : reward + this.gamma * bootstrap;
+        return q;
+      });
+      return { stateTensor, targetTensor: tf.tensor2d(updatedQ) };
     });
-
-    const targetTensor = tf.tensor2d(updatedQ);
-    await this.model.fit(stateTensor, targetTensor, { epochs: 1, verbose: 0 });
-
-    tf.dispose([stateTensor, nextStateTensor, qValues, nextQValues, targetTensor]);
+    try {
+      await this.model.fit(stateTensor, targetTensor, { epochs: 1, verbose: 0, ...(this.config.seed === undefined ? {} : { shuffle: false }) });
+    } finally {
+      tf.dispose([stateTensor, targetTensor]);
+    }
 
     if (this.epsilon > this.minEpsilon) {
       this.epsilon *= this.epsilonDecay;
@@ -127,7 +139,7 @@ export class DQNAgent implements AgentInterface {
 
   reset(): void {
     this.epsilon = this.config.epsilon ?? 1.0;
-    this.memory = new ReplayBuffer(this.config.memorySize);
+    this.memory = new ReplayBuffer(this.config.memorySize, this.random);
     this.trainStepCounter = 0;
   }
 
@@ -139,8 +151,7 @@ export class DQNAgent implements AgentInterface {
   async loadFromHub(repoId: string, modelPath = 'model.json'): Promise<void> {
     console.log(`[DQN] Loading model from HF Hub: ${repoId}`);
     const loadedModel = await loadModelFromHub(repoId, modelPath);
-    this.model = loadedModel as tf.Sequential;
-    await this.updateTargetModel();
+    this.replaceModel(loadedModel as tf.Sequential);
   }
 
   async saveCheckpoint(repoId: string, token: string, checkpointName: string): Promise<void> {
@@ -164,8 +175,7 @@ export class DQNAgent implements AgentInterface {
     const modelPath = `model_${checkpointName}/model.json`;
     console.log(`[DQN] Loading checkpoint "${checkpointName}" from HF Hub...`);
     const model = await loadModelFromHub(repoId, modelPath);
-    this.model = model as tf.Sequential;
-    await this.updateTargetModel();
+    this.replaceModel(model as tf.Sequential);
     console.log(`[DQN] ✅ Checkpoint "${checkpointName}" loaded`);
   }
 
@@ -185,7 +195,7 @@ export class DQNAgent implements AgentInterface {
     if (!provider) {
       throw new Error('[DQN] No storageProvider configured. Pass one in DQNConfig.');
     }
-    return provider.save(modelId, this.model, metadata);
+    return provider.save(modelId, this.model, { ...metadata, algorithm: this.config.doubleQ ? 'double-dqn' : 'dqn' });
   }
 
   /**
@@ -198,8 +208,16 @@ export class DQNAgent implements AgentInterface {
       throw new Error('[DQN] No storageProvider configured. Pass one in DQNConfig.');
     }
     const loaded = await provider.load(modelId);
-    this.model = loaded as tf.Sequential;
-    await this.updateTargetModel();
+    this.replaceModel(loaded as tf.Sequential);
+  }
+
+  private replaceModel(loaded: tf.Sequential): void {
+    if (loaded === this.model) { this.targetModel.setWeights(loaded.getWeights()); return; }
+    try { this.targetModel.setWeights(loaded.getWeights()); }
+    catch (error) { loaded.optimizer?.dispose(); loaded.dispose(); throw error; }
+    this.model.optimizer?.dispose();
+    this.model.dispose();
+    this.model = loaded;
   }
 
   getState(): Record<string, unknown> {
@@ -227,7 +245,9 @@ export class DQNAgent implements AgentInterface {
 
   dispose(): void {
     console.log(`[DQN] Disposing model...`);
+    this.model?.optimizer?.dispose();
     this.model?.dispose();
+    this.targetModel?.optimizer?.dispose();
     this.targetModel?.dispose();
     this.memory = new ReplayBuffer(0);
     console.log(`[DQN] ✅ DQNAgent disposed`);

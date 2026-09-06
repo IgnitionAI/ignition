@@ -18,6 +18,9 @@ export function validateTrainingEnv(env: unknown): asserts env is TrainingEnv {
   assertFn(e, 'reward', 'TrainingEnv');
   assertFn(e, 'done', 'TrainingEnv');
   assertFn(e, 'reset', 'TrainingEnv');
+  for (const name of ['terminated', 'truncated']) {
+    if (e[name] !== undefined) assertFn(e, name, 'TrainingEnv');
+  }
 
   if (e.actions === undefined || e.actions === null) {
     throw new Error('[IgnitionAI] TrainingEnv must have an actions property (string[] or number)');

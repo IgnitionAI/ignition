@@ -6,9 +6,10 @@
  * self-contained Next.js deployment with all demos embedded.
  */
 import { execSync } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { promoteDemos } from './promote-demos.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(__dirname, '../../..')
@@ -19,27 +20,16 @@ console.log('[build-demos] repoRoot:', repoRoot)
 console.log('[build-demos] webPublicDemos:', webPublicDemos)
 console.log('[build-demos] cwd:', process.cwd())
 
-const DEMOS = [
-  { slug: 'maze',             pkg: 'demo-maze',             dir: 'packages/demo-maze'             },
-  { slug: 'gridworld',        pkg: 'demo-gridworld',        dir: 'packages/demo-gridworld'        },
-  { slug: 'cartpole',         pkg: 'demo-cartpole',         dir: 'packages/demo-cartpole'         },
-  { slug: 'mountaincar',      pkg: 'demo-mountaincar',      dir: 'packages/demo-mountaincar'      },
-  { slug: 'cartpole-3d',      pkg: 'demo-cartpole-3d',      dir: 'packages/demo-cartpole-3d'      },
-  { slug: 'car-circuit',      pkg: 'demo-car-circuit',      dir: 'packages/demo-car-circuit'      },
-  { slug: 'drone-navigation', pkg: 'demo-drone-navigation', dir: 'packages/demo-drone-navigation' },
-  { slug: 'maze-3d',          pkg: 'demo-maze-3d',          dir: 'packages/demo-maze-3d'          },
-]
+const DEMOS = JSON.parse(readFileSync(new URL('../data/demos.json', import.meta.url), 'utf8'))
 
 function run(cmd, env) {
   console.log(`\n$ ${cmd}`)
   execSync(cmd, { stdio: 'inherit', cwd: repoRoot, env: { ...process.env, ...env } })
 }
 
-// Clean destination
-if (existsSync(webPublicDemos)) {
-  rmSync(webPublicDemos, { recursive: true, force: true })
-}
-mkdirSync(webPublicDemos, { recursive: true })
+// Build into a fresh staging directory; preserve the previous local artifact.
+mkdirSync(join(repoRoot, '.scratch'), { recursive: true })
+const staging = mkdtempSync(join(repoRoot, '.scratch/demos-stage-'))
 
 // ---------------------------------------------------------------------------
 // 1. Build the library packages first.
@@ -75,7 +65,7 @@ for (const demo of DEMOS) {
     throw new Error(`[build-demos] expected ${distDir} to exist after build`)
   }
 
-  const outDir = join(webPublicDemos, demo.slug)
+  const outDir = join(staging, demo.slug)
   console.log(`Copying ${distDir} → ${outDir}`)
   cpSync(distDir, outDir, { recursive: true })
 }
@@ -86,7 +76,10 @@ const manifest = {
   commit: process.env.VERCEL_GIT_COMMIT_SHA || process.env.GITHUB_SHA || 'local',
   demos: DEMOS.map((d) => d.slug),
 }
-writeFileSync(join(webPublicDemos, 'manifest.json'), JSON.stringify(manifest, null, 2))
+writeFileSync(join(staging, 'manifest.json'), JSON.stringify(manifest, null, 2))
+
+mkdirSync(dirname(webPublicDemos), { recursive: true })
+promoteDemos(staging, webPublicDemos, join(repoRoot, `.scratch/demos-backup-${Date.now()}`))
 
 console.log('\n✓ All demos built and copied to packages/web/public/demos/')
 console.log('[build-demos] final listing:', readdirSync(webPublicDemos))

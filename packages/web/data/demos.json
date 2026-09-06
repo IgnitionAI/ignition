@@ -1,0 +1,91 @@
+[
+  {
+    "slug": "car-circuit",
+    "title": "Circuit Racing",
+    "description": "Train and save neural drivers, race their frozen checkpoints, or take the wheel. Two licensed 3D vehicles, three laps and shared arcade physics.",
+    "tech": "R3F",
+    "algos": "Imitation MLP · DQN · Double DQN",
+    "accent": "#e6ee58",
+    "pkg": "demo-car-circuit",
+    "dir": "packages/demo-car-circuit",
+    "featured": true,
+    "platform": "Desktop keyboard"
+  },
+  {
+    "slug": "maze",
+    "title": "Maze",
+    "description": "A low-poly humanoid trains in a Rapier 3D arena with prefab walls, sensor rays, doors, and moving hazards.",
+    "tech": "R3F · Rapier",
+    "algos": "Q-Table · DQN · PPO",
+    "accent": "#22c55e",
+    "featured": false,
+    "pkg": "demo-maze",
+    "dir": "packages/demo-maze"
+  },
+  {
+    "slug": "cartpole",
+    "title": "CartPole",
+    "description": "Classic pole-balancing benchmark with Euler physics.",
+    "tech": "2D Canvas",
+    "algos": "DQN · PPO",
+    "accent": "#3b82f6",
+    "pkg": "demo-cartpole",
+    "dir": "packages/demo-cartpole",
+    "featured": false
+  },
+  {
+    "slug": "mountaincar",
+    "title": "MountainCar",
+    "description": "Sparse reward challenge. Explore the momentum needed to reach the hilltop.",
+    "tech": "2D Canvas",
+    "algos": "DQN · PPO",
+    "accent": "#f59e0b",
+    "pkg": "demo-mountaincar",
+    "dir": "packages/demo-mountaincar",
+    "featured": false
+  },
+  {
+    "slug": "cartpole-3d",
+    "title": "CartPole 3D",
+    "description": "Classic CartPole rendered in 3D with React Three Fiber. Metallic materials and shadows.",
+    "tech": "R3F",
+    "algos": "DQN · PPO",
+    "accent": "#6366f1",
+    "pkg": "demo-cartpole-3d",
+    "dir": "packages/demo-cartpole-3d",
+    "featured": false
+  },
+  {
+    "slug": "drone-navigation",
+    "title": "Drone Navigation",
+    "description": "A quadcopter learns to fly to moving target points. Rigid-body physics, 8 thrust combos, real gravity and torque.",
+    "tech": "R3F · Physics",
+    "algos": "DQN",
+    "accent": "#a855f7",
+    "pkg": "demo-drone-navigation",
+    "dir": "packages/demo-drone-navigation",
+    "featured": false
+  },
+  {
+    "slug": "maze-3d",
+    "title": "Maze 3D",
+    "description": "A robot navigates a 3D maze to find keys, avoid traps, and reach the exit. Raycast observations, pathfinding challenge.",
+    "tech": "R3F",
+    "algos": "DQN · Q-Table",
+    "accent": "#14b8a6",
+    "pkg": "demo-maze-3d",
+    "dir": "packages/demo-maze-3d",
+    "featured": false
+  },
+  {
+    "slug": "gridworld",
+    "pkg": "demo-gridworld",
+    "dir": "packages/demo-gridworld",
+    "title": "GridWorld",
+    "description": "A discrete navigation environment for exploring rewards and learned action values.",
+    "tech": "2D Grid",
+    "algos": "Q-Table · DQN · PPO",
+    "accent": "#06b6d4",
+    "featured": false
+  }
+]

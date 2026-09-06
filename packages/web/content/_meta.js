@@ -1,6 +1,7 @@
 export default {
   index: 'Introduction',
   quickstart: 'Quickstart',
+  demos: 'Demo catalogue',
   algorithms: 'Algorithms',
   'how-it-works': 'How it works',
   api: 'API Reference',

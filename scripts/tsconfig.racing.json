@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "..",
+    "paths": {
+      "@ignitionai/backend-tfjs": ["packages/backend-tfjs/src/index.ts"],
+      "@ignitionai/core": ["packages/core/src/index.ts"],
+      "@ignitionai/storage": ["packages/storage/src/index.ts"]
+    }
+  }
+}
