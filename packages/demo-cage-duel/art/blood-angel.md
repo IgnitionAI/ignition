@@ -36,7 +36,24 @@ http://127.0.0.1:3033/atelier.html?model=blood-angel
 
 The purchased option is only exposed in this explicit inspection mode. Standard demo builds without the privately purchased file retain their original assets. The private route only exists in development and does not copy the GLB into production builds. Do not commit the GLB or vendor archives.
 
-This is **static visual acceptance**, not a playable replacement yet. Rigging/skin weights, concealed joints, combat animation, weapon grip, collision alignment and runtime optimization remain work for the combat integration. The existing cage duel is preserved.
+This browser export is **static visual acceptance**, not a playable replacement yet. The separate Blender rig described below is not exported into this GLB. Concealed joints, combat animation, weapon grip, collision alignment and runtime optimization remain work for the combat integration. The existing cage duel is preserved.
+
+## First editable skeleton (2026-09-07)
+
+`blender/rig_blood_angel.py` copies the prepared scene into `Blood Angel Rigged` and saves the private `blood-angel-rigged.blend`. It creates 55 FK bones, including 30 finger bones and separate shoulder/hip plate controls. All 71 purchased mesh objects receive an armature modifier and rigid weights (one bone per part). The studio floor is excluded. This preserves rigid armour; it does not add a deformable undersuit or IK controls.
+
+```sh
+/Applications/Blender.app/Contents/MacOS/Blender -b ~/.local/share/ignition-assets/blood-angel/blood-angel-prepared.blend --python-exit-code 1 -P packages/demo-cage-duel/art/blender/rig_blood_angel.py
+/Applications/Blender.app/Contents/MacOS/Blender -b ~/.local/share/ignition-assets/blood-angel/blood-angel-rigged.blend --python-exit-code 1 -P packages/demo-cage-duel/art/blender/validate_blood_angel_rig.py
+```
+
+Rebuilding overwrites the generated rig project; save hand edits under another name first. The supplied FBX and prepared scene are preserved. Open the generated project, select `Blood Angel Rig`, enter Pose Mode and rotate bones. The Action Editor contains `Guard Test`, `Strike Test` and `Step Test`: 48-frame diagnostic pose transitions, not finished combat clips. The file opens at rest with no active action; select the action and its rig slot to preview it.
+
+Validation samples rest-pose vertices across all 71 parts (maximum displacement below 0.000001 scene units), verifies bindings and checks that hands/feet move in the saved actions. Cycles renders `rig-guard.png` and `rig-strike.png` confirm visible articulation. They also reveal unfinished shoulder coverage and hand poses: these are joint tests, not approved combat choreography. `rig-report.json` records the binding map; `rig-validation.json` records action displacement checks.
+
+Mixamo is a candidate source for motion. The third-party https://github.com/V1xel/mixamo-mcp advertises character upload, auto-rigger review, animation search, parameter changes and FBX downloads through a persistent authenticated browser. It has not been installed or tested here. Motions still need retargeting and armour-clearance adjustments; the current rig is not claimed to be automatically Mixamo-compatible.
+
+Saved-action validation passed: right-hand displacement 0.45818 (guard), 0.63600 (strike), left-foot displacement 0.04187 (step), in scene units. Both Cycles poses rendered. Package typecheck passed; full Vitest rerun: 54 files / 359 tests passed, 3 files / 3 tests skipped. Standards review found no actionable issue; spec review's pending saved-action check was resolved by the successful validation report.
 
 ## Validation and review
 
