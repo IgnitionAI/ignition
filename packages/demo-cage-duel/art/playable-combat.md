@@ -30,3 +30,5 @@ Validation du 2026-09-07 : typecheck et build passent ; suite complète 55 fichi
 Navigateur IAB, fenêtre 818×674 : échange léger constaté (adversaire100→84 PV), feinte constatée (vie intacte, endurance100→58), esquive et pause inspectées après correction du Root ; Espace active bien le bouton Reprendre au focus. Courts relevés du compteur de rendu :95–97 FPS, sans garantie de performance prolongée ou sur autre matériel. Capture privée `~/.local/share/ignition-assets/blood-angel/combat-playable.png`. Revue Standards et Spec : défaut de double translation et activation Espace corrigés, aucune observation restante lors de la revue ciblée.
 
 Ajustement après essai utilisateur : déplacements libres +50 %, en garde environ +64 %, distance des esquives +50 %. Durées des attaques, récupération et fenêtre d’invulnérabilité conservées.
+
+Variante World Eaters (retour utilisateur) : chargement privé de `world-eater-mixamo.glb`, peinture ivoire/épaulières bleues, suppression des emblèmes centraux et du halo. Épée seule dans le duel et la salle d’armes ; sélecteurs et géométrie des haches retirés de cette variante. Source Blood Angel originale conservée.

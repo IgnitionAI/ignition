@@ -1,5 +1,6 @@
 import './combat-view.css';
-import { attachChainsword, selectWeapon, type Weapon } from './weapon';
+import { attachChainsword } from './weapon';
+import { paintWorldEater } from './world-eater';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -94,7 +95,6 @@ el('begin').onclick = () => { awaitingStart = false; el('start').hidden = true; 
 function pause(): void { if (awaitingStart) return; paused = !paused; pending = undefined; keys.clear(); pointerGuard = false; accumulator = 0; el('pause').textContent = paused ? 'Reprendre' : 'Pause'; }
 el('pause').onclick = pause; el('reset').onclick = reset; el('again').onclick = reset;
 el<HTMLSelectElement>('opponent').onchange = reset;
-el<HTMLSelectElement>('weapon').onchange = () => { for (const model of models) selectWeapon(model, el<HTMLSelectElement>('weapon').value as Weapon); };
 document.querySelectorAll<HTMLButtonElement>('[data-action]').forEach(b => { b.disabled = true; b.onclick = () => { if (!paused && !combat.done) { pending = b.dataset.action as Command['action']; renderer.domElement.focus(); } }; });
 document.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach(b => b.onclick = () => { selected = b.dataset.dir as Direction; renderer.domElement.focus(); });
 el('defend').onpointerdown = e => { pointerGuard = true; el('defend').setPointerCapture(e.pointerId); };
@@ -120,8 +120,8 @@ window.addEventListener('resize', layout); layout();
 const loader = new GLTFLoader();
 async function load(): Promise<void> {
     try {
-        const [cage, asset, sword] = await Promise.all([loader.loadAsync(import.meta.env.BASE_URL+'models/cage-blender.glb'),loader.loadAsync(import.meta.env.BASE_URL+'models/purchased/blood-angel-mixamo.glb'),loader.loadAsync(import.meta.env.BASE_URL+'models/chainsword.glb')]);
-        scene.add(cage.scene); attachChainsword(asset.scene, sword.scene); selectWeapon(asset.scene, el<HTMLSelectElement>('weapon').value as Weapon); models.push(asset.scene,clone(asset.scene));
+        const [cage, asset, sword] = await Promise.all([loader.loadAsync(import.meta.env.BASE_URL+'models/cage-blender.glb'),loader.loadAsync(import.meta.env.BASE_URL+'models/purchased/world-eater-mixamo.glb'),loader.loadAsync(import.meta.env.BASE_URL+'models/chainsword.glb')]);
+        scene.add(cage.scene); paintWorldEater(asset.scene); attachChainsword(asset.scene, sword.scene);  models.push(asset.scene,clone(asset.scene));
         for (const model of models) {
             scene.add(model); const mixer = new THREE.AnimationMixer(model); mixers.push(mixer);
             actions.push(new Map(asset.animations.map(source => {
