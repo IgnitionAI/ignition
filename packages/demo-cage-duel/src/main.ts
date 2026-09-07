@@ -15,7 +15,7 @@ app.innerHTML = `
 </section>
 <section class="command"><div class="play"><button id="start" class="primary">ENTRER DANS LA CAGE <span>↗</span></button><button id="pause" class="secondary">PAUSE</button></div><div class="keyguide"><span><kbd>ZQSD</kbd> / <kbd>WASD</kbd> Déplacer</span><span><kbd>ESPACE</kbd> Frapper</span><span><kbd>SHIFT</kbd> Parer</span><span><kbd>ÉCHAP</kbd> Pause</span></div></section>
 <div class="touch" aria-label="Commandes tactiles"><button data-action="1">Avancer</button><button data-action="2">Reculer</button><button data-action="3">Gauche</button><button data-action="4">Droite</button><button data-action="5">Frapper</button><button data-action="6">Parer</button></div>
-<section class="lab"><div class="lab-title"><p class="eyebrow">L’APPRENTISSAGE, POUR DE VRAI</p><h2>Personne ne naît<br><em>gladiateur.</em></h2><p>Entraînez une politique dans votre navigateur.<br>Puis entrez dans la cage pour l’affronter.</p></div><div class="training"><div class="training-top"><span class="eyebrow">IGNITION / Q-LEARNING</span><span id="training-state">PRÊT</span></div><p id="training-description">La référence suit des règles. Votre recrue apprend à partir des coups donnés, reçus et des résultats des duels.</p><div class="progress"><i id="progress"></i></div><div class="training-actions"><button id="train" class="secondary">ENTRAÎNER UNE RECRUE</button><button id="stop" class="quiet" hidden>ARRÊTER</button><label>Adversaire <select id="policy"><option value="reference">Référence · règles fixes</option value="learned" disabled>Recrue · entraînement requis</option></select></label></div><p id="report" role="status">60 000 transitions · Évaluation séparée sur 10 duels · Politique conservée jusqu’au rechargement.</p></div></section>
+<section class="lab"><div class="lab-title"><p class="eyebrow">L’APPRENTISSAGE, POUR DE VRAI</p><h2>Personne ne naît<br><em>gladiateur.</em></h2><p>Entraînez une politique dans votre navigateur.<br>Puis entrez dans la cage pour l’affronter.</p></div><div class="training"><div class="training-top"><span class="eyebrow">IGNITION / Q-LEARNING</span><span id="training-state">PRÊT</span></div><p id="training-description">La référence suit des règles. Votre recrue apprend à partir des coups donnés, reçus et des résultats des duels.</p><div class="progress"><i id="progress"></i></div><div class="training-actions"><button id="train" class="secondary">ENTRAÎNER UNE RECRUE</button><button id="stop" class="quiet" hidden>ARRÊTER</button><label>Adversaire <select id="policy"><option value="reference">Référence · règles fixes</option></select></label></div><p id="report" role="status">60 000 transitions · Évaluation séparée sur 10 duels · Politique conservée jusqu’au rechargement.</p></div></section>
 <footer><span>UN DUEL. SEPT ACTIONS. UNE POLITIQUE À APPRENDRE.</span><span>MODÈLES ORIGINAUX PROCÉDURAUX · DÉMO EXPÉRIMENTALE</span></footer>
 </main>`;
 const el = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -28,6 +28,7 @@ catch (error) {
     throw error;
 }
 let duel = new Duel(), playing = false, paused = false, busy = false, generation = 0, learned: ReturnType<typeof createAgent> | undefined;
+let roundAgent: ReturnType<typeof createAgent> | undefined;
 let training = false, cancelTraining = false, sound = false, audio: AudioContext | undefined, impactUntil = 0;
 const keys = new Set<string>();
 let touch: Action | undefined;
@@ -49,7 +50,11 @@ function tone(kind: string): void {
     osc.stop(audio.currentTime + .21);
 }
 function selectedLearned(): boolean { return el<HTMLSelectElement>('policy').value === 'learned' && !!learned; }
-function reset(play: boolean): void { (document.activeElement as HTMLElement)?.blur(); generation++; duel = new Duel(17); playing = play; paused = false; keys.clear(); touch = undefined; pendingAction = undefined; el('outcome').hidden = true; el('pause').textContent = 'PAUSE'; el('mode').textContent = play ? 'DUEL EN COURS' : 'DÉMONSTRATION'; el('opponent-label').textContent = selectedLearned() ? 'Politique apprise · figée' : play ? 'Adversaire de référence' : 'Adversaires de référence'; view.wide(); }
+const gameSurface = el("viewport");
+gameSurface.tabIndex = 0;
+gameSurface.setAttribute("aria-label", "Combat : ZQSD pour déplacer, espace pour frapper, shift pour parer");
+function focusGame(): void { gameSurface.focus({ preventScroll: true }); }
+function reset(play: boolean, preservePause = false): void { const wasPaused = paused; generation++; duel = new Duel(17); roundAgent = selectedLearned() ? learned : undefined; playing = play; paused = false; keys.clear(); touch = undefined; pendingAction = undefined; el('outcome').hidden = true; el('pause').textContent = 'PAUSE'; el('mode').textContent = play ? 'DUEL EN COURS' : 'DÉMONSTRATION'; el('opponent-label').textContent = selectedLearned() ? 'Politique apprise · figée' : play ? 'Adversaire de référence' : 'Adversaires de référence'; if (!preservePause) view.wide(); if (preservePause && wasPaused) pause(); }
 function pause(): void { paused = !paused; keys.clear(); touch = undefined; pendingAction = undefined; el('pause').textContent = paused ? 'REPRENDRE' : 'PAUSE'; el('mode').textContent = paused ? 'EN PAUSE' : playing ? 'DUEL EN COURS' : 'DÉMONSTRATION'; }
 function input(): Action {
     if (pendingAction !== undefined) {
@@ -73,22 +78,21 @@ function input(): Action {
         return Action.Right;
     return Action.Idle;
 }
-el('start').onclick = () => reset(true);
-el('rematch').onclick = () => reset(true);
-el('pause').onclick = pause;
-el('closeup').onclick = () => view.closeup();
-el('wide').onclick = () => view.wide();
-el('sound').onclick = () => { sound = !sound; el('sound').textContent = sound ? 'SON ON' : 'SON OFF'; el('sound').setAttribute('aria-pressed', String(sound)); tone('parry'); };
-el('policy').onchange = () => reset(playing);
+el('start').onclick = () => { reset(true); focusGame(); };
+el('rematch').onclick = () => { reset(true); focusGame(); };
+el('pause').onclick = () => { pause(); focusGame(); };
+el('closeup').onclick = () => { view.closeup(); focusGame(); };
+el('wide').onclick = () => { view.wide(); focusGame(); };
+el('sound').onclick = () => { sound = !sound; el('sound').textContent = sound ? 'SON ON' : 'SON OFF'; el('sound').setAttribute('aria-pressed', String(sound)); tone('parry'); focusGame(); };
+el('policy').onchange = () => { reset(playing); if (playing) focusGame(); };
 window.addEventListener('keydown', e => {
-    if ((e.target as HTMLElement).matches('input,select,textarea,button'))
-        return;
     const k = e.key.toLowerCase();
     if (k === 'escape') {
         if (!e.repeat)
             pause();
         return;
     }
+    if ((e.target as HTMLElement).matches('input,select,textarea,button')) return;
     if ([' ', 'shift', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'z', 'q', 's', 'd', 'w', 'a'].includes(k)) {
         e.preventDefault();
         keys.add(k);
@@ -109,7 +113,7 @@ async function tick(): Promise<void> {
     busy = true;
     const run = generation;
     try {
-        const action = selectedLearned() ? await learned!.getAction(duel.observe(1), true) : duel.reference(1);
+        const action = roundAgent ? await roundAgent.getAction(duel.observe(1), true) : duel.reference(1);
         if (run !== generation || paused)
             return;
         duel.step(playing ? input() : duel.reference(0), action);
@@ -122,7 +126,7 @@ async function tick(): Promise<void> {
         if (duel.done) {
             if (!playing) {
                 setTimeout(() => { if (run === generation && !playing)
-                    reset(false); }, 1800);
+                    reset(false, true); }, 1800);
             }
             else {
                 const [a, b] = duel.fighters;
@@ -168,6 +172,9 @@ el('train').onclick = async () => {
         const choices = el<HTMLSelectElement>('policy');
         if (!choices.querySelector('option[value=learned]'))
             choices.add(new Option('Recrue · politique apprise', 'learned'));
+        const option = choices.querySelector<HTMLOptionElement>('option[value=learned]')!;
+        option.disabled = false;
+        option.textContent = 'Recrue · politique apprise';
         learned = candidate;
         el('training-state').textContent = 'RECRUE DISPONIBLE';
         el('training-description').textContent = 'Entraînement terminé. Sélectionnez « Recrue » pour affronter cette politique figée.';

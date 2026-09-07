@@ -2,7 +2,7 @@ import { IgnitionEnv } from '../../core/src/ignition-env';
 import { QTableAgent } from '../../backend-tfjs/src/agents/qtable';
 import { Duel, Action } from './duel';
 export function createAgent(): QTableAgent {
-    return new QTableAgent({ backend: 'cpu', inputSize: 4, actionSize: 7, stateBins: 6, stateLow: [0, 0, 0, 0], stateHigh: [6, 6, 6, 6], lr: .18, gamma: .92, epsilon: .8, epsilonDecay: .99993, minEpsilon: .08 });
+    return new QTableAgent({ backend: 'cpu', inputSize: 4, actionSize: 7, stateBins: 6, stateLow: [-.5, -.5, -.5, -.5], stateHigh: [5.5, 5.5, 5.5, 5.5], lr: .18, gamma: .92, epsilon: .8, epsilonDecay: .99993, minEpsilon: .08 });
 }
 export class DuelTraining {
     actions = 7;
@@ -19,8 +19,8 @@ export class DuelTraining {
             this.lastReward += p.health > q.health ? 3 : p.health < q.health ? -3 : 0;
     }
     reward(): number { return this.lastReward; }
-    terminated(): boolean { return this.duel.fighters.some(f => f.health <= 0); }
-    truncated(): boolean { return this.duel.done && !this.terminated(); }
+    terminated(): boolean { return this.duel.done; }
+    truncated(): boolean { return false; }
     done(): boolean { return this.duel.done; }
     reset(): void { this.episodes++; this.duel = new Duel(1 + this.episodes % 97, 3 + (this.episodes % 5) * .4); }
 }
