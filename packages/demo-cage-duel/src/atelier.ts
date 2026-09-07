@@ -43,12 +43,14 @@ ground.receiveShadow = true;
 scene.add(ground);
 const loader = new GLTFLoader();
 const cache = new Map<string, THREE.Group>();
-let active = 'marine', request = 0, model: THREE.Group | undefined;
+const purchaseMode = new URLSearchParams(location.search).get('model') === 'blood-angel';
+type ModelKind = 'marine' | 'cage' | 'blood-angel';
+let active: ModelKind = 'marine', request = 0, model: THREE.Group | undefined;
 function frameModel(): void {
-    if (active === 'marine') {
+    if (active !== 'cage') {
         camera.position.set(3, 2.8, 5);
         ground.position.y = -.02;
-        controls.target.set(0, 1.7, 0);
+        controls.target.set(0, active === 'blood-angel' ? 1.35 : 1.7, 0);
         controls.minDistance = 1.3;
         controls.maxDistance = 15;
     } else {
@@ -60,15 +62,15 @@ function frameModel(): void {
     }
     controls.update();
 }
-async function show(kind: 'marine' | 'cage'): Promise<void> {
+async function show(kind: ModelKind): Promise<void> {
     const token = ++request;
     active = kind;
     status.textContent = 'Chargement du modèle…';
-    for (const name of ['marine', 'cage']) document.getElementById(name)!.setAttribute('aria-pressed', String(name === kind));
+    for (const name of ['marine', 'cage', 'blood-angel']) document.getElementById(name)!.setAttribute('aria-pressed', String(name === kind));
     try {
         let loaded = cache.get(kind);
         if (!loaded) {
-            const filename = kind === 'marine' ? 'marine-base-blender.glb' : 'cage-blender.glb';
+            const filename = { marine: 'marine-base-blender.glb', cage: 'cage-blender.glb', 'blood-angel': 'purchased/blood-angel-inspection.glb' }[kind];
             const result = await loader.loadAsync(`${import.meta.env.BASE_URL}models/${filename}`);
             loaded = result.scene;
             loaded.traverse(o => {
@@ -80,8 +82,10 @@ async function show(kind: 'marine' | 'cage'): Promise<void> {
         if (model) scene.remove(model);
         model = loaded;
         scene.add(model);
+        renderer.toneMappingExposure = kind === 'blood-angel' ? 1 : 1.3;
         frameModel();
-        status.textContent = kind === 'marine' ? 'Marine chargé · pièces articulables · matériaux PBR' : 'Cage chargée · grille et entrée ouvertes à l’inspection';
+        updateMetadata(kind);
+        status.textContent = kind === 'blood-angel' ? 'Blood Angel · Jeffry Quiambao · modèle acheté · sans squelette, aperçu statique' : kind === 'marine' ? 'Marine chargé · pièces articulables · matériaux PBR' : 'Cage chargée · grille et entrée ouvertes à l’inspection';
     } catch (error) {
         if (token === request) status.textContent = `Chargement impossible : ${error instanceof Error ? error.message : String(error)}`;
     }
@@ -96,4 +100,18 @@ new ResizeObserver(() => {
     camera.updateProjectionMatrix();
 }).observe(stage);
 renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
-void show('marine');
+const originalDescription = document.getElementById('description')!.textContent;
+const originalNote = document.querySelector('.note')!.textContent;
+function updateMetadata(kind: ModelKind): void {
+    const purchased = kind === 'blood-angel';
+    document.querySelector('h1')!.textContent = purchased ? 'Blood Angel.' : 'Forgés dans Blender.';
+    document.getElementById('description')!.textContent = purchased
+        ? 'Le modèle acheté de Jeffry Quiambao, préparé dans Blender. Tournez autour de l’armure et zoomez pour examiner ses détails.'
+        : originalDescription;
+    document.querySelector('.note')!.textContent = purchased
+        ? 'Aperçu local du modèle acheté : 71 pièces, environ 498 000 triangles, textures adaptées en 2K. Aucun squelette fourni dans le FBX ; la préparation au combat reste à faire.'
+        : originalNote;
+}
+if (purchaseMode) document.getElementById('blood-angel')!.hidden = false;
+document.getElementById('blood-angel')!.onclick = () => void show('blood-angel');
+void show(purchaseMode ? 'blood-angel' : 'marine');
