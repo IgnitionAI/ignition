@@ -127,6 +127,35 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
 
+  packages/demo-cage-duel:
+    dependencies:
+      '@ignitionai/backend-tfjs':
+        specifier: workspace:*
+        version: link:../backend-tfjs
+      '@ignitionai/core':
+        specifier: workspace:*
+        version: link:../core
+      three:
+        specifier: ^0.162.0
+        version: 0.162.0
+    devDependencies:
+      '@types/node':
+        specifier: ^22.14.1
+        version: 22.14.1
+      '@types/three':
+        specifier: ^0.162.0
+        version: 0.162.0
+      typescript:
+        specifier: ~5.7.2
+        version: 5.7.3
+      vite:
+        specifier: ^6.3.1
+        version: 6.3.3(@types/node@22.14.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3)
+      vitest:
+        specifier: ^3.1.1
+        version: 3.1.1(@types/debug@4.1.13)(@types/node@22.14.1)(@vitest/ui@3.1.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3)
+
+
   packages/demo-car-circuit:
     dependencies:
       '@ignitionai/backend-tfjs':
