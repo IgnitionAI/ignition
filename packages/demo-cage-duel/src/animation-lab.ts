@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { combatCatalog } from './combat-catalog';
+import { mixamoCatalog as combatCatalog } from './mixamo-catalog';
 
 type Direction = 'top' | 'left' | 'right' | 'bottom';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -28,7 +28,7 @@ const rim = new THREE.DirectionalLight(0x819fcb, 2); rim.position.set(-4, 5, -5)
 const targetRing = new THREE.Mesh(new THREE.RingGeometry(.68, .71, 64), new THREE.MeshBasicMaterial({ color: 0xd8ad55, side: THREE.DoubleSide }));
 targetRing.rotation.x = -Math.PI / 2; targetRing.position.set(0, .18, -1.5); scene.add(targetRing);
 let player: THREE.Object3D | undefined, mixer: THREE.AnimationMixer | undefined, enemyMixer: THREE.AnimationMixer | undefined;
-let active: THREE.AnimationAction | undefined, selected = 'guard_top', direction: Direction = 'top', paused = false;
+let active: THREE.AnimationAction | undefined, selected = 'mx_standing_idle', direction: Direction = 'top', paused = false;
 const actions = new Map<string, THREE.AnimationAction>(), clips = new Map<string, THREE.AnimationClip>();
 const keys = new Set<string>(); let moving = false;
 const speed = el<HTMLSelectElement>('speed'), loop = el<HTMLInputElement>('loop'), timeline = el<HTMLInputElement>('timeline');
@@ -50,19 +50,15 @@ function play(name: string): void {
     // Stop previous actions so scrubbing always evaluates only the selected movement.
     mixer.stopAllAction(); next.reset(); next.enabled = true; next.setEffectiveWeight(1);
     selected = name; active = next;
-    if (name.startsWith('guard_') && ['top', 'left', 'right', 'bottom'].includes(name.slice(6))) {
-        direction = name.slice(6) as Direction;
-        document.querySelectorAll<HTMLButtonElement>('[data-direction]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.direction === direction)));
-    }
     const entry = combatCatalog.find(c => c.name === name)!;
     loop.checked = entry.loop; next.setLoop(entry.loop ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
     next.clampWhenFinished = true; next.play(); setPaused(false); mixer.update(0);
-    el('current').textContent = entry.label; el('status').textContent = `${combatCatalog.length} mouvements disponibles · ${next.getClip().duration.toFixed(2)} s · version de travail`;
+    el('current').textContent = entry.label; el('status').textContent = `${combatCatalog.length} mouvements disponibles · ${next.getClip().duration.toFixed(2)} s · Mixamo / ${entry.source}`;
     document.querySelectorAll<HTMLButtonElement>('[data-clip]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.clip === name)));
 }
 function guard(d: Direction): void {
     direction = d; document.querySelectorAll<HTMLButtonElement>('[data-direction]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.direction === d)));
-    play('guard_' + d);
+    play('mx_standing_block_idle');
 }
 document.querySelectorAll<HTMLButtonElement>('[data-direction]').forEach(b => { b.onclick = () => guard(b.dataset.direction as Direction); });
 el('replay').onclick = () => play(selected); el('pause').onclick = () => setPaused(!paused);
@@ -85,8 +81,17 @@ window.addEventListener('keydown', e => {
     keys.add(key); if (e.repeat) return;
     const dirs: Record<string, Direction> = { arrowup: 'top', arrowdown: 'bottom', arrowleft: 'left', arrowright: 'right' };
     if (dirs[key]) guard(dirs[key]);
-    const commands: Record<string, string> = { '1': 'light_' + direction, '2': 'heavy_' + direction, '3': 'punch', '4': 'dodge_' + ({ top: 'forward', bottom: 'backward', left: 'left', right: 'right' }[direction]), f: 'feint_' + direction, b: 'block_' + direction, p: 'parry_' + direction };
-    if (commands[key]) play(commands[key]); if (key === ' ') setPaused(!paused);
+    const attacks: Partial<Record<Direction, string>> = { left: 'backhand', right: 'horizontal', top: 'downward' };
+    const commands: Record<string, string | undefined> = {
+        '1': attacks[direction] ? 'mx_standing_melee_attack_' + attacks[direction] : undefined,
+        '2': 'mx_standing_melee_combo_attack_ver_1', '3': 'mx_standing_melee_punch',
+        '4': 'mx_standing_dodge_' + ({ top: 'forward', bottom: 'backward', left: 'left', right: 'right' }[direction]),
+        b: 'mx_standing_block_react_large'
+    };
+    if ((key === '1' && !commands[key]) || key === 'f' || key === 'p') {
+        el('status').textContent = 'Ce mouvement précis reste à adapter : aucun clip Mixamo équivalent validé dans ce catalogue.';
+    }
+    if (commands[key]) play(commands[key]!); if (key === ' ') setPaused(!paused);
 });
 window.addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
 window.addEventListener('blur', () => { keys.clear(); moving = false; setPaused(true); });
@@ -105,7 +110,7 @@ async function load(): Promise<void> {
     try {
         const [cage, asset] = await Promise.all([
             loader.loadAsync(import.meta.env.BASE_URL + 'models/cage-blender.glb'),
-            loader.loadAsync(import.meta.env.BASE_URL + 'models/purchased/blood-angel-combat.glb')
+            loader.loadAsync(import.meta.env.BASE_URL + 'models/purchased/blood-angel-mixamo.glb')
         ]);
         for (const entry of combatCatalog) if (!asset.animations.some(a => a.name === entry.name)) throw new Error('Animation absente : ' + entry.name);
         scene.add(cage.scene); player = asset.scene; scene.add(player);
@@ -113,7 +118,7 @@ async function load(): Promise<void> {
         scene.traverse(o => { if (o instanceof THREE.Mesh) { o.castShadow = true; o.receiveShadow = true; } });
         mixer = new THREE.AnimationMixer(player); enemyMixer = new THREE.AnimationMixer(enemy);
         for (const clip of asset.animations) { clips.set(clip.name, clip); actions.set(clip.name, mixer.clipAction(clip)); }
-        enemyMixer.clipAction(clips.get('guard_top')!).play();
+        enemyMixer.clipAction(clips.get('mx_standing_idle')!).play();
         reset(); catalog(); guard('top');
     } catch (error) {
         el('current').textContent = 'Chargement impossible';
@@ -128,14 +133,16 @@ renderer.setAnimationLoop(() => {
         const lateral = Number(keys.has('d')) - Number(keys.has('q') || keys.has('a'));
         if ((forward || lateral) && !paused) {
             const movement = Math.abs(lateral) > Math.abs(forward) ? (lateral > 0 ? 'right' : 'left') : (forward > 0 ? 'forward' : 'backward');
-            if (selected !== 'move_' + movement) play('move_' + movement); moving = true;
+            const moveName = 'mx_standing_walk_' + (movement === 'backward' ? 'back' : movement);
+            if (selected !== moveName) play(moveName); moving = true;
             const toward = new THREE.Vector3(0, 0, -1.5).sub(player.position); toward.y = 0; toward.normalize();
             const right = new THREE.Vector3(-toward.z, 0, toward.x);
-            const delta = toward.multiplyScalar(forward).addScaledVector(right, lateral).normalize().multiplyScalar(dt * .7 * rate);
+            const capturedSpeed = combatCatalog.find(c => c.name === moveName)?.speed ?? .7;
+            const delta = toward.multiplyScalar(forward).addScaledVector(right, lateral).normalize().multiplyScalar(dt * Math.max(.1, capturedSpeed) * rate);
             const candidate = player.position.clone().add(delta);
             if (Math.hypot(candidate.x, candidate.z) < 4.7 && Math.hypot(candidate.x, candidate.z + 1.5) > 1.45) player.position.copy(candidate);
             player.rotation.y = Math.atan2(-player.position.x, -1.5 - player.position.z);
-        } else if (moving && !forward && !lateral) { moving = false; if (!paused) play('guard_' + direction); }
+        } else if (moving && !forward && !lateral) { moving = false; if (!paused) play('mx_standing_idle'); }
         if (!paused) { if (active) active.paused = false; mixer.update(dt * rate); enemyMixer?.update(dt * rate); }
         if (active) { timeline.value = String(active.time / active.getClip().duration); el('time').textContent = active.time.toFixed(2) + ' s'; }
     }

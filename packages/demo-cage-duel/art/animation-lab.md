@@ -1,3 +1,11 @@
+# État actuel : Mixamo
+
+La salle d’armes charge maintenant 48 vrais clips Mixamo transférés au Blood Angel. Voir [mixamo-integration.md](mixamo-integration.md) pour les commandes, limites et preuves actuelles.
+
+---
+
+# Historique conservé — première passe maison (remplacée dans la salle d’armes)
+
 # Salle d’armes — essai local des animations
 
 Ouvrir `http://127.0.0.1:3033/animations.html` après `pnpm --filter demo-cage-duel dev`. Un lien est aussi présent dans l'atelier. Le fichier acheté et son export doivent être disponibles sur cette machine.

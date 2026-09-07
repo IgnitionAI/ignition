@@ -12,7 +12,7 @@ export default defineConfig({
         apply: 'serve',
         configureServer(server) {
             // Fixed local asset; no caller-supplied filesystem path or production copy.
-            for (const filename of ['blood-angel-inspection.glb', 'blood-angel-combat.glb']) {
+            for (const filename of ['blood-angel-inspection.glb', 'blood-angel-combat.glb', 'blood-angel-mixamo.glb']) {
                 server.middlewares.use('/models/purchased/' + filename, (req, res) => {
                     if (req.method !== 'GET' && req.method !== 'HEAD') {
                         res.statusCode = 405;

@@ -4,7 +4,8 @@ UDIM tiles become ordinary materials; original meshes/images are not mutated.
 from pathlib import Path
 import bpy, math, json, struct, sys
 ROOT = Path.home() / '.local/share/ignition-assets/blood-angel'
-combat = '--combat' in sys.argv
+mixamo = '--mixamo' in sys.argv
+combat = '--combat' in sys.argv or mixamo
 source = bpy.data.scenes['Blood Angel Rigged' if combat else '03 · BLOOD ANGEL — PURCHASED']
 scene = bpy.data.scenes.new('Blood Angel Export')
 scene.render.fps = source.render.fps
@@ -54,20 +55,20 @@ for src in source.objects:
             for i in poly.loop_indices: uv[i].uv.x-=offset
     obj.select_set(True)
 
-out=ROOT/('blood-angel-combat.glb' if combat else 'blood-angel-inspection.glb')
+out=ROOT/('blood-angel-mixamo.glb' if mixamo else 'blood-angel-combat.glb' if combat else 'blood-angel-inspection.glb')
 bpy.ops.export_scene.gltf(filepath=str(out),export_format='GLB',use_selection=True,use_active_scene=True,export_image_format='JPEG',export_jpeg_quality=90,export_animations=combat,export_animation_mode='ACTIONS',export_cameras=False,export_lights=False,export_extras=False)
 blob=out.read_bytes()
 size=struct.unpack_from('<I',blob,12)[0]
 gltf=json.loads(blob[20:20+size])
 assert len(gltf['scenes']) == 1, 'Export contains unrelated scenes'
 if combat:
-    expected = {entry['name'] for entry in json.loads((ROOT/'combat-catalog.json').read_text())}
+    expected = {entry['name'] for entry in json.loads((ROOT/('mixamo-catalog.json' if mixamo else 'combat-catalog.json')).read_text())}
     actual = {a['name'] for a in gltf.get('animations', [])}
     assert expected == actual, f'Animation mismatch: {expected ^ actual}'
     assert gltf.get('skins'), 'Combat export must be skinned'
 else:
     assert not gltf.get('skins') and not gltf.get('animations'), 'Inspection export must stay static'
 assert not any(n.get('name') == 'BA Studio Floor' for n in gltf['nodes']), 'Studio leaked into asset'
-report={'mesh_objects':sum(o.type=='MESH' for o in scene.objects),'vertices':sum(len(o.data.vertices) for o in scene.objects if o.type=='MESH'),'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in scene.objects if o.type=='MESH'),'materials':len(materials),'images':len(images),'rigged':combat,'purpose':'authored animation blocking' if combat else 'static inspection, not combat-ready','bytes':out.stat().st_size}
-(ROOT/('combat-export-report.json' if combat else 'inspection-report.json')).write_text(json.dumps(report,indent=2))
+report={'mesh_objects':sum(o.type=='MESH' for o in scene.objects),'vertices':sum(len(o.data.vertices) for o in scene.objects if o.type=='MESH'),'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in scene.objects if o.type=='MESH'),'materials':len(materials),'images':len(images),'rigged':combat,'purpose':'Mixamo retarget' if mixamo else 'authored animation blocking' if combat else 'static inspection, not combat-ready','bytes':out.stat().st_size}
+(ROOT/('mixamo-export-report.json' if mixamo else 'combat-export-report.json' if combat else 'inspection-report.json')).write_text(json.dumps(report,indent=2))
 print(report)
