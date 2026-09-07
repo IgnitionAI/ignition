@@ -42,6 +42,7 @@ export default defineConfig({
         target: 'es2022',
         rollupOptions: { input: {
             main: fileURLToPath(new URL('./index.html', import.meta.url)),
+            combat: fileURLToPath(new URL('./combat.html', import.meta.url)),
             animations: fileURLToPath(new URL('./animations.html', import.meta.url)),
             atelier: fileURLToPath(new URL('./atelier.html', import.meta.url))
         } }
