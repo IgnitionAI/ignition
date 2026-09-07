@@ -40,3 +40,15 @@ it('preserves marine articulation pivots in glTF Y-up coordinates', () => {
     expect(positions.get('Hand.R')?.y).toBeCloseTo(1.55, 3);
     expect(positions.get('Shin.L')?.x).toBeCloseTo(-.44, 3);
 });
+it('ships the credited sword alone, without the purchased character or its skeleton', () => {
+    const gltf = asset('chainsword');
+    expect(gltf.scenes).toHaveLength(1);
+    expect(gltf.nodes).toHaveLength(1);
+    expect(gltf.meshes).toHaveLength(1);
+    expect(gltf.skins ?? []).toHaveLength(0);
+    expect(gltf.animations ?? []).toHaveLength(0);
+    expect(gltf.nodes[0].extras.author).toBe('Kaiser-E');
+    expect(gltf.nodes[0].extras.license).toBe('CC-BY-4.0');
+    expect(gltf.asset.copyright).toContain('Kaiser-E');
+    expect(gltf.asset.copyright).toContain('Changes:');
+});

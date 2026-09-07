@@ -1,4 +1,6 @@
 import './animation-lab.css';
+import { attachChainsword, selectWeapon, type Weapon } from './weapon';
+const armedCharacters: THREE.Object3D[] = [];
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -44,6 +46,7 @@ function catalog(): void {
     }
 }
 category.onchange = catalog;
+el<HTMLSelectElement>('weapon').onchange = () => { for (const character of armedCharacters) selectWeapon(character, el<HTMLSelectElement>('weapon').value as Weapon); };
 function setPaused(value: boolean): void { paused = value; el('pause').textContent = paused ? 'Reprendre' : 'Pause'; }
 function play(name: string): void {
     const next = actions.get(name); if (!next || !mixer) return;
@@ -108,13 +111,15 @@ layout();
 const loader = new GLTFLoader();
 async function load(): Promise<void> {
     try {
-        const [cage, asset] = await Promise.all([
+        const [cage, asset, sword] = await Promise.all([
             loader.loadAsync(import.meta.env.BASE_URL + 'models/cage-blender.glb'),
-            loader.loadAsync(import.meta.env.BASE_URL + 'models/purchased/blood-angel-mixamo.glb')
+            loader.loadAsync(import.meta.env.BASE_URL + 'models/purchased/blood-angel-mixamo.glb'),
+            loader.loadAsync(import.meta.env.BASE_URL + 'models/chainsword.glb')
         ]);
         for (const entry of combatCatalog) if (!asset.animations.some(a => a.name === entry.name)) throw new Error('Animation absente : ' + entry.name);
+        attachChainsword(asset.scene, sword.scene); selectWeapon(asset.scene, el<HTMLSelectElement>('weapon').value as Weapon);
         scene.add(cage.scene); player = asset.scene; scene.add(player);
-        const enemy = clone(asset.scene); enemy.position.set(0, .17, -1.5); scene.add(enemy);
+        const enemy = clone(asset.scene); armedCharacters.push(player, enemy); enemy.position.set(0, .17, -1.5); scene.add(enemy);
         scene.traverse(o => { if (o instanceof THREE.Mesh) { o.castShadow = true; o.receiveShadow = true; } });
         mixer = new THREE.AnimationMixer(player); enemyMixer = new THREE.AnimationMixer(enemy);
         for (const clip of asset.animations) { clips.set(clip.name, clip); actions.set(clip.name, mixer.clipAction(clip)); }

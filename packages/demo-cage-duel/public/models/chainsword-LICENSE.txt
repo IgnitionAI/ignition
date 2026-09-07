@@ -1,0 +1,10 @@
+Wh-40k-chainsword by Kaiser-E
+Author: https://sketchfab.com/Kaiser-E
+Source: https://sketchfab.com/3d-models/wh-40k-chainsword-2976e3debf33494a831253b160f7d2c9
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+Changes: scale and orientation, right-hand attachment coordinates, textures resized from 4K to 2K and JPEG compression. Original geometry retained.
+Attribution extracted from source GLB asset.extras; no author endorsement is implied.
+Source SHA-256: 221ada6ba0ece0292b9c0c5df88fa1db1d553161a1b22be5c80bd43ba5a19ca0
+This license applies to chainsword.glb only, not to the purchased Blood Angel character.
