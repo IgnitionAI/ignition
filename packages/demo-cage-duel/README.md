@@ -1,6 +1,6 @@
 # The Crucible — Ignition cage duel
 
-Local first playable slice. Original procedural armoured characters and cage; visual inspiration: grimdark science fiction. No purchased or extracted game assets. Models are authored directly in Three.js, not produced with Blender. This is a stylized demo, not an AAA quality claim or an official Warhammer product.
+Local first playable slice. Original procedural armoured characters and cage; visual inspiration: grimdark science fiction. No purchased or extracted game assets. The existing playable demo uses models authored directly in Three.js. New Blender-authored cage and marine assets are available in the [Blender atelier](http://127.0.0.1:3033/atelier.html), with [source and build instructions](art/README.md); they are not yet wired into the playable combat. This is a stylized demo, not an AAA quality claim or an official Warhammer product.
 
 ## Run
 
