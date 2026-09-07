@@ -15,8 +15,8 @@ hand = rig.data.bones['Hand.R'].matrix_local.copy()
 scene = bpy.data.scenes.new('Chainsword game export')
 bpy.context.window.scene = scene
 mesh = source.data.copy(); obj = bpy.data.objects.new('Kaiser-E chainsword', mesh); scene.collection.objects.link(obj)
-# Source blade points -X, thickness is Y; map blade to character +Z and teeth toward -Y.
-rotation = Matrix(((0,1,0),(0,0,-1),(-1,0,0)))
+# Source blade points -X and teeth -Z; map blade to character +Z and teeth forward (-Y).
+rotation = Matrix(((0,-1,0),(0,0,1),(-1,0,0)))
 palm = Vector((-.615,-.335,1.37)); grip = Vector((8.5,0,.25)); scale = .105
 for v in mesh.vertices:
     v.co = hand.inverted() @ (palm + rotation @ ((source.matrix_world @ v.co - grip)*scale))

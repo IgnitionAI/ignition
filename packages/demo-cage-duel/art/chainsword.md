@@ -9,7 +9,7 @@ Métadonnées natives `asset.extras` : Wh-40k-chainsword, Kaiser-E, CC-BY-4.0, h
 
 Export actif/selection explicites et assertions AVANT copie vers public : un seul maillage, un seul nœud d’épée, aucune skin. Un premier export multi-scènes a été rejeté et retiré de public avant intégration. Le fichier distribué final ne contient aucun personnage acheté.
 
-`public/models/chainsword.glb` :1,802,424 octets. Licence et modifications dans le GLB, fichier compagnon `chainsword-LICENSE.txt`, page `credits.html` et lien visible depuis combat/salle d’armes.
+`public/models/chainsword.glb` :1,802,464 octets. Licence et modifications dans le GLB, fichier compagnon `chainsword-LICENSE.txt`, page `credits.html` et lien visible depuis combat/salle d’armes.
 
 `src/weapon.ts` attache une copie à Hand.R ; la rotationX+90° annule la conversion globale glTF du prop pour respecter les axes locaux des os. Sélecteur épée/hache pour les deux personnages, dans les deux pages. Ancienne hache conservée et masquée réversiblement. Les clips et règles de combat restent ceux de la tranche Mixamo actuelle ; pas d’animation spécifique d’épée ni de déplacement des dents ajouté.
 
@@ -24,3 +24,5 @@ Instructions consultées pendant cette intégration. Ce sont des références co
 Reproduction via MCP : `import runpy; runpy.run_path(chemin_absolu_du_script, run_name="__main__")`, après import de la source dans la scène nommée et chargement du rig. Le répertoire public cible est déduit du chemin du script, donc suit le checkout utilisé.
 
 Validation finale : typecheck/build réussis ;370 tests réussis,3 ignorés. Inspection navigateur de la prise au repos et pendant une frappe, bascule épée/hache dans les deux pages. Capture privée `~/.local/share/ignition-assets/blood-angel/chainsword-combat.png`. La longueur de lame et la géométrie du gant restent à ajuster artistiquement ; les règles de portée du prototype sont inchangées.
+
+Correction de prise après retour utilisateur : demi-tour autour du manche, avec le pivot de paume conservé. Le bord denté de la source est -Z ; il est désormais orienté vers -Y (avant du personnage au repos).
