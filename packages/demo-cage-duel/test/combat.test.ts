@@ -99,3 +99,30 @@ it('resolves simultaneous kicks symmetrically before their knockback affects rea
     expect(d.fighters.map(f=>f.health)).toEqual([92,92]);
     expect(d.distance()).toBeCloseTo(3.3);
 });
+it('opens an identifiable riposte after a precise heavy parry, without granting it to held blocks', () => {
+    const d = new Combat(2);
+    d.step({}, {action:'heavy'}); advance(d,.8);
+    let parried = false;
+    for(let i=0;i<8;i++) { d.step({guard:true},{}); parried ||= d.events.some(e=>e.kind==='parry'); }
+    expect(parried).toBe(true);
+    d.step({action:'light'}, {});
+    const hits = [];
+    for(let i=0;i<35;i++) { d.step({},{}); hits.push(...d.events); }
+    expect(hits).toContainEqual(expect.objectContaining({kind:'hit',source:0,attack:'light',riposte:true}));
+    expect(d.fighters.map(f=>f.health)).toEqual([100,84]);
+    const held = new Combat(2); held.step({}, {action:'heavy'}); advance(held,1,{guard:true},{});
+    held.step({action:'light'},{});
+    const normal = [];
+    for(let i=0;i<35;i++) { held.step({},{}); normal.push(...held.events); }
+    expect(normal).toContainEqual(expect.objectContaining({kind:'hit',riposte:false}));
+});
+it('gives a human half a second to launch a guaranteed light riposte after parrying', () => {
+    const d = new Combat(2); d.step({}, {action:'heavy'}); advance(d,.8);
+    for(let i=0;i<10&&!d.events.some(e=>e.kind==='parry');i++)d.step({guard:true},{});
+    expect(d.events.some(e=>e.kind==='parry')).toBe(true);
+    advance(d,.45);
+    d.step({action:'light'},{guard:true});
+    const events=[];for(let i=0;i<30;i++){d.step({}, {guard:true});events.push(...d.events);}
+    expect(events).toContainEqual(expect.objectContaining({kind:'hit',riposte:true,source:0}));
+    expect(d.fighters[1].health).toBe(84);
+});

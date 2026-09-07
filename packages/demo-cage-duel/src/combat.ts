@@ -15,13 +15,13 @@ export const strikes = {
 export interface Fighter {
     x: number; z: number; health: number; stamina: number; exhausted: boolean;
     phase: Phase; remaining: number; elapsed: number; duration: number;
-    attack: Attack; serial: number; recovery: number;
+    attack: Attack; riposte: boolean; riposteUntil: number; serial: number; recovery: number;
     guarding: boolean; guardHeld: boolean; parryUntil: number; move?: Move; dodgeMove: Move;
     chain: number; chainUntil: number; regenAt: number; punchImmuneUntil: number;
 }
-export interface CombatEvent { kind: 'hit' | 'block' | 'parry' | 'miss' | 'evade' | 'break' | 'feint'; source: number; target: number }
+export interface CombatEvent { kind: 'hit' | 'block' | 'parry' | 'miss' | 'evade' | 'break' | 'feint'; source: number; target: number; attack: Attack; riposte: boolean }
 const fighter = (z: number): Fighter => ({ x: 0, z, health: 100, stamina: 100, exhausted: false,
-    phase: 'ready', remaining: 0, elapsed: 0, duration: 0, attack: 'light', serial: 0, recovery: .44, guarding: false, guardHeld: false, parryUntil: -1, dodgeMove: 'back',
+    phase: 'ready', remaining: 0, elapsed: 0, duration: 0, attack: 'light', riposte: false, riposteUntil: -1, serial: 0, recovery: .44, guarding: false, guardHeld: false, parryUntil: -1, dodgeMove: 'back',
     chain: 0, chainUntil: 0, regenAt: 0, punchImmuneUntil: 0 });
 export class Combat {
     fighters: [Fighter, Fighter]; time = 0; events: CombatEvent[] = [];
@@ -67,6 +67,7 @@ export class Combat {
                         if (input.action === 'dodge') {
                             f.dodgeMove = input.move ?? 'back'; f.duration = .65; this.phase(f, 'dodge', .65);
                         } else {
+                            f.riposte = input.action === 'light' && this.time <= f.riposteUntil; f.riposteUntil = -1;
                             f.attack = input.action; f.recovery = strikes[f.attack].recover; f.chain++;
                             f.duration = strikes[f.attack].windup + strikes[f.attack].active + f.recovery + (f.chain >= 3 ? .45 : 0);
                             f.chainUntil = this.time + f.duration + .35;
@@ -76,7 +77,7 @@ export class Combat {
                 }
             } else if (input.action === 'feint' && f.phase === 'windup' && f.attack === 'heavy' && !f.exhausted && f.stamina >= 10) {
                 this.spend(f, 10); this.phase(f, 'recover', .22); f.chain = 0;
-                this.events.push({ kind: 'feint', source: i, target: 1-i });
+                this.events.push({ kind: 'feint', source: i, target: 1-i, attack: f.attack, riposte: false });
             }
             if (f.phase === 'dodge' && f.elapsed < .3) this.move(f, other, f.dodgeMove, movement.dodgeSpeed);
             if (f.phase === 'ready' && !f.guarding && this.time >= f.regenAt) f.stamina = Math.min(100, f.stamina + 18*STEP);
@@ -99,7 +100,7 @@ export class Combat {
         else if (before.phase === 'dodge' && before.elapsed >= .04 && before.elapsed <= .27) kind = 'evade';
         else if (attack !== 'punch' && before.guarding) {
             if (this.time <= before.parryUntil && !before.exhausted) {
-                kind = 'parry'; this.phase(attacker, 'stunned', .85); attacker.chain = 0;
+                kind = 'parry'; target.riposteUntil = this.time + .55; this.phase(attacker, 'stunned', 1.1); attacker.chain = 0;
             } else {
                 kind = before.exhausted ? 'break' : 'block'; this.spend(target, attack === 'heavy' ? 26 : 14);
                 if (kind === 'break') this.phase(target, 'stunned', .9);
@@ -121,7 +122,7 @@ export class Combat {
             }
         }
         target.guarding = target.guarding && target.phase === 'ready';
-        this.events.push({ kind, source: i, target: 1-i });
+        this.events.push({ kind, source: i, target: 1-i, attack, riposte: snapshot[i].riposte });
     }
     /** Deliberately scripted, readable sparring partner; not an Ignition policy. */
     opponent(): Command {

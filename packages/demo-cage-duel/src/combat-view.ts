@@ -1,11 +1,13 @@
 import './combat-view.css';
+import { CombatEffects, CombatAudio } from './combat-effects';
+import { ExchangePose } from './exchange-pose';
 import { attachChainsword } from './weapon';
 import { paintWorldEater } from './world-eater';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { Combat, STEP, strikes, movement, type Command, type Fighter, type Move } from './combat';
+import { Combat, STEP, strikes, movement, type Command, type Fighter, type Move, type Attack } from './combat';
 import { mixamoCatalog } from './mixamo-catalog';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#131b20'); scene.fog = new THREE.FogExp2('#131b20', .035);
@@ -20,9 +22,13 @@ const key = new THREE.DirectionalLight(0xffddb1, 3.5); key.position.set(2,7,4); 
 Object.assign(key.shadow.camera, { left:-7, right:7, top:7, bottom:-7, far:25 }); key.shadow.normalBias = .025; scene.add(key);
 const rim = new THREE.DirectionalLight(0x819fcb, 2); rim.position.set(-4,5,-5); scene.add(rim);
 const ring = new THREE.Mesh(new THREE.RingGeometry(.73,.76,64), new THREE.MeshBasicMaterial({color:0xd8ad55,side:THREE.DoubleSide})); ring.rotation.x = -Math.PI/2; scene.add(ring);
-const flash = new THREE.PointLight(0xffc475,0,4); scene.add(flash);
+const effects = new CombatEffects(scene), audio = new CombatAudio();
+let hitStop = 0, renderRequested=true;
+const soundedSerial = [-1,-1];
+const contactPoses: ExchangePose[] = [];
+let contactPair: {source:number;target:number;parry:boolean;attack:Attack}|undefined;
 let combat = new Combat(), loaded = false, paused = false, accumulator = 0;
-let pending: Command['action'], pointerGuard = false, feedbackUntil = 0;
+let pending: Command['action'], pointerGuard = false, guardTapUntil=-1, feedbackUntil = 0;
 const keys = new Set<string>();
 let awaitingStart = true;
 const models: THREE.Object3D[] = [], mixers: THREE.AnimationMixer[] = [], actions: Map<string,THREE.AnimationAction>[] = [];
@@ -53,7 +59,8 @@ function pose(i: number, f: Fighter, dt: number): void {
         loop = false;
         const rule = strikes[f.attack];
         // Source clips are phase-retimed. Contact at 46% is provisional, not weapon-mesh collision.
-        progress = f.phase === 'windup' ? .46*f.elapsed/rule.windup : f.phase === 'active' ? .46+.12*f.elapsed/rule.active : .58+.42*Math.min(1, f.elapsed/f.recovery);
+        const contact = f.attack==='heavy'||f.attack==='light' ? .38 : .46;
+        progress = f.phase === 'windup' ? contact*f.elapsed/rule.windup : f.phase === 'active' ? contact+.12*f.elapsed/rule.active : contact+.12+(1-contact-.12)*Math.min(1, f.elapsed/f.recovery);
         if (f.phase === 'recover' && f.remaining <= .22 && f.chain === 0) { name = 'mx_standing_block_idle'; loop = true; progress = undefined; }
     } else if (f.phase === 'dodge') {
         name = 'mx_standing_dodge_' + ({forward:'forward',back:'backward',left:'left',right:'right'}[f.dodgeMove]); loop = false; progress = f.elapsed/.65;
@@ -86,16 +93,42 @@ function updateHUD(): void {
     if (combat.done) { el('finish').hidden = false; el('result').textContent = combat.fighters[0].health > 0 ? 'Victoire.' : combat.fighters[1].health > 0 ? 'Défaite.' : 'Double K.O.'; }
 }
 function reset(): void {
-    combat = new Combat(); pending = undefined; keys.clear(); pointerGuard = false; accumulator = 0;
+    renderRequested=true;
+    if(recorder?.state==='recording')recorder.stop();
+    combat = new Combat(['exercise','showcase'].includes(el<HTMLSelectElement>('opponent').value) ? 2 : 3.8); effects.reset(); audio.reset(); hitStop=0; contactPair=undefined; soundedSerial.fill(-1); pending = undefined; keys.clear(); pointerGuard = false; guardTapUntil=-1; accumulator = 0;
     awaitingStart = true; el('start').hidden = false; el<HTMLButtonElement>('pause').disabled = true;
     playing.forEach(s => { s.serial = -1; s.reactionUntil = 0; });
     el('finish').hidden = true; paused = true; el('pause').textContent = 'Pause'; message('ENTREZ DANS LA CAGE', 2);
 }
-el('begin').onclick = () => { awaitingStart = false; el('start').hidden = true; el<HTMLButtonElement>('pause').disabled = false; renderer.domElement.focus(); paused = false; el('pause').textContent = 'Pause'; };
-function pause(): void { if (awaitingStart) return; paused = !paused; pending = undefined; keys.clear(); pointerGuard = false; accumulator = 0; el('pause').textContent = paused ? 'Reprendre' : 'Pause'; }
+let recorder:MediaRecorder|undefined, videoUrl:string|undefined, captureTimer:ReturnType<typeof setTimeout>|undefined;
+el('record').onclick=async()=>{
+    if(recorder?.state==='recording') {recorder.stop();return;}
+    el<HTMLSelectElement>('opponent').value='showcase'; el<HTMLInputElement>('inspect-impact').checked=false; reset();
+    await audio.start();
+    const stream=renderer.domElement.captureStream(60);
+    for(const track of audio.stream?.getAudioTracks()??[])stream.addTrack(track);
+    const mime=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(m=>MediaRecorder.isTypeSupported(m));
+    if(!mime){message('Capture vidéo non prise en charge',5);return;}
+    const chunks:Blob[]=[];
+    recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:8_000_000});
+    recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+    recorder.onstop=()=>{
+        clearTimeout(captureTimer);for(const track of stream.getVideoTracks())track.stop();
+        if(videoUrl)URL.revokeObjectURL(videoUrl);
+        videoUrl=URL.createObjectURL(new Blob(chunks,{type:mime}));
+        const link=el<HTMLAnchorElement>('download');link.href=videoUrl;link.download='crucible-echange.webm';link.hidden=false;
+        el('record').textContent='Capturer l’échange';
+    };
+    recorder.start();el('record').textContent='Arrêter la capture';
+    el('begin').click();captureTimer=setTimeout(()=>{if(recorder?.state==='recording')recorder.stop();},8000);
+};
+el('sound').onclick=()=>{audio.setMuted(!audio.muted);el('sound').textContent=audio.muted?'Son coupé':'Son activé';el('sound').setAttribute('aria-pressed',String(!audio.muted));};
+el('begin').onclick = () => { void audio.start(); awaitingStart = false; el('start').hidden = true; el<HTMLButtonElement>('pause').disabled = false; renderer.domElement.focus(); paused = false; el('pause').textContent = 'Pause'; };
+function pause(): void { renderRequested=true; if (awaitingStart) return; paused = !paused; if(paused) {audio.pause();if(recorder?.state==='recording')recorder.stop();} else void audio.start(); pending = undefined; keys.clear(); pointerGuard = false; guardTapUntil=-1; accumulator = 0; el('pause').textContent = paused ? 'Reprendre' : 'Pause'; }
 el('pause').onclick = pause; el('reset').onclick = reset; el('again').onclick = reset;
 el<HTMLSelectElement>('opponent').onchange = reset;
 document.querySelectorAll<HTMLButtonElement>('[data-action]').forEach(b => { b.disabled = true; b.onclick = () => { if (!paused && !combat.done) { pending = b.dataset.action as Command['action']; renderer.domElement.focus(); } }; });
+el('defend').onclick=()=>{if(!paused&&!combat.done)guardTapUntil=combat.time+.15;};
 el('defend').onpointerdown = e => { pointerGuard = true; el('defend').setPointerCapture(e.pointerId); };
 el('defend').onkeydown = e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); pointerGuard = true; } };
 el('defend').onkeyup = () => { pointerGuard = false; };
@@ -114,7 +147,7 @@ window.addEventListener('keydown', e => {
 });
 window.addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
 window.addEventListener('blur', () => { if (!paused) pause(); });
-function layout(): void { renderer.setSize(innerWidth,innerHeight); camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+function layout(): void { renderRequested=true; renderer.setSize(innerWidth,innerHeight); camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); }
 window.addEventListener('resize', layout); layout();
 const loader = new GLTFLoader();
 async function load(): Promise<void> {
@@ -122,7 +155,7 @@ async function load(): Promise<void> {
         const [cage, asset, sword] = await Promise.all([loader.loadAsync(import.meta.env.BASE_URL+'models/cage-blender.glb'),loader.loadAsync(import.meta.env.BASE_URL+'models/purchased/world-eater-mixamo.glb'),loader.loadAsync(import.meta.env.BASE_URL+'models/chainsword.glb')]);
         scene.add(cage.scene); paintWorldEater(asset.scene); attachChainsword(asset.scene, sword.scene);  models.push(asset.scene,clone(asset.scene));
         for (const model of models) {
-            scene.add(model); const mixer = new THREE.AnimationMixer(model); mixers.push(mixer);
+            scene.add(model); contactPoses.push(new ExchangePose(model)); const mixer = new THREE.AnimationMixer(model); mixers.push(mixer);
             actions.push(new Map(asset.animations.map(source => {
                 const clip = source.clone();
                 // Gameplay owns horizontal displacement. Preserve the original catalogue and vertical footwork.
@@ -133,49 +166,74 @@ async function load(): Promise<void> {
             })));
         }
         scene.traverse(o => { if (o instanceof THREE.Mesh) { o.castShadow = true; o.receiveShadow = true; } });
-        loaded = true; document.querySelectorAll<HTMLButtonElement>('[data-action]').forEach(b => b.disabled = false); reset();
+        loaded = true; el<HTMLButtonElement>('record').disabled=false; document.querySelectorAll<HTMLButtonElement>('[data-action]').forEach(b => b.disabled = false); reset();
     } catch (error) { message('Chargement impossible : '+String(error),Infinity); }
 }
 const clock = new THREE.Clock();
 let measuredSeconds = 0, measuredFrames = 0;
 camera.position.set(2.5,3.6,4.6);
+const cameraBase=camera.position.clone();
 renderer.setAnimationLoop(() => {
     const realDelta = clock.getDelta(), dt = Math.min(realDelta,.05);
+    if(loaded&&paused&&!renderRequested)return;
     if (loaded && !paused) {
         measuredSeconds += realDelta; measuredFrames++;
         if (measuredSeconds >= 2) { el('fps').textContent = Math.round(measuredFrames/measuredSeconds)+' FPS'; measuredSeconds = 0; measuredFrames = 0; }
     } else { measuredSeconds = 0; measuredFrames = 0; }
     if (loaded) {
         if (!paused && !combat.done) {
-            accumulator += dt;
+            const stopped = hitStop > 0; hitStop=Math.max(0,hitStop-dt);
+            accumulator += stopped ? 0 : dt;
             while (accumulator >= STEP && !combat.done) {
                 const mode = el<HTMLSelectElement>('opponent').value;
-                combat.step({move:moveInput(),guard:keys.has('b')||pointerGuard,action:pending}, mode === 'sparring' ? combat.opponent() : mode === 'guard' ? {guard:true} : {});
+                const [player,enemy]=combat.fighters;
+                const rehearsal=mode==='exercise'||mode==='showcase';
+                const automatic: Command = player.riposteUntil>combat.time && player.riposteUntil-combat.time<.23 ? {action:'light'} : {guard:enemy.phase==='windup'&&enemy.remaining<.09};
+                const partner: Command = rehearsal ? (enemy.phase==='ready' && combat.time%4<STEP*1.5 ? {action:'heavy'} : {}) : mode==='sparring' ? combat.opponent() : mode==='guard' ? {guard:true} : {};
+                combat.step(mode==='showcase'?automatic:{move:moveInput(),guard:keys.has('b')||pointerGuard||combat.time<guardTapUntil,action:pending},partner);
                 pending = undefined; accumulator -= STEP;
                 for (const event of combat.events) {
                     const labels = {hit:'IMPACT',block:'BLOQUÉ',parry:'PARADE',miss:'HORS DE PORTÉE',evade:'ESQUIVÉ',break:'GARDE BRISÉE',feint:'FEINTE'};
-                    message((event.source === 0 ? 'VOUS · ' : 'ADVERSAIRE · ')+labels[event.kind]);
+                    message(event.kind==='parry' ? 'PARADE · RIPOSTEZ !' : event.riposte&&event.kind==='hit' ? 'RIPOSTE · IMPACT' : (event.source === 0 ? 'VOUS · ' : 'ADVERSAIRE · ')+labels[event.kind]);
                     if (['hit','block','parry','break'].includes(event.kind)) {
-                        const f = combat.fighters[event.target]; flash.position.set(f.x,1.5,f.z); flash.intensity = event.kind === 'parry' ? 10 : 5;
+                        const source=combat.fighters[event.source], target=combat.fighters[event.target];
+                        contactPair={source:event.source,target:event.target,parry:event.kind==='parry'||event.kind==='block',attack:event.attack};
+                        if(event.attack==='heavy'||event.attack==='light') contactPoses[event.source].contact(true,event.attack);
+                        if(contactPair.parry) contactPoses[event.target].contact(false);
+                        const point=contactPair.parry?contactPoses[event.target].bladePoint(.4):new THREE.Vector3(target.x,1.65,target.z);
+                        effects.contact(event,point); audio.contact(event); hitStop=event.kind==='parry'?.075:event.attack==='heavy'?.06:.035;
                         if (event.kind === 'block' || event.kind === 'parry') {
-                            play(event.target,'mx_standing_block_react_large',combat.time,false); playing[event.target].reactionUntil = combat.time+.25;
+                            play(event.target,'mx_standing_block_react_large',combat.time,false); playing[event.target].reactionUntil = combat.time+.3;
+                            if(event.kind==='parry') { play(event.source,'mx_standing_react_large_from_right',combat.time,false);playing[event.source].reactionUntil=combat.time+.65; }
                         }
+                        if(event.kind==='hit'||event.kind==='break') { play(event.target,event.attack==='punch'||event.attack==='kick'?'mx_standing_react_large_gut':'mx_standing_react_large_from_left',combat.time,false);playing[event.target].reactionUntil=combat.time+.5; }
                     }
                 }
+                if(hitStop>0) { accumulator=0; if(el<HTMLInputElement>('inspect-impact').checked) {paused=true;audio.pause();if(recorder?.state==='recording')recorder.stop();el('pause').textContent='Reprendre';} break; }
             }
         }
         combat.fighters.forEach((f,i) => {
             const other = combat.fighters[1-i]; models[i].position.set(f.x,.17,f.z); models[i].rotation.y = Math.atan2(other.x-f.x,other.z-f.z);
-            if ((!paused && !combat.done) || awaitingStart) pose(i,f,awaitingStart ? 0 : dt);
+            if ((!paused && !combat.done && hitStop<=0) || awaitingStart) { pose(i,f,awaitingStart ? 0 : dt); contactPoses[i].ground(); contactPoses[i].apply(f); }
+            if(!paused&&f.phase==='windup'&&f.remaining<.2&&soundedSerial[i]!==f.serial) {audio.swing();soundedSerial[i]=f.serial;}
         });
+        if(hitStop>0&&contactPair) {
+            if(contactPair.attack==='heavy'||contactPair.attack==='light') contactPoses[contactPair.source].contact(true,contactPair.attack);
+            if(contactPair.parry) contactPoses[contactPair.target].contact(false);
+        }
         const [p,e] = combat.fighters; ring.position.set(e.x,.18,e.z);
         const toward = new THREE.Vector3(e.x-p.x,0,e.z-p.z).normalize(), right = new THREE.Vector3(-toward.z,0,toward.x);
         // An inside-cage shoulder camera; avoid putting the camera behind the cage walls.
-        const desired = new THREE.Vector3(p.x,3.5,p.z).addScaledVector(toward,-2.4).addScaledVector(right,1.35);
+        const desired = new THREE.Vector3(p.x,2.65,p.z).addScaledVector(toward,-3.0).addScaledVector(right,2.4);
         const radius = Math.hypot(desired.x,desired.z); if (radius > 5.1) { desired.x *= 5.1/radius; desired.z *= 5.1/radius; }
-        camera.position.lerp(desired,1-Math.exp(-5*dt)); camera.lookAt((p.x+e.x)/2,1.4,(p.z+e.z)/2);
-        flash.intensity *= Math.exp(-16*dt); updateHUD();
+        if(!paused||awaitingStart) {if(awaitingStart)cameraBase.copy(desired);else cameraBase.lerp(desired,1-Math.exp(-5*dt));camera.position.copy(cameraBase).add(effects.cameraOffset());camera.lookAt((p.x+e.x)/2,1.55,(p.z+e.z)/2);}
+        if(!paused) effects.update(dt);
+        if(!paused) audio.motorLoad(combat.fighters.some(f=>f.phase==='active')?1:combat.fighters.some(f=>f.phase==='windup')?.6:0);
+        if(combat.done) audio.pause();
+        const mode=el<HTMLSelectElement>('opponent').value;
+        el('lesson').textContent=mode==='showcase'?'DÉMONSTRATION AUTOMATIQUE · LOURDE → PARADE → RIPOSTE':mode==='exercise'?(p.riposteUntil>combat.time?'1 · RIPOSTEZ MAINTENANT':e.phase==='windup'?(e.remaining<.15?'B · PAREZ !':'ATTENDEZ LA LAME…'):'EXERCICE · PAREZ LA PROCHAINE LOURDE'):'';
+        updateHUD();
     }
-    renderer.render(scene,camera);
+    renderer.render(scene,camera);renderRequested=false;
 });
 void load();
