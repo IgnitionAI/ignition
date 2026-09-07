@@ -6,7 +6,7 @@ function advance(d: Combat, seconds: number, a: Command = idle, b: Command = idl
 }
 it('telegraphs a strike and damages once, only in reach', () => {
     const d = new Combat(2);
-    d.step({ action: 'light', direction: 'left' }, idle);
+    d.step({ action: 'light' }, idle);
     expect(d.fighters[1].health).toBe(100);
     advance(d, 2);
     expect(d.fighters[1].health).toBe(84);
@@ -14,19 +14,15 @@ it('telegraphs a strike and damages once, only in reach', () => {
     far.step({ action: 'heavy' }, idle); advance(far, 3);
     expect(far.fighters[1].health).toBe(100);
 });
-it('requires a fresh guard press for a precise directional parry', () => {
-    const held = new Combat(2), fresh = new Combat(2), wrong = new Combat(2);
-    for (const d of [held, fresh, wrong]) d.step({ action: 'light', direction: 'left' }, { guard: true });
-    advance(held, .3, {}, { guard: true });
-    advance(fresh, .3); advance(wrong, .3);
-    advance(held, .18, {}, { guard: true, direction: 'left' });
-    advance(fresh, .18, {}, { guard: true, direction: 'left' });
-    advance(wrong, .18, {}, { guard: true, direction: 'right' });
+it('requires a fresh guard press to parry instead of simply blocking', () => {
+    const held = new Combat(2), fresh = new Combat(2);
+    held.step({action:'light'}, {guard:true}); fresh.step({action:'light'}, {});
+    advance(held,.3,{}, {guard:true}); advance(fresh,.3);
+    advance(held,.18,{}, {guard:true}); advance(fresh,.18,{}, {guard:true});
     expect(held.fighters[0].phase).not.toBe('stunned');
     expect(held.fighters[1].stamina).toBeLessThan(100);
     expect(fresh.fighters[0].phase).toBe('stunned');
     expect(fresh.fighters[1].health).toBe(100);
-    expect(wrong.fighters[1].health).toBe(84);
 });
 it('feints only an uncommitted heavy and never deals damage', () => {
     const d = new Combat(2); d.step({ action: 'heavy' }, {}); advance(d, .2);
@@ -84,4 +80,22 @@ it('trades simultaneous blows while an active heavy resists light interruption',
     d.step({}, {action:'light'}); advance(d,28/60);
     expect(d.fighters[0].health).toBe(84); expect(d.fighters[1].health).toBe(70);
     expect(d.fighters[0].phase).toBe('active'); expect(d.fighters[1].phase).toBe('stunned');
+});
+it('a kick damages and pushes away a nearby target, but cannot reach a distant one', () => {
+    const d = new Combat(2); d.step({action:'kick'}, {}); advance(d,.6);
+    expect(d.fighters[1].health).toBe(92); expect(d.distance()).toBeGreaterThan(2.5);
+    const far = new Combat(3); far.step({action:'kick'}, {}); advance(far,1.4);
+    expect(far.fighters[1].health).toBe(100);
+});
+it('blocks a kick with held guard and parries it with a fresh press', () => {
+    const held = new Combat(2), fresh = new Combat(2);
+    held.step({action:'kick'}, {guard:true}); advance(held,.6,{}, {guard:true});
+    expect(held.fighters[1].health).toBe(100); expect(held.distance()).toBeCloseTo(2);
+    fresh.step({action:'kick'}, {}); advance(fresh,.45); advance(fresh,.13,{}, {guard:true});
+    expect(fresh.fighters[1].health).toBe(100); expect(fresh.fighters[0].phase).toBe('stunned');
+});
+it('resolves simultaneous kicks symmetrically before their knockback affects reach', () => {
+    const d = new Combat(2); d.step({action:'kick'}, {action:'kick'}); advance(d,.56);
+    expect(d.fighters.map(f=>f.health)).toEqual([92,92]);
+    expect(d.distance()).toBeCloseTo(3.3);
 });

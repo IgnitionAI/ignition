@@ -1,3 +1,19 @@
+# Combat simplifié — état courant
+
+Décision utilisateur du 2026-09-07 : abandon des attaques gauche/droite/haut et passage à quatre commandes : légère, lourde, poing, pied. Le catalogue détaillé reste accessible dans la salle d’armes pour examiner les sources Mixamo.
+
+-1 : légère (clip horizontal),2 : lourde (clip descendant),3 : poing,4 : pied (Mixamo kick ver1).
+-B : blocage frontal ; nouvel appui dans les150ms avant contact = parade. Plus de direction à choisir. Par défaut retenu pour accompagner la simplification des attaques.
+-ZQSD/WASD : déplacements ; Espace : esquive ; F : feinte de lourde ; R : recommencer.
+-Poing : ouvre une garde à courte distance. Pied : portée2.1,8 dégâts,26 endurance, préparation.55s, contact.12s, récupération.6s ; repousse de.65 unité sur touche non bloquée, dans les limites de la cage. Blocage, parade et esquive s’appliquent au pied.
+-Poids des attaques, épuisement, limite de3 coups et invulnérabilité d’esquive conservés. Contacts encore abstraits par distance, synchronisation des clips provisoire.
+-Adversaire scripté utilisant les quatre attaques, jamais présenté comme une politique Ignition entraînée. Moteur historique `Duel` inchangé.
+-World Eaters ivoire/bleu, lentilles rouges via le masque émissif existant ; épée seule, crédits conservés.
+
+La suite ci-dessous conserve les réglages et l’historique de la première tranche ; ses références aux directions sont remplacées par les décisions ci-dessus.
+
+---
+
 # Duel jouable — première tranche
 
 `combat.html` complète la salle d’armes, qui conserve ses 48 clips. Le moteur `Combat.step` est indépendant du `Duel` historique et de son contrat de politique sauvegardée.

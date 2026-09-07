@@ -1,8 +1,7 @@
 /** Fixed-step combat rules. Independent of the legacy Duel / saved learning policy. */
-export type Direction = 'top' | 'left' | 'right';
 export type Move = 'forward' | 'back' | 'left' | 'right';
-export type Attack = 'light' | 'heavy' | 'punch';
-export type Command = { direction?: Direction; move?: Move; guard?: boolean; action?: Attack | 'dodge' | 'feint' };
+export type Attack = 'light' | 'heavy' | 'punch' | 'kick';
+export type Command = { move?: Move; guard?: boolean; action?: Attack | 'dodge' | 'feint' };
 export type Phase = 'ready' | 'windup' | 'active' | 'recover' | 'dodge' | 'stunned';
 export const STEP = 1 / 60;
 // Shared with animation playback so travelling speed and foot cadence stay aligned.
@@ -10,19 +9,19 @@ export const movement = { walkSpeed: 1.8, guardSpeed: 1.15, dodgeSpeed: 5.25 } a
 export const strikes = {
     light: { windup: .46, active: .12, recover: .44, cost: 18, damage: 16, reach: 2.5 },
     heavy: { windup: .9, active: .2, recover: .65, cost: 32, damage: 30, reach: 2.65 },
+    kick: { windup: .55, active: .12, recover: .6, cost: 26, damage: 8, reach: 2.1 },
     punch: { windup: .3, active: .1, recover: .65, cost: 20, damage: 5, reach: 1.8 }
 } as const;
 export interface Fighter {
     x: number; z: number; health: number; stamina: number; exhausted: boolean;
     phase: Phase; remaining: number; elapsed: number; duration: number;
-    direction: Direction; attackDirection: Direction; attack: Attack; serial: number; recovery: number;
+    attack: Attack; serial: number; recovery: number;
     guarding: boolean; guardHeld: boolean; parryUntil: number; move?: Move; dodgeMove: Move;
     chain: number; chainUntil: number; regenAt: number; punchImmuneUntil: number;
 }
 export interface CombatEvent { kind: 'hit' | 'block' | 'parry' | 'miss' | 'evade' | 'break' | 'feint'; source: number; target: number }
 const fighter = (z: number): Fighter => ({ x: 0, z, health: 100, stamina: 100, exhausted: false,
-    phase: 'ready', remaining: 0, elapsed: 0, duration: 0, direction: 'top', attackDirection: 'top',
-    attack: 'light', serial: 0, recovery: .44, guarding: false, guardHeld: false, parryUntil: -1, dodgeMove: 'back',
+    phase: 'ready', remaining: 0, elapsed: 0, duration: 0, attack: 'light', serial: 0, recovery: .44, guarding: false, guardHeld: false, parryUntil: -1, dodgeMove: 'back',
     chain: 0, chainUntil: 0, regenAt: 0, punchImmuneUntil: 0 });
 export class Combat {
     fighters: [Fighter, Fighter]; time = 0; events: CombatEvent[] = [];
@@ -48,7 +47,7 @@ export class Combat {
         const contacts: number[] = [];
         this.fighters.forEach((f, i) => {
             const input = i === 0 ? a : b, other = this.fighters[1-i];
-            f.direction = input.direction ?? f.direction; f.move = undefined;
+            f.move = undefined;
             const freshGuard = !!input.guard && !f.guardHeld; f.guardHeld = !!input.guard;
             f.remaining -= STEP; f.elapsed += STEP;
             if (f.remaining <= 1e-8 && f.phase !== 'ready') {
@@ -68,7 +67,7 @@ export class Combat {
                         if (input.action === 'dodge') {
                             f.dodgeMove = input.move ?? 'back'; f.duration = .65; this.phase(f, 'dodge', .65);
                         } else {
-                            f.attack = input.action; f.recovery = strikes[f.attack].recover; f.attackDirection = f.direction; f.chain++;
+                            f.attack = input.action; f.recovery = strikes[f.attack].recover; f.chain++;
                             f.duration = strikes[f.attack].windup + strikes[f.attack].active + f.recovery + (f.chain >= 3 ? .45 : 0);
                             f.chainUntil = this.time + f.duration + .35;
                             this.phase(f, 'windup', strikes[f.attack].windup);
@@ -95,9 +94,10 @@ export class Combat {
     private contact(i: number, snapshot: Fighter[]): void {
         const attacker = this.fighters[i], target = this.fighters[1-i], before = snapshot[1-i], attack = snapshot[i].attack;
         let kind: CombatEvent['kind'];
-        if (this.distance() > strikes[attack].reach) kind = 'miss';
+        const distance = Math.hypot(before.x-snapshot[i].x, before.z-snapshot[i].z);
+        if (distance > strikes[attack].reach) kind = 'miss';
         else if (before.phase === 'dodge' && before.elapsed >= .04 && before.elapsed <= .27) kind = 'evade';
-        else if (attack !== 'punch' && before.guarding && before.direction === snapshot[i].attackDirection) {
+        else if (attack !== 'punch' && before.guarding) {
             if (this.time <= before.parryUntil && !before.exhausted) {
                 kind = 'parry'; this.phase(attacker, 'stunned', .85); attacker.chain = 0;
             } else {
@@ -106,6 +106,12 @@ export class Combat {
             }
         } else {
             kind = 'hit'; target.health = Math.max(0, target.health - strikes[attack].damage);
+            if (attack === 'kick') {
+                const divisor = Math.max(.001, distance);
+                target.x += (before.x-snapshot[i].x)/divisor*.65; target.z += (before.z-snapshot[i].z)/divisor*.65;
+                const radius = Math.hypot(target.x,target.z);
+                if (radius>4.6) { target.x *= 4.6/radius; target.z *= 4.6/radius; }
+            }
             const armour = before.attack === 'heavy' && before.phase === 'active' && attack === 'light';
             const protectedPunch = attack === 'punch' && this.time < before.punchImmuneUntil;
             if (!armour && !protectedPunch) {
@@ -122,10 +128,11 @@ export class Combat {
         const f = this.fighters[1], p = this.fighters[0];
         if (f.phase !== 'ready') return {};
         if (f.exhausted || f.stamina < 24) return { move: 'back' };
-        if (this.distance() > 2.3) return { move: 'forward' };
         const beat = Math.floor(this.time / 2.7);
-        if (p.phase === 'windup' && beat % 3 !== 0) return { guard: true, direction: p.attackDirection };
-        if (this.time % 2.7 < .08) return { action: beat % 3 === 0 ? 'heavy' : 'light', direction: (['top','left','right'] as const)[beat % 3] };
+        const attack = (['heavy','light','punch','kick'] as const)[beat % 4];
+        if (this.distance() > strikes[attack].reach-.15) return { move: 'forward' };
+        if (p.phase === 'windup' && beat % 3 !== 0) return { guard: true };
+        if (this.time % 2.7 < .08) return { action: attack };
         return {};
     }
 }

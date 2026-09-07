@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { Combat, STEP, strikes, movement, type Command, type Direction, type Fighter, type Move } from './combat';
+import { Combat, STEP, strikes, movement, type Command, type Fighter, type Move } from './combat';
 import { mixamoCatalog } from './mixamo-catalog';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#131b20'); scene.fog = new THREE.FogExp2('#131b20', .035);
@@ -21,7 +21,7 @@ Object.assign(key.shadow.camera, { left:-7, right:7, top:7, bottom:-7, far:25 })
 const rim = new THREE.DirectionalLight(0x819fcb, 2); rim.position.set(-4,5,-5); scene.add(rim);
 const ring = new THREE.Mesh(new THREE.RingGeometry(.73,.76,64), new THREE.MeshBasicMaterial({color:0xd8ad55,side:THREE.DoubleSide})); ring.rotation.x = -Math.PI/2; scene.add(ring);
 const flash = new THREE.PointLight(0xffc475,0,4); scene.add(flash);
-let combat = new Combat(), loaded = false, paused = false, accumulator = 0, selected: Direction = 'top';
+let combat = new Combat(), loaded = false, paused = false, accumulator = 0;
 let pending: Command['action'], pointerGuard = false, feedbackUntil = 0;
 const keys = new Set<string>();
 let awaitingStart = true;
@@ -29,7 +29,7 @@ const models: THREE.Object3D[] = [], mixers: THREE.AnimationMixer[] = [], action
 const playing: { name: string; serial: number; action?: THREE.AnimationAction; reactionUntil: number }[] = [
     { name:'', serial:-1, reactionUntil:0 }, { name:'', serial:-1, reactionUntil:0 }
 ];
-const directionLabels: Record<Direction,string> = { top:'HAUT', left:'GAUCHE', right:'DROITE' };
+const attackLabels: Record<Fighter['attack'],string> = { light:'LÉGÈRE', heavy:'LOURDE', punch:'POING', kick:'PIED' };
 const phaseLabels = { ready:'EN GARDE', windup:'PRÉPARATION', active:'FRAPPE', recover:'RÉCUPÉRATION', dodge:'ESQUIVE', stunned:'DÉSÉQUILIBRE' };
 function message(text: string, duration = 1.2): void { el('feedback').textContent = text; feedbackUntil = combat.time + duration; }
 function play(i: number, name: string, serial: number, loop = false): THREE.AnimationAction {
@@ -49,7 +49,7 @@ function pose(i: number, f: Fighter, dt: number): void {
     if (state.reactionUntil > combat.time && f.phase !== 'windup' && f.phase !== 'active') { mixers[i].update(dt); return; }
     let name = 'mx_standing_idle', loop = true, progress: number | undefined;
     if (f.phase === 'windup' || f.phase === 'active' || f.phase === 'recover') {
-        name = f.attack === 'punch' ? 'mx_standing_melee_punch' : 'mx_standing_melee_attack_' + ({top:'downward',left:'backhand',right:'horizontal'}[f.attackDirection]);
+        name = f.attack === 'kick' ? 'mx_standing_melee_attack_kick_ver_1' : f.attack === 'punch' ? 'mx_standing_melee_punch' : f.attack === 'heavy' ? 'mx_standing_melee_attack_downward' : 'mx_standing_melee_attack_horizontal';
         loop = false;
         const rule = strikes[f.attack];
         // Source clips are phase-retimed. Contact at 46% is provisional, not weapon-mesh collision.
@@ -79,8 +79,8 @@ function updateHUD(): void {
         el('state'+i).textContent = `${f.health} PV · ${Math.round(f.stamina)} END · ${f.exhausted ? 'ÉPUISÉ' : phaseLabels[f.phase]}`;
     });
     const enemy = combat.fighters[1], incoming = enemy.phase === 'windup' || enemy.phase === 'active';
-    el('incoming').textContent = incoming ? `${enemy.attack === 'heavy' ? 'LOURDE' : enemy.attack === 'punch' ? 'POING' : 'LÉGÈRE'} · ${directionLabels[enemy.attackDirection]}` : 'CIBLE VERROUILLÉE';
-    document.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach(b => { b.setAttribute('aria-pressed', String(b.dataset.dir === selected)); b.dataset.incoming = String(incoming && b.dataset.dir === enemy.attackDirection); });
+    el('incoming').textContent = incoming ? attackLabels[enemy.attack] : 'CIBLE VERROUILLÉE';
+    el('defense-state').textContent = combat.fighters[0].guarding ? 'GARDE LEVÉE' : '◇';
     el('defend').setAttribute('aria-pressed', String(keys.has('b') || pointerGuard));
     if (combat.time > feedbackUntil) el('feedback').textContent = combat.fighters[0].exhausted ? 'REPRENEZ VOTRE SOUFFLE' : '';
     if (combat.done) { el('finish').hidden = false; el('result').textContent = combat.fighters[0].health > 0 ? 'Victoire.' : combat.fighters[1].health > 0 ? 'Défaite.' : 'Double K.O.'; }
@@ -96,7 +96,6 @@ function pause(): void { if (awaitingStart) return; paused = !paused; pending = 
 el('pause').onclick = pause; el('reset').onclick = reset; el('again').onclick = reset;
 el<HTMLSelectElement>('opponent').onchange = reset;
 document.querySelectorAll<HTMLButtonElement>('[data-action]').forEach(b => { b.disabled = true; b.onclick = () => { if (!paused && !combat.done) { pending = b.dataset.action as Command['action']; renderer.domElement.focus(); } }; });
-document.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach(b => b.onclick = () => { selected = b.dataset.dir as Direction; renderer.domElement.focus(); });
 el('defend').onpointerdown = e => { pointerGuard = true; el('defend').setPointerCapture(e.pointerId); };
 el('defend').onkeydown = e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); pointerGuard = true; } };
 el('defend').onkeyup = () => { pointerGuard = false; };
@@ -105,12 +104,12 @@ el('defend').onpointerup = el('defend').onpointercancel = () => { pointerGuard =
 window.addEventListener('keydown', e => {
     if ((e.target instanceof HTMLElement && e.target.closest('select,input,textarea')) || e.metaKey || e.ctrlKey || e.altKey) return;
     if ((e.key === ' ' || e.key === 'Enter') && e.target instanceof HTMLElement && e.target.closest('button')) return;
-    const k = e.key.toLowerCase(), dirs: Record<string,Direction> = {arrowup:'top',arrowleft:'left',arrowright:'right'};
-    if (['z','q','s','d','w','a','b','1','2','3',' ','f','r','escape',...Object.keys(dirs)].includes(k)) e.preventDefault();
+    const k = e.key.toLowerCase();
+    if (['z','q','s','d','w','a','b','1','2','3','4',' ','f','r','escape'].includes(k)) e.preventDefault();
     if (e.repeat) return;
     if (k === 'escape') { pause(); return; } if (k === 'r') { reset(); return; }
-    if (paused || !loaded || combat.done) return; keys.add(k); if (dirs[k]) selected = dirs[k];
-    const commands: Record<string,Command['action']> = {'1':'light','2':'heavy','3':'punch',' ':'dodge',f:'feint'};
+    if (paused || !loaded || combat.done) return; keys.add(k);
+    const commands: Record<string,Command['action']> = {'1':'light','2':'heavy','3':'punch','4':'kick',' ':'dodge',f:'feint'};
     if (commands[k]) pending = commands[k];
 });
 window.addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
@@ -151,7 +150,7 @@ renderer.setAnimationLoop(() => {
             accumulator += dt;
             while (accumulator >= STEP && !combat.done) {
                 const mode = el<HTMLSelectElement>('opponent').value;
-                combat.step({direction:selected,move:moveInput(),guard:keys.has('b')||pointerGuard,action:pending}, mode === 'sparring' ? combat.opponent() : mode === 'guard' ? {guard:true,direction:'top'} : {});
+                combat.step({move:moveInput(),guard:keys.has('b')||pointerGuard,action:pending}, mode === 'sparring' ? combat.opponent() : mode === 'guard' ? {guard:true} : {});
                 pending = undefined; accumulator -= STEP;
                 for (const event of combat.events) {
                     const labels = {hit:'IMPACT',block:'BLOQUÉ',parry:'PARADE',miss:'HORS DE PORTÉE',evade:'ESQUIVÉ',break:'GARDE BRISÉE',feint:'FEINTE'};
