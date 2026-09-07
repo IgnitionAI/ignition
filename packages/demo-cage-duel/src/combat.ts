@@ -5,6 +5,8 @@ export type Attack = 'light' | 'heavy' | 'punch';
 export type Command = { direction?: Direction; move?: Move; guard?: boolean; action?: Attack | 'dodge' | 'feint' };
 export type Phase = 'ready' | 'windup' | 'active' | 'recover' | 'dodge' | 'stunned';
 export const STEP = 1 / 60;
+// Shared with animation playback so travelling speed and foot cadence stay aligned.
+export const movement = { walkSpeed: 1.8, guardSpeed: 1.15, dodgeSpeed: 5.25 } as const;
 export const strikes = {
     light: { windup: .46, active: .12, recover: .44, cost: 18, damage: 16, reach: 2.5 },
     heavy: { windup: .9, active: .2, recover: .65, cost: 32, damage: 30, reach: 2.65 },
@@ -58,7 +60,7 @@ export class Combat {
             if (freshGuard && f.guarding) f.parryUntil = this.time + .15;
             if (f.phase === 'ready') {
                 if (this.time > f.chainUntil) f.chain = 0;
-                if (input.move) { f.move = input.move; this.move(f, other, input.move, f.guarding ? .7 : 1.2); }
+                if (input.move) { f.move = input.move; this.move(f, other, input.move, f.guarding ? movement.guardSpeed : movement.walkSpeed); }
                 if (input.action && input.action !== 'feint' && !f.exhausted) {
                     const cost = input.action === 'dodge' ? 24 : strikes[input.action].cost;
                     if (f.stamina >= cost) {
@@ -77,7 +79,7 @@ export class Combat {
                 this.spend(f, 10); this.phase(f, 'recover', .22); f.chain = 0;
                 this.events.push({ kind: 'feint', source: i, target: 1-i });
             }
-            if (f.phase === 'dodge' && f.elapsed < .3) this.move(f, other, f.dodgeMove, 3.5);
+            if (f.phase === 'dodge' && f.elapsed < .3) this.move(f, other, f.dodgeMove, movement.dodgeSpeed);
             if (f.phase === 'ready' && !f.guarding && this.time >= f.regenAt) f.stamina = Math.min(100, f.stamina + 18*STEP);
             if (f.exhausted && f.stamina >= 25) f.exhausted = false;
         });

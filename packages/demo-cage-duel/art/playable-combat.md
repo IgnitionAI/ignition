@@ -13,11 +13,11 @@
 
 ## Réglages du prototype, à éprouver
 
-Simulation fixe 60 Hz. Légère : préparation .46 s, contact .12 s, récupération .44 s, 18 endurance, 16 dégâts. Lourde : .9/.2/.65 s, 32 endurance, 30 dégâts. Poing : .3/.1/.65 s, 20 endurance, 5 dégâts, portée 1.8 contre 2.5/2.65 pour la hache.
+Simulation fixe 60 Hz. Déplacement libre 1.8 unités/s, en garde 1.15 unités/s ; cadence des boucles Mixamo adaptée à ces vitesses. Légère : préparation .46 s, contact .12 s, récupération .44 s, 18 endurance, 16 dégâts. Lourde : .9/.2/.65 s, 32 endurance, 30 dégâts. Poing : .3/.1/.65 s, 20 endurance, 5 dégâts, portée 1.8 contre 2.5/2.65 pour la hache.
 
 Blocage sans dégâts, coût 14/26 endurance ; parade directionnelle sur nouvel appui, stun attaquant .85 s. Changer la direction en maintenant B ne renouvelle pas la parade. Endurance nulle : actions offensives/esquive/feinte interdites, prochain blocage déséquilibre .9 s ; sortie à 25 endurance. Régénération 18/s en état prêt hors garde, délai .9 s après dépense.
 
-Esquive .65 s, déplacement court pendant .3 s, invulnérabilité .04–.27 s, coût 24. Feinte lourde uniquement en préparation, coût 10, récupération .22 s. Poing sur garde : récupération attaquant réduite à .12 s pour permettre une légère, ouverture .72 s, immunité à la nouvelle interruption par poing 2.5 s. Proposition non définitive : lourde/lourde et poing/lourde interrompent ; légère ne stoppe une lourde que hors phase active. Impacts simultanés évalués sur le même état, peuvent échanger leurs dégâts.
+Esquive .65 s, déplacement de 1.575 unité en espace libre pendant .3 s (5.25 unités/s), invulnérabilité .04–.27 s, coût 24. Feinte lourde uniquement en préparation, coût 10, récupération .22 s. Poing sur garde : récupération attaquant réduite à .12 s pour permettre une légère, ouverture .72 s, immunité à la nouvelle interruption par poing 2.5 s. Proposition non définitive : lourde/lourde et poing/lourde interrompent ; légère ne stoppe une lourde que hors phase active. Impacts simultanés évalués sur le même état, peuvent échanger leurs dégâts.
 
 Maximum trois attaques rapprochées avant récupération prolongée .45 s et remise à zéro de chaîne. Aucune attaque pendant récupération/stun ; aucun buffer d’attaque. Recommencer réinitialise les deux combattants. Écran de départ avant tout échange. Les copies de clips du combat suppriment la translation horizontale du Root (la simulation possède le déplacement), sans modifier les originaux du catalogue. Pause et perte de focus arrêtent la simulation et vident les touches.
 
@@ -28,3 +28,5 @@ Tests publics de `Combat.step` : portée/contact unique, garde tenue vs parade f
 Validation du 2026-09-07 : typecheck et build passent ; suite complète 55 fichiers/369 tests réussis, 3 fichiers/3 tests ignorés (dont 10 nouveaux tests de combat). Build conserve l’avertissement existant de chunk Three.js >500 ko ; aucun GLB Blood Angel publié dans dist.
 
 Navigateur IAB, fenêtre 818×674 : échange léger constaté (adversaire100→84 PV), feinte constatée (vie intacte, endurance100→58), esquive et pause inspectées après correction du Root ; Espace active bien le bouton Reprendre au focus. Courts relevés du compteur de rendu :95–97 FPS, sans garantie de performance prolongée ou sur autre matériel. Capture privée `~/.local/share/ignition-assets/blood-angel/combat-playable.png`. Revue Standards et Spec : défaut de double translation et activation Espace corrigés, aucune observation restante lors de la revue ciblée.
+
+Ajustement après essai utilisateur : déplacements libres +50 %, en garde environ +64 %, distance des esquives +50 %. Durées des attaques, récupération et fenêtre d’invulnérabilité conservées.

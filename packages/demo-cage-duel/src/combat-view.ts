@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
-import { Combat, STEP, strikes, type Command, type Direction, type Fighter, type Move } from './combat';
+import { Combat, STEP, strikes, movement, type Command, type Direction, type Fighter, type Move } from './combat';
 import { mixamoCatalog } from './mixamo-catalog';
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const scene = new THREE.Scene(); scene.background = new THREE.Color('#131b20'); scene.fog = new THREE.FogExp2('#131b20', .035);
@@ -62,8 +62,8 @@ function pose(i: number, f: Fighter, dt: number): void {
     action.paused = progress !== undefined;
     if (progress !== undefined) action.time = Math.min(.999, Math.max(0, progress))*action.getClip().duration;
     else if (f.move) {
-        const captured = mixamoCatalog.find(c => c.name === name)?.speed ?? 1.2;
-        action.setEffectiveTimeScale((f.guarding ? .7 : 1.2)/Math.max(.1,captured));
+        const captured = mixamoCatalog.find(c => c.name === name)?.speed ?? movement.walkSpeed;
+        action.setEffectiveTimeScale((f.guarding ? movement.guardSpeed : movement.walkSpeed)/Math.max(.1,captured));
     }
     mixers[i].update(dt);
 }
