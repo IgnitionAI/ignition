@@ -6,8 +6,15 @@ export enum Action {
     Left,
     Right,
     Attack,
-    Guard
+    Guard,
+    AttackLeft,
+    AttackRight,
+    GuardLeft,
+    GuardRight
 }
+export type Direction = 0 | 1 | 2; // top, left, right (defender's screen)
+export const attackAction = (d: Direction): Action => [Action.Attack, Action.AttackLeft, Action.AttackRight][d];
+export const guardAction = (d: Direction): Action => [Action.Guard, Action.GuardLeft, Action.GuardRight][d];
 export type Phase = 'ready' | 'windup' | 'recover' | 'stunned';
 export interface Fighter {
     x: number;
@@ -18,6 +25,7 @@ export interface Fighter {
     timer: number;
     guard: boolean;
     guardAge: number;
+    direction: Direction;
 }
 export interface Impact {
     kind: 'hit' | 'block' | 'parry';
@@ -35,7 +43,7 @@ export class Duel {
     tick = 0;
     events: Impact[] = [];
     constructor(public seed = 1, distance = 4.5) {
-        const make = (z: number): Fighter => ({ x: 0, z, health: 100, stamina: 100, phase: 'ready', timer: 0, guard: false, guardAge: 0 });
+        const make = (z: number): Fighter => ({ x: 0, z, health: 100, stamina: 100, phase: 'ready', timer: 0, guard: false, guardAge: 0, direction: 0 });
         this.fighters = [make(distance / 2), make(-distance / 2)];
     }
     get distance(): number { const [a, b] = this.fighters; return Math.hypot(a.x - b.x, a.z - b.z); }
@@ -64,12 +72,14 @@ export class Duel {
                 }
             }
             if (f.phase === 'ready') {
-                if (actions[i] === Action.Attack && f.stamina >= 24) {
+                if ([Action.Attack, Action.AttackLeft, Action.AttackRight].includes(actions[i]) && f.stamina >= 24) {
+                    f.direction = [Action.Attack, Action.AttackLeft, Action.AttackRight].indexOf(actions[i]) as Direction;
                     f.stamina -= 24;
                     f.phase = 'windup';
                     f.timer = 4;
                 }
-                else if (actions[i] === Action.Guard && f.stamina >= 5) {
+                else if ([Action.Guard, Action.GuardLeft, Action.GuardRight].includes(actions[i]) && f.stamina >= 5) {
+                    f.direction = [Action.Guard, Action.GuardLeft, Action.GuardRight].indexOf(actions[i]) as Direction;
                     f.guard = true;
                     f.stamina -= 2;
                 }
@@ -92,7 +102,7 @@ export class Duel {
         });
         // Resolve contacts simultaneously; one strike is consumed even when it misses.
         const range = this.distance;
-        const contacts = strikes.filter(() => range <= REACH).map(i => ({ attacker: i, target: 1 - i, guard: this.fighters[1 - i].guard, age: this.fighters[1 - i].guardAge }));
+        const contacts = strikes.filter(() => range <= REACH).map(i => ({ attacker: i, target: 1 - i, guard: this.fighters[1 - i].guard && this.fighters[1 - i].direction === this.fighters[i].direction, age: this.fighters[1 - i].guardAge }));
         for (const c of contacts) {
             const target = this.fighters[c.target], attacker = this.fighters[c.attacker];
             const parry = c.guard && c.age <= 2;
@@ -120,16 +130,16 @@ export class Duel {
     observe(i: number): number[] {
         const f = this.fighters[i], o = this.fighters[1 - i];
         const phase = (v: Fighter) => v.phase === 'windup' ? (v.timer <= 2 ? 2 : 1) : v.phase === 'recover' ? 3 : v.phase === 'stunned' ? 4 : 0;
-        return [Math.min(5, Math.floor(this.distance / .7)), phase(o), phase(f), Math.min(5, Math.floor(f.stamina / 20))];
+        return [Math.min(5, Math.floor(this.distance / .7)), phase(o), phase(f), Math.min(5, Math.floor(f.stamina / 20)), o.direction];
     }
     reference(i: number): Action {
         const f = this.fighters[i], o = this.fighters[1 - i];
         if (this.distance > 2.3)
             return Action.Advance;
         if (o.phase === 'windup' && o.timer <= 2 && (this.tick + this.seed) % 4 !== 0)
-            return Action.Guard;
+            return guardAction(o.direction);
         if (f.stamina < 26)
             return Action.Retreat;
-        return (this.tick + this.seed) % 9 < 6 ? Action.Attack : Action.Idle;
+        return (this.tick + this.seed) % 9 < 6 ? attackAction((Math.floor((this.tick + this.seed) / 13) % 3) as Direction) : Action.Idle;
     }
 }

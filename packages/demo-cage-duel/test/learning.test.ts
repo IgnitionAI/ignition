@@ -3,7 +3,7 @@ import { createAgent, createTraining, evaluate, DuelTraining } from '../src/lear
 it('Ignition learns from duel transitions and evaluates frozen policies separately', async () => {
     const agent = createAgent();
     const session = createTraining(agent);
-    const before = await agent.getAction([3, 0, 0, 5], true);
+    const before = await agent.getAction([3, 0, 0, 5, 0], true);
     for (let i = 0; i < 3000; i++)
         await session.step();
     expect(agent.tableSize).toBeGreaterThan(5);
@@ -19,7 +19,7 @@ it('Ignition learns from duel transitions and evaluates frozen policies separate
 });
 it('keeps ready and early attack telegraphs distinguishable to the policy', async () => {
  const agent=createAgent();
- const ready=[3,0,0,5], windup=[3,1,0,5];
+ const ready=[3,0,0,5,0], windup=[3,1,0,5,0];
  agent.remember({state:ready,action:5,reward:1,nextState:ready,terminated:true,truncated:false});await agent.train();
  agent.remember({state:windup,action:6,reward:1,nextState:windup,terminated:true,truncated:false});await agent.train();
  expect(await agent.getAction(ready,true)).toBe(5);

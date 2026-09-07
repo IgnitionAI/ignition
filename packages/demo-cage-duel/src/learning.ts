@@ -2,10 +2,10 @@ import { IgnitionEnv } from '../../core/src/ignition-env';
 import { QTableAgent } from '../../backend-tfjs/src/agents/qtable';
 import { Duel, Action } from './duel';
 export function createAgent(): QTableAgent {
-    return new QTableAgent({ backend: 'cpu', inputSize: 4, actionSize: 7, stateBins: 6, stateLow: [-.5, -.5, -.5, -.5], stateHigh: [5.5, 5.5, 5.5, 5.5], lr: .18, gamma: .92, epsilon: .8, epsilonDecay: .99993, minEpsilon: .08 });
+    return new QTableAgent({ backend: 'cpu', inputSize: 5, actionSize: 11, stateBins: 6, stateLow: [-.5, -.5, -.5, -.5, -.5], stateHigh: [5.5, 5.5, 5.5, 5.5, 5.5], lr: .18, gamma: .92, epsilon: .8, epsilonDecay: .99993, minEpsilon: .08 });
 }
 export class DuelTraining {
-    actions = 7;
+    actions = 11;
     duel = new Duel(1);
     episodes = 0;
     private lastReward = 0;

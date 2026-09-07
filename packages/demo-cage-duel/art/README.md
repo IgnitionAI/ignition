@@ -19,7 +19,7 @@ Marine: shaped breastplate, gorget, helmet/visor/respirator, shoulder heraldry, 
 
 Named rigid pivots include MarineRoot, Hips, Torso, Head, Thigh.L/R, Shin.L/R, Foot.L/R, Shoulder.L/R, UpperArm.L/R, Forearm.L/R, Hand.L/R, PowerPack and Weapon · ChainAxe. Exported names can acquire numeric suffixes because Blender source objects remain present during export. Mesh surfaces are merged per parent pivot and preserve material slots.
 
-The source includes editable bevels and procedural microtexture. Exports bake geometry modifiers and use constant PBR colours/metalness/roughness/emission; procedural bumps are not baked to image textures. Materials therefore do not exactly match the Cycles renders. Neither asset is a final AAA production claim. There is no skinning, retopology/UV bake pass, completed combat animation, LOD set, or integration into the playable duel yet.
+The source includes editable bevels and procedural microtexture. Exports bake geometry modifiers and use constant PBR colours/metalness/roughness/emission; procedural bumps are not baked to image textures. Materials therefore do not exactly match the Cycles renders. Neither asset is a final AAA production claim. There is no skinning, retopology/UV bake pass, completed combat animation, LOD set, or final authored combat clips. Both GLBs are now integrated into the playable duel with runtime rigid-pivot animation.
 
 ## Reproduce
 

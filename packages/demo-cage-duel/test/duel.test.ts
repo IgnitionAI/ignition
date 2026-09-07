@@ -43,3 +43,18 @@ it('a finished duel cannot apply further hits or advance time', () => {
     d.step(Action.Attack, Action.Attack);
     expect(JSON.stringify(d)).toBe(snapshot);
 });
+it('requires a matching direction to block or parry a lateral strike', () => {
+    const wrong = new Duel(1, 2), right = new Duel(1, 2);
+    for (let tick = 0; tick < 5; tick++) {
+        wrong.step(tick === 0 ? Action.AttackLeft : Action.Idle, tick >= 3 ? Action.Guard : Action.Idle);
+        right.step(tick === 0 ? Action.AttackLeft : Action.Idle, tick >= 3 ? Action.GuardLeft : Action.Idle);
+    }
+    expect(wrong.fighters[1].health).toBe(80);
+    expect(right.fighters[1].health).toBe(100);
+    expect(right.events[0].kind).toBe('parry');
+});
+it('does not refresh a held guard parry window by switching direction', () => {
+    const d = new Duel(1, 2);
+    for (let tick = 0; tick < 5; tick++) d.step(tick === 0 ? Action.AttackLeft : Action.Idle, tick < 3 ? Action.Guard : Action.GuardLeft);
+    expect(d.fighters[1].health).toBe(97);
+});
