@@ -40,3 +40,29 @@ it.each([-1, 1])('contains a car hitting boundary side %s and dissipates impact 
   expect(world.track.nearest(world.car.x,world.car.z).distance).toBeLessThanOrEqual(5.576);
   expect(world.car.speed).toBeLessThan(2);
 });
+
+it('lets a human brake to a stop then reverse while agent braking stays unchanged', () => {
+  const human = new DrivingWorld(), agent = new DrivingWorld();
+  human.car.speed = agent.car.speed = 4;
+  for (let i = 0; i < 120; i++) { human.step(1, true); agent.step(1); }
+  expect(human.car.speed).toBeLessThan(-1);
+  expect(human.car.speed).toBeGreaterThanOrEqual(-5);
+  expect(agent.car.speed).toBe(0);
+});
+
+it('keeps rolling backward when reverse is released and reapplied', () => {
+  const world = new DrivingWorld();
+  world.car.speed = -4;
+  world.step(4, true);
+  world.step(1, true);
+  expect(world.car.speed).toBeLessThan(-3.9);
+});
+
+it('softens a short human steering press at speed without changing agent control', () => {
+  const human = new DrivingWorld(), agent = new DrivingWorld();
+  human.car.speed = agent.car.speed = 25;
+  const start = human.car.angle;
+  for (let i=0;i<6;i++) { human.step(5, true); agent.step(5); }
+  expect(Math.abs(human.car.angle-start)).toBeLessThan(0.03);
+  expect(Math.abs(agent.car.angle-start)).toBeGreaterThan(0.07);
+});

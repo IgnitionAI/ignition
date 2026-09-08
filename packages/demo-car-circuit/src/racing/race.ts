@@ -126,7 +126,25 @@ export class RaceWorld {
       for (const id of moved) if (this.drivers[id].world.constrainToTrack()) railContacts.add(id);
     }
   }
-  step(actions: readonly number[]) {
+  /** Rejoin at the last earned checkpoint; recovery never awards progress. */
+  rescue(id: number) {
+    const d = this.drivers[id];
+    if (!d || this.finished || d.finishSeconds !== null || this.countdown > 0) return;
+    const c = d.world.car;
+    const safe = this.track.sample(d.safeProgress);
+    c.x = safe.x;
+    c.z = safe.z;
+    c.angle = safe.angle;
+    c.speed = 0;
+    c.steering = 0;
+    d.lastProgress = safe.progress;
+    d.offroadTicks = 0;
+    d.stationaryTicks = 0;
+    d.motionAnchor = { x: c.x, z: c.z };
+    d.rescues++;
+    d.penaltySeconds += RACE_PROTOCOL.rescuePenalty;
+  }
+  step(actions: readonly number[], humanId?: number) {
     if (
       actions.length !== this.drivers.length ||
       actions.some((a) => !Number.isInteger(a) || a < 0 || a > 8)
@@ -138,7 +156,7 @@ export class RaceWorld {
     this.elapsedTicks++;
     const railContacts = new Set<number>();
     for (const d of this.drivers)
-      if (d.finishSeconds === null && d.world.step(actions[d.id])) railContacts.add(d.id);
+      if (d.finishSeconds === null && d.world.step(actions[d.id], d.id === humanId)) railContacts.add(d.id);
     if (!this.ghost) this.resolveContacts(railContacts);
     for (const id of railContacts) this.drivers[id].collisions++;
     for (const d of this.drivers) {
@@ -178,18 +196,7 @@ export class RaceWorld {
         d.stationaryTicks = 0;
       } else d.stationaryTicks++;
       if (d.stationaryTicks >= RACE_PROTOCOL.rescueTicks) {
-        const safe = this.track.sample(d.safeProgress);
-        c.x = safe.x;
-        c.z = safe.z;
-        c.angle = safe.angle;
-        c.speed = 0;
-        c.steering = 0;
-        d.lastProgress = safe.progress;
-        d.offroadTicks = 0;
-        d.stationaryTicks = 0;
-        d.motionAnchor = { x: c.x, z: c.z };
-        d.rescues++;
-        d.penaltySeconds += RACE_PROTOCOL.rescuePenalty;
+        this.rescue(d.id);
       }
     }
   }

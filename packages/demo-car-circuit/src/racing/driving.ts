@@ -109,6 +109,7 @@ export class DrivingWorld {
   readonly track: RacingTrack;
   car: CarState;
   ticks = 0;
+  private reverseHold = 0;
   constructor(track = new RacingTrack()) {
     this.track = track;
     this.car = this.start();
@@ -120,6 +121,7 @@ export class DrivingWorld {
   reset() {
     this.car = this.start();
     this.ticks = 0;
+    this.reverseHold = 0;
   }
   /** Project the collision circle inside the continuous rail and remove outward velocity. */
   constrainToTrack(): boolean {
@@ -129,11 +131,11 @@ export class DrivingWorld {
     const nx = (c.x - p.x) / p.distance, nz = (c.z - p.z) / p.distance;
     c.x = p.x + nx * limit;
     c.z = p.z + nz * limit;
-    const outward = Math.max(0, Math.cos(c.angle) * nx + Math.sin(c.angle) * nz);
+    const outward = Math.max(0, (Math.cos(c.angle) * nx + Math.sin(c.angle) * nz) * (c.speed < 0 ? -1 : 1));
     c.speed *= Math.max(0, 1 - outward * outward);
     return true;
   }
-  step(action: number) {
+  step(action: number, manual = false) {
     if (!Number.isInteger(action) || action < 0 || action >= 9)
       throw new Error("Driving action must be an integer in [0,8]");
     const steer = (action % 3) - 1,
@@ -142,20 +144,32 @@ export class DrivingWorld {
       dt = DRIVING_CONTRACT.dt;
     const offRoad =
       this.track.nearest(c.x, c.z).distance > this.track.width / 2;
-    c.steering += (steer - c.steering) * Math.min(1, dt * 9);
-    const acceleration = throttle === 1 ? 9 : throttle === -1 ? -20 : 0;
-    c.speed = Math.max(
-      0,
-      Math.min(
-        DRIVING_CONTRACT.maxSpeed,
-        c.speed +
-          (acceleration -
-            0.7 -
-            c.speed * 0.045 -
-            (offRoad ? c.speed * 0.8 : 0)) *
-            dt,
-      ),
-    );
+    const steeringTarget = manual ? steer / (1 + Math.abs(c.speed) / 10) : steer;
+    c.steering += (steeringTarget - c.steering) * Math.min(1, dt * (manual ? 4 : 9));
+    if (manual) {
+      this.reverseHold = throttle === -1 && c.speed <= 0 ? this.reverseHold + dt : 0;
+      const reverse = throttle === -1 && (c.speed < 0 || this.reverseHold >= 0.3);
+      const acceleration = throttle === 1 ? (c.speed < 0 ? 20 : 9)
+        : throttle === -1 ? (c.speed > 0 ? -20 : reverse ? -5 : 0) : 0;
+      const drag = 0.7 + Math.abs(c.speed) * (0.045 + (offRoad ? 0.8 : 0));
+      const accelerated = c.speed + acceleration * dt;
+      c.speed = Math.sign(accelerated) * Math.max(0, Math.abs(accelerated) - drag * dt);
+      c.speed = Math.max(reverse || c.speed < 0 && throttle !== -1 ? -5 : 0, Math.min(DRIVING_CONTRACT.maxSpeed, c.speed));
+    } else {
+      const acceleration = throttle === 1 ? 9 : throttle === -1 ? -20 : 0;
+      c.speed = Math.max(
+        0,
+        Math.min(
+          DRIVING_CONTRACT.maxSpeed,
+          c.speed +
+            (acceleration -
+              0.7 -
+              c.speed * 0.045 -
+              (offRoad ? c.speed * 0.8 : 0)) *
+              dt,
+        ),
+      );
+    }
     c.angle += c.steering * c.speed * 0.12 * dt;
     c.x += Math.cos(c.angle) * c.speed * dt;
     c.z += Math.sin(c.angle) * c.speed * dt;

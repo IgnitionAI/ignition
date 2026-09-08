@@ -140,3 +140,16 @@ it('keeps rail collisions active in ghost races', () => {
   expect(d.world.car.speed).toBeLessThan(2);
   expect(d.collisions).toBe(1);
 });
+
+it('manual recovery keeps earned gates and applies the existing rescue penalty', () => {
+  const race = new RaceWorld({count:1, countdown:0});
+  const driver = race.drivers[0];
+  driver.gates = 3;
+  driver.safeProgress = 0.15;
+  driver.world.car.speed = -4;
+  race.rescue(0);
+  expect(driver.gates).toBe(3);
+  expect(driver.penaltySeconds).toBe(5);
+  expect(driver.world.car.speed).toBe(0);
+  expect(driver.world.track.nearest(driver.world.car.x,driver.world.car.z).distance).toBeLessThan(0.01);
+});

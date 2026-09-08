@@ -3,6 +3,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, useProgress } from "@react-three/drei";
 import * as THREE from "three";
 import type { LearnedRace } from "./learned-race";
+import { RacingCamera } from "./camera";
 import { referenceAction } from "./reference";
 import { RaceWorld } from "./race";
 import { DrivingWorld, DRIVING_CONTRACT, RacingTrack } from "./driving";
@@ -150,7 +151,8 @@ function Driver({
   const { active: loading } = useProgress();
   const accumulator = useRef(0),
     frames = useRef(0),
-    cameraReady = useRef(false);
+    cameraRig = useRef(new RacingCamera()),
+    cameraWorld = useRef(world);
   useFrame(({ camera }, delta) => {
     if (!paused && !loading) {
       accumulator.current += Math.min(delta, 0.1);
@@ -173,26 +175,18 @@ function Driver({
             race.drivers.map((d, i) =>
               reference || i > 0 ? referenceAction(d.world) : action,
             ),
+            reference ? undefined : 0,
           );
-        else world.step(action);
+        else world.step(action, true);
         accumulator.current -= DRIVING_CONTRACT.dt;
       }
     } else accumulator.current = 0;
-    const c = world.car,
-      target = new THREE.Vector3(
-        c.x - Math.cos(c.angle) * 12,
-        7.5,
-        c.z - Math.sin(c.angle) * 12,
-      );
-    if (!cameraReady.current) {
-      camera.position.copy(target);
-      cameraReady.current = true;
-    } else camera.position.lerp(target, 1 - Math.exp(-delta * 5));
-    camera.lookAt(
-      c.x + Math.cos(c.angle) * 8,
-      0.8,
-      c.z + Math.sin(c.angle) * 8,
-    );
+    const c = world.car;
+    cameraRig.current.update(c, paused ? 0 : delta, cameraWorld.current !== world);
+    cameraWorld.current = world;
+    camera.position.copy(cameraRig.current.position);
+    camera.up.set(0, 1, 0);
+    camera.lookAt(cameraRig.current.target);
     if (++frames.current % 6 === 0) onStats(c.speed * 3.6);
   });
   return null;

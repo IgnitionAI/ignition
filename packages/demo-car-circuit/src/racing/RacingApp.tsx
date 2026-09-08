@@ -38,7 +38,7 @@ const copy = {
     reset: "Retour aux stands",
     controls: "COMMANDES",
     gas: "Accélérer",
-    brake: "Freiner",
+    brake: "Freiner / maintenir pour reculer",
     steer: "Tourner",
     track: "ALPINE PARK",
     layout: "10 virages · Circuit école",
@@ -72,7 +72,7 @@ const copy = {
     reset: "Back to pits",
     controls: "CONTROLS",
     gas: "Accelerate",
-    brake: "Brake",
+    brake: "Brake / hold to reverse",
     steer: "Steer",
     track: "ALPINE PARK",
     layout: "10 corners · Training circuit",
@@ -373,6 +373,21 @@ export default function RacingApp() {
           )}
         </aside>
         <section className="race-viewport" aria-label={t.track}>
+          {!trainingMode && !garageMode && !reference && (!learned || learned.human) && (
+            <button className="recovery-button" disabled={!!race && (race.finished || race.countdown > 0)} onClick={() => {
+              keys.clear();
+              if (race) race.rescue(0);
+              else {
+                const p = world.track.nearest(world.car.x, world.car.z);
+                Object.assign(world.car, {x:p.x,z:p.z,angle:p.angle,speed:0,steering:0});
+              }
+              setSpeed(0);
+              updateHUD(n => n + 1);
+              (document.activeElement as HTMLElement)?.blur();
+            }}>
+              {lang === "fr" ? "Remettre sur piste" : "Return to track"}{race ? " (+5 s)" : ""}
+            </button>
+          )}
           <SceneBoundary message={t.error} retry={t.retry}>
             <RacingScene
               world={learned ? learned.race.drivers[follow].world : world}

@@ -59,7 +59,7 @@ export class LearnedRace {
           return this.previousActions[i];
         })(),
     );
-    this.race.step(actions);
+    this.race.step(actions, this.human ? 0 : undefined);
   }
   snapshots() {
     return this.policies.map((p) => p.exportCheckpoint());
