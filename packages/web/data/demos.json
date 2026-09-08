@@ -1,17 +1,5 @@
 [
   {
-    "slug": "cage-duel",
-    "title": "The Crucible",
-    "description": "Enter a stylized industrial cage, fight with an axe and timed parries, then train a real Q-learning opponent in your browser.",
-    "tech": "Three.js",
-    "algos": "Q-Table",
-    "accent": "#e27651",
-    "pkg": "demo-cage-duel",
-    "dir": "packages/demo-cage-duel",
-    "featured": false,
-    "platform": "Keyboard \u00b7 on-screen controls"
-  },
-  {
     "slug": "car-circuit",
     "title": "Circuit Racing",
     "description": "Train and save neural drivers, race their frozen checkpoints, or take the wheel. Two licensed 3D vehicles, three laps and shared arcade physics.",
