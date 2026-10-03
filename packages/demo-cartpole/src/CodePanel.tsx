@@ -4,21 +4,19 @@ import { useDemoStore } from './store';
 export function CodePanel() {
   const { algorithm } = useDemoStore();
 
-  const code = `import { IgnitionEnv } from '@ignitionai/backend-tfjs';
+  const code = `import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
 import { CartPoleEnv } from './cartpole-env';
 
 const pole = new CartPoleEnv();
+const env = new IgnitionEnvTFJS(pole);
 
-const env = new IgnitionEnv({
-  getObservation: () => pole.observe(),
-  actions: ['push_left', 'push_right'],
-  applyAction: (a) => pole.step(a),
-  computeReward: () => pole.reward(),
-  isTerminated: () => pole.done(),
-  onReset: () => pole.reset(),
-});
+env.train('${algorithm}');
 
-env.train('${algorithm}');`;
+// Apply the learned policy without training:
+// env.infer();
+
+// Stop the automatic loop:
+// env.stop();`;
 
   return (
     <div style={{ background: '#0d1117', borderRadius: 8, padding: 16, border: '1px solid #333', overflow: 'auto' }}>

@@ -1,0 +1,51 @@
+{
+  "url": "http://127.0.0.1:5173/",
+  "title": "IgnitionAI — CartPole Demo",
+  "training": {
+    "mode": "training",
+    "episodes": 14,
+    "episodeLengths": [
+      16,
+      29,
+      23,
+      21,
+      23,
+      16,
+      12,
+      19,
+      13,
+      9,
+      11,
+      11,
+      10,
+      13
+    ],
+    "step": 12
+  },
+  "example": {
+    "training": {
+      "observation": [
+        -0.01318763423064767,
+        0.1959030310232687,
+        -0.03885773860073381,
+        -0.2716219325607707
+      ],
+      "reward": 1,
+      "terminated": false,
+      "truncated": false
+    },
+    "inference": {
+      "observation": [
+        -0.009269573610182297,
+        0.0013564827297585236,
+        -0.044290177251949225,
+        0.008556304318052432
+      ],
+      "reward": 1,
+      "terminated": false,
+      "truncated": false
+    },
+    "lastError": null
+  },
+  "errors": []
+}

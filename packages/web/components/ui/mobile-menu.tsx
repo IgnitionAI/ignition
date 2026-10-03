@@ -87,6 +87,9 @@ export default function MobileMenu() {
             <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/docs">Docs</Link>
           </li>
           <li>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/blog">Blog</Link>
+          </li>
+          <li>
             <a className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="https://github.com/IgnitionAI/ignition" target="_blank" rel="noopener noreferrer">GitHub</a>
           </li>
         </ul>
