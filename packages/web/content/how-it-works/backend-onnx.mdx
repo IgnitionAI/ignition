@@ -15,8 +15,8 @@ The pipeline has four stages:
 
 ```text
 1. Train        → @ignitionai/backend-tfjs (browser, TF.js)
-2. Export       → @ignitionai/backend-onnx (TF.js → SavedModel)
-3. Convert      → tf2onnx (one-time Python step, SavedModel → .onnx)
+2. Export       → browser downloads TF.js JSON/weights; Node saves the conversion input
+3. Convert      → Python: TF.js Layers → SavedModel → .onnx
 4. Deploy       → anywhere that has an ONNX runtime
 ```
 
@@ -29,7 +29,7 @@ You stay in JavaScript for everything except stage 3, which is a one-time setup 
 | `OnnxAgent` | class | Inference-only agent that loads an `.onnx` model and runs `getAction()` against it. |
 | `OnnxAgentConfig` | type | Config for `OnnxAgent` — `modelPath`, `actionSize`, optional `executionProviders`, `inputName`, `outputName`. |
 | `OnnxAgentConfigSchema` | Zod schema | Runtime validation for `OnnxAgentConfig`. |
-| `saveForOnnxExport` | function | Saves a TF.js model to the TensorFlow SavedModel format, ready for conversion. |
+| `saveForOnnxExport` | function | Node-only: saves TF.js JSON/weights and returns conversion script text. |
 | `generateConversionScript` | function | Emits a Python/bash script that runs `tf2onnx`. |
 | `ExportResult` | type | Return type of `saveForOnnxExport`. |
 | `loadOnnxModelFromHub` | function | Downloads an `.onnx` model from a HuggingFace repo. |
@@ -49,45 +49,46 @@ env.train('dqn')
 env.stop()
 ```
 
-When training finishes, the `env.agent` property holds a `DQNAgent` with a trained TF.js model under `.model`. Stage 2 takes that model and prepares it for export.
+When training finishes, narrow `env.agent` to `DQNAgent` and access its model
+through `getModel()`. Do not access the private `.model` field.
 
-## Stage 2 — Export with `saveForOnnxExport`
+## Stage 2 — Download from the browser
 
-```ts filename="export.ts"
+```ts
+import { DQNAgent } from '@ignitionai/backend-tfjs'
+
+env.stop()
+await env.inferStep() // Serialized behind any training step already in flight.
+if (!(env.agent instanceof DQNAgent)) throw new Error('Expected DQN')
+await env.agent.getModel().save('downloads://ignition-dqn')
+```
+
+Keep the downloaded JSON and weights together, preserving their filenames.
+Do not resume training while downloading. Browsers cannot write `file://` paths.
+
+## Stage 3 — Export in Node and convert in Python
+
+```ts
+import '@tensorflow/tfjs-node'
+import * as tf from '@tensorflow/tfjs'
+import { writeFile } from 'node:fs/promises'
 import { saveForOnnxExport } from '@ignitionai/backend-onnx'
 
-const { savedModelPath, conversionScript } = await saveForOnnxExport(
-  env.agent.model,
-  './export',
-  undefined,   // onnxOutputPath (optional)
-  15,          // opset version (default: 13, recommended: 15+)
-)
-
-console.log(`SavedModel written to: ${savedModelPath}`)
-console.log(`Run this to convert: ${conversionScript}`)
+const model = await tf.loadLayersModel('file:///absolute/path/ignition-dqn.json')
+const { modelDir, conversionScript } = await saveForOnnxExport(model, './export')
+await writeFile(`${modelDir}/convert.sh`, conversionScript)
+model.dispose()
 ```
 
-`saveForOnnxExport` does two things:
+The helper saves TF.js JSON/weights and returns the script; it does not create a
+SavedModel or run Python itself. Registering `@tensorflow/tfjs-node` enables
+Node's file handlers. The script performs TF.js Layers → TensorFlow SavedModel → ONNX, and writes `./export.onnx` by default.
 
-1. Writes the TF.js model to a TensorFlow SavedModel directory — the format `tf2onnx` can consume.
-2. Generates a `convert.sh` (or equivalent) script you run once to invoke `tf2onnx`.
-
-You can also call `generateConversionScript()` directly if you want to customize the conversion flags (opset version, signature inputs, etc.).
-
-## Stage 3 — Convert with `tf2onnx` (one-time setup)
-
-This is the only non-JS step. You install `tf2onnx` once via pip, then run the conversion script:
-
-```bash
-# one-time setup
-pip install -U tf2onnx
-
-# convert the SavedModel to ONNX
-bash ./export/convert.sh
-# produces ./export/model.onnx
-```
-
-The result is a platform-agnostic `.onnx` file — a few hundred kilobytes for a CartPole-class policy, a few megabytes for a bigger one.
+Use Python 3.11 in an isolated virtual environment and install the tested
+[requirements](https://github.com/IgnitionAI/ignition/blob/main/packages/backend-onnx/examples/requirements-onnx.txt)
+before running `bash ./export/convert.sh`. Complete runnable examples and
+commands are in the
+[export guide](https://github.com/IgnitionAI/ignition/blob/main/packages/backend-onnx/examples/README.md).
 
 ## Stage 4 — Deploy anywhere
 
@@ -122,11 +123,17 @@ For browser deployments, the ~800KB ONNX Runtime is a one-time cost — it serve
 If you want to run the trained model back in the browser without the training dependencies, `OnnxAgent` is a drop-in `AgentInterface` that auto-detects the environment and loads the correct ONNX Runtime (Web in browser, Node in server):
 
 ```ts filename="infer.ts"
-import { OnnxAgent } from '@ignitionai/backend-onnx'
+import { createOnnxSession, OnnxAgent } from '@ignitionai/backend-onnx'
 
+const session = await createOnnxSession('./model.onnx')
+const inputName = session.inputNames[0]
+const outputName = session.outputNames[0]
+await session.release()
 const agent = new OnnxAgent({
   modelPath: './model.onnx',
   actionSize: 2,
+  inputName,
+  outputName,
 })
 
 await agent.load()
@@ -148,6 +155,8 @@ import { CartPoleEnv } from '@ignitionai/environments'
 const env = new IgnitionEnv(new CartPoleEnv())
 const agent = new OnnxAgent({ modelPath: './model.onnx', actionSize: 2 })
 await agent.load()
+
+env.agent = agent
 
 // Manually drive the inference loop
 for (let step = 0; step < 500; step++) {

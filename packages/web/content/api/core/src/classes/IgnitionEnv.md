@@ -6,7 +6,7 @@
 
 # Class: IgnitionEnv
 
-Defined in: [core/src/ignition-env.ts:5](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L5)
+Defined in: [core/src/ignition-env.ts:5](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L5)
 
 ## Constructors
 
@@ -14,7 +14,7 @@ Defined in: [core/src/ignition-env.ts:5](https://github.com/IgnitionAI/ignition/
 
 > **new IgnitionEnv**(`env`): `IgnitionEnv`
 
-Defined in: [core/src/ignition-env.ts:22](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L22)
+Defined in: [core/src/ignition-env.ts:27](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L27)
 
 #### Parameters
 
@@ -28,11 +28,21 @@ Defined in: [core/src/ignition-env.ts:22](https://github.com/IgnitionAI/ignition
 
 ## Properties
 
+### lastError
+
+> **lastError**: `Error` \| `null` = `null`
+
+Defined in: [core/src/ignition-env.ts:14](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L14)
+
+Most recent automatic-loop failure; cleared when a new loop starts.
+
+***
+
 ### stepCount
 
 > **stepCount**: `number` = `0`
 
-Defined in: [core/src/ignition-env.ts:10](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L10)
+Defined in: [core/src/ignition-env.ts:15](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L15)
 
 ***
 
@@ -40,7 +50,7 @@ Defined in: [core/src/ignition-env.ts:10](https://github.com/IgnitionAI/ignition
 
 > **stepIntervalMs**: `number` = `50`
 
-Defined in: [core/src/ignition-env.ts:13](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L13)
+Defined in: [core/src/ignition-env.ts:18](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L18)
 
 Milliseconds between steps. Lower = faster training. Default 50ms (20 steps/sec).
 
@@ -50,7 +60,7 @@ Milliseconds between steps. Lower = faster training. Default 50ms (20 steps/sec)
 
 > **stepsPerTick**: `number` = `1`
 
-Defined in: [core/src/ignition-env.ts:16](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L16)
+Defined in: [core/src/ignition-env.ts:21](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L21)
 
 Number of steps to run per tick. >1 = batch multiple steps before yielding to the event loop.
 
@@ -60,7 +70,7 @@ Number of steps to run per tick. >1 = batch multiple steps before yielding to th
 
 > `protected` **factories**: `Record`\<`string`, [`AgentFactory`](../type-aliases/AgentFactory.md)\> = `{}`
 
-Defined in: [core/src/ignition-env.ts:18](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L18)
+Defined in: [core/src/ignition-env.ts:23](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L23)
 
 ***
 
@@ -68,7 +78,7 @@ Defined in: [core/src/ignition-env.ts:18](https://github.com/IgnitionAI/ignition
 
 > `protected` **algorithmDefaults**: `Record`\<`string`, `Record`\<`string`, `unknown`\>\> = `{}`
 
-Defined in: [core/src/ignition-env.ts:19](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L19)
+Defined in: [core/src/ignition-env.ts:24](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L24)
 
 ## Accessors
 
@@ -78,7 +88,7 @@ Defined in: [core/src/ignition-env.ts:19](https://github.com/IgnitionAI/ignition
 
 > **get** **agent**(): [`AgentInterface`](../interfaces/AgentInterface.md) \| `null`
 
-Defined in: [core/src/ignition-env.ts:28](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L28)
+Defined in: [core/src/ignition-env.ts:33](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L33)
 
 ##### Returns
 
@@ -88,7 +98,7 @@ Defined in: [core/src/ignition-env.ts:28](https://github.com/IgnitionAI/ignition
 
 > **set** **agent**(`value`): `void`
 
-Defined in: [core/src/ignition-env.ts:32](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L32)
+Defined in: [core/src/ignition-env.ts:37](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L37)
 
 ##### Parameters
 
@@ -106,7 +116,7 @@ Defined in: [core/src/ignition-env.ts:32](https://github.com/IgnitionAI/ignition
 
 > **train**(`algorithm?`, `overrides?`): `void`
 
-Defined in: [core/src/ignition-env.ts:36](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L36)
+Defined in: [core/src/ignition-env.ts:41](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L41)
 
 #### Parameters
 
@@ -128,7 +138,7 @@ Defined in: [core/src/ignition-env.ts:36](https://github.com/IgnitionAI/ignition
 
 > **step**(): `Promise`\<[`StepResult`](../interfaces/StepResult.md)\>
 
-Defined in: [core/src/ignition-env.ts:71](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L71)
+Defined in: [core/src/ignition-env.ts:73](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L73)
 
 #### Returns
 
@@ -140,7 +150,7 @@ Defined in: [core/src/ignition-env.ts:71](https://github.com/IgnitionAI/ignition
 
 > **inferStep**(): `Promise`\<[`StepResult`](../interfaces/StepResult.md)\>
 
-Defined in: [core/src/ignition-env.ts:109](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L109)
+Defined in: [core/src/ignition-env.ts:77](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L77)
 
 #### Returns
 
@@ -152,7 +162,7 @@ Defined in: [core/src/ignition-env.ts:109](https://github.com/IgnitionAI/ignitio
 
 > **infer**(): `void`
 
-Defined in: [core/src/ignition-env.ts:135](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L135)
+Defined in: [core/src/ignition-env.ts:111](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L111)
 
 #### Returns
 
@@ -164,7 +174,7 @@ Defined in: [core/src/ignition-env.ts:135](https://github.com/IgnitionAI/ignitio
 
 > **start**(): `void`
 
-Defined in: [core/src/ignition-env.ts:155](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L155)
+Defined in: [core/src/ignition-env.ts:116](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L116)
 
 #### Returns
 
@@ -176,7 +186,7 @@ Defined in: [core/src/ignition-env.ts:155](https://github.com/IgnitionAI/ignitio
 
 > **stop**(): `void`
 
-Defined in: [core/src/ignition-env.ts:171](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L171)
+Defined in: [core/src/ignition-env.ts:147](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L147)
 
 #### Returns
 
@@ -188,7 +198,7 @@ Defined in: [core/src/ignition-env.ts:171](https://github.com/IgnitionAI/ignitio
 
 > **reset**(): `void`
 
-Defined in: [core/src/ignition-env.ts:175](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L175)
+Defined in: [core/src/ignition-env.ts:154](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L154)
 
 #### Returns
 
@@ -200,7 +210,7 @@ Defined in: [core/src/ignition-env.ts:175](https://github.com/IgnitionAI/ignitio
 
 > **setSpeed**(`multiplier`): `void`
 
-Defined in: [core/src/ignition-env.ts:184](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L184)
+Defined in: [core/src/ignition-env.ts:164](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L164)
 
 Set training speed. Multiplier: 1x = normal (50ms, 1 step/tick), 10x = fast, 50x = turbo.
 
@@ -220,7 +230,7 @@ Set training speed. Multiplier: 1x = normal (50ms, 1 step/tick), 10x = fast, 50x
 
 > **save**(`modelId`, `metadata?`): `Promise`\<`string` \| `void`\>
 
-Defined in: [core/src/ignition-env.ts:204](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L204)
+Defined in: [core/src/ignition-env.ts:184](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L184)
 
 Save the current agent model + training state.
 Requires the agent to implement `save()`.
@@ -245,7 +255,7 @@ Requires the agent to implement `save()`.
 
 > **load**(`modelId`): `Promise`\<`void`\>
 
-Defined in: [core/src/ignition-env.ts:221](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/core/src/ignition-env.ts#L221)
+Defined in: [core/src/ignition-env.ts:201](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/core/src/ignition-env.ts#L201)
 
 Load a previously saved agent model + training state.
 Requires the agent to implement `load()`.

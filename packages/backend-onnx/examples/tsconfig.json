@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "typeRoots": ["../../web/node_modules/@types"],
+    "paths": {
+      "@ignitionai/environments": ["../../environments/dist/index.d.ts"],
+      "@ignitionai/backend-onnx": ["../dist/index.d.ts"]
+    }
+  },
+  "include": ["*.ts", "../../backend-tfjs/scripts/verify-onnx-export.ts"]
+}

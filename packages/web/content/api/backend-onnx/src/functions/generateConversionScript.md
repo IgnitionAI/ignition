@@ -8,7 +8,7 @@
 
 > **generateConversionScript**(`tfjsModelDir`, `savedModelDir`, `onnxOutputPath`, `opset?`): `string`
 
-Defined in: [backend-onnx/src/exporter.ts:79](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-onnx/src/exporter.ts#L79)
+Defined in: [backend-onnx/src/exporter.ts:51](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-onnx/src/exporter.ts#L51)
 
 Generates the bash conversion script without saving the model.
 Useful when you want to preview the commands or use a pre-saved model.
