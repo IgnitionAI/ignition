@@ -90,6 +90,11 @@ export class DQNAgent implements AgentInterface {
     this.memory.add(exp);
   }
 
+  /** The current Q-network for prediction or export. Do not dispose it while the agent is in use. */
+  getModel(): tf.LayersModel {
+    return this.model;
+  }
+
   async updateTargetModel(): Promise<void> {
     this.targetModel.setWeights(this.model.getWeights());
   }

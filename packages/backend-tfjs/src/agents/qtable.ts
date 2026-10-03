@@ -12,6 +12,13 @@
 
 import { AgentInterface, Experience, QTableConfig } from '../types';
 import { QTableConfigSchema } from '../schemas';
+import { z } from 'zod';
+
+const checkpointSchema = z.object({
+  config: QTableConfigSchema,
+  qTable: z.array(z.tuple([z.number().int().nonnegative().safe(), z.array(z.number().finite())])),
+  state: z.object({ epsilon: z.number().finite().min(0).max(1) }),
+});
 
 export class QTableAgent implements AgentInterface {
   /** Table Q : stateIndex → valeurs Q pour chaque action */
@@ -54,8 +61,8 @@ export class QTableAgent implements AgentInterface {
     this.inputSize = inputSize;
     this.actionSize = actionSize;
     this.stateBins = stateBins;
-    this.stateLow = stateLow ?? new Array(inputSize).fill(0);
-    this.stateHigh = stateHigh ?? new Array(inputSize).fill(1);
+    this.stateLow = stateLow?.slice() ?? new Array(inputSize).fill(0);
+    this.stateHigh = stateHigh?.slice() ?? new Array(inputSize).fill(1);
     this.lr = lr;
     this.gamma = gamma;
     this.epsilon = epsilon;
@@ -224,9 +231,30 @@ export class QTableAgent implements AgentInterface {
     if (!json) {
       throw new Error(`[QTable] No saved model found for "${modelId}"`);
     }
-    const payload = JSON.parse(json);
-    this.qTable = new Map(payload.qTable);
-    this.setState(payload.state ?? {});
-    console.log(`[QTable] ✅ Loaded from localStorage (${modelId})`);
+    const payload = checkpointSchema.parse(JSON.parse(json) as unknown);
+    this.validateCheckpointConfig(payload.config);
+    const table = new Map<number, number[]>();
+    const stateCount = this.stateBins ** this.inputSize;
+    for (const [key, values] of payload.qTable) {
+      if (key >= stateCount || values.length !== this.actionSize || table.has(key)) {
+        throw new Error('[QTable] Invalid checkpoint: state keys must be unique and in range, with actionSize Q-values.');
+      }
+      table.set(key, values);
+    }
+    this.qTable = table;
+    this.epsilon = payload.state.epsilon;
+    this.lastExperience = null;
+  }
+
+  private validateCheckpointConfig(config: QTableConfig): void {
+    const low = config.stateLow ?? new Array<number>(config.inputSize).fill(0);
+    const high = config.stateHigh ?? new Array<number>(config.inputSize).fill(1);
+    const compatible = config.inputSize === this.inputSize && config.actionSize === this.actionSize
+      && (config.stateBins ?? 10) === this.stateBins
+      && low.every((value, index) => value === this.stateLow[index])
+      && high.every((value, index) => value === this.stateHigh[index]);
+    if (!compatible) {
+      throw new Error('[QTable] Incompatible checkpoint: inputSize, actionSize, stateBins and bounds must match the current agent.');
+    }
   }
 }

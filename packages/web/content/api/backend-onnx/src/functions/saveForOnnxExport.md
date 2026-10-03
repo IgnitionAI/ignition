@@ -8,7 +8,7 @@
 
 > **saveForOnnxExport**(`model`, `outputDir`, `onnxOutputPath?`, `opset?`): `Promise`\<[`ExportResult`](../interfaces/ExportResult.md)\>
 
-Defined in: [backend-onnx/src/exporter.ts:54](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-onnx/src/exporter.ts#L54)
+Defined in: [backend-onnx/src/exporter.ts:27](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-onnx/src/exporter.ts#L27)
 
 Saves a TF.js LayersModel to `outputDir` and returns the Python conversion script.
 

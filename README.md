@@ -128,42 +128,75 @@ env.train('dqn', { lr: 0.0005, hiddenLayers: [128, 128, 64] });
 
 ---
 
+Overrides apply when creating an agent. Calling `train()` without overrides
+resumes the existing agent; passing overrides for the same existing agent throws
+instead of silently changing or losing its weights. Create a new runner to start
+with a new configuration. Switching algorithms creates a new agent.
+
+Q-table observations default to bounds `[0, 1]` in every dimension. Supply
+`stateLow` and `stateHigh` for other ranges. Each array must match the observation
+size, with finite values and `stateHigh > stateLow`. Out-of-range observations
+are clamped. Loading requires the same dimensions, bins and bounds as the
+current agent; incompatible or malformed checkpoints leave it unchanged.
+
+Automatic training and inference share one serialized transition stream.
+`stop()` cancels future ticks; a transition already started may finish. Changing
+mode or algorithm waits behind that transition before executing the new mode.
+Manual `step()` and `inferStep()` calls are also serialized. Automatic failures
+stop the loop and appear in `env.lastError`; starting a new loop clears it.
+
 ## Train in the Browser, Deploy Everywhere
 
-The ONNX bridge is what makes IgnitionAI a serious tool, not a toy:
+Training runs in the browser. ONNX conversion is a separate Node/Python step.
 
 ```ts
-import { saveForOnnxExport } from 'ignitionai';
+// Browser: call after convergence, and do not resume while saving.
+import { DQNAgent } from 'ignitionai';
 
-// 1. Train in the browser
-env.train('dqn');
-// ... wait for convergence ...
 env.stop();
-
-// 2. Export to ONNX
-const { conversionScript } = await saveForOnnxExport(
-  env.agent.model,
-  './export',
-);
-
-// 3. Run the Python conversion script (one-time)
-// bash convert.sh
-
-// 4. Deploy the .onnx model anywhere:
-//    - Unity via Sentis or Barracuda
-//    - Unreal Engine via NNE
-//    - Python / C++ / Rust via ONNX Runtime
-//    - Mobile / edge devices
+await env.inferStep(); // Finish behind any training transition already in flight.
+if (!(env.agent instanceof DQNAgent)) throw new Error('Expected DQN');
+await env.agent.getModel().save('downloads://ignition-dqn');
 ```
+
+Keep both downloaded files (`ignition-dqn.json` and `ignition-dqn.weights.bin`)
+together. In Node, register `@tensorflow/tfjs-node` to enable `file://` handlers:
+
+```ts
+import '@tensorflow/tfjs-node';
+import * as tf from '@tensorflow/tfjs';
+import { writeFile } from 'node:fs/promises';
+import { saveForOnnxExport } from '@ignitionai/backend-onnx';
+
+const model = await tf.loadLayersModel('file:///absolute/path/ignition-dqn.json');
+const { modelDir, conversionScript } = await saveForOnnxExport(model, './export');
+await writeFile(`${modelDir}/convert.sh`, conversionScript);
+model.dispose();
+```
+
+`saveForOnnxExport` writes **TF.js JSON and weights**, and returns the script text.
+It does not write or execute `convert.sh`. Activate an isolated Python 3.11
+virtual environment, install the [tested conversion dependencies](packages/backend-onnx/examples/requirements-onnx.txt),
+and run `bash ./export/convert.sh`. The script converts TF.js Layers → TensorFlow SavedModel → ONNX, producing `./export.onnx` by default.
+
+See the [complete export examples and commands](packages/backend-onnx/examples/README.md).
+Stop training before export; the returned model belongs to the agent and must
+not be disposed while that agent is in use.
 
 You can also run inference directly in JS using the trained model:
 
 ```ts
-import { OnnxAgent } from 'ignitionai';
+import { createOnnxSession, OnnxAgent } from 'ignitionai';
 
+const session = await createOnnxSession('./my-model.onnx');
+const inputName = session.inputNames[0];
+const outputName = session.outputNames[0];
+await session.release();
 const agent = new OnnxAgent({
   modelPath: './my-model.onnx',
   actionSize: 4,
+  inputName,
+  outputName,
 });
 await agent.load();
 const action = await agent.getAction(observation);
@@ -214,14 +247,15 @@ The training loop runs independently of the render loop — the agent learns whi
 ## Save & Load Models (HuggingFace Hub)
 
 ```ts
-import { HuggingFaceProvider } from 'ignitionai';
+import { DQNAgent, HuggingFaceProvider } from 'ignitionai';
 
 const storage = new HuggingFaceProvider({
   token: process.env.HF_TOKEN,
   repoId: 'your-username/your-rl-model',
 });
 
-await storage.save('my-agent-v1', env.agent.model);
+if (!(env.agent instanceof DQNAgent)) throw new Error('Expected DQN');
+await storage.save('my-agent-v1', env.agent.getModel());
 const model = await storage.load('my-agent-v1');
 ```
 

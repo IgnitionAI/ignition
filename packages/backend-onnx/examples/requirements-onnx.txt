@@ -1,0 +1,18 @@
+# Tested together on Python 3.11. Use an isolated virtual environment.
+tensorflow==2.15.0
+tensorflowjs==4.15.0
+tf2onnx==1.16.1
+numpy==1.26.4
+# TensorFlow.js imports these converter dependencies even for Layers models.
+# Pins keep them compatible with the TensorFlow/Keras 2 conversion path.
+tensorflow-decision-forests==1.8.1
+tensorflow-hub==0.15.0
+flax==0.7.5
+jax==0.4.19
+jaxlib==0.4.19
+orbax-checkpoint==0.3.5
+tensorstore==0.1.45
+optax==0.1.7
+chex==0.1.7
+scipy==1.11.4
+setuptools==80.9.0

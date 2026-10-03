@@ -6,7 +6,7 @@
 
 # Class: DQNAgent
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:12](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L12)
+Defined in: [backend-tfjs/src/agents/dqn.ts:12](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L12)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:12](https://github.com/IgnitionAI/ig
 
 > **new DQNAgent**(`config`): `DQNAgent`
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:26](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L26)
+Defined in: [backend-tfjs/src/agents/dqn.ts:27](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L27)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:26](https://github.com/IgnitionAI/ig
 
 > **getAction**(`state`, `greedy?`): `Promise`\<`number`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:66](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L66)
+Defined in: [backend-tfjs/src/agents/dqn.ts:74](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L74)
 
 #### Parameters
 
@@ -62,7 +62,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:66](https://github.com/IgnitionAI/ig
 
 > **remember**(`exp`): `void`
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:81](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L81)
+Defined in: [backend-tfjs/src/agents/dqn.ts:89](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L89)
 
 #### Parameters
 
@@ -80,11 +80,25 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:81](https://github.com/IgnitionAI/ig
 
 ***
 
+### getModel()
+
+> **getModel**(): `LayersModel`
+
+Defined in: [backend-tfjs/src/agents/dqn.ts:94](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L94)
+
+The current Q-network for prediction or export. Do not dispose it while the agent is in use.
+
+#### Returns
+
+`LayersModel`
+
+***
+
 ### updateTargetModel()
 
 > **updateTargetModel**(): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:85](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L85)
+Defined in: [backend-tfjs/src/agents/dqn.ts:98](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L98)
 
 #### Returns
 
@@ -96,7 +110,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:85](https://github.com/IgnitionAI/ig
 
 > **train**(): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:89](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L89)
+Defined in: [backend-tfjs/src/agents/dqn.ts:102](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L102)
 
 #### Returns
 
@@ -112,7 +126,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:89](https://github.com/IgnitionAI/ig
 
 > **reset**(): `void`
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:128](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L128)
+Defined in: [backend-tfjs/src/agents/dqn.ts:145](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L145)
 
 Reset agent internal state (epsilon, memory, counters…)
 
@@ -130,7 +144,7 @@ Reset agent internal state (epsilon, memory, counters…)
 
 > **saveToHub**(`repoId`, `token`, `modelName?`, `checkpointName?`): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:134](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L134)
+Defined in: [backend-tfjs/src/agents/dqn.ts:151](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L151)
 
 #### Parameters
 
@@ -160,7 +174,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:134](https://github.com/IgnitionAI/i
 
 > **loadFromHub**(`repoId`, `modelPath?`): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:139](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L139)
+Defined in: [backend-tfjs/src/agents/dqn.ts:156](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L156)
 
 #### Parameters
 
@@ -182,7 +196,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:139](https://github.com/IgnitionAI/i
 
 > **saveCheckpoint**(`repoId`, `token`, `checkpointName`): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:146](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L146)
+Defined in: [backend-tfjs/src/agents/dqn.ts:162](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L162)
 
 #### Parameters
 
@@ -208,7 +222,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:146](https://github.com/IgnitionAI/i
 
 > **maybeSaveBestCheckpoint**(`repoId`, `token`, `reward`, `step?`): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:153](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L153)
+Defined in: [backend-tfjs/src/agents/dqn.ts:169](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L169)
 
 #### Parameters
 
@@ -238,7 +252,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:153](https://github.com/IgnitionAI/i
 
 > **loadCheckpoint**(`repoId`, `checkpointName`): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:163](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L163)
+Defined in: [backend-tfjs/src/agents/dqn.ts:179](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L179)
 
 #### Parameters
 
@@ -260,7 +274,7 @@ Defined in: [backend-tfjs/src/agents/dqn.ts:163](https://github.com/IgnitionAI/i
 
 > **saveModel**(`modelId`, `metadata?`): `Promise`\<`string`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:180](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L180)
+Defined in: [backend-tfjs/src/agents/dqn.ts:195](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L195)
 
 Save the model via the configured storageProvider.
 Throws if no storageProvider was supplied in DQNConfig.
@@ -287,7 +301,7 @@ the URI returned by the provider (e.g. "hf://user/repo/modelId")
 
 > **loadModel**(`modelId`): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:195](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L195)
+Defined in: [backend-tfjs/src/agents/dqn.ts:210](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L210)
 
 Load a model via the configured storageProvider and replace the current model.
 Throws if no storageProvider was supplied in DQNConfig.
@@ -308,7 +322,7 @@ Throws if no storageProvider was supplied in DQNConfig.
 
 > **getState**(): `Record`\<`string`, `unknown`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:205](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L205)
+Defined in: [backend-tfjs/src/agents/dqn.ts:228](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L228)
 
 Serialize internal state (epsilon, stepCount, etc.) for checkpointing.
 
@@ -326,7 +340,7 @@ Serialize internal state (epsilon, stepCount, etc.) for checkpointing.
 
 > **setState**(`state`): `void`
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:213](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L213)
+Defined in: [backend-tfjs/src/agents/dqn.ts:236](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L236)
 
 Restore internal state from a serialized object.
 
@@ -350,7 +364,7 @@ Restore internal state from a serialized object.
 
 > **save**(`modelId`, `metadata?`): `Promise`\<`string`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:220](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L220)
+Defined in: [backend-tfjs/src/agents/dqn.ts:243](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L243)
 
 Save the agent's model and state. Returns URI or void.
 
@@ -378,7 +392,7 @@ Save the agent's model and state. Returns URI or void.
 
 > **load**(`modelId`): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:224](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L224)
+Defined in: [backend-tfjs/src/agents/dqn.ts:247](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L247)
 
 Load a previously saved model and state.
 
@@ -402,7 +416,7 @@ Load a previously saved model and state.
 
 > **dispose**(): `void`
 
-Defined in: [backend-tfjs/src/agents/dqn.ts:228](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/dqn.ts#L228)
+Defined in: [backend-tfjs/src/agents/dqn.ts:251](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/dqn.ts#L251)
 
 Release TF/GPU/WASM resources held by the agent
 

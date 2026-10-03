@@ -6,7 +6,7 @@
 
 # Class: QTableAgent
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:16](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L16)
+Defined in: [backend-tfjs/src/agents/qtable.ts:23](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L23)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [backend-tfjs/src/agents/qtable.ts:16](https://github.com/IgnitionAI
 
 > **new QTableAgent**(`config`): `QTableAgent`
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:35](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L35)
+Defined in: [backend-tfjs/src/agents/qtable.ts:42](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L42)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [backend-tfjs/src/agents/qtable.ts:35](https://github.com/IgnitionAI
 
 > **get** **tableSize**(): `number`
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:173](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L173)
+Defined in: [backend-tfjs/src/agents/qtable.ts:180](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L180)
 
 Nombre d'états visités.
 
@@ -54,7 +54,7 @@ Nombre d'états visités.
 
 > **get** **currentEpsilon**(): `number`
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:178](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L178)
+Defined in: [backend-tfjs/src/agents/qtable.ts:185](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L185)
 
 Taux d'exploration courant.
 
@@ -68,7 +68,7 @@ Taux d'exploration courant.
 
 > **getAction**(`state`, `greedy?`): `Promise`\<`number`\>
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:116](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L116)
+Defined in: [backend-tfjs/src/agents/qtable.ts:123](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L123)
 
 Sélectionner une action par politique epsilon-greedy.
 Exploration : action aléatoire (prob. ε)
@@ -98,7 +98,7 @@ Exploitation : argmax Q(s, ·)
 
 > **remember**(`experience`): `void`
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:129](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L129)
+Defined in: [backend-tfjs/src/agents/qtable.ts:136](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L136)
 
 Stocker l'expérience pour le prochain appel à train().
 
@@ -122,7 +122,7 @@ Stocker l'expérience pour le prochain appel à train().
 
 > **train**(): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:140](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L140)
+Defined in: [backend-tfjs/src/agents/qtable.ts:147](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L147)
 
 Effectuer une mise à jour Q-Learning sur la dernière expérience.
 
@@ -144,7 +144,7 @@ Décroît epsilon après chaque update.
 
 > **getState**(): `Record`\<`string`, `unknown`\>
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:184](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L184)
+Defined in: [backend-tfjs/src/agents/qtable.ts:191](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L191)
 
 Serialize internal state (epsilon, stepCount, etc.) for checkpointing.
 
@@ -162,7 +162,7 @@ Serialize internal state (epsilon, stepCount, etc.) for checkpointing.
 
 > **setState**(`state`): `void`
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:190](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L190)
+Defined in: [backend-tfjs/src/agents/qtable.ts:197](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L197)
 
 Restore internal state from a serialized object.
 
@@ -186,7 +186,7 @@ Restore internal state from a serialized object.
 
 > **save**(`modelId`, `metadata?`): `Promise`\<`string`\>
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:198](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L198)
+Defined in: [backend-tfjs/src/agents/qtable.ts:205](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L205)
 
 Serialize the Q-table to a JSON-compatible object.
 Stores in localStorage under the given modelId.
@@ -215,7 +215,7 @@ Stores in localStorage under the given modelId.
 
 > **load**(`modelId`): `Promise`\<`void`\>
 
-Defined in: [backend-tfjs/src/agents/qtable.ts:222](https://github.com/IgnitionAI/ignition/blob/be8a282adf5676773a30380bf9e36dfec337bf01/packages/backend-tfjs/src/agents/qtable.ts#L222)
+Defined in: [backend-tfjs/src/agents/qtable.ts:229](https://github.com/IgnitionAI/ignition/blob/98013cacf597d0fb1791d7687c2ae194434aed84/packages/backend-tfjs/src/agents/qtable.ts#L229)
 
 Load a previously saved model and state.
 

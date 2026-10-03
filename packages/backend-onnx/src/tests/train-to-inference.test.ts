@@ -12,7 +12,7 @@
 import { describe, it, expect, afterAll } from 'vitest';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-backend-cpu';
-import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
+import { DQNAgent, IgnitionEnvTFJS, PPOAgent } from '@ignitionai/backend-tfjs';
 import type { TrainingEnv } from '@ignitionai/core';
 import { generateConversionScript } from '../exporter';
 import { OnnxAgent } from '../agents/onnx-agent';
@@ -73,7 +73,8 @@ describe('Train → Export → Inference pipeline', () => {
     expect(action).toBeLessThan(4);
 
     // Model exists and has layers
-    const model = (env.agent as any).model as tf.Sequential;
+    if (!(env.agent instanceof DQNAgent)) throw new Error('Expected a DQN agent');
+    const model = env.agent.getModel();
     expect(model).toBeDefined();
     expect(model.layers.length).toBeGreaterThan(0);
     expect(model.outputs.length).toBeGreaterThan(0);
@@ -89,17 +90,17 @@ describe('Train → Export → Inference pipeline', () => {
     );
 
     expect(script).toContain('#!/bin/bash');
-    expect(script).toContain('pip install');
-    expect(script).toContain('tensorflowjs_converter');
+    expect(script).toContain('tensorflowjs.converters.converter');
+    expect(script).toContain('--output_format=keras_saved_model');
     expect(script).toContain('--input_format=tfjs_layers_model');
-    expect(script).toContain('/exports/my_model/model.json');
+    expect(script).toContain('/exports/my_model');
     expect(script).toContain('tf2onnx.convert');
     expect(script).toContain('/exports/my_model_savedmodel');
     expect(script).toContain('/exports/my_model.onnx');
     expect(script).toContain('--opset 13');
   });
 
-  it('Inference: OnnxAgent instantiates and validates config', () => {
+  it('Inference: OnnxAgent instantiates and validates config', async () => {
     const agent = new OnnxAgent({
       modelPath: '/fake/model.onnx',
       actionSize: 4,
@@ -109,7 +110,7 @@ describe('Train → Export → Inference pipeline', () => {
     expect(agent).toBeDefined();
 
     // getAction throws because load() not called — expected behavior
-    expect(agent.getAction([0, 0, 0, 0])).rejects.toThrow('call load()');
+    await expect(agent.getAction([0, 0, 0, 0])).rejects.toThrow('call load()');
   });
 
   it('Full pipeline: TrainingEnv → train → verify model topology', async () => {
@@ -118,7 +119,8 @@ describe('Train → Export → Inference pipeline', () => {
     env.stop();
 
     // Verify auto-config: inputSize=4 (from observe), actionSize=4 (from actions)
-    const model = (env.agent as any).model as tf.Sequential;
+    if (!(env.agent instanceof DQNAgent)) throw new Error('Expected a DQN agent');
+    const model = env.agent.getModel();
     const inputShape = model.inputLayers[0].batchInputShape;
     const outputShape = model.outputLayers[0].outputShape;
 
@@ -138,13 +140,13 @@ describe('Train → Export → Inference pipeline', () => {
     env.train('dqn');
     env.stop();
     for (let i = 0; i < 5; i++) await env.step();
-    expect((env.agent as any).model).toBeDefined(); // DQN has model
+    expect(env.agent).toBeInstanceOf(DQNAgent);
 
     // Switch to PPO
     env.train('ppo');
     env.stop();
     for (let i = 0; i < 5; i++) await env.step();
-    expect((env.agent as any).actorNet).toBeDefined(); // PPO has actorNet
+    expect(env.agent).toBeInstanceOf(PPOAgent);
 
     env.agent?.dispose?.();
   });
