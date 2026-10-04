@@ -1,0 +1,58 @@
+{
+  "reports": [
+    {
+      "theme": "scroll-smooth light",
+      "background": "rgb(250, 250, 250)",
+      "storedTheme": "light",
+      "samples": [
+        {
+          "selector": "h1",
+          "color": "lab(7.78673 1.82345 -15.0537)",
+          "contrast": 17.08291566246302
+        },
+        {
+          "selector": "article p",
+          "color": "lab(26.9569 -1.47016 -15.6993)",
+          "contrast": 9.922659987171569
+        },
+        {
+          "selector": "aside a",
+          "color": "lab(35.6337 -1.58697 -10.8425)",
+          "contrast": 7.241161709264806
+        }
+      ]
+    },
+    {
+      "theme": "scroll-smooth dark",
+      "background": "rgb(17, 17, 17)",
+      "storedTheme": "dark",
+      "samples": [
+        {
+          "selector": "h1",
+          "color": "lab(96.286 -0.852436 -2.46847)",
+          "contrast": 17.236663231699445
+        },
+        {
+          "selector": "article p",
+          "color": "lab(91.7353 -0.998765 -4.76968)",
+          "contrast": 15.317443965531666
+        },
+        {
+          "selector": "aside a",
+          "color": "lab(66.128 -0.0000298023 0.0000119209)",
+          "contrast": 7.308646378979089
+        }
+      ]
+    }
+  ],
+  "persisted": {
+    "theme": "scroll-smooth dark",
+    "storedTheme": "dark"
+  },
+  "home": {
+    "path": "/",
+    "background": "lab(7.78673 1.82345 -15.0537)",
+    "heading": "Train RL agents in your browser"
+  },
+  "errors": []
+}

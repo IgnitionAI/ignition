@@ -1,6 +1,7 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
+import './documentation.css'
 
 export const metadata = {
   title: {
@@ -46,13 +47,15 @@ const footer = (
 export default async function DocsLayout({ children }: { children: React.ReactNode }) {
   const pageMap = await getPageMap('/docs')
   return (
-    <Layout
-      navbar={navbar}
-      footer={footer}
-      pageMap={pageMap}
-      docsRepositoryBase="https://github.com/IgnitionAI/ignition/tree/main/packages/web/content"
-    >
-      {children}
-    </Layout>
+    <div className="documentation">
+      <Layout
+        navbar={navbar}
+        footer={footer}
+        pageMap={pageMap}
+        docsRepositoryBase="https://github.com/IgnitionAI/ignition/tree/main/packages/web/content"
+      >
+        {children}
+      </Layout>
+    </div>
   )
 }

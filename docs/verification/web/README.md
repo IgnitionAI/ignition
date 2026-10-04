@@ -39,3 +39,22 @@ IndexedDB exports, instantiated CartPole and DQN, and returned a valid greedy
 action with finite scene coordinates. This verifies local package installation
 and API availability, not a complete external Vite tutorial or published npm
 parity. Legacy issues #6–17 still require criterion-level reconciliation.
+
+## Documentation theme repair and catalogue reconciliation
+
+The contrast limitation above was repaired by initializing Nextra Head in the
+root html layout and giving documentation its own theme-dependent surface.
+The production Next build (105 routes) and real lint passed. Browser UI theme
+selection, reload persistence and navigation to the unchanged dark landing
+surface passed without page errors. `theme-contrast.json` measures heading,
+paragraph and sidebar-link contrast in light/dark modes (minimum7.24:1 among
+these samples). It is a scoped contrast check, not an exhaustive accessibility
+audit. Screenshots were shown inline in the task.
+
+For #10, `catalogue.json` records matching eight-link lists and calculated
+counts in the homepage and docs, Circuit featured and Target Chasing excluded.
+`catalogue-routes.json` records eight local HTTP200 routes with body content,
+visible canvas and no observed page/HTTP errors at initial mount. The generated
+manifest agrees with the shared source catalogue; its commit field is local.
+The earlier retained full demo build remains the build proof for unchanged demo
+sources. These checks do not prove complete races or gameplay acceptance.
