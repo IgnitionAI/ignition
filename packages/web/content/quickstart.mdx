@@ -9,8 +9,16 @@ By the end of this page, you will have trained a reinforcement-learning agent to
 
 ## Install
 
+These examples target the current source checkout. Published npm packages are
+version 0.1.0 and do not expose all APIs shown here, including the current
+`IgnitionEnvTFJS` runner. Use Node.js 20+ and the repository’s pnpm 10.8.0 toolchain.
+
 ```bash
-npm install @ignitionai/core @ignitionai/backend-tfjs @ignitionai/environments
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack pnpm install --frozen-lockfile
+corepack pnpm --filter @ignitionai/core --filter @ignitionai/backend-tfjs --filter @ignitionai/environments --filter @ignitionai/storage build
+corepack pnpm --filter demo-cartpole dev
 ```
 
 You need:
@@ -19,7 +27,8 @@ You need:
 
 ## Train a CartPole agent
 
-Create `src/main.ts` and paste this in exactly:
+The command above starts the existing CartPole demo. The following is the minimal
+runner pattern for a browser entry using the built workspace packages:
 
 ```ts filename="src/main.ts"
 import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
@@ -27,7 +36,7 @@ import { CartPoleEnv } from '@ignitionai/environments'
 
 const env = new IgnitionEnvTFJS(new CartPoleEnv())
 
-env.train('dqn')       // Zero config. It just works.
+env.train('dqn')       // Start with the default configuration.
 // env.infer()         // Switch to inference after training.
 // env.setSpeed(50)    // Turbo training — 50× faster.
 ```
@@ -55,7 +64,7 @@ env.infer()  // Watch the trained agent play
 
 `save()` stores the model weights **and** the agent's internal state (`epsilon`, step counter, best reward). `load()` restores everything. No manual bookkeeping.
 
-Open the page in your browser, pop the devtools console, and you'll see reward logs scrolling as the agent learns. Within a few dozen seconds on most machines, the pole will start staying up.
+Observe training in the demo’s controls. Learning time and success depend on the environment, backend and random initialization; starting the loop does not prove convergence.
 
 That's it. If you want to understand *how* to write your own `TrainingEnv` from scratch (instead of using the built-in `CartPoleEnv`), jump to the [GridWorld tutorial](/docs/tutorials/grid-world) — it walks through the full 5-method interface.
 

@@ -361,7 +361,7 @@ git clone https://github.com/IgnitionAI/ignition.git
 cd ignition
 pnpm install
 pnpm -r run build     # build all packages
-pnpm -r run test      # run all tests
+pnpm exec vitest run --minWorkers=1 --maxWorkers=2  # run the root suite
 ```
 
 The codebase follows:

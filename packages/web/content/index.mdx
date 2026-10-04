@@ -27,7 +27,7 @@ IgnitionAI closes that gap. You implement a handful of methods describing your w
 - **Browser-native.** TensorFlow.js auto-selects WebGPU → WebGL → WASM → CPU. No install, no CUDA, no server. Everything runs where your game runs.
 - **Train → Deploy pipeline.** Train in the browser, export to ONNX, and deploy the `.onnx` file in Unity (Sentis), Unreal (NNE), Python, C++, or edge devices. IgnitionAI is a serious tool, not a toy.
 - **R3F-first.** The training loop is decoupled from the render loop, so your `<Canvas>` stays at 60 fps while the agent learns in the background. You can also call `env.setSpeed(50)` to fast-forward training and then drop back to real-time to watch the policy play.
-- **Production-ready.** TypeScript strict mode, Zod validation, 184+ tests, CI/CD, modular monorepo. The framework is small but not fragile.
+- **Quality checks.** TypeScript, validation and CI cover the source packages. The local suite on 2026-10-04 passed 420 tests with 3 authenticated Hugging Face tests skipped; authenticated remote storage remains unverified.
 
 ## How it compares
 
@@ -35,7 +35,7 @@ IgnitionAI closes that gap. You implement a handful of methods describing your w
 |---|---|---|---|
 | Language | TypeScript / JavaScript | C# + Python | Python |
 | Where training runs | Browser | Unity editor + Python sidecar | Python process |
-| Install | `npm install` | Unity + Python toolchain | pip + CUDA |
+| Install | Source checkout for current APIs | Unity + Python toolchain | pip + CUDA |
 | Primary audience | JS/TS creative devs | Unity game devs | ML researchers |
 | Deploy target | Browser, ONNX anywhere | Sentis / Barracuda | Production servers |
 | GPU required | No | Optional | Usually yes |
@@ -44,11 +44,19 @@ None of these is strictly better than the others — they target different audie
 
 ## Install
 
+These examples target the current source checkout. Published npm packages are
+version 0.1.0 and do not expose all APIs shown here, including the current
+`IgnitionEnvTFJS` runner. Use Node.js 20+ and the repository’s pnpm 10.8.0 toolchain.
+
 ```bash
-npm install @ignitionai/core @ignitionai/backend-tfjs @ignitionai/environments
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack pnpm install --frozen-lockfile
+corepack pnpm --filter @ignitionai/core --filter @ignitionai/backend-tfjs --filter @ignitionai/environments --filter @ignitionai/storage build
+corepack pnpm --filter demo-cartpole dev
 ```
 
-Three packages to get started. `core` contains the training loop and the `TrainingEnv` interface. `backend-tfjs` provides the TensorFlow.js agents (DQN, PPO, Q-Table). `environments` ships ready-made envs (`CartPoleEnv`, `GridWorldEnv`, `MountainCarEnv`) so you can train something in 30 seconds. Drop `environments` from the list if you'd rather write your own env from scratch — the [tutorials](/docs/tutorials) walk through that exact flow.
+Three packages to get started. `core` contains the training loop and the `TrainingEnv` interface. `backend-tfjs` provides the TensorFlow.js agents (DQN, PPO, Q-Table). `environments` ships ready-made envs (`CartPoleEnv`, `GridWorldEnv`, `MountainCarEnv`) for the source demos. Drop `environments` from the list if you'd rather write your own env from scratch — the [tutorials](/docs/tutorials) walk through that exact flow.
 
 ## Where to go next
 

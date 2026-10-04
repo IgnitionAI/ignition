@@ -15,13 +15,32 @@ Estimated time: **35–45 minutes** (longer than the 2D tutorials because you se
 - You've read the [React Three Fiber page](/docs/r3f) so you understand the training-loop/render-loop split.
 - Comfort with React hooks (`useEffect`, `useRef`) and basic R3F (`<Canvas>`, `useFrame`).
 
+## Source package prerequisite
+
+Follow the [Quickstart source setup](/docs/quickstart) first. These examples use
+current workspace APIs absent from npm 0.1.0. Create the tutorial project next to
+the `ignition` checkout so the relative package paths below resolve. Build and pack the workspace packages before installing them in the tutorial project.
+From the checkout root, run:
+
+```bash
+mkdir -p .scratch/source-packages
+corepack pnpm --dir packages/core pack --pack-destination ../../.scratch/source-packages
+corepack pnpm --dir packages/backend-tfjs pack --pack-destination ../../.scratch/source-packages
+corepack pnpm --dir packages/environments pack --pack-destination ../../.scratch/source-packages
+corepack pnpm --dir packages/storage pack --pack-destination ../../.scratch/source-packages
+```
+
+These archives contain the built checkout APIs. Packing rewrites workspace
+references for npm; installing the raw workspace directories would leave
+unsupported `workspace:*` dependencies.
+
 ## Step 1 — Scaffold a Vite React project
 
 ```bash
 npm create vite@latest cartpole-3d -- --template react-ts
 cd cartpole-3d
 npm install
-npm install @ignitionai/core @ignitionai/backend-tfjs @react-three/fiber @react-three/drei three
+npm install ../ignition/.scratch/source-packages/ignitionai-core-0.1.0.tgz ../ignition/.scratch/source-packages/ignitionai-backend-tfjs-0.1.0.tgz ../ignition/.scratch/source-packages/ignitionai-storage-0.1.0.tgz @react-three/fiber @react-three/drei three
 npm install -D @types/three
 ```
 
@@ -31,7 +50,13 @@ npm install -D @types/three
 
 ## Step 2 — Add the CartPole env
 
-Create `src/cartpole-env.ts` and paste the full `CartPoleEnv` from the [Quickstart](/docs/quickstart). This is unchanged from before.
+Create `src/cartpole-env.ts` and re-export the built-in environment instead of copying its implementation:
+
+```ts filename="src/cartpole-env.ts"
+export { CartPoleEnv } from '@ignitionai/environments'
+```
+
+Install it with `npm install ../ignition/.scratch/source-packages/ignitionai-environments-0.1.0.tgz`.
 
 **What to observe**: nothing yet — you're preparing for Step 3.
 
@@ -52,7 +77,7 @@ export function Cart({ env }: { env: CartPoleEnv }) {
   const ref = useRef<THREE.Mesh>(null!)
   useFrame(() => {
     // Read env state, update mesh position
-    ref.current.position.x = (env as any).x
+    ref.current.position.x = env.state.x
   })
   return (
     <mesh ref={ref} position={[0, 0.1, 0]} castShadow>
@@ -66,7 +91,7 @@ export function Cart({ env }: { env: CartPoleEnv }) {
 export function Pole({ env }: { env: CartPoleEnv }) {
   const ref = useRef<THREE.Group>(null!)
   useFrame(() => {
-    const e = env as any
+    const e = env.state
     // Position matches cart; rotation is theta (pole angle)
     ref.current.position.x = e.x
     ref.current.position.y = 0.2
@@ -93,29 +118,15 @@ export function Ground() {
 }
 ```
 
-**What to observe**: three pure components that know nothing about training — they just read `env.x` and `env.theta` on every frame and position their meshes. The `as any` cast is there because our `CartPoleEnv` marks those fields private; in production you'd expose them via a `state` getter.
+**What to observe**: the components read the built-in environment’s public `state.x` and `state.theta` fields on each frame to position the meshes.
 
 **Why this step exists**: this is the view layer. It reads the env's state at render-time and updates the meshes. It never mutates the env. That's the render loop.
 
-## Step 4 — Expose the env state
+## Step 4 — Read the public environment state
 
-Your `CartPoleEnv` has `private x` and `private theta`. The scene needs read access. Adjust `cartpole-env.ts` to make the five state fields public (or expose them via a `state` getter):
-
-```ts filename="src/cartpole-env.ts (change private → public)"
-export class CartPoleEnv implements TrainingEnv {
-  actions = ['push_left', 'push_right']
-  x = 0
-  xDot = 0
-  theta = 0
-  thetaDot = 0
-  stepCount = 0
-  // ... everything else unchanged
-}
-```
-
-You can now remove the `as any` casts from the scene components.
-
-**Why this step exists**: trade-off time. Keeping fields private is cleaner inside the env class. Exposing them as public lets other parts of your app (like a 3D renderer) read the state cheaply. For tutorial code, public wins; for library code, you'd prefer a read-only getter.
+The built-in `CartPoleEnv` exposes `state` with `x`, `xDot`, `theta`,
+`thetaDot` and `stepCount`. The scene reads this object; it does not modify it.
+No copied environment implementation or private-field cast is needed.
 
 ## Step 5 — Mount the scene and start training
 
@@ -167,7 +178,7 @@ export default function App() {
 }
 ```
 
-**What to observe**: Run `npm run dev`. You should see a cart at `(0, 0)` with a pole standing up, a soft contact shadow below it, a sunset-tinted environment, and after a few seconds of DQN training, the cart starts wobbling back and forth keeping the pole upright. Drag to orbit the camera with your mouse.
+**What to observe**: Run `npm run dev`. You should see a cart at `(0, 0)` with a pole standing up, a soft contact shadow below it, a sunset-tinted environment, and the cart moving while DQN trains. Pole balancing is an evaluation outcome, not a guaranteed result after a fixed duration. Drag to orbit the camera with your mouse.
 
 **Why this step exists**: this is the full integration. The `useEffect` owns the trainer lifecycle — it starts training on mount and stops on unmount. The `<Canvas>` renders the scene at 60 fps. The two loops communicate exclusively through `envRef.current`, which is a stable object owned by the React ref system.
 
@@ -175,7 +186,7 @@ export default function App() {
 
 **Where the training loop lives**: in `useEffect`, inside `trainer.train('dqn')`. That call sets up a `setTimeout` loop that runs entirely outside React's render cycle. React doesn't re-render when the agent takes a step. Training happens in the "background" relative to rendering.
 
-**Where the render loop lives**: in the `useFrame` callbacks inside `Cart` and `Pole`. Those fire on every animation frame (60 fps) and read `envRef.current.x` / `envRef.current.theta`. They never mutate the env. They just observe and render.
+**Where the render loop lives**: in the `useFrame` callbacks inside `Cart` and `Pole`. Those fire on every animation frame (60 fps) and read `envRef.current.state.x` / `envRef.current.state.theta`. They never mutate the env. They just observe and render.
 
 **Why this doesn't race**: JavaScript is single-threaded. The `setTimeout` callback and the `requestAnimationFrame` callback can't run simultaneously. One always finishes before the other starts. The env state is consistent at any instant a callback reads it.
 

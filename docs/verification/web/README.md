@@ -23,3 +23,19 @@ The production mobile navigation opened to218px (equal to scrollHeight) and
 closed with Escape without pageerror. A real lint violation submitted through
 stdin exited1, while source lint and TypeScript exited0. Generated artifact
 exclusions and MDX parser limitations are documented in packages/web/README.md.
+
+## Current-source installation follow-up (#29)
+
+On 2026-10-04, the modified source-install pages and homepage passed a Next
+production build and real ESLint. The two `source-install-pages*.json` reports
+record eight HTTP200 pages, rendered source prerequisites and no page errors.
+The screenshots revealed poor text contrast in the displayed documentation
+theme; this remains unresolved and visual readability is not a PASS claim.
+
+Local core/backend-tfjs/environments/storage archives were created with pnpm
+pack and installed with npm in an isolated scratch project (dependency scripts
+disabled). A rebuilt Node bundle imported the current runner, PPO, Q-table and
+IndexedDB exports, instantiated CartPole and DQN, and returned a valid greedy
+action with finite scene coordinates. This verifies local package installation
+and API availability, not a complete external Vite tutorial or published npm
+parity. Legacy issues #6–17 still require criterion-level reconciliation.
