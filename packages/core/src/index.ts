@@ -29,3 +29,5 @@ export type {
 export {
   validateContinuousBounds, validateContinuousVector, validateContinuousAction, validateContinuousEnv,
 } from './continuous';
+export { ContinuousRunner } from './continuous-runner';
+export type { ContinuousStepResult } from './continuous-runner';
