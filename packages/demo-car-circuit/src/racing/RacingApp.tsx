@@ -136,7 +136,7 @@ export default function RacingApp() {
     setLearned(undefined);
     setFollow(0);
     const next = competitive
-      ? new RaceWorld({ count: references ? 4 : 1, ghost: true })
+      ? new RaceWorld({ count: references ? 4 : 1 })
       : undefined;
     setReference(references);
     setRace(next);

@@ -1,0 +1,35 @@
+
+ RUN  v3.1.1 /srv/dev/projects/ignition
+
+stderr | packages/demo-car-circuit/test/racing-learning.test.ts > learns, serializes actual weights, and reloads identical frozen decisions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stderr | packages/demo-car-circuit/test/q-training.test.ts > trains dqn and reloads its actual weights into frozen racing opponents
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/demo-car-circuit/test/q-training.test.ts > trains dqn and reloads its actual weights into frozen racing opponents
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-car-circuit/test/q-training.test.ts > trains double-dqn and reloads its actual weights into frozen racing opponents
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-car-circuit/test/q-training.test.ts (5 tests) 874ms
+   ✓ trains dqn and reloads its actual weights into frozen racing opponents  568ms
+ ✓ packages/demo-car-circuit/test/racing-learning.test.ts (9 tests) 2979ms
+   ✓ learns, serializes actual weights, and reloads identical frozen decisions  356ms
+   ✓ completes a race using persisted learned weights without changing them  1767ms
+   ✓ does not publish an obsolete training world when cancelled during the update  779ms
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  20:58:24
+   Duration  4.70s (transform 724ms, setup 0ms, collect 2.33s, tests 3.85s, environment 1ms, prepare 418ms)
+

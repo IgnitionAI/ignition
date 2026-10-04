@@ -1,0 +1,59 @@
+
+ RUN  v3.1.1 /srv/dev/projects/ignition
+
+ ✓ packages/demo-car-circuit/test/track.test.ts (9 tests) 14ms
+ ✓ packages/demo-car-circuit/test/circuit-env.test.ts (12 tests) 38ms
+ ✓ packages/demo-car-circuit/test/evaluation.test.ts (5 tests) 400ms
+stderr | packages/demo-car-circuit/test/racing-learning.test.ts > learns, serializes actual weights, and reloads identical frozen decisions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/demo-car-circuit/test/racing-driving.test.ts (6 tests) 151ms
+ ✓ packages/demo-car-circuit/test/racing-camera.test.ts (3 tests) 46ms
+stderr | packages/demo-car-circuit/test/q-training.test.ts > trains dqn and reloads its actual weights into frozen racing opponents
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stderr | packages/demo-car-circuit/test/racing-garage.test.ts > keeps a saved local driver available when bundled assets fail
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/demo-car-circuit/test/q-training.test.ts > trains dqn and reloads its actual weights into frozen racing opponents
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-car-circuit/test/racing-garage.test.ts (1 test) 42ms
+stdout | packages/demo-car-circuit/test/q-training.test.ts > trains double-dqn and reloads its actual weights into frozen racing opponents
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-car-circuit/test/q-training.test.ts (5 tests) 1496ms
+   ✓ trains dqn and reloads its actual weights into frozen racing opponents  1079ms
+ ✓ packages/demo-car-circuit/test/racing-learning.test.ts (9 tests) 3607ms
+   ✓ learns, serializes actual weights, and reloads identical frozen decisions  584ms
+   ✓ completes a race using persisted learned weights without changing them  2172ms
+   ✓ does not publish an obsolete training world when cancelled during the update  766ms
+ ✓ packages/demo-car-circuit/test/racing-race.test.ts (15 tests) 4739ms
+   ✓ completes three ordered laps on track test=false with a labelled rule-based reference  754ms
+   ✓ completes three ordered laps on track test=true with a labelled rule-based reference  649ms
+   ✓ runs four reference drivers on one common clock to completion  3103ms
+stderr | packages/demo-car-circuit/test/learned-race.test.ts > runs separately loaded learned policies to a result without changing their weights
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/demo-car-circuit/test/learned-race.test.ts (5 tests) 5764ms
+   ✓ runs separately loaded learned policies to a result without changing their weights  5472ms
+
+ Test Files  10 passed (10)
+      Tests  70 passed (70)
+   Start at  21:00:27
+   Duration  7.71s (transform 1.44s, setup 0ms, collect 7.20s, tests 16.30s, environment 3ms, prepare 2.07s)
+
