@@ -35,4 +35,4 @@ Primary reference: https://github.com/openai/spinningup/blob/master/spinup/algos
 
 ## Delivery status
 
-This plan defines the full issue. The public continuous boundary and serialized runner are implemented and locally verified. SAC, persistence, demo and benchmark remain required before completion.
+This plan defines the full issue. The public continuous boundary, serialized runner, fixed-temperature SAC and JSON checkpoints are implemented and locally verified. The actual point-mass demo, five-seed learning benchmark and final integration remain required before completion.

@@ -10,3 +10,6 @@ export type { DQNConfig, PPOConfig, QTableConfig } from './types';
 export { DQNConfigSchema, PPOConfigSchema, QTableConfigSchema } from './schemas';
 export { IgnitionEnvTFJS, IgnitionEnvTFJS as IgnitionEnv } from './ignition-env-tfjs';
 export { ALGORITHM_DEFAULTS, DQN_DEFAULTS, PPO_DEFAULTS, QTABLE_DEFAULTS } from './defaults';
+export { SACAgent } from './agents/sac';
+export type { SACSnapshot } from './agents/sac';
+export type { SACConfig } from './sac/config';
