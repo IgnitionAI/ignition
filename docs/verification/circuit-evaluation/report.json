@@ -1,0 +1,143 @@
+{
+  "sourceCommit": "229eb2654b92f6c8a381cdfb5a73832c2d973c56",
+  "tensorflowVersion": "4.22.0",
+  "backend": "cpu",
+  "training": {
+    "seed": 11,
+    "transitions": 512,
+    "hiddenLayers": [
+      16
+    ],
+    "batchSize": 32
+  },
+  "trainingUpdates": 481,
+  "observationSize": 5,
+  "actionSize": 3,
+  "policyId": "legacy-dqn-seed11-eee7a244510c",
+  "beforeHash": "eee7a244510c208ccf97ff6c60efae28bd5426de7d6790feb85dba515befcff1",
+  "afterHash": "eee7a244510c208ccf97ff6c60efae28bd5426de7d6790feb85dba515befcff1",
+  "unchanged": true,
+  "reproducible": true,
+  "bounded": true,
+  "train": {
+    "schemaVersion": 1,
+    "protocolId": "circuit-evaluation-v1",
+    "policyId": "legacy-dqn-seed11-eee7a244510c",
+    "circuit": "training",
+    "protocol": {
+      "id": "circuit-evaluation-v1",
+      "circuits": {
+        "training": {
+          "straightLength": 10,
+          "radius": 4,
+          "halfWidth": 2
+        },
+        "test": {
+          "straightLength": 6,
+          "radius": 6,
+          "halfWidth": 2
+        }
+      },
+      "startWaypoints": [
+        0,
+        16,
+        32
+      ],
+      "maxSteps": 1500,
+      "targetLaps": 3,
+      "stepSeconds": 0.05
+    },
+    "episodes": [
+      {
+        "transitions": 20,
+        "completedLaps": 0,
+        "lapTimesSeconds": [],
+        "simulationSeconds": 1,
+        "endReason": "off-track",
+        "startWaypoint": 0
+      },
+      {
+        "transitions": 24,
+        "completedLaps": 0,
+        "lapTimesSeconds": [],
+        "simulationSeconds": 1.2000000000000002,
+        "endReason": "off-track",
+        "startWaypoint": 16
+      },
+      {
+        "transitions": 20,
+        "completedLaps": 0,
+        "lapTimesSeconds": [],
+        "simulationSeconds": 1,
+        "endReason": "off-track",
+        "startWaypoint": 32
+      }
+    ],
+    "totalTransitions": 64,
+    "completedLaps": 0,
+    "successfulEpisodes": 0,
+    "offTrackEpisodes": 3,
+    "truncatedEpisodes": 0
+  },
+  "test": {
+    "schemaVersion": 1,
+    "protocolId": "circuit-evaluation-v1",
+    "policyId": "legacy-dqn-seed11-eee7a244510c",
+    "circuit": "test",
+    "protocol": {
+      "id": "circuit-evaluation-v1",
+      "circuits": {
+        "training": {
+          "straightLength": 10,
+          "radius": 4,
+          "halfWidth": 2
+        },
+        "test": {
+          "straightLength": 6,
+          "radius": 6,
+          "halfWidth": 2
+        }
+      },
+      "startWaypoints": [
+        0,
+        16,
+        32
+      ],
+      "maxSteps": 1500,
+      "targetLaps": 3,
+      "stepSeconds": 0.05
+    },
+    "episodes": [
+      {
+        "transitions": 20,
+        "completedLaps": 0,
+        "lapTimesSeconds": [],
+        "simulationSeconds": 1,
+        "endReason": "off-track",
+        "startWaypoint": 0
+      },
+      {
+        "transitions": 22,
+        "completedLaps": 0,
+        "lapTimesSeconds": [],
+        "simulationSeconds": 1.1,
+        "endReason": "off-track",
+        "startWaypoint": 16
+      },
+      {
+        "transitions": 20,
+        "completedLaps": 0,
+        "lapTimesSeconds": [],
+        "simulationSeconds": 1,
+        "endReason": "off-track",
+        "startWaypoint": 32
+      }
+    ],
+    "totalTransitions": 62,
+    "completedLaps": 0,
+    "successfulEpisodes": 0,
+    "offTrackEpisodes": 3,
+    "truncatedEpisodes": 0
+  },
+  "passed": true
+}
