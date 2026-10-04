@@ -14,3 +14,10 @@ Acceptance: all eight blog article routes and their examples preserved; existing
 Maze3D entry/style repairs retained without duplicate apps; no conflict markers;
 local checks pass; feature-branch remote revision matches and PR mergeability
 is read back. Existing manual-player/HF/licence acceptance stays open.
+
+Clean-checkout CI follow-up: run 37236505869 failed before build on Cage Duel
+lint resolving @ignitionai/storage's absent compiled declarations. Its config
+already maps core to source. Add the storage source mapping at that same owner
+boundary, preserving build-independent lint rather than reordering/skipping it.
+Reproduce with storage dist temporarily moved to a recoverable location, prove
+pre-fix failure and repaired success, restore the artifact, then read new CI.

@@ -1,0 +1,8 @@
+
+> demo-cage-duel@0.0.0 lint /srv/dev/projects/ignition/packages/demo-cage-duel
+> tsc --noEmit
+
+../backend-tfjs/src/types.ts(2,43): error TS2307: Cannot find module '@ignitionai/storage' or its corresponding type declarations.
+ ELIFECYCLE  Command failed with exit code 2.
+
+Exit: 2

@@ -15,6 +15,9 @@
     "paths": {
       "@ignitionai/core": [
         "../core/src/index.ts"
+      ],
+      "@ignitionai/storage": [
+        "../storage/src/index.ts"
       ]
     },
     "types": [

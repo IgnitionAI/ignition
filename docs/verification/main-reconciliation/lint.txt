@@ -1,0 +1,10 @@
+
+> ignition-monorepo@ lint /srv/dev/projects/ignition
+> pnpm -r lint
+
+Scope: 17 of 18 workspace projects
+packages/web lint$ eslint .
+packages/web lint: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web lint: Done
+packages/demo-cage-duel lint$ tsc --noEmit
+packages/demo-cage-duel lint: Done

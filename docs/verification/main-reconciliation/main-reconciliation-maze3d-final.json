@@ -1,0 +1,14 @@
+{
+  "url": "http://127.0.0.1:4195/demos/maze-3d/",
+  "title": "IgnitionAI — Maze 3D",
+  "first": "Maze 3D\n\nTrain an agent to escape the maze\n\nAlgorithm\nDQN\nQ-Table\nSpeed\n1x\nTrain\nReset\nEpisodes\n0\nTotal reward\n0.0\nSteps\n160\nKey\n❌",
+  "second": "Maze 3D\n\nTrain an agent to escape the maze\n\nAlgorithm\nDQN\nQ-Table\nSpeed\n1x\nTrain\nReset\nEpisodes\n0\nTotal reward\n0.0\nSteps\n160\nKey\n❌",
+  "stable": true,
+  "canvas": 1,
+  "controls": {
+    "x": 16,
+    "y": 16,
+    "width": 242.359375,
+    "height": 327
+  }
+}

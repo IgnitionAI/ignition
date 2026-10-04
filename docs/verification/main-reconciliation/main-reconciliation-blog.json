@@ -1,0 +1,65 @@
+{
+  "url": "http://127.0.0.1:3112/blog",
+  "title": "Blog — IgnitionAI",
+  "status": 200,
+  "links": [
+    "/blog/mountaincar-prendre-elan",
+    "/blog/gridworld-valeurs-actions",
+    "/blog/cartpole-3d-observations",
+    "/blog/drone-navigation-controle",
+    "/blog/maze-capteurs-recompenses",
+    "/blog/maze-3d-cles-portes",
+    "/blog/circuit-racing-pilotes",
+    "/blog/premier-agent-cartpole"
+  ],
+  "articles": [
+    {
+      "environment": "mountaincar",
+      "slug": "mountaincar-prendre-elan",
+      "status": 200,
+      "heading": "MountainCar : apprendre à prendre de l’élan"
+    },
+    {
+      "environment": "gridworld",
+      "slug": "gridworld-valeurs-actions",
+      "status": 200,
+      "heading": "GridWorld : rendre les décisions d’un agent lisibles"
+    },
+    {
+      "environment": "cartpole-3d",
+      "slug": "cartpole-3d-observations",
+      "status": 200,
+      "heading": "CartPole 3D : une scène visible, quatre observations"
+    },
+    {
+      "environment": "drone-navigation",
+      "slug": "drone-navigation-controle",
+      "status": 200,
+      "heading": "Drone Navigation : relier moteurs, mouvement et récompense"
+    },
+    {
+      "environment": "maze",
+      "slug": "maze-capteurs-recompenses",
+      "status": 200,
+      "heading": "Maze : guider un agent avec des capteurs et des récompenses"
+    },
+    {
+      "environment": "maze-3d",
+      "slug": "maze-3d-cles-portes",
+      "status": 200,
+      "heading": "Maze 3D : une clé change la valeur du chemin"
+    },
+    {
+      "environment": "car-circuit",
+      "slug": "circuit-racing-pilotes",
+      "status": 200,
+      "heading": "Circuit Racing : entraîner un pilote, puis mesurer sa course"
+    },
+    {
+      "environment": "cartpole",
+      "slug": "premier-agent-cartpole",
+      "status": 200,
+      "heading": "Entraîner son premier agent avec Ignition sur CartPole"
+    }
+  ]
+}
