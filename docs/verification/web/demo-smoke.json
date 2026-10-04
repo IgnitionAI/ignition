@@ -1,0 +1,66 @@
+[
+  {
+    "slug": "car-circuit",
+    "status": 200,
+    "body": 587,
+    "canvas": 1,
+    "errors": [],
+    "failed": []
+  },
+  {
+    "slug": "maze",
+    "status": 200,
+    "body": 598,
+    "canvas": 1,
+    "errors": [],
+    "failed": []
+  },
+  {
+    "slug": "cartpole",
+    "status": 200,
+    "body": 489,
+    "canvas": 1,
+    "errors": [],
+    "failed": []
+  },
+  {
+    "slug": "mountaincar",
+    "status": 200,
+    "body": 637,
+    "canvas": 1,
+    "errors": [],
+    "failed": []
+  },
+  {
+    "slug": "cartpole-3d",
+    "status": 200,
+    "body": 401,
+    "canvas": 1,
+    "errors": [],
+    "failed": []
+  },
+  {
+    "slug": "drone-navigation",
+    "status": 200,
+    "body": 495,
+    "canvas": 1,
+    "errors": [],
+    "failed": []
+  },
+  {
+    "slug": "maze-3d",
+    "status": 200,
+    "body": 160,
+    "canvas": 1,
+    "errors": [],
+    "failed": []
+  },
+  {
+    "slug": "gridworld",
+    "status": 200,
+    "body": 371,
+    "canvas": 1,
+    "errors": [],
+    "failed": []
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "path": "/docs",
+    "status": 200,
+    "title": "Introduction — IgnitionAI Docs",
+    "heading": "IgnitionAI",
+    "errors": []
+  },
+  {
+    "path": "/blog",
+    "status": 200,
+    "title": "Blog — IgnitionAI",
+    "heading": "Apprendre en construisant",
+    "errors": []
+  },
+  {
+    "path": "/blog/premier-agent-cartpole",
+    "status": 200,
+    "title": "Entraîner son premier agent avec Ignition sur CartPole — IgnitionAI",
+    "heading": "Entraîner son premier agent avec Ignition sur CartPole",
+    "errors": []
+  }
+]
