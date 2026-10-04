@@ -56,4 +56,3 @@ Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dram
       Tests  70 passed (70)
    Start at  21:00:27
    Duration  7.71s (transform 1.44s, setup 0ms, collect 7.20s, tests 16.30s, environment 3ms, prepare 2.07s)
-

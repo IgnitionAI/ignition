@@ -32,4 +32,3 @@ stdout | packages/demo-car-circuit/test/q-training.test.ts > trains double-dqn a
       Tests  14 passed (14)
    Start at  20:58:24
    Duration  4.70s (transform 724ms, setup 0ms, collect 2.33s, tests 3.85s, environment 1ms, prepare 418ms)
-
