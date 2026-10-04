@@ -228,6 +228,6 @@ See epics [#22](https://github.com/IgnitionAI/ignition/issues/22), [#23](https:/
 - Circuit driving/rules/training/AI-racing: #13–#16 verified; source proofs under `docs/verification/racing-acceptance`, `training-browser` and `racing-four`.
 - Player acceptance #17 remains open: complete human-keyboard race against a learned checkpoint is not proven. AI/API or rule-controlled browser runs cannot replace it. Parents #9/#6 remain open.
 - Double DQN #11: native train/save/reload and all20 evaluations verified with unchanged weights (6000-transition partial checkpoint,0/20 successful). Comparison #12 retains the independently audited200-outcome equal-budget experiment and its verified production-local report link. Human-player acceptance remains separate.
-- HF #31 remains open: PR #41 fixes source and provides a protected opt-in live test; authenticated remote round-trip requires credentials and is not proven.
+- HF #31 remains open: the provider repair and protected opt-in live test from PR #41 are integrated in the consolidation branch. Authenticated remote round-trip requires dedicated credentials and is not proven.
 - Epics #22/#23 remain open. Epic #24 has combined local API/runtime verification in PR #37; this does not establish a published release.
 - Blog articles were merged in PR #38; current public URLs need independent deployment readback.

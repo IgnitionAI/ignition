@@ -343,7 +343,7 @@ Under the hood: `stepIntervalMs` goes down and `stepsPerTick` batches multiple s
 - Core and algorithms have behavioral and convergence coverage; this does not promise convergence on every custom environment.
 - Historical full suite on 2026-10-04 at source `52610b5`: **420 tests passed, 3 skipped** because `HF_TOKEN` was absent. This is not a test count for every later commit.
 - Real local ONNX conversion and TFJS/ONNX output parity passed; see [the retained report](docs/verification/onnx/README.md).
-- HuggingFace storage has mocked coverage; the current authenticated remote round-trip remains unverified.
+- HuggingFace storage preserves real TFJS artifacts and authenticated loader requests in local transport tests; see [the provider proof](docs/verification/huggingface/README.md). The authenticated remote round-trip remains unverified without dedicated test credentials.
 - Eight public demo entries are defined in the shared catalogue. Cage Duel is a local prototype; Target Chasing is excluded from public builds.
 - Complete web build and local smoke checks passed; follow-up acceptance and CI are tracked in [PR #37](https://github.com/IgnitionAI/ignition/pull/37). A local check does not establish deployed behavior.
 - Published modular npm packages are version 0.1.0; current source changes are not a newly published npm release.

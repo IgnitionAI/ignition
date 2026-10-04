@@ -1,0 +1,5 @@
+Scope: 2 of 18 workspace projects
+packages/storage build$ tsc
+packages/storage build: Done
+packages/backend-tfjs build$ tsc
+packages/backend-tfjs build: Done
