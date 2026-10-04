@@ -5,7 +5,7 @@ description: Train your first RL agent in the browser in under 10 lines of code.
 
 # Quickstart
 
-By the end of this page, you will have trained a reinforcement-learning agent to balance a pole in the browser. The entire setup is 7 lines of code. You will not configure a neural network, pick hyperparameters, or write a training loop.
+This page starts a CartPole training loop in the browser using the default network and hyperparameters. The minimal setup fits in seven lines; whether the resulting policy balances the pole must be measured through evaluation.
 
 ## Install
 
@@ -48,21 +48,26 @@ env.train('dqn')       // Start with the default configuration.
 Training takes time. Don't throw it away. Add two lines to persist the model:
 
 ```ts filename="src/main.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from '@ignitionai/environments'
 import { IndexedDBProvider } from '@ignitionai/storage'
 
 const env = new IgnitionEnvTFJS(new CartPoleEnv())
 env.train('dqn', { storageProvider: new IndexedDBProvider() })
 
-// ... training converges ...
+// Save after your own training/evaluation procedure.
 
-await env.save('cartpole-best', { meanReward: 195.4 })
+await env.save('cartpole-current')
 
-// Later — on page reload, or in another session:
-await env.load('cartpole-best')
-env.infer()  // Watch the trained agent play
+// Later — create the same algorithm and architecture in a new session.
+const restored = new IgnitionEnvTFJS(new CartPoleEnv())
+restored.train('dqn', { storageProvider: new IndexedDBProvider() })
+restored.stop()  // Initialize the agent without running scheduled training.
+await restored.load('cartpole-current')
+restored.infer()  // Run the loaded policy without learning.
 ```
 
-`save()` stores the model weights **and** the agent's internal state (`epsilon`, step counter, best reward). `load()` restores everything. No manual bookkeeping.
+For DQN and Double DQN, `save()` persists model weights and passes agent-state metadata to the provider. `load()` restores the weights; it does **not** restore saved exploration state, training counters, replay memory or an exact optimizer continuation. Create the same algorithm with compatible dimensions and hidden layers before loading. Inference uses greedy actions without updating the weights. A saved model is not a guarantee of a successful policy.
 
 Observe training in the demo’s controls. Learning time and success depend on the environment, backend and random initialization; starting the loop does not prove convergence.
 
