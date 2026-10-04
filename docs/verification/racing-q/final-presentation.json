@@ -1,0 +1,12 @@
+{
+  "url": "http://127.0.0.1:3102/demos/car-circuit/reports/racing-q-v3/index.html",
+  "status": 200,
+  "stats": [
+    "42/100",
+    "33/100"
+  ],
+  "historicalNotice": true,
+  "contactNotice": true,
+  "ghostNotice": true,
+  "htmlHash": "1332b73920501039903083cfe79afa47f560db350638b4cfba4163263139d4fb"
+}

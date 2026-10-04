@@ -1,0 +1,22 @@
+{
+  "url": "http://127.0.0.1:3102/demos/car-circuit/reports/racing-q-v3/index.html",
+  "h1": "DQN et Double DQN,\nà budget égal.",
+  "rows": 10,
+  "stats": [
+    "42/100",
+    "33/100"
+  ],
+  "contactNotice": true,
+  "ghostNotice": true,
+  "limits": true,
+  "downloads": [
+    {
+      "href": "results.json",
+      "status": 200,
+      "algorithm": null,
+      "seed": null,
+      "weightArrays": null,
+      "policyReports": 10
+    }
+  ]
+}
