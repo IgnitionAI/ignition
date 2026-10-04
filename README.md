@@ -1,7 +1,7 @@
 # IgnitionAI
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./LICENSE)
-[![Tests](https://img.shields.io/badge/tests-420%20passing-22c55e?style=flat-square)](https://github.com/IgnitionAI/ignition/actions)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./package.json)
+[![CI](https://github.com/IgnitionAI/ignition/actions/workflows/ci.yml/badge.svg)](https://github.com/IgnitionAI/ignition/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?style=flat-square)](https://www.typescriptlang.org/)
 
 > **The ML-Agents of the JavaScript creative ecosystem.**
@@ -341,14 +341,14 @@ Under the hood: `stepIntervalMs` goes down and `stepsPerTick` batches multiple s
 **v0.1 packages, with further development in this repository.**
 
 - Core and algorithms have behavioral and convergence coverage; this does not promise convergence on every custom environment.
-- Local full suite on 2026-10-04: **420 tests passed, 3 skipped** because `HF_TOKEN` was absent.
+- Historical full suite on 2026-10-04 at source `52610b5`: **420 tests passed, 3 skipped** because `HF_TOKEN` was absent. This is not a test count for every later commit.
 - Real local ONNX conversion and TFJS/ONNX output parity passed; see [the retained report](docs/verification/onnx/README.md).
 - HuggingFace storage has mocked coverage; the current authenticated remote round-trip remains unverified.
 - Eight public demo entries are defined in the shared catalogue. Cage Duel is a local prototype; Target Chasing is excluded from public builds.
 - Complete web build and local smoke checks passed; follow-up acceptance and CI are tracked in [PR #37](https://github.com/IgnitionAI/ignition/pull/37). A local check does not establish deployed behavior.
 - Published modular npm packages are version 0.1.0; current source changes are not a newly published npm release.
 
-See [roadmap.md](./roadmap.md) for what's coming next (SAC, multi-agent, model hub, more demos).
+SAC, multi-agent and the checkpoint catalogue have independently verified implementations in [PR #40](https://github.com/IgnitionAI/ignition/pull/40), [PR #39](https://github.com/IgnitionAI/ignition/pull/39) and [PR #42](https://github.com/IgnitionAI/ignition/pull/42). These open PRs are not integrated in this checkout. See [roadmap.md](./roadmap.md) for delivery status and later work.
 
 ---
 
@@ -375,7 +375,7 @@ The codebase follows:
 
 ## License
 
-[MIT](./LICENSE) — use it for anything, commercial or otherwise. Attribution appreciated but not required.
+The root [package metadata](./package.json) declares MIT. A root LICENSE text is currently missing; retain the separate licences and provenance supplied with demo assets.
 
 ---
 

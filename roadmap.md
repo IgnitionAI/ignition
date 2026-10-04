@@ -6,21 +6,21 @@
 
 ---
 
-## Done
+## Implemented in source
 
 - **Core**: TrainingEnv/InferenceEnv interfaces, auto-config, IgnitionEnv with train/infer/stop/setSpeed
-- **Algos**: DQN, PPO, Q-Table — with greedy mode for inference
-- **Infrastructure**: pnpm monorepo, Zod validation, CI/CD, `ignitionai` umbrella package
+- **Algos**: DQN, Double DQN, PPO, Q-Table — with greedy mode for inference
+- **Infrastructure**: pnpm monorepo, Zod validation, CI/CD, local-only `ignitionai` umbrella package
 - **ONNX**: OnnxAgent, TF.js→ONNX exporter, HF Hub loader
 - **Storage**: HuggingFace Hub provider
 - **Environments**: `@ignitionai/environments` — GridWorld, CartPole, MountainCar
 - **Demos 2D**: GridWorld, CartPole, MountainCar
 - **Demos 3D**: CartPole 3D, Car Circuit (dense progress reward), Drone Navigation (rigid-body physics hero demo)
-- Local suite observed 2026-10-04: **420 tests passed, 3 authenticated HF tests skipped**.
+- Historical suite at source `52610b5`, observed 2026-10-04: **420 tests passed, 3 authenticated HF tests skipped**. Later commits require their own results.
 
 ---
 
-## Phase 1 — Public Launch Prep ✅
+## Phase 1 — Public Launch Prep
 
 > Launch foundation is implemented. Current consolidation and remaining acceptance are tracked in GitHub epics #22 and #23.
 
@@ -32,7 +32,7 @@
 - [x] IgnitionAI brand: flame GIF logo, indigo palette, custom SVG feature diagrams
 - [x] Real package install command (`@ignitionai/core` + `@ignitionai/backend-tfjs` + `@ignitionai/environments`)
 - [x] "Recent updates" section reading CHANGELOG.md at build time
-- [x] Deployed on Vercel at `ignitionai.dev`
+- Historical Vercel site: `ignitionai.dev`. Current PR previews and local builds do not prove publication of the latest source.
 
 ### 1.2 Documentation site ✅
 - [x] Docs at `/docs` via Nextra 4, same Next.js deployment (single Vercel build)
@@ -42,7 +42,7 @@
 - [x] React Three Fiber page: why R3F-first + full training-loop/render-loop split
 - [x] 7 tutorials: GridWorld, CartPole observations, MountainCar reward shaping, CartPole 3D, Car Circuit, ONNX → Unity, Drone Navigation (physics + "IgnitionAI philosophy" section)
 - [x] Auto-generated sidebar via `_meta.js` contracts, dark-mode matches landing
-- [x] 26 routes built statically (landing, /changelog, /docs/*, 6 demo SPAs)
+- [x] Static site/docs routes and eight catalogue demo SPAs; see `packages/web/data/demos.json` and the retained web verification report
 
 ### 1.3 README + branding
 - [x] README rewritten for v0.1 with current API + all demos
@@ -50,7 +50,7 @@
 - [x] Flame GIF logo (IgnitionAI brand asset)
 - [x] Flame SVG favicon across all pages + demos (`app/icon.svg` + `public/favicon.svg`)
 - [x] Root metadata: title template "— IgnitionAI", real description
-- [ ] Social card image for Twitter/OG
+- [x] Social card and metadata locally verified in #32; latest deployment remains a separate check
 - [ ] Hero GIF of Car Circuit or Drone demo in README
 
 ### 1.4 npm publish v0.1.0 ✅
@@ -96,7 +96,7 @@
 - [ ] **Reddit r/reinforcementlearning + r/javascript + r/threejs + r/reactjs**
 - [ ] **Product Hunt** submission
 - [ ] **Discord server**: community + support channel
-- [ ] Social card image for Twitter/OG meta tags
+- [x] Social card and metadata locally verified in #32; latest deployment remains a separate check
 - [ ] Hero GIF in README (Drone Navigation or Car Circuit)
 - [ ] Track metrics: GitHub stars, npm downloads, demo page views
 
@@ -120,7 +120,7 @@ These are engineered for virality. "AI learns Flappy Bird in JavaScript" is a tw
 
 > Continuous action spaces for real game AI.
 
-- [ ] **SAC** (Soft Actor-Critic) — continuous actions (steering angle, throttle)
+- **SAC / continuous actions**: #33 verified, open PR #40; not integrated here. Point-mass benchmark retained; no claim of SAC vehicle steering.
 - [ ] **A2C** — lightweight alternative to PPO
 - [ ] Upgrade Drone Navigation + Car Circuit to continuous steering with SAC — smoother control
 - [ ] Benchmark: DQN vs PPO vs SAC on the same env
@@ -131,7 +131,7 @@ These are engineered for virality. "AI learns Flappy Bird in JavaScript" is a tw
 
 > The next level of RL.
 
-- [ ] **Multi-agent API**: multiple agents in the same environment
+- **Multi-agent API**: #34 verified, open PR #39; not integrated here.
 - [ ] **Self-play**: agent trains against past versions of itself
 - [ ] Demo: **Pong** — two agents learning to beat each other
 - [ ] Demo: **Sumo** — two agents wrestling in a circle
@@ -144,7 +144,7 @@ These are engineered for virality. "AI learns Flappy Bird in JavaScript" is a tw
 
 - [ ] Upload API: `agent.publish('username/model-name')`
 - [ ] Download API: `IgnitionEnv.loadAgent('username/model-name')`
-- [ ] Gallery page: browse published agents
+- **Checkpoint catalogue**: #35 verified, open PR #42; not integrated here. Five documented SAC checkpoints, compatibility checks and a local laboratory; not a general model leaderboard.
 - [ ] Top models: car racing, Snake champion, Flappy master, drone pilot
 - [ ] Leaderboard per environment
 
@@ -222,3 +222,12 @@ Built by [@salim4n](https://github.com/salim4n) / [@IgnitionAI](https://github.c
 ## Current delivery tracking
 
 See epics [#22](https://github.com/IgnitionAI/ignition/issues/22), [#23](https://github.com/IgnitionAI/ignition/issues/23), and [#24](https://github.com/IgnitionAI/ignition/issues/24). These distinguish verified corrections, pending acceptance and future extensions. The `ignitionai` umbrella is local-only; published modular packages are still 0.1.0 and lag current source APIs. For current examples use a source workspace.
+
+## Acceptance snapshot — 2026-10-04
+
+- Circuit driving/rules/training/AI-racing: #13–#16 verified; source proofs under `docs/verification/racing-acceptance`, `training-browser` and `racing-four`.
+- Player acceptance #17 remains open: complete human-keyboard race against a learned checkpoint is not proven. AI/API or rule-controlled browser runs cannot replace it. Parents #9/#6 remain open.
+- Double DQN #11: native current-browser save/reload verified;20 evaluations still running. Comparison #12 has archived200-outcome audit and visible report; dependency reconciliation pending.
+- HF #31 remains open: PR #41 fixes source and provides a protected opt-in live test; authenticated remote round-trip requires credentials and is not proven.
+- Epics #22/#23/#24 remain open. Closed extension children do not establish combined integration or a published release.
+- Blog articles were merged in PR #38; current public URLs need independent deployment readback.

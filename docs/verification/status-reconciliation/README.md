@@ -1,0 +1,7 @@
+# Documentation status reconciliation — #29
+
+Current sourceb83d212 and GitHub readbacks2026-10-04. Eight demo entries verified directly from packages/web/data/demos.json. Historical420-test result explicitly anchored to52610b5 rather than advertised as a live passing counter; CI badge now points to actual workflow. Roadmap reconciles closed#13–#16 and#32 with still-open#17/#31/parent epics. Open PR39/40/42 have separate verified implementations but are not integrated into this checkout. BlogPR38 is actually MERGED; public deployment readback remains separate. Remote states were read directly, not inferred from checked checkboxes.
+
+Archived TODO and contribution notes are explicitly historical, including obsolete experiment paths. README metadata references root package.json declaring MIT; broken root LICENSE links corrected and missing license text disclosed, with asset licences retained. Root LICENSE is a material repository gap, not silently substituted with inferred copyright terms.
+
+Verification:12 local Markdown links resolve (local-links.json); eight catalogue entries; git diff --check PASS. Documentation-only change, no mirrored tests needed. Review specification PASS for corrected claims, standards PASS. Broader#29 closure requires final reconciliation after DDQN evaluation and remaining status references; do not mark parent product acceptance complete. CurrentDDQN page issue11-ddqn-current continues20 evaluations, last readback4/20, no restart.
