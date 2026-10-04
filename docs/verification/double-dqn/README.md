@@ -1,5 +1,7 @@
 # Double DQN serialized runner round-trip
 
+Historical intermediate proof. Final #11/#12 acceptance passed and both issues are closed; see [the final lifecycle/comparison report](../double-dqn-final/README.md). Pending statements below describe the earlier checkpoint.
+
 Verified on 2026-10-04 using the TFJS CPU backend.
 
 The existing public API test now persists TensorFlow.js ModelArtifacts and loads a distinct model through `IgnitionEnv.load()`. It verifies that trained weights survive loading, greedy inference chooses the same action, and inference leaves loaded weights unchanged. Metadata identifies Double DQN even when caller metadata supplies an incorrect algorithm label. Existing injected fit-failure cleanup coverage remains.

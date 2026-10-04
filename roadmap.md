@@ -231,3 +231,7 @@ See epics [#22](https://github.com/IgnitionAI/ignition/issues/22), [#23](https:/
 - HF #31 remains open: the provider repair and protected opt-in live test from PR #41 are integrated in the consolidation branch. Authenticated remote round-trip requires dedicated credentials and is not proven.
 - Epics #22/#23 remain open. Epic #24 has combined local API/runtime verification in PR #37; this does not establish a published release.
 - Blog articles were merged in PR #38; current public URLs need independent deployment readback.
+- Cleanup #44 is verified and closed; `pnpm clean` moves package artifacts to Trash.
+- Licence #45 awaits copyright confirmation; public article verification is tracked in #46.
+- Release preparation #47 remains open. Local archives pass ESM/CommonJS imports and operations on Node 20.0.0, 20.19.2 and 22.23.3; tests/build metadata are excluded. These are candidate archives, not a new npm publication.
+- Documentation #29 has criterion-level reconciliation of #6–#17, preserving the outstanding human acceptance. See `docs/verification/status-reconciliation` for dated GitHub readbacks and local link checks.

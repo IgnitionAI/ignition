@@ -19,12 +19,12 @@ Requirements:
 
 ```
 packages/
-├── core/            # TrainingEnv interface, types, schemas
-├── backend-tfjs/    # DQN, PPO, QTable agents (TF.js)
+├── core/            # Discrete/continuous contracts and mono/multi-agent runners
+├── backend-tfjs/    # DQN, Double DQN, PPO, QTable and SAC agents (TF.js)
 ├── backend-onnx/    # ONNX export + inference runtime
 ├── storage/         # Model persistence providers
 ├── environments/    # Built-in envs (CartPole, MountainCar, GridWorld)
-├── ignitionai/      # Public facade (exports everything)
+├── ignitionai/      # Local-only facade; not published on npm
 ├── web/             # Next.js 16 landing + Nextra docs
 └── demo-*/          # Standalone demo apps
 ```
@@ -83,10 +83,10 @@ Example: `feat(backend-tfjs): add GRU support to DQNAgent`
 ## Release process
 
 Maintainers only:
-1. Update `CHANGELOG.md`
-2. Bump versions in affected `package.json` files
-3. Run `pnpm -r publish`
-4. Tag the release on GitHub
+Follow the [candidate preparation and recovery checklist](../docs/design/release-candidate.md).
+Approve the scope/version, validate the five modular archives outside the
+workspace and their licences, then authorize publication separately. The
+umbrella remains local-only. A local build or draft PR is not a published release.
 
 ## Questions?
 

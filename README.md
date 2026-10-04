@@ -255,7 +255,7 @@ function Game() {
 }
 ```
 
-The training loop runs independently of the render loop — the agent learns while your scene renders at 60fps.
+The training loop runs independently of the render loop. Measure rendering performance on your target device; this separation does not guarantee 60 FPS.
 
 ---
 
@@ -299,10 +299,10 @@ IgnitionAI is a pnpm monorepo. The modular `@ignitionai/*` packages are publishe
 
 ```
 ignitionai                  ← local umbrella workspace, not published
-├── @ignitionai/core           IgnitionEnv, TrainingEnv interface, types
-├── @ignitionai/backend-tfjs   DQN, PPO, Q-Table + IgnitionEnvTFJS
+├── @ignitionai/core           Discrete/continuous contracts and multi-agent runner
+├── @ignitionai/backend-tfjs   DQN, Double DQN, PPO, Q-Table, SAC + IgnitionEnvTFJS
 ├── @ignitionai/backend-onnx   OnnxAgent, TF.js → ONNX exporter
-├── @ignitionai/storage        HuggingFace Hub model persistence
+├── @ignitionai/storage        Model persistence and checkpoint catalogue
 └── @ignitionai/environments   GridWorld, CartPole, MountainCar
 ```
 
@@ -316,8 +316,8 @@ IgnitionAI exposes `env.setSpeed(multiplier)` so you can accelerate training dyn
 
 ```ts
 env.train('dqn');
-env.setSpeed(50);    // Turbo — 50x faster, agent learns in seconds
-// ... agent converges ...
+env.setSpeed(50);    // Batch more steps between browser yields
+// ... evaluate the learned policy ...
 env.setSpeed(1);     // Back to real-time for visual inspection
 env.infer();
 ```
@@ -433,6 +433,6 @@ forward progress from the selected starting position, rather than merely
 crossing the start line.
 
 This is the historical oval protocol. The current Circuit Racing experience uses
-its own `circuit-racing-v1`, `racing-observation-v1` and `circuit-race-v1` contracts.
+its own `circuit-racing-v2`, `racing-observation-v1` and `circuit-race-v2` contracts.
 See [Circuit Racing](packages/demo-car-circuit/README.md) for current behavior,
 learned checkpoint reports and validation boundaries.

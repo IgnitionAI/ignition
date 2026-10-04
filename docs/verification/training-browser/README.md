@@ -1,4 +1,6 @@
-# Current #15 browser lifecycle — in progress
+# Current #15 browser lifecycle
+
+Current scoped acceptance: PASS; see the final evidence below. The earlier observations record the verification chronology and are not the current status. Human-player #17 remains open.
 
 Source49973cf / production preview localhost4174, named page issue15-training-current. Public buttons started imitation seed11, observed first completed round4096 samples/loss1.1452, then Stop and Save without waiting for tests. Actual stored checkpoint driver-11-1791144182320 has8192 samples,6 updates,six real weight arrays and circuit-racing-v2. A second in-flight update completed during Stop; UI still displayed4096 samples. This stale counter is a validated remaining defect; do not close#15.
 

@@ -1,4 +1,6 @@
-# Final DDQN browser recipe — #11 / #12, in progress
+# Final DDQN browser recipe — #11 / #12
+
+Current scoped acceptance: PASS; see the final evidence below. The earlier observations record the verification chronology and are not the current status. Human-player #17 remains open.
 
 Source3521370/current Vite build, localhost4174. Public method selected DQN then Double DQN. Genuine training stopped and native Save persisted driver-11-1791144828984,6000 transitions/1493 updates, double-dqn/circuit-racing-v2. Actual reload/load restores algorithm and counts, with fresh optimizer disclosure. Screenshots displayed and inspected. No injected checkpoint/private agent, reduced budget or competence claim. The configured20 full evaluations started on retained page issue11-ddqn-current, last poll1/20. Preserve it and observe to finish; no restart on observation timeout. Complete outcome export/weight comparison still pending, so #11/#12 remain open.
 
