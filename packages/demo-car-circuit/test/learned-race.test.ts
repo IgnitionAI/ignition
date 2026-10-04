@@ -1,5 +1,6 @@
 import { expect, it } from "vitest";
 import { readFileSync } from "node:fs";
+import { DrivingWorld } from "../src/racing/driving";
 import { LearnedRace, type RaceEntry } from "../src/racing/learned-race";
 const entries: RaceEntry[] = [11, 29].map((seed) => ({
   id: `checkpoint-${seed}`,
@@ -40,17 +41,32 @@ it("rejects a missing or incompatible opponent instead of substituting reference
 
 it("applies human commands on the same clock while the saved opponent uses its own policy", () => {
   const session = new LearnedRace([entries[0]], true);
-  const before = session.snapshots().map((p) => p.weights);
-  for (let i = 0; i < 240; i++) session.step(7);
-  expect(session.race.drivers[0].world.car.speed).toBeGreaterThan(5);
-  expect(session.race.drivers[0].world.ticks).toBe(
-    session.race.drivers[1].world.ticks,
-  );
-  const speed = session.race.drivers[0].world.car.speed;
-  for (let i = 0; i < 20; i++) session.step(1);
-  expect(session.race.drivers[0].world.car.speed).toBeLessThan(speed);
-  expect(session.snapshots().map((p) => p.weights)).toEqual(before);
-  session.dispose();
+  try {
+    const before = session.snapshots().map((p) => p.weights);
+    const canonical = new DrivingWorld(session.race.track);
+    canonical.car = { ...session.race.drivers[0].world.car };
+    for (let i = 0; i < 240; i++) {
+      const elapsed = session.race.elapsedTicks;
+      const action = i < 210 ? 7 : 8;
+      session.step(action);
+      if (session.race.elapsedTicks > elapsed) canonical.step(action);
+      expect(session.race.drivers[0].world.car).toEqual(canonical.car);
+    }
+    expect(session.race.drivers[0].world.car.speed).toBeGreaterThan(5);
+    expect(session.race.drivers[0].world.ticks).toBe(
+      session.race.drivers[1].world.ticks,
+    );
+    const speed = session.race.drivers[0].world.car.speed;
+    for (let i = 0; i < 20; i++) {
+      session.step(1);
+      canonical.step(1);
+      expect(session.race.drivers[0].world.car).toEqual(canonical.car);
+    }
+    expect(session.race.drivers[0].world.car.speed).toBeLessThan(speed);
+    expect(session.snapshots().map((p) => p.weights)).toEqual(before);
+  } finally {
+    session.dispose();
+  }
 });
 
 

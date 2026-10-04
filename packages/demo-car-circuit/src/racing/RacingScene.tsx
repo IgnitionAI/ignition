@@ -175,9 +175,8 @@ function Driver({
             race.drivers.map((d, i) =>
               reference || i > 0 ? referenceAction(d.world) : action,
             ),
-            reference ? undefined : 0,
           );
-        else world.step(action, true);
+        else world.step(action);
         accumulator.current -= DRIVING_CONTRACT.dt;
       }
     } else accumulator.current = 0;
