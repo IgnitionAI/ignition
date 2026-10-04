@@ -6,7 +6,11 @@
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
   "files": [
-    "dist"
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "!dist/tests/**",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
   ],
   "scripts": {
     "build": "tsc",

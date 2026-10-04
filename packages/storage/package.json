@@ -5,7 +5,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "!dist/tests/**",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts"
   ],
   "license": "MIT",
   "publishConfig": {

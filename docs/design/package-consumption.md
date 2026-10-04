@@ -23,3 +23,10 @@ suites because import specifiers affect the complete source package surface.
 Remaining epic units: archive filtering, licence distribution, release notes,
 version approval, supported-Node/module-mode matrix and remote gates. Passing
 this unit does not close #47 or authorize publication.
+
+Archive filtering unit: restrict each modular package's files whitelist to
+emitted JavaScript and declaration files, excluding compiled test paths. Do not
+remove source tests or generated workspace outputs. Verify actual packed file
+lists contain the public entry points, no tests and no tsbuildinfo, then install
+these exact archives in a fresh external consumer and recheck imports/types.
+Licence absence remains a separate unsatisfied criterion tracked by #45.

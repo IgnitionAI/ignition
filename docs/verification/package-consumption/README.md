@@ -47,3 +47,19 @@ NOT PROVEN: licence distribution (#45), filtering build metadata/ONNX test
 artifacts, approved release scope/version, full supported Node/module matrix,
 notes and publication/rollback procedure, and remote gates on final revision.
 These local checks do not close #47 or prove a released package is fixed.
+
+## Filtered archive follow-up
+
+The files whitelist now admits emitted JavaScript/declarations and excludes
+compiled tests. Actual pnpm tarballs were inspected: all five retain main/types
+entry points and contain no tests or tsbuildinfo (`filtered/archives.json`).
+Those exact tarballs installed in a new isolated consumer at
+`/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y`; the public operation smoke
+and strict NodeNext declaration check both passed. No source test or workspace
+output was deleted, and owner suites were not repeated for metadata-only edits.
+Spec and standards review PASS; git diff-check PASS.
+
+Archive filtering is now PASS. Release notes and delivery/recovery steps are
+prepared in `docs/design/release-candidate.md` for maintainer review. Licence
+distribution, release approval, full runtime matrix and final remote gates
+remain NOT PROVEN. The earlier remaining-unit list records the initial stage.
