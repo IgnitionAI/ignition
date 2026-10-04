@@ -150,7 +150,7 @@ function Driver({
 }) {
   const { active: loading } = useProgress();
   const accumulator = useRef(0),
-    frames = useRef(0),
+    statsElapsed = useRef(0),
     cameraRig = useRef(new RacingCamera()),
     cameraWorld = useRef(world);
   useFrame(({ camera }, delta) => {
@@ -186,7 +186,11 @@ function Driver({
     camera.position.copy(cameraRig.current.position);
     camera.up.set(0, 1, 0);
     camera.lookAt(cameraRig.current.target);
-    if (++frames.current % 6 === 0) onStats(c.speed * 3.6);
+    statsElapsed.current += delta;
+    if (statsElapsed.current >= 0.1) {
+      statsElapsed.current = 0;
+      onStats(c.speed * 3.6);
+    }
   });
   return null;
 }
