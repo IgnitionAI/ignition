@@ -1,0 +1,455 @@
+[
+  {
+    "run": "ppo-before-tests",
+    "passed": 0,
+    "failed": 3,
+    "cases": [
+      {
+        "file": "backend-tfjs/test/ppo-public-regression.test.ts",
+        "name": "PPO learns rewarded actions through the public loop (seed 11)",
+        "status": "failed",
+        "failures": [
+          "AssertionError: expected 0.565 to be greater than 0.8"
+        ]
+      },
+      {
+        "file": "backend-tfjs/test/ppo-public-regression.test.ts",
+        "name": "PPO learns rewarded actions through the public loop (seed 29)",
+        "status": "failed",
+        "failures": [
+          "AssertionError: expected 0.495 to be greater than 0.8"
+        ]
+      },
+      {
+        "file": "backend-tfjs/test/ppo-public-regression.test.ts",
+        "name": "PPO learns rewarded actions through the public loop (seed 47)",
+        "status": "failed",
+        "failures": [
+          "AssertionError: expected 0.5 to be greater than 0.8"
+        ]
+      },
+      {
+        "file": "backend-tfjs/test/ppo-public-regression.test.ts",
+        "name": "discards a partial rollout on reset",
+        "status": "skipped",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-public-regression.test.ts",
+        "name": "discards a partial rollout on inferStep",
+        "status": "skipped",
+        "failures": []
+      }
+    ]
+  },
+  {
+    "run": "ppo-current-tests",
+    "passed": 35,
+    "failed": 0,
+    "cases": [
+      {
+        "file": "backend-tfjs/test/dqn-truncation.test.ts",
+        "name": "DQN bootstraps unless terminated=false",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/dqn-truncation.test.ts",
+        "name": "DQN bootstraps unless terminated=true",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-bootstrap.test.ts",
+        "name": "single-transition update bootstraps only nonterminal states: {\"terminated\":false,\"truncated\":false,\"expected\":0}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-bootstrap.test.ts",
+        "name": "single-transition update bootstraps only nonterminal states: {\"terminated\":false,\"truncated\":true,\"expected\":0}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-bootstrap.test.ts",
+        "name": "single-transition update bootstraps only nonterminal states: {\"terminated\":true,\"truncated\":false,\"expected\":1}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-bootstrap.test.ts",
+        "name": "GAE does not carry rewards across an episode boundary (truncated=false)",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-bootstrap.test.ts",
+        "name": "GAE does not carry rewards across an episode boundary (truncated=true)",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-bootstrap.test.ts",
+        "name": "bootstraps the actual successor rather than the current observation",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-public.test.ts",
+        "name": "PPO learns rewarded actions through the public loop (seed 11)",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-public.test.ts",
+        "name": "PPO learns rewarded actions through the public loop (seed 29)",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-public.test.ts",
+        "name": "PPO learns rewarded actions through the public loop (seed 47)",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-public.test.ts",
+        "name": "discards a partial rollout on reset",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo-public.test.ts",
+        "name": "discards a partial rollout on inferStep",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo.test.ts",
+        "name": "PPOAgent \u2014 interface getAction retourne un indice d'action valide",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo.test.ts",
+        "name": "PPOAgent \u2014 interface remember puis train ne leve pas d'erreur",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo.test.ts",
+        "name": "PPOAgent \u2014 interface le rollout est vide apres train()",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/ppo.test.ts",
+        "name": "PPOAgent \u2014 convergence la r\u00e9compense moyenne augmente sur 200 \u00e9pisodes (navigation 1D)",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-truncation.test.ts",
+        "name": "Q-table bootstraps a truncated transition from its actual successor",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/episode-end.test.ts",
+        "name": "step reports truncation and resets without losing the last observation",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/episode-end.test.ts",
+        "name": "inferStep reports truncation and resets without losing the last observation",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/episode-end.test.ts",
+        "name": "preserves legacy done and explicit terminal precedence: {\"terminal\":true,\"cut\":false}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/episode-end.test.ts",
+        "name": "preserves legacy done and explicit terminal precedence: {\"explicit\":true,\"truncated\":true,\"terminal\":true,\"cut\":true}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/episode-end.test.ts",
+        "name": "preserves legacy done and explicit terminal precedence: {\"explicit\":false,\"truncated\":false,\"terminal\":false,\"cut\":false}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/episode-end.test.ts",
+        "name": "rejects a non-function terminated callback at construction",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/episode-end.test.ts",
+        "name": "rejects a non-function truncated callback at construction",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle invalidates pending timers on infer",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle invalidates pending timers on resume",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle invalidates pending timers on repeat-infer",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle invalidates pending timers on switch",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle finishes one in-flight transition before infer",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle finishes one in-flight transition before resume",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle finishes one in-flight transition before switch",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle serializes manual public steps and preserves their successor observations",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle rejects overrides on an existing agent without losing it",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "core/test/lifecycle.test.ts",
+        "name": "public runner lifecycle stops a failed loop and exposes the error, then permits a clean restart",
+        "status": "passed",
+        "failures": []
+      }
+    ]
+  },
+  {
+    "run": "ppo-sibling-tests",
+    "passed": 31,
+    "failed": 0,
+    "cases": [
+      {
+        "file": "backend-tfjs/test/dqn-truncation.test.ts",
+        "name": "DQN bootstraps unless terminated=false",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/dqn-truncation.test.ts",
+        "name": "DQN bootstraps unless terminated=true",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/dqn.test.ts",
+        "name": "DQNAgent should train on a fake environment",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects invalid discretization {\"stateLow\":[]} at the public boundary",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects invalid discretization {\"stateHigh\":[]} at the public boundary",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects invalid discretization {\"stateLow\":[null]} at the public boundary",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects invalid discretization {\"stateHigh\":[null]} at the public boundary",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects invalid discretization {\"stateLow\":[1],\"stateHigh\":[1]} at the public boundary",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects invalid discretization {\"stateLow\":[2],\"stateHigh\":[1]} at the public boundary",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects invalid discretization {\"inputSize\":17,\"stateBins\":10} at the public boundary",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract uses default bounds and clamps out-of-range observations",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects an incompatible checkpoint without changing the agent: {\"inputSize\":2}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects an incompatible checkpoint without changing the agent: {\"actionSize\":3}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects an incompatible checkpoint without changing the agent: {\"stateBins\":6}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects an incompatible checkpoint without changing the agent: {\"stateLow\":[-1]}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects an incompatible checkpoint without changing the agent: {\"stateHigh\":[2]}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects malformed checkpoint atomically: {",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects malformed checkpoint atomically: {\"qTable\":[],\"state\":{}}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects malformed checkpoint atomically: {\"config\":{\"inputSize\":1,\"actionSize\":2,\"stateBins\":5,\"epsilon\":0.5},\"qTable\":[[-1,[0,1]]],\"state\":{\"epsilon\":0.1}}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects malformed checkpoint atomically: {\"config\":{\"inputSize\":1,\"actionSize\":2,\"stateBins\":5,\"epsilon\":0.5},\"qTable\":[[5,[0,1]]],\"state\":{\"epsilon\":0.1}}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects malformed checkpoint atomically: {\"config\":{\"inputSize\":1,\"actionSize\":2,\"stateBins\":5,\"epsilon\":0.5},\"qTable\":[[1,[0]]],\"state\":{\"epsilon\":0.1}}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects malformed checkpoint atomically: {\"config\":{\"inputSize\":1,\"actionSize\":2,\"stateBins\":5,\"epsilon\":0.5},\"qTable\":[[1,[null,1]]],\"state\":{\"epsilon\":0.1}}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects malformed checkpoint atomically: {\"config\":{\"inputSize\":1,\"actionSize\":2,\"stateBins\":5,\"epsilon\":0.5},\"qTable\":[[1,[0,1]],[1,[1,0]]],\"state\":{\"epsilon\":0.1}}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract rejects malformed checkpoint atomically: {\"config\":{\"inputSize\":1,\"actionSize\":2,\"stateBins\":5,\"epsilon\":0.5},\"qTable\":[[1,[0,1]]],\"state\":{\"epsilon\":2}}",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-contract.test.ts",
+        "name": "Q-table config and checkpoint contract restores greedy actions and epsilon, keeps current lr and discards pending experience",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable-truncation.test.ts",
+        "name": "Q-table bootstraps a truncated transition from its actual successor",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable.test.ts",
+        "name": "QTableAgent \u2014 interface getAction retourne un indice valide",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable.test.ts",
+        "name": "QTableAgent \u2014 interface remember + train ne leve pas d'erreur",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable.test.ts",
+        "name": "QTableAgent \u2014 interface epsilon d\u00e9cro\u00eet apr\u00e8s chaque train()",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable.test.ts",
+        "name": "QTableAgent \u2014 interface la table Q grandit avec les \u00e9tats visit\u00e9s",
+        "status": "passed",
+        "failures": []
+      },
+      {
+        "file": "backend-tfjs/test/qtable.test.ts",
+        "name": "QTableAgent \u2014 convergence GridWorld 5\u00d75 la r\u00e9compense moyenne augmente sur 300 \u00e9pisodes",
+        "status": "passed",
+        "failures": []
+      }
+    ]
+  }
+]
