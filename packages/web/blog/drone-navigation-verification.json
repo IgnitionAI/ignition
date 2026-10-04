@@ -1,0 +1,53 @@
+{
+  "environment": "drone-navigation",
+  "url": "http://127.0.0.1:5203/",
+  "title": "IgnitionAI — Drone Navigation",
+  "initialText": "← IgnitionAI\nIgnitionAIDrone Navigation\n\nRigid-body physics · 8 thrust combos · DQN learns to fly\n\nEpisode: 0\nSteps: 0\nCaptures: 0\nMode: STOPPED\nTrain\nInfer\nReset\nSpeed:\n25×\n\nPress Train and wait ~3 minutes at 25× speed. The drone starts tumbling, then learns to hover, then chases the pulsing target. Each target captured earns a big reward and a new one spawns. Hitting the ground or flying out of the arena crashes the episode. Click Infer when it looks good to watch the trained policy play.",
+  "activeText": "← IgnitionAI\nIgnitionAIDrone Navigation\n\nRigid-body physics · 8 thrust combos · DQN learns to fly\n\nEpisode: 0\nSteps: 34\nCaptures: 0\nMode: TRAINING\nTrain\nInfer\nReset\nSpeed:\n25×\n\nPress Train and wait ~3 minutes at 25× speed. The drone starts tumbling, then learns to hover, then chases the pulsing target. Each target captured earns a big reward and a new one spawns. Hitting the ground or flying out of the arena crashes the episode. Click Infer when it looks good to watch the trained policy play.",
+  "example": {
+    "observationSize": 13,
+    "training": {
+      "observation": [
+        0.6192810804223005,
+        0.30153500476307316,
+        -0.2299616357160753,
+        0,
+        0.020799999999999996,
+        0,
+        0,
+        0,
+        0.3866629468136977,
+        0,
+        0.50052,
+        0,
+        0.23199776808821865
+      ],
+      "reward": -0.23208365328986777,
+      "terminated": false,
+      "truncated": false
+    },
+    "inference": {
+      "observation": [
+        0.6192810804223005,
+        0.3004965647630732,
+        -0.2299616357160753,
+        0,
+        0.041537599999999994,
+        -0.00477464829275686,
+        0,
+        0,
+        0.3863034810576951,
+        0,
+        0.5015584399999999,
+        0,
+        0.23178208863461705
+      ],
+      "reward": -0.23528846094356404,
+      "terminated": false,
+      "truncated": false
+    },
+    "lastError": null
+  },
+  "errors": [],
+  "failures": []
+}

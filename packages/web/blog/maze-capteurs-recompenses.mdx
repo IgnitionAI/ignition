@@ -1,0 +1,75 @@
+Le chemin semble libre, puis un danger mobile le coupe. Une porte change le passage possible. Dans Maze, la décision utile dépend de ce que l’agent perçoit maintenant.
+
+Le labyrinthe permet de relier un capteur à un comportement : contourner un mur, activer une porte ou éviter une zone dangereuse. La récompense guide l’exploration, mais elle peut aussi favoriser un compromis inattendu.
+
+**Vous allez lancer l’expérience et comprendre le lien entre ses observations, ses décisions et son résultat.**
+
+[**Essayer Maze dans le navigateur →**](/demos/maze/)
+
+## Commencer par la démo
+
+Choisissez un algorithme et cliquez sur **Train**. Suivez les rayons, la porte et les collisions, puis utilisez **Inference**. La scène affiche une arène 3D, tandis que MazeEnv gère les mouvements et les collisions logiques dans le plan.
+
+![La démo Maze avant l’interaction.](/images/blog/maze/initial.png)
+
+*État initial capturé dans Chromium. Les captures servent à montrer le parcours, pas à garantir un score.*
+
+## Ce que reçoit l’agent
+
+MazeEnv fournit 16 valeurs : position normalisée, orientation en sinus/cosinus, informations de but, six capteurs, proximité du danger, état de porte et progrès récent. Ses six actions sont avancer, tourner à gauche/droite, se décaler à gauche/droite ou attendre.
+
+## Ce que la récompense encourage
+
+Le but donne une récompense de base de 1,4. Sinon, la base combine −0,012 et le progrès vers le but multiplié par 0,15. Une action bloquée enlève 0,09, un danger touché 0,18 et attendre 0,025. Un checkpoint découvert ajoute 0,08. L’épisode termine au but ou après 260 transitions.
+
+Le contrat complet se trouve dans [maze-env.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-maze/src/maze-env.ts). Lisez ensemble `observe()`, `step()` et `reward()` : le nom du benchmark ne suffit pas à définir son implémentation.
+
+## Reproduire l’expérience avec du code
+
+Utilisez Node.js 20 ou 22 et pnpm 10.8.0. Depuis le dépôt :
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter demo-maze dev --host 127.0.0.1 --port 5173
+```
+
+Ouvrez [localhost:5173](http://localhost:5173). Sur un VPS, utilisez un tunnel SSH vers ce port pour y accéder depuis votre ordinateur.
+
+L’exemple est chargé directement depuis [blog-experiment.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-maze/src/examples/blog-experiment.ts) : le code de l’article et celui du dépôt restent synchronisés.
+
+<!-- FIRST_AGENT_CODE -->
+
+Pendant que Vite tourne, vous pouvez importer ce module dans la console du navigateur :
+
+```js
+const { createExperiment } = await import('/examples/blog-experiment.ts');
+const session = createExperiment();
+// Après quelques tentatives :
+session.infer();
+session.stop();
+```
+
+Le module crée une session indépendante. Il ne la branche pas à la scène déjà ouverte : utilisez les boutons de la démo pour le parcours visuel. infer() applique la politique courante sans entraînement ; resume() conserve l’agent et stop() annule les prochains ticks. Une transition déjà commencée peut encore finir.
+
+## Observer, puis évaluer
+
+![La démo Maze après son interaction principale.](/images/blog/maze/active.png)
+
+*Capture de la même session après interaction. La présence d’une scène et d’un indicateur actif confirme le parcours, pas une politique convergée.*
+
+Les six capteurs ne décrivent pas tout le futur des dangers mobiles. Une bonne moyenne de récompense ne suffit donc pas : relevez aussi les arrivées, collisions et blocages. Essayez ensuite de retirer une observation pour comprendre son rôle, sans mélanger les résultats des deux contrats.
+
+## Vérification de cette édition
+
+La démo a été ouverte dans Chromium et son entraînement lancé avant la capture. L’exemple indépendant a exécuté une transition d’entraînement et une transition d’inférence avec 16 observations, puis les commandes de changement de mode. Aucune erreur de page ou de runner n’a été relevée pendant cette vérification. Ce parcours vérifie l’intégration, sans prouver une convergence.
+
+## À vous de lancer l’expérience
+
+Reproduisez le parcours, puis modifiez un seul élément du contrat et comparez vos observations. Vous disposerez d’un cas concret pour discuter de ce que l’agent sait, de ce qu’il choisit et de ce que la récompense valorise.
+
+[**Ouvrir Maze →**](/demos/maze/)
+
+Pour approfondir, consultez [le runner Ignition](/docs/how-it-works/core) et [les algorithmes disponibles](/docs/algorithms).

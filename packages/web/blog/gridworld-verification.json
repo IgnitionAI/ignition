@@ -1,0 +1,34 @@
+{
+  "environment": "gridworld",
+  "url": "http://127.0.0.1:5201/",
+  "title": "IgnitionAI — GridWorld Demo",
+  "activeText": "← IgnitionAI\nIgnitionAI GridWorld\n\nTrain RL agents in the browser. Zero config.\n\n// Your code — that's it.\n 1import { IgnitionEnv } from '@ignitionai/backend-tfjs';\n 2import { GridWorldEnv } from './gridworld-env';\n 3\n 4const grid = new GridWorldEnv(7);\n 5const env = new IgnitionEnv(grid);\n 6\n 7env.train('qtable');\nPress Start to begin training\nStop\nInference\nReset\nDQN\nPPO\nQ-Table\nTRAINING",
+  "example": {
+    "observationSize": 4,
+    "training": {
+      "observation": [
+        0.16666666666666666,
+        0,
+        1,
+        1
+      ],
+      "reward": -0.1,
+      "terminated": false,
+      "truncated": false
+    },
+    "inference": {
+      "observation": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "reward": -0.1,
+      "terminated": false,
+      "truncated": false
+    },
+    "lastError": null
+  },
+  "errors": [],
+  "failures": []
+}

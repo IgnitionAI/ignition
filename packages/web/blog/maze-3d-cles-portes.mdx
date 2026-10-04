@@ -1,0 +1,77 @@
+Une porte ferme le passage. La clé est ailleurs. Maze 3D rend visible une idée essentielle : la valeur d’un déplacement dépend aussi de ce que l’agent a déjà obtenu.
+
+Deux visites à la même position peuvent mener à des décisions différentes si l’agent possède une clé. Ajouter cet état à l’observation permet au modèle de distinguer ces situations.
+
+**Vous allez lancer l’expérience et comprendre le lien entre ses observations, ses décisions et son résultat.**
+
+[**Essayer Maze 3D dans le navigateur →**](/demos/maze-3d/)
+
+## Commencer par la démo
+
+Cliquez sur **Train** pour lancer la boucle, puis **Stop** pour l’arrêter. Cette interface n’a pas de bouton d’inférence : l’exemple expose une commande infer() indépendante pour explorer ce mode dans votre propre session.
+
+![La démo Maze 3D avant l’interaction.](/images/blog/maze-3d/initial.png)
+
+*État initial capturé dans Chromium. Les captures servent à montrer le parcours, pas à garantir un score.*
+
+## Ce que reçoit l’agent
+
+Maze3DEnv utilise une grille de 12 × 12 avec murs, clés, porte verrouillée, sortie et piège. L’observation comprend position, angle, cinq distances de rayons, possession d’une clé et fraction de l’horizon écoulée : dix valeurs au total. Les quatre actions sont avancer, tourner à gauche, tourner à droite et reculer.
+
+## Ce que la récompense encourage
+
+Un déplacement valide ordinaire vaut −0,1 ; la clé vaut +10 et la sortie +100. Un mur ou un piège vaut −10, une porte verrouillée −5. À la limite de 500 transitions, la dernière récompense vaut −1. La récompense reste mémorisée dans l’environnement : examinez step() pour comprendre le comportement des rotations.
+
+Le contrat complet se trouve dans [maze-env.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-maze-3d/src/maze-env.ts). Lisez ensemble `observe()`, `step()` et `reward()` : le nom du benchmark ne suffit pas à définir son implémentation.
+
+## Reproduire l’expérience avec du code
+
+Utilisez Node.js 20 ou 22 et pnpm 10.8.0. Depuis le dépôt :
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter demo-maze-3d dev --host 127.0.0.1 --port 5173
+```
+
+Ouvrez [localhost:5173](http://localhost:5173). Sur un VPS, utilisez un tunnel SSH vers ce port pour y accéder depuis votre ordinateur.
+
+L’exemple est chargé directement depuis [blog-experiment.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-maze-3d/src/examples/blog-experiment.ts) : le code de l’article et celui du dépôt restent synchronisés.
+
+<!-- FIRST_AGENT_CODE -->
+
+Pendant que Vite tourne, vous pouvez importer ce module dans la console du navigateur :
+
+```js
+const { createExperiment } = await import('/examples/blog-experiment.ts');
+const session = createExperiment();
+// Après quelques tentatives :
+session.infer();
+session.stop();
+```
+
+Le module crée une session indépendante. Il ne la branche pas à la scène déjà ouverte : utilisez les boutons de la démo pour le parcours visuel. infer() applique la politique courante sans entraînement ; resume() conserve l’agent et stop() annule les prochains ticks. Une transition déjà commencée peut encore finir.
+
+## Observer, puis évaluer
+
+![La démo Maze 3D après son interaction principale.](/images/blog/maze-3d/active.png)
+
+*Capture de la même session après interaction. La présence d’une scène et d’un indicateur actif confirme le parcours, pas une politique convergée.*
+
+Le compteur de récompense de l’interface est échantillonné par requestAnimationFrame. Ce relevé peut manquer des transitions ou des fins d’épisode : ne le présentez pas comme une évaluation exhaustive. Pour mesurer, cumulez les résultats retournés par runner.step() ou runner.inferStep().
+
+## Vérification de cette édition
+
+La démo a été ouverte dans Chromium et son entraînement lancé avant la capture. L’exemple indépendant a exécuté une transition d’entraînement et une transition d’inférence avec 10 observations, puis les commandes de changement de mode. Aucune erreur de page ou de runner n’a été relevée pendant cette vérification. Ce parcours vérifie l’intégration, sans prouver une convergence.
+
+L’exemple a été exécuté sur le backend CPU. Le démarrage React et la mise en page de la démo ont également été rétablis pour rendre la scène et les commandes accessibles.
+
+## À vous de lancer l’expérience
+
+Reproduisez le parcours, puis modifiez un seul élément du contrat et comparez vos observations. Vous disposerez d’un cas concret pour discuter de ce que l’agent sait, de ce qu’il choisit et de ce que la récompense valorise.
+
+[**Ouvrir Maze 3D →**](/demos/maze-3d/)
+
+Pour approfondir, consultez [le runner Ignition](/docs/how-it-works/core) et [les algorithmes disponibles](/docs/algorithms).

@@ -5,3 +5,14 @@ html, body, #root {
   height: 100%;
   margin: 0;
 }
+
+body {
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: system-ui, sans-serif;
+}
+
+.maze-app { position: relative; width: 100vw; height: 100vh; }
+.maze-scene { position: absolute; inset: 0; }
+.maze-controls { position: absolute; z-index: 10; top: 16px; left: 16px; }
+.maze-legend { position: absolute; z-index: 10; bottom: 16px; right: 16px; }

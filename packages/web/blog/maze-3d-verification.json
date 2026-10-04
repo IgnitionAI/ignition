@@ -1,0 +1,47 @@
+{
+  "environment": "maze-3d",
+  "url": "http://127.0.0.1:5205/",
+  "title": "IgnitionAI — Maze 3D",
+  "text": "Maze 3D\n\nTrain an agent to escape the maze\n\nAlgorithm\nDQN\nQ-Table\nSpeed\n1x\nTrain\nReset\nEpisodes\n0\nTotal reward\n0.0\nSteps\n86\nKey\n❌\nAgent\nKey\nLocked door\nTrap\nExit",
+  "example": {
+    "executionBackend": "cpu",
+    "observationSize": 10,
+    "training": {
+      "observation": [
+        0.09090909090909091,
+        0.09090909090909091,
+        0.75,
+        0.6,
+        2.500000000000001,
+        0.6,
+        0.7999999999999999,
+        0.7999999999999999,
+        0,
+        0.002
+      ],
+      "reward": 0,
+      "terminated": false,
+      "truncated": false
+    },
+    "inference": {
+      "observation": [
+        0.09090909090909093,
+        0.18181818181818182,
+        0.75,
+        1.5000000000000002,
+        0.5,
+        0.6,
+        2.2000000000000006,
+        0.7999999999999999,
+        0,
+        0.004
+      ],
+      "reward": -0.1,
+      "terminated": false,
+      "truncated": false
+    },
+    "lastError": null
+  },
+  "errors": [],
+  "failures": []
+}
