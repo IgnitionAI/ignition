@@ -230,7 +230,7 @@ See epics [#22](https://github.com/IgnitionAI/ignition/issues/22), [#23](https:/
 - Double DQN #11: native train/save/reload and all20 evaluations verified with unchanged weights (6000-transition partial checkpoint,0/20 successful). Comparison #12 retains the independently audited200-outcome equal-budget experiment and its verified production-local report link. Human-player acceptance remains separate.
 - HF #31 remains open: the provider repair and protected opt-in live test from PR #41 are integrated in the consolidation branch. Authenticated remote round-trip requires dedicated credentials and is not proven.
 - Epics #22/#23 remain open. Epic #24 has combined local API/runtime verification in PR #37; this does not establish a published release.
-- Blog articles were merged in PR #38; current public URLs need independent deployment readback.
+- Blog PR #38: public index/eight articles, seventeen PNGs and demo links verified on 2026-10-04 in #46. GitHub Production deployment identifies 761e0f7; the technical Vercel hostname requires login, while canonical-domain behavior is retained separately in `docs/verification/public-articles`.
 - Cleanup #44 is verified and closed; `pnpm clean` moves package artifacts to Trash.
 - Licence #45 awaits copyright confirmation; public article verification is tracked in #46.
 - Release preparation #47 remains open. Local archives pass ESM/CommonJS imports and operations on Node 20.0.0, 20.19.2 and 22.23.3; tests/build metadata are excluded. These are candidate archives, not a new npm publication.
