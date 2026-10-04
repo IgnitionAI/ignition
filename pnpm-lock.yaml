@@ -155,7 +155,6 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(@types/debug@4.1.13)(@types/node@22.14.1)(@vitest/ui@3.1.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3)
 
-
   packages/demo-car-circuit:
     dependencies:
       '@ignitionai/backend-tfjs':
@@ -486,6 +485,9 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@19.1.2)(immer@11.1.4)(react@19.2.3)(use-sync-external-store@1.5.0(react@19.2.3))
     devDependencies:
+      '@tailwindcss/vite':
+        specifier: 4.2.2
+        version: 4.2.2(vite@6.3.3(@types/node@22.14.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3))
       '@types/react':
         specifier: 19.1.2
         version: 19.1.2
@@ -498,6 +500,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.3.4(vite@6.3.3(@types/node@22.14.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3))
+      tailwindcss:
+        specifier: 4.2.2
+        version: 4.2.2
       typescript:
         specifier: ~5.7.2
         version: 5.7.3
@@ -2090,6 +2095,11 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20 || >=4.0.0-beta.1'
 
+  '@tailwindcss/vite@4.2.2':
+    resolution: {integrity: sha512-mEiF5HO1QqCLXoNEfXVA1Tzo+cYsrqV7w9Juj2wdUFyW07JRenqMG225MvPwr3ZD9N1bFQj46X7r33iHxLUW0w==}
+    peerDependencies:
+      vite: ^5.2.0 || ^6 || ^7 || ^8
+
   '@tanstack/react-virtual@3.13.23':
     resolution: {integrity: sha512-XnMRnHQ23piOVj2bzJqHrRrLg4r+F86fuBcwteKfbIjJrtGxb4z7tIvPVAe4B+4UVwo9G4Giuz5fmapcrnZ0OQ==}
     peerDependencies:
@@ -3583,6 +3593,7 @@ packages:
   eslint@9.25.1:
     resolution: {integrity: sha512-E6Mtz9oGQWDCpV12319d59n4tx9zOTXSTmc8BLVxBx+G/0RdM5MvEEJLU9c0+aleoePYYgVTOsRblx433qmhWQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -5160,6 +5171,7 @@ packages:
   recharts@2.15.4:
     resolution: {integrity: sha512-UT/q6fwS3c1dHbXv2uFgYJ9BMFHu3fwnd7AYZaEQhXuYQ4hgsxLvsUXzGdKeZrW5xopzDCvuA2N41WJ88I7zIw==}
     engines: {node: '>=14'}
+    deprecated: 1.x and 2.x branches are no longer active. Bump to Recharts v3 to receive latest features and bugfixes. See https://github.com/recharts/recharts/wiki/3.0-migration-guide
     peerDependencies:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -7657,6 +7669,13 @@ snapshots:
       postcss-selector-parser: 6.0.10
       tailwindcss: 4.2.2
 
+  '@tailwindcss/vite@4.2.2(vite@6.3.3(@types/node@22.14.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3))':
+    dependencies:
+      '@tailwindcss/node': 4.2.2
+      '@tailwindcss/oxide': 4.2.2
+      tailwindcss: 4.2.2
+      vite: 6.3.3(@types/node@22.14.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3)
+
   '@tanstack/react-virtual@3.13.23(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       '@tanstack/virtual-core': 3.13.23
@@ -9036,8 +9055,7 @@ snapshots:
 
   detect-libc@2.0.3: {}
 
-  detect-libc@2.1.2:
-    optional: true
+  detect-libc@2.1.2: {}
 
   detect-node@2.1.0: {}
 
@@ -9291,7 +9309,7 @@ snapshots:
       eslint: 9.25.1(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.10
       eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint@9.25.1(jiti@2.6.1)))(eslint@9.25.1(jiti@2.6.1))
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint@9.25.1(jiti@2.6.1)))(eslint@9.25.1(jiti@2.6.1)))(eslint@9.25.1(jiti@2.6.1))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1(jiti@2.6.1))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.25.1(jiti@2.6.1))
       eslint-plugin-react: 7.37.5(eslint@9.25.1(jiti@2.6.1))
       eslint-plugin-react-hooks: 7.1.1(eslint@9.25.1(jiti@2.6.1))
@@ -9324,7 +9342,7 @@ snapshots:
       tinyglobby: 0.2.16
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint@9.25.1(jiti@2.6.1)))(eslint@9.25.1(jiti@2.6.1)))(eslint@9.25.1(jiti@2.6.1))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 
@@ -9339,7 +9357,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint@9.25.1(jiti@2.6.1)))(eslint@9.25.1(jiti@2.6.1)))(eslint@9.25.1(jiti@2.6.1)):
+  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.59.2(eslint@9.25.1(jiti@2.6.1))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.25.1(jiti@2.6.1)):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.9
@@ -10398,7 +10416,7 @@ snapshots:
 
   lightningcss@1.32.0:
     dependencies:
-      detect-libc: 2.0.3
+      detect-libc: 2.1.2
     optionalDependencies:
       lightningcss-android-arm64: 1.32.0
       lightningcss-darwin-arm64: 1.32.0
