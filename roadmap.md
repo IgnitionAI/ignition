@@ -229,5 +229,5 @@ See epics [#22](https://github.com/IgnitionAI/ignition/issues/22), [#23](https:/
 - Player acceptance #17 remains open: complete human-keyboard race against a learned checkpoint is not proven. AI/API or rule-controlled browser runs cannot replace it. Parents #9/#6 remain open.
 - Double DQN #11: native current-browser save/reload verified;20 evaluations still running. Comparison #12 has archived200-outcome audit and visible report; dependency reconciliation pending.
 - HF #31 remains open: PR #41 fixes source and provides a protected opt-in live test; authenticated remote round-trip requires credentials and is not proven.
-- Epics #22/#23/#24 remain open. Closed extension children do not establish combined integration or a published release.
+- Epics #22/#23 remain open. Epic #24 has combined local API/runtime verification in PR #37; this does not establish a published release.
 - Blog articles were merged in PR #38; current public URLs need independent deployment readback.
