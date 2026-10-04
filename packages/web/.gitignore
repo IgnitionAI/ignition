@@ -37,3 +37,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Regenerated checkpoint catalogue and browser lab
+/public/models/lab/
+/public/models/catalog.json
