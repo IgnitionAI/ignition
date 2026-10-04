@@ -1,0 +1,7 @@
+# HF provider source integration — #31
+
+Analysis: PR41 owns a verified local serialization/authentication repair and manual-only real-provider test. Its source is absent from the combined consolidation despite catalogue/core/SAC integration. Current missing credentials do not prevent integrating or verifying the local repair; they prevent claiming authenticated remote round-trip.
+
+Plan: locally merge codex/hf-roundtrip into codex/issue-consolidation; preserve current catalogue exports and newer Circuit/extension sources. Review final provider diff against existing docs/design/huggingface-roundtrip.md. Run storage owner suite including real TFJS fixture round-trip,old-contract/auth/retry error coverage and explicit live skip; build storage and backend TFJS affected dependency. Check secret names/presence without displaying values. Push source and precise local/remote status into PR37, keep#31 open without real authenticated success and cleanup. Do not create/delete public models or dispatch a secretless workflow as if it proved integration. No new tests/private hook or changed protocol planned.
+
+Acceptance: local real-model weights/shape/inference survive and authentication reaches topology/weights; genuine repository auth error propagates; combined catalogue tests/build pass; no secret leak. Full#31 still NOT PROVEN until existing private test repo credentials are provided and real provider/cleanup pass.
