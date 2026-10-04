@@ -22,3 +22,10 @@ export type {
 export { mergeDefaults } from './defaults';
 export { validateTrainingEnv, validateInferenceEnv } from './env-validation';
 export { ExperienceSchema } from './schemas';
+
+export type {
+  ContinuousTrainingEnv, ContinuousExperience, ContinuousAgent, ContinuousActionBounds,
+} from './continuous';
+export {
+  validateContinuousBounds, validateContinuousVector, validateContinuousAction, validateContinuousEnv,
+} from './continuous';
