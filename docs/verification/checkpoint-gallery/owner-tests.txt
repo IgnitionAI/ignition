@@ -57,20 +57,20 @@ stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > delet
 stderr | packages/backend-tfjs/test/schemas.test.ts > DQNAgent constructor validation > constructs successfully with valid config
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
  ✓ packages/backend-tfjs/test/schemas.test.ts (30 tests) 208ms
 stderr | packages/backend-tfjs/test/sac.test.ts > updates genuine actor/twin critics and Polyak targets while greedy inference stays frozen
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stderr | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — interface > getAction retourne un indice d'action valide
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() creates a DQN agent with deduced inputSize=4, actionSize=4
@@ -80,7 +80,7 @@ stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — au
 stderr | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() creates a DQN agent with deduced inputSize=4, actionSize=4
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > agent can produce actions after train()
@@ -108,7 +108,7 @@ stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — au
 stderr | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 3: Overrides > overrides lr and hiddenLayers
@@ -157,7 +157,7 @@ Step 1/50: State=0.261, Correct action=0
 stderr | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
@@ -765,7 +765,7 @@ stdout | packages/backend-tfjs/test/qtable-persistence.test.ts > QTableAgent per
 stderr | packages/backend-tfjs/test/dqn.convergence.test.ts > DQN — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
  ✓ packages/core/test/ignition-env.test.ts (9 tests) 14ms
@@ -774,7 +774,7 @@ Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dram
 stderr | packages/backend-tfjs/test/double-dqn-api.test.ts > trains and restores serialized Double DQN for greedy inference through IgnitionEnv
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
  ✓ packages/core/test/continuous.test.ts (18 tests) 14ms
@@ -796,7 +796,7 @@ stderr | packages/backend-tfjs/test/hubIntegration.test.ts
 stderr | packages/backend-tfjs/test/dqn-target-cadence.test.ts > bootstraps from the refreshed target (false, undefined)
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stderr | packages/backend-tfjs/test/checkpoint.test.ts
@@ -825,7 +825,7 @@ stdout | packages/backend-tfjs/test/dqn-target-cadence.test.ts > bootstraps from
 stderr | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=false
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=false
@@ -840,7 +840,7 @@ stdout | packages/backend-tfjs/test/double-dqn.test.ts > separates online select
 stderr | packages/backend-tfjs/test/ppo-public.test.ts > PPO learns rewarded actions through the public loop (seed 11)
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/dqn.convergence.test.ts > DQN — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
@@ -862,7 +862,7 @@ stdout | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — convergence > la 
 stderr | packages/backend-tfjs/test/dqn-truncation.test.ts > DQN bootstraps unless terminated=false
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/dqn-truncation.test.ts > DQN bootstraps unless terminated=false
@@ -878,7 +878,7 @@ stdout | packages/backend-tfjs/test/dqn-truncation.test.ts > DQN bootstraps unle
 stderr | packages/backend-tfjs/test/dqn-seed.test.ts > repeats initialization, exploration and replay updates with a supplied seed
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/dqn-seed.test.ts > repeats initialization, exploration and replay updates with a supplied seed
@@ -893,7 +893,7 @@ stdout | packages/backend-tfjs/test/dqn-seed.test.ts > repeats initialization, e
 stderr | packages/backend-tfjs/test/dqn-export.test.ts > exports the current public DQN model with its trained predictions
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/dqn-export.test.ts > exports the current public DQN model with its trained predictions
@@ -910,7 +910,7 @@ stdout | packages/backend-tfjs/test/dqn-export.test.ts > exports the current pub
 stderr | packages/backend-tfjs/test/dqn-load-memory.test.ts > releases replaced networks and owned optimizers after repeated loads
 
 ============================
-Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
 ============================
 
 stdout | packages/backend-tfjs/test/dqn-load-memory.test.ts > releases replaced networks and owned optimizers after repeated loads

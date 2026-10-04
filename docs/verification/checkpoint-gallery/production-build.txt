@@ -451,9 +451,9 @@ Copying /srv/dev/worktrees/ignition-gallery/packages/demo-gridworld/dist → /sr
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
-   Generating static pages using 7 workers (26/106) 
-   Generating static pages using 7 workers (52/106) 
-   Generating static pages using 7 workers (79/106) 
+   Generating static pages using 7 workers (26/106)
+   Generating static pages using 7 workers (52/106)
+   Generating static pages using 7 workers (79/106)
  ✓ Generating static pages using 7 workers (106/106) in 3.1s
    Finalizing page optimization ...
 
