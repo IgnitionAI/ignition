@@ -1,18 +1,19 @@
 {
   "name": "@ignitionai/backend-onnx",
   "version": "0.1.0",
-  "description": "ONNX inference backend for IgnitionAI — cross-platform, production-ready RL inference",
-  "main": "dist/index.js",
+  "description": "ONNX inference backend for IgnitionAI \u2014 cross-platform, production-ready RL inference",
+  "main": "dist/cjs/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*.js",
     "dist/**/*.d.ts",
     "!dist/tests/**",
     "!dist/**/*.test.js",
-    "!dist/**/*.test.d.ts"
+    "!dist/**/*.test.d.ts",
+    "dist/cjs/package.json"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "node ../../scripts/build-package.mjs",
     "test": "vitest --config ../../vitest.config.ts",
     "prepublishOnly": "npm run build"
   },
@@ -54,19 +55,36 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     },
     "./node": {
-      "types": "./dist/runtime.d.ts",
-      "import": "./dist/runtime.js",
-      "require": "./dist/runtime.js"
+      "import": {
+        "types": "./dist/runtime.d.ts",
+        "default": "./dist/runtime.js"
+      },
+      "require": {
+        "types": "./dist/cjs/runtime.d.ts",
+        "default": "./dist/cjs/runtime.js"
+      }
     },
     "./web": {
-      "types": "./dist/runtime-universal.d.ts",
-      "import": "./dist/runtime-universal.js",
-      "require": "./dist/runtime-universal.js"
+      "import": {
+        "types": "./dist/runtime-universal.d.ts",
+        "default": "./dist/runtime-universal.js"
+      },
+      "require": {
+        "types": "./dist/cjs/runtime-universal.d.ts",
+        "default": "./dist/cjs/runtime-universal.js"
+      }
     }
-  }
+  },
+  "type": "module",
+  "module": "dist/index.js"
 }

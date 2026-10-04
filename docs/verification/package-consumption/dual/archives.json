@@ -1,0 +1,542 @@
+[
+  {
+    "archive": "ignitionai-backend-onnx-0.1.0.tgz",
+    "sha256": "4097f5ae12def9a813df5d7766904ee498d0e7f53454525df5839179088cc426",
+    "files": [
+      "package/dist/cjs/exporter.js",
+      "package/dist/exporter.js",
+      "package/dist/cjs/index.js",
+      "package/dist/index.js",
+      "package/dist/cjs/io/loadOnnxFromHub.js",
+      "package/dist/io/loadOnnxFromHub.js",
+      "package/dist/agents/onnx-agent.js",
+      "package/dist/cjs/agents/onnx-agent.js",
+      "package/dist/cjs/runtime-universal.js",
+      "package/dist/runtime-universal.js",
+      "package/dist/cjs/runtime.js",
+      "package/dist/runtime.js",
+      "package/dist/cjs/types.js",
+      "package/dist/types.js",
+      "package/dist/cjs/package.json",
+      "package/package.json",
+      "package/dist/cjs/exporter.d.ts",
+      "package/dist/exporter.d.ts",
+      "package/dist/cjs/index.d.ts",
+      "package/dist/index.d.ts",
+      "package/dist/cjs/io/loadOnnxFromHub.d.ts",
+      "package/dist/io/loadOnnxFromHub.d.ts",
+      "package/dist/agents/onnx-agent.d.ts",
+      "package/dist/cjs/agents/onnx-agent.d.ts",
+      "package/dist/cjs/runtime-universal.d.ts",
+      "package/dist/runtime-universal.d.ts",
+      "package/dist/cjs/runtime.d.ts",
+      "package/dist/runtime.d.ts",
+      "package/dist/cjs/types.d.ts",
+      "package/dist/types.d.ts"
+    ],
+    "manifest": {
+      "name": "@ignitionai/backend-onnx",
+      "version": "0.1.0",
+      "description": "ONNX inference backend for IgnitionAI \u2014 cross-platform, production-ready RL inference",
+      "main": "dist/cjs/index.js",
+      "types": "dist/index.d.ts",
+      "files": [
+        "dist/**/*.js",
+        "dist/**/*.d.ts",
+        "!dist/tests/**",
+        "!dist/**/*.test.js",
+        "!dist/**/*.test.d.ts",
+        "dist/cjs/package.json"
+      ],
+      "keywords": [
+        "reinforcement-learning",
+        "onnx",
+        "inference",
+        "onnxruntime",
+        "dqn",
+        "browser",
+        "node"
+      ],
+      "author": "salim4n (@IgnitionAI)",
+      "license": "MIT",
+      "dependencies": {
+        "@huggingface/hub": "^1.1.2",
+        "onnxruntime-common": "^1.17.0",
+        "onnxruntime-node": "^1.17.0",
+        "zod": "^3.22.0",
+        "@ignitionai/core": "0.1.0"
+      },
+      "peerDependencies": {
+        "onnxruntime-web": "^1.17.0"
+      },
+      "peerDependenciesMeta": {
+        "onnxruntime-web": {
+          "optional": true
+        }
+      },
+      "devDependencies": {
+        "@tensorflow/tfjs": "^4.22.0",
+        "@tensorflow/tfjs-backend-cpu": "^4.22.0",
+        "esbuild": "^0.28.0",
+        "vitest": "^3.1.1",
+        "@ignitionai/backend-tfjs": "0.1.0"
+      },
+      "publishConfig": {
+        "access": "public"
+      },
+      "exports": {
+        ".": {
+          "import": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "require": {
+            "types": "./dist/cjs/index.d.ts",
+            "default": "./dist/cjs/index.js"
+          }
+        },
+        "./node": {
+          "import": {
+            "types": "./dist/runtime.d.ts",
+            "default": "./dist/runtime.js"
+          },
+          "require": {
+            "types": "./dist/cjs/runtime.d.ts",
+            "default": "./dist/cjs/runtime.js"
+          }
+        },
+        "./web": {
+          "import": {
+            "types": "./dist/runtime-universal.d.ts",
+            "default": "./dist/runtime-universal.js"
+          },
+          "require": {
+            "types": "./dist/cjs/runtime-universal.d.ts",
+            "default": "./dist/cjs/runtime-universal.js"
+          }
+        }
+      },
+      "type": "module",
+      "module": "dist/index.js",
+      "scripts": {
+        "build": "node ../../scripts/build-package.mjs",
+        "test": "vitest --config ../../vitest.config.ts"
+      }
+    }
+  },
+  {
+    "archive": "ignitionai-backend-tfjs-0.1.0.tgz",
+    "sha256": "82d3f6dfe83d77999c9d5b4ef272dadccea6968c2bf177e9b6c411ecaa752aa1",
+    "files": [
+      "package/dist/cjs/utils/backend-selector.js",
+      "package/dist/utils/backend-selector.js",
+      "package/dist/cjs/model/BuildMLP.js",
+      "package/dist/model/BuildMLP.js",
+      "package/dist/cjs/sac/checkpoint.js",
+      "package/dist/sac/checkpoint.js",
+      "package/dist/cjs/sac/config.js",
+      "package/dist/sac/config.js",
+      "package/dist/cjs/defaults.js",
+      "package/dist/defaults.js",
+      "package/dist/agents/dqn.js",
+      "package/dist/cjs/agents/dqn.js",
+      "package/dist/cjs/ignition-env-tfjs.js",
+      "package/dist/ignition-env-tfjs.js",
+      "package/dist/cjs/index.js",
+      "package/dist/cjs/io/index.js",
+      "package/dist/index.js",
+      "package/dist/io/index.js",
+      "package/dist/cjs/io/loadModel.js",
+      "package/dist/io/loadModel.js",
+      "package/dist/cjs/sac/network.js",
+      "package/dist/sac/network.js",
+      "package/dist/agents/ppo.js",
+      "package/dist/cjs/agents/ppo.js",
+      "package/dist/agents/qtable.js",
+      "package/dist/cjs/agents/qtable.js",
+      "package/dist/cjs/memory/ReplayBuffer.js",
+      "package/dist/memory/ReplayBuffer.js",
+      "package/dist/agents/sac.js",
+      "package/dist/cjs/agents/sac.js",
+      "package/dist/cjs/io/saveModelToHub.js",
+      "package/dist/io/saveModelToHub.js",
+      "package/dist/cjs/schemas.js",
+      "package/dist/schemas.js",
+      "package/dist/cjs/tools/trainer.js",
+      "package/dist/tools/trainer.js",
+      "package/dist/cjs/types.js",
+      "package/dist/types.js",
+      "package/dist/cjs/package.json",
+      "package/package.json",
+      "package/dist/cjs/utils/backend-selector.d.ts",
+      "package/dist/utils/backend-selector.d.ts",
+      "package/dist/cjs/model/BuildMLP.d.ts",
+      "package/dist/model/BuildMLP.d.ts",
+      "package/dist/cjs/sac/checkpoint.d.ts",
+      "package/dist/sac/checkpoint.d.ts",
+      "package/dist/cjs/sac/config.d.ts",
+      "package/dist/sac/config.d.ts",
+      "package/dist/cjs/defaults.d.ts",
+      "package/dist/defaults.d.ts",
+      "package/dist/agents/dqn.d.ts",
+      "package/dist/cjs/agents/dqn.d.ts",
+      "package/dist/cjs/ignition-env-tfjs.d.ts",
+      "package/dist/ignition-env-tfjs.d.ts",
+      "package/dist/cjs/index.d.ts",
+      "package/dist/cjs/io/index.d.ts",
+      "package/dist/index.d.ts",
+      "package/dist/io/index.d.ts",
+      "package/dist/cjs/io/loadModel.d.ts",
+      "package/dist/io/loadModel.d.ts",
+      "package/dist/cjs/sac/network.d.ts",
+      "package/dist/sac/network.d.ts",
+      "package/dist/agents/ppo.d.ts",
+      "package/dist/cjs/agents/ppo.d.ts",
+      "package/dist/agents/qtable.d.ts",
+      "package/dist/cjs/agents/qtable.d.ts",
+      "package/dist/cjs/memory/ReplayBuffer.d.ts",
+      "package/dist/memory/ReplayBuffer.d.ts",
+      "package/dist/agents/sac.d.ts",
+      "package/dist/cjs/agents/sac.d.ts",
+      "package/dist/cjs/io/saveModelToHub.d.ts",
+      "package/dist/io/saveModelToHub.d.ts",
+      "package/dist/cjs/schemas.d.ts",
+      "package/dist/schemas.d.ts",
+      "package/dist/cjs/tools/trainer.d.ts",
+      "package/dist/tools/trainer.d.ts",
+      "package/dist/cjs/types.d.ts",
+      "package/dist/types.d.ts"
+    ],
+    "manifest": {
+      "name": "@ignitionai/backend-tfjs",
+      "version": "0.1.0",
+      "description": "TensorFlow.js backend for IgnitionAI - browser-based reinforcement learning framework",
+      "main": "dist/cjs/index.js",
+      "types": "dist/index.d.ts",
+      "module": "dist/index.js",
+      "files": [
+        "dist/**/*.js",
+        "dist/**/*.d.ts",
+        "!dist/tests/**",
+        "!dist/**/*.test.js",
+        "!dist/**/*.test.d.ts",
+        "dist/cjs/package.json"
+      ],
+      "keywords": [
+        "reinforcement-learning",
+        "tensorflow",
+        "tfjs",
+        "dqn",
+        "ppo",
+        "q-learning",
+        "browser",
+        "webgl",
+        "webgpu"
+      ],
+      "author": "salim4n (@IgnitionAI)",
+      "license": "MIT",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/IgnitionAI/ignition-monorepo-starter"
+      },
+      "homepage": "https://github.com/IgnitionAI/ignition-monorepo-starter#readme",
+      "dependencies": {
+        "@huggingface/hub": "^1.1.2",
+        "@tensorflow/tfjs": "^4.22.0",
+        "@tensorflow/tfjs-backend-cpu": "^4.22.0",
+        "@tensorflow/tfjs-backend-wasm": "^4.22.0",
+        "@tensorflow/tfjs-backend-webgl": "^4.22.0",
+        "@tensorflow/tfjs-backend-webgpu": "^4.22.0",
+        "@tensorflow/tfjs-vis": "^1.5.1",
+        "zod": "^3.24.2",
+        "@ignitionai/core": "0.1.0",
+        "@ignitionai/storage": "0.1.0"
+      },
+      "devDependencies": {
+        "@tensorflow/tfjs-node": "^4.22.0",
+        "dotenv": "^16.5.0",
+        "form-data": "^4.0.2",
+        "vitest": "^3.1.1"
+      },
+      "publishConfig": {
+        "access": "public"
+      },
+      "exports": {
+        ".": {
+          "import": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "require": {
+            "types": "./dist/cjs/index.d.ts",
+            "default": "./dist/cjs/index.js"
+          }
+        }
+      },
+      "type": "module",
+      "scripts": {
+        "build": "node ../../scripts/build-package.mjs",
+        "test": "vitest --config ../../vitest.config.ts"
+      }
+    }
+  },
+  {
+    "archive": "ignitionai-core-0.1.0.tgz",
+    "sha256": "ccca015d745c2b0ce139d4b269e7c140bb406306d7259961f4f62a0dd14115b1",
+    "files": [
+      "package/dist/cjs/continuous-runner.js",
+      "package/dist/continuous-runner.js",
+      "package/dist/cjs/continuous.js",
+      "package/dist/continuous.js",
+      "package/dist/cjs/defaults.js",
+      "package/dist/defaults.js",
+      "package/dist/cjs/env-validation.js",
+      "package/dist/env-validation.js",
+      "package/dist/cjs/ignition-env.js",
+      "package/dist/ignition-env.js",
+      "package/dist/cjs/index.js",
+      "package/dist/index.js",
+      "package/dist/cjs/multi-agent.js",
+      "package/dist/multi-agent.js",
+      "package/dist/cjs/schemas.js",
+      "package/dist/schemas.js",
+      "package/dist/cjs/types.js",
+      "package/dist/types.js",
+      "package/dist/cjs/package.json",
+      "package/package.json",
+      "package/dist/cjs/continuous-runner.d.ts",
+      "package/dist/continuous-runner.d.ts",
+      "package/dist/cjs/continuous.d.ts",
+      "package/dist/continuous.d.ts",
+      "package/dist/cjs/defaults.d.ts",
+      "package/dist/defaults.d.ts",
+      "package/dist/cjs/env-validation.d.ts",
+      "package/dist/env-validation.d.ts",
+      "package/dist/cjs/ignition-env.d.ts",
+      "package/dist/ignition-env.d.ts",
+      "package/dist/cjs/index.d.ts",
+      "package/dist/index.d.ts",
+      "package/dist/cjs/multi-agent.d.ts",
+      "package/dist/multi-agent.d.ts",
+      "package/dist/cjs/schemas.d.ts",
+      "package/dist/schemas.d.ts",
+      "package/dist/cjs/types.d.ts",
+      "package/dist/types.d.ts"
+    ],
+    "manifest": {
+      "name": "@ignitionai/core",
+      "version": "0.1.0",
+      "description": "Core components for IgnitionAI - browser-based reinforcement learning framework",
+      "main": "dist/cjs/index.js",
+      "types": "dist/index.d.ts",
+      "module": "dist/index.js",
+      "files": [
+        "dist/**/*.js",
+        "dist/**/*.d.ts",
+        "!dist/tests/**",
+        "!dist/**/*.test.js",
+        "!dist/**/*.test.d.ts",
+        "dist/cjs/package.json"
+      ],
+      "keywords": [
+        "reinforcement-learning",
+        "agent",
+        "environment",
+        "browser",
+        "tensorflow"
+      ],
+      "author": "salim4n (@IgnitionAI)",
+      "license": "MIT",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/IgnitionAI/ignition"
+      },
+      "homepage": "https://github.com/IgnitionAI/ignition#readme",
+      "dependencies": {
+        "zod": "^3.24.2"
+      },
+      "publishConfig": {
+        "access": "public"
+      },
+      "exports": {
+        ".": {
+          "import": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "require": {
+            "types": "./dist/cjs/index.d.ts",
+            "default": "./dist/cjs/index.js"
+          }
+        }
+      },
+      "type": "module",
+      "scripts": {
+        "build": "node ../../scripts/build-package.mjs"
+      }
+    }
+  },
+  {
+    "archive": "ignitionai-environments-0.1.0.tgz",
+    "sha256": "de294cd094c7909e67784fc1df06db0e2ce8f83f319496206b2d783bdbe0ba87",
+    "files": [
+      "package/dist/cartpole.js",
+      "package/dist/cjs/cartpole.js",
+      "package/dist/cjs/gridworld.js",
+      "package/dist/gridworld.js",
+      "package/dist/cjs/index.js",
+      "package/dist/index.js",
+      "package/dist/cjs/mountaincar.js",
+      "package/dist/mountaincar.js",
+      "package/dist/cjs/package.json",
+      "package/package.json",
+      "package/dist/cartpole.d.ts",
+      "package/dist/cjs/cartpole.d.ts",
+      "package/dist/cjs/gridworld.d.ts",
+      "package/dist/gridworld.d.ts",
+      "package/dist/cjs/index.d.ts",
+      "package/dist/index.d.ts",
+      "package/dist/cjs/mountaincar.d.ts",
+      "package/dist/mountaincar.d.ts"
+    ],
+    "manifest": {
+      "name": "@ignitionai/environments",
+      "version": "0.1.0",
+      "description": "Reference training environments for IgnitionAI \u2014 GridWorld, CartPole, MountainCar",
+      "main": "dist/cjs/index.js",
+      "types": "dist/index.d.ts",
+      "files": [
+        "dist/**/*.js",
+        "dist/**/*.d.ts",
+        "!dist/tests/**",
+        "!dist/**/*.test.js",
+        "!dist/**/*.test.d.ts",
+        "dist/cjs/package.json"
+      ],
+      "dependencies": {
+        "@ignitionai/core": "0.1.0"
+      },
+      "devDependencies": {
+        "vitest": "^3.1.1"
+      },
+      "publishConfig": {
+        "access": "public"
+      },
+      "license": "MIT",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/IgnitionAI/ignition.git"
+      },
+      "type": "module",
+      "module": "dist/index.js",
+      "exports": {
+        ".": {
+          "import": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "require": {
+            "types": "./dist/cjs/index.d.ts",
+            "default": "./dist/cjs/index.js"
+          }
+        }
+      },
+      "scripts": {
+        "build": "node ../../scripts/build-package.mjs",
+        "test": "vitest run"
+      }
+    }
+  },
+  {
+    "archive": "ignitionai-storage-0.1.0.tgz",
+    "sha256": "85d032dce3c0c47e3c08d4761eb8f50136260a389664e5179b567ab8e4aeff45",
+    "files": [
+      "package/dist/cjs/src/catalog.js",
+      "package/dist/src/catalog.js",
+      "package/dist/cjs/src/config.js",
+      "package/dist/src/config.js",
+      "package/dist/cjs/src/providers/download.js",
+      "package/dist/src/providers/download.js",
+      "package/dist/cjs/src/providers/huggingface.js",
+      "package/dist/src/providers/huggingface.js",
+      "package/dist/cjs/index.js",
+      "package/dist/cjs/src/index.js",
+      "package/dist/index.js",
+      "package/dist/src/index.js",
+      "package/dist/cjs/src/providers/indexeddb.js",
+      "package/dist/src/providers/indexeddb.js",
+      "package/dist/cjs/src/providers/localstorage.js",
+      "package/dist/src/providers/localstorage.js",
+      "package/dist/cjs/src/types.js",
+      "package/dist/src/types.js",
+      "package/dist/cjs/package.json",
+      "package/package.json",
+      "package/dist/cjs/src/catalog.d.ts",
+      "package/dist/src/catalog.d.ts",
+      "package/dist/cjs/src/config.d.ts",
+      "package/dist/src/config.d.ts",
+      "package/dist/cjs/src/providers/download.d.ts",
+      "package/dist/src/providers/download.d.ts",
+      "package/dist/cjs/src/providers/huggingface.d.ts",
+      "package/dist/src/providers/huggingface.d.ts",
+      "package/dist/cjs/index.d.ts",
+      "package/dist/cjs/src/index.d.ts",
+      "package/dist/index.d.ts",
+      "package/dist/src/index.d.ts",
+      "package/dist/cjs/src/providers/indexeddb.d.ts",
+      "package/dist/src/providers/indexeddb.d.ts",
+      "package/dist/cjs/src/providers/localstorage.d.ts",
+      "package/dist/src/providers/localstorage.d.ts",
+      "package/dist/cjs/src/types.d.ts",
+      "package/dist/src/types.d.ts"
+    ],
+    "manifest": {
+      "name": "@ignitionai/storage",
+      "version": "0.1.0",
+      "description": "Model storage providers for IgnitionAI (Hugging Face Hub, S3, GCS, local)",
+      "main": "dist/cjs/index.js",
+      "types": "dist/index.d.ts",
+      "files": [
+        "dist/**/*.js",
+        "dist/**/*.d.ts",
+        "!dist/tests/**",
+        "!dist/**/*.test.js",
+        "!dist/**/*.test.d.ts",
+        "dist/cjs/package.json"
+      ],
+      "license": "MIT",
+      "publishConfig": {
+        "access": "public"
+      },
+      "dependencies": {
+        "@huggingface/hub": "^1.1.2",
+        "zod": "^3.24.2"
+      },
+      "peerDependencies": {
+        "@tensorflow/tfjs": "^4.0.0"
+      },
+      "devDependencies": {
+        "@tensorflow/tfjs": "^4.22.0",
+        "vitest": "^3.1.1"
+      },
+      "type": "module",
+      "module": "dist/index.js",
+      "exports": {
+        ".": {
+          "import": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "require": {
+            "types": "./dist/cjs/index.d.ts",
+            "default": "./dist/cjs/index.js"
+          }
+        }
+      },
+      "scripts": {
+        "build": "node ../../scripts/build-package.mjs",
+        "test": "vitest run"
+      }
+    }
+  }
+]

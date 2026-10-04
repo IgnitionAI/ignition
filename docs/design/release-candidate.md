@@ -25,10 +25,11 @@ as already available from npm. Select a new version after compatibility review.
   Car Circuit simulation remains a demo, not an additional published export.
 - ONNX: retained train/export/convert/infer workflow and explicit runtime entry
   points. Python conversion remains an external setup step.
-- Packaging: explicit emitted-module paths make packed packages consumable by
-  native Node 20.19.2 ESM/require; archives exclude compiled tests and build
-  metadata. Full supported-version validation and licence distribution remain
-  prerequisites, not inferred from this limited runtime matrix.
+- Packaging: separate ESM/CommonJS outputs and matching declarations make
+  packed packages consumable natively on Node 20.0.0, 20.19.2 and 22.23.3 in
+  both modes; archives exclude compiled tests and build metadata. This matrix
+  covers the CI's Node 20/22 families; licence distribution and final revision
+  gates remain prerequisites.
 
 ## Delivery checklist
 

@@ -1,0 +1,212 @@
+[
+  {
+    "node": "v20.19.2",
+    "package": "core",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "core",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "storage",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "storage",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-tfjs",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-tfjs",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-onnx",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-onnx",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "environments",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "environments",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "core",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "core",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "storage",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "storage",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-tfjs",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-tfjs",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-onnx",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-onnx",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "environments",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "environments",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "core",
+    "mode": "esm",
+    "exit": 1,
+    "stderr": "(node:1355357) Warning: To load an ES module, set \"type\": \"module\" in the package.json or use the .mjs extension.\n(Use `node --trace-warnings ...` to show where the warning was created)\n/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/core/dist/index.js:1\nexport const version = '0.1.0';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:165:29)\n    at ModuleJob.run (node:internal/modules/esm/module_job:192:25)\n\nNode.js v20.0.0\n"
+  },
+  {
+    "node": "v20.0.0",
+    "package": "core",
+    "mode": "require",
+    "exit": 1,
+    "stderr": "/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/core/dist/index.js:1\nexport const version = '0.1.0';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at Module.require (node:internal/modules/cjs/loader:1149:19)\n    at require (node:internal/modules/helpers:121:18)\n    at [eval]:1:1\n    at Script.runInThisContext (node:vm:122:12)\n\nNode.js v20.0.0\n"
+  },
+  {
+    "node": "v20.0.0",
+    "package": "storage",
+    "mode": "esm",
+    "exit": 1,
+    "stderr": "(node:1355371) Warning: To load an ES module, set \"type\": \"module\" in the package.json or use the .mjs extension.\n(Use `node --trace-warnings ...` to show where the warning was created)\n/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/storage/dist/index.js:1\nexport * from './src/index.js';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:165:29)\n    at ModuleJob.run (node:internal/modules/esm/module_job:192:25)\n\nNode.js v20.0.0\n"
+  },
+  {
+    "node": "v20.0.0",
+    "package": "storage",
+    "mode": "require",
+    "exit": 1,
+    "stderr": "/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/storage/dist/index.js:1\nexport * from './src/index.js';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at Module.require (node:internal/modules/cjs/loader:1149:19)\n    at require (node:internal/modules/helpers:121:18)\n    at [eval]:1:1\n    at Script.runInThisContext (node:vm:122:12)\n\nNode.js v20.0.0\n"
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-tfjs",
+    "mode": "esm",
+    "exit": 1,
+    "stderr": "(node:1355385) Warning: To load an ES module, set \"type\": \"module\" in the package.json or use the .mjs extension.\n(Use `node --trace-warnings ...` to show where the warning was created)\n/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/backend-tfjs/dist/index.js:1\nexport { DQNAgent } from './agents/dqn.js';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:165:29)\n    at ModuleJob.run (node:internal/modules/esm/module_job:192:25)\n\nNode.js v20.0.0\n"
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-tfjs",
+    "mode": "require",
+    "exit": 1,
+    "stderr": "/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/backend-tfjs/dist/index.js:1\nexport { DQNAgent } from './agents/dqn.js';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at Module.require (node:internal/modules/cjs/loader:1149:19)\n    at require (node:internal/modules/helpers:121:18)\n    at [eval]:1:1\n    at Script.runInThisContext (node:vm:122:12)\n\nNode.js v20.0.0\n"
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-onnx",
+    "mode": "esm",
+    "exit": 1,
+    "stderr": "(node:1355399) Warning: To load an ES module, set \"type\": \"module\" in the package.json or use the .mjs extension.\n(Use `node --trace-warnings ...` to show where the warning was created)\n/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/backend-onnx/dist/index.js:1\nexport { OnnxAgent } from './agents/onnx-agent.js';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:165:29)\n    at ModuleJob.run (node:internal/modules/esm/module_job:192:25)\n\nNode.js v20.0.0\n"
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-onnx",
+    "mode": "require",
+    "exit": 1,
+    "stderr": "/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/backend-onnx/dist/index.js:1\nexport { OnnxAgent } from './agents/onnx-agent.js';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at Module.require (node:internal/modules/cjs/loader:1149:19)\n    at require (node:internal/modules/helpers:121:18)\n    at [eval]:1:1\n    at Script.runInThisContext (node:vm:122:12)\n\nNode.js v20.0.0\n"
+  },
+  {
+    "node": "v20.0.0",
+    "package": "environments",
+    "mode": "esm",
+    "exit": 1,
+    "stderr": "(node:1355413) Warning: To load an ES module, set \"type\": \"module\" in the package.json or use the .mjs extension.\n(Use `node --trace-warnings ...` to show where the warning was created)\n/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/environments/dist/index.js:1\nexport { GridWorldEnv } from './gridworld.js';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at ModuleWrap.<anonymous> (node:internal/modules/esm/translators:165:29)\n    at ModuleJob.run (node:internal/modules/esm/module_job:192:25)\n\nNode.js v20.0.0\n"
+  },
+  {
+    "node": "v20.0.0",
+    "package": "environments",
+    "mode": "require",
+    "exit": 1,
+    "stderr": "/srv/dev/tmp/ignition-filtered-consumer-36tm2u2y/node_modules/@ignitionai/environments/dist/index.js:1\nexport { GridWorldEnv } from './gridworld.js';\n^^^^^^\n\nSyntaxError: Unexpected token 'export'\n    at internalCompileFunction (node:internal/vm:73:18)\n    at wrapSafe (node:internal/modules/cjs/loader:1187:20)\n    at Module._compile (node:internal/modules/cjs/loader:1231:27)\n    at Module._extensions..js (node:internal/modules/cjs/loader:1321:10)\n    at Module.load (node:internal/modules/cjs/loader:1125:32)\n    at Module._load (node:internal/modules/cjs/loader:965:12)\n    at Module.require (node:internal/modules/cjs/loader:1149:19)\n    at require (node:internal/modules/helpers:121:18)\n    at [eval]:1:1\n    at Script.runInThisContext (node:vm:122:12)\n\nNode.js v20.0.0\n"
+  }
+]

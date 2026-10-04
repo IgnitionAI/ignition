@@ -30,3 +30,15 @@ remove source tests or generated workspace outputs. Verify actual packed file
 lists contain the public entry points, no tests and no tsbuildinfo, then install
 these exact archives in a fresh external consumer and recheck imports/types.
 Licence absence remains a separate unsatisfied criterion tracked by #45.
+
+Node/module unit: baseline matrix proves 10/10 imports pass on Node 20.19.2 and
+22.23.3, but 0/10 pass on 20.0.0 because package module mode is ambiguous.
+Keep the announced Node 20 support. Declare the primary output ESM explicitly,
+compile a separate CommonJS tree with its own type=commonjs package metadata,
+and route import/require (including their declarations) to matching trees.
+Use the existing pinned TypeScript compiler, without another bundler dependency.
+Pack the nested module metadata explicitly. Preserve ONNX node/web subpaths.
+Acceptance: actual archives import/require on all three observed versions,
+isolated ESM and CommonJS consumers typecheck, public runtime smoke passes,
+and existing owner suites and a browser build remain green. No release approval
+or licence criterion is inferred from passing this unit.

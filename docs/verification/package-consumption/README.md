@@ -63,3 +63,31 @@ Archive filtering is now PASS. Release notes and delivery/recovery steps are
 prepared in `docs/design/release-candidate.md` for maintainer review. Licence
 distribution, release approval, full runtime matrix and final remote gates
 remain NOT PROVEN. The earlier remaining-unit list records the initial stage.
+
+## Explicit module outputs — current verification
+
+Node 20.0.0 failed all ten baseline imports because the package lacked explicit
+module metadata (`dual/matrix-before.json`). Package builds now emit primary
+ESM plus a separate CommonJS tree, with matching conditional declarations and
+nested CommonJS metadata included in the archive. ONNX node/web subpaths remain
+available in both modes. No new compiler/bundler dependency was introduced.
+
+PASS: actual corrected archives installed outside the workspace at
+`/srv/dev/tmp/ignition-dual-consumer-oeorisol`. Node 20.0.0, 20.19.2 and 22.23.3
+each pass 14 imports (five packages, two ONNX subpaths, ESM/require): 42/42.
+Public operation smoke passes in both modes on all three versions. The real
+ONNX artifact from the prior conversion proof loads and predicts actions
+`[0, 0, 1]` in all six combinations; model conversion was not repeated.
+Isolated .mts/.cts consumers compile strictly with NodeNext, including both
+ONNX subpath declarations. See `dual/` for outputs, fixture consumers and exact
+tarball hashes/manifests. No registry publication took place.
+
+PASS: five dual-output package builds, unchanged owner suites (292 passed,
+four authenticated HF skips), Circuit browser production build (17.30 s),
+Node script syntax, diff-check and spec/standards review. This verifies the
+Node 20/22 runtime matrix represented by the tested versions, not arbitrary
+Node releases or authenticated provider behavior.
+
+Remaining #47: copyright/licence distribution, maintainer release approval,
+parent acceptance and final remote gates. Local packaging/module checks PASS;
+the full epic remains NOT PROVEN.
