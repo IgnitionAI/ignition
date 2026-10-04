@@ -25,3 +25,5 @@ python3 -m http.server 4191 --bind 127.0.0.1 --directory .scratch/sac-demo
 ```
 
 Open http://127.0.0.1:4191/. Any equivalent static HTTP server may replace Python. Controls exercise actual training, stop, greedy episodes, a clearly labelled 20-episode quick evaluation, local JSON save/load and file import/export. Demo files wrap the snapshot as `{ environment: "point-mass-v1", checkpoint: ... }`; raw benchmark snapshots must be wrapped with that verified environment identity before importing. The quick test is not the 100-episode benchmark. Resume uses fresh optimizers/replay.
+
+The public contracts, execution lifecycle and checkpoint limits are documented in [the continuous source API](../../../../docs/design/continuous-api.md).

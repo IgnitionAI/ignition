@@ -44,3 +44,9 @@ A locally built static demo on port 4191 was exercised in Chromium using the CLI
 The CLI path-based file upload is unsupported in its QuickJS sandbox. Recovery preserved the same page; the verified file payload was delivered as a browser File/DataTransfer to the existing file input change handler. No policy, RNG, model weights or application methods were injected.
 
 Strict TypeScript of app.ts and the esbuild browser bundle pass. Review PASS for the local demo lot. The full five-seed benchmark remains running and unproven; no issue closure or public deployment is claimed by these quick browser checks.
+
+## Public API documentation and interrupted first benchmark
+
+`docs/design/continuous-api.md` documents the separately exported runner/agent, episode signals, manual and automatic lifecycle, ownership, fixed-temperature defaults and checkpoint limitations. Its complete TypeScript snippet passes strict no-emit compilation against the checked-in core/backend sources (TypeScript workspace compiler, ES2022, ESNext/Bundler). Review: documentation matches the current public exports and implementations; no npm availability or exact optimizer/replay restoration is claimed.
+
+The first benchmark process ended with exit code 143 (SIGTERM) after seeds 11, 29 and 47 completed and seed 73 reached 15000 interactions. `first-benchmark-interruption.json` retains the observed interruption. The originating caller is not established. That run is incomplete and cannot establish PASS. Raw completed results remain in `.scratch/sac-point-mass-v1` of the SAC worktree. A fresh execution of the entire unchanged frozen protocol runs independently of the terminal session in `.scratch/sac-point-mass-v1-complete`; its manifest is created before any evaluation/training. Do not merge its results with the interrupted run or select only passing seeds.
