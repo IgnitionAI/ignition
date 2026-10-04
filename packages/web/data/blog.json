@@ -1,0 +1,72 @@
+[
+  {
+    "environment": "mountaincar",
+    "slug": "mountaincar-prendre-elan",
+    "title": "MountainCar : apprendre à prendre de l’élan",
+    "description": "Comprendre pourquoi reculer peut aider un agent à atteindre le sommet.",
+    "date": "2026-10-04",
+    "image": "/images/blog/mountaincar/active.png",
+    "imageAlt": "La démo MountainCar pendant une exécution réelle",
+    "example": "demo-mountaincar/src/examples/blog-experiment.ts"
+  },
+  {
+    "environment": "gridworld",
+    "slug": "gridworld-valeurs-actions",
+    "title": "GridWorld : rendre les décisions d’un agent lisibles",
+    "description": "Une grille, quatre actions et une récompense : explorez le Q-learning pas à pas.",
+    "date": "2026-10-04",
+    "image": "/images/blog/gridworld/active.png",
+    "imageAlt": "La démo GridWorld pendant une exécution réelle",
+    "example": "demo-gridworld/src/examples/blog-experiment.ts"
+  },
+  {
+    "environment": "cartpole-3d",
+    "slug": "cartpole-3d-observations",
+    "title": "CartPole 3D : une scène visible, quatre observations",
+    "description": "Séparez le rendu 3D de ce que le réseau reçoit réellement.",
+    "date": "2026-10-04",
+    "image": "/images/blog/cartpole-3d/active.png",
+    "imageAlt": "La démo CartPole 3D pendant une exécution réelle",
+    "example": "demo-cartpole-3d/src/examples/blog-experiment.ts"
+  },
+  {
+    "environment": "drone-navigation",
+    "slug": "drone-navigation-controle",
+    "title": "Drone Navigation : relier moteurs, mouvement et récompense",
+    "description": "Observez les compromis entre atteindre une cible et garder le drone stable.",
+    "date": "2026-10-04",
+    "image": "/images/blog/drone-navigation/active.png",
+    "imageAlt": "La démo Drone Navigation pendant une exécution réelle",
+    "example": "demo-drone-navigation/src/examples/blog-experiment.ts"
+  },
+  {
+    "environment": "maze",
+    "slug": "maze-capteurs-recompenses",
+    "title": "Maze : guider un agent avec des capteurs et des récompenses",
+    "description": "Découvrez comment un agent explore une arène avec portes et dangers mobiles.",
+    "date": "2026-10-04",
+    "image": "/images/blog/maze/active.png",
+    "imageAlt": "La démo Maze pendant une exécution réelle",
+    "example": "demo-maze/src/examples/blog-experiment.ts"
+  },
+  {
+    "environment": "maze-3d",
+    "slug": "maze-3d-cles-portes",
+    "title": "Maze 3D : une clé change la valeur du chemin",
+    "description": "Explorez un labyrinthe où l’état de la porte compte autant que la position.",
+    "date": "2026-10-04",
+    "image": "/images/blog/maze-3d/active.png",
+    "imageAlt": "La démo Maze 3D pendant une exécution réelle",
+    "example": "demo-maze-3d/src/examples/blog-experiment.ts"
+  },
+  {
+    "environment": "car-circuit",
+    "slug": "circuit-racing-pilotes",
+    "title": "Circuit Racing : entraîner un pilote, puis mesurer sa course",
+    "description": "Prenez le volant et découvrez comment distinguer imitation, DQN et évaluation.",
+    "date": "2026-10-04",
+    "image": "/images/blog/car-circuit/active.png",
+    "imageAlt": "La démo Circuit Racing pendant une exécution réelle",
+    "example": "demo-car-circuit/src/examples/blog-experiment.ts"
+  }
+]

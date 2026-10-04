@@ -94,14 +94,14 @@ export default function App() {
   }, [stopTraining])
 
   return (
-    <div className="relative w-screen h-screen bg-slate-950 text-slate-200 font-sans">
+    <div className="maze-app">
       {/* 3D Viewport */}
-      <div className="absolute inset-0">
+      <div className="maze-scene">
         <Maze3D />
       </div>
 
       {/* Overlay UI */}
-      <div className="absolute top-4 left-4 z-10">
+      <div className="maze-controls">
         <div className="bg-slate-900/80 backdrop-blur border border-slate-700 rounded-xl p-4 min-w-[240px]">
           <h1 className="text-lg font-bold text-indigo-400 mb-1">Maze 3D</h1>
           <p className="text-xs text-slate-500 mb-4">Train an agent to escape the maze</p>
@@ -186,7 +186,7 @@ export default function App() {
       </div>
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 z-10">
+      <div className="maze-legend">
         <div className="bg-slate-900/80 backdrop-blur border border-slate-700 rounded-xl p-3 text-xs space-y-1">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-blue-500" />

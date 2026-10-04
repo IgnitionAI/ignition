@@ -4,18 +4,8 @@ import { useDemoStore } from './store';
 export function CodePanel() {
   const { algorithm } = useDemoStore();
 
-  const code = `import { IgnitionEnvTFJS } from 'ignitionai';
-import type { TrainingEnv } from 'ignitionai';
-
-class MazeEnv implements TrainingEnv {
-  actions = mazeActions;
-
-  observe() { return arena.sensors(); }
-  step(action) { arena.apply(action); }
-  reward() { return arena.reward(); }
-  done() { return arena.done(); }
-  reset() { arena.reset(); }
-}
+  const code = `import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
+import { MazeEnv } from './maze-env';
 
 const maze = new MazeEnv();
 const trainer = new IgnitionEnvTFJS(maze);
