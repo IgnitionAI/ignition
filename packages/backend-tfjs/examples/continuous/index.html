@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SAC · Point-mass continu — IgnitionAI</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#e5e7eb;background:#111827}body{max-width:960px;margin:auto;padding:32px}h1{font-size:2rem;margin-bottom:8px}p{line-height:1.6;color:#cbd5e1}.note{border-left:3px solid #a5b4fc;padding-left:16px}canvas{display:block;width:100%;height:auto;background:#1f2937;border-radius:12px;margin:24px 0}button{padding:10px 14px;margin:4px;border:1px solid #6366f1;border-radius:6px;background:#312e81;color:white;cursor:pointer}button:disabled{opacity:.45;cursor:default}progress{width:100%;height:16px}pre{white-space:pre-wrap;background:#1f2937;padding:16px;border-radius:8px}#error{color:#fca5a5}.eyebrow{color:#a5b4fc}label{display:inline-block;margin:8px}input{color:inherit}a{color:#c4b5fd}
+</style></head><body>
+<p class="eyebrow">IGNITIONAI · PROTOTYPE CONTINU</p><h1>Ramener une masse au centre avec SAC</h1>
+<p>Une action réelle entre −2 et +2 contrôle l’accélération. La politique observe la position et la vitesse. Les poids changent pendant l’entraînement ; l’inférence et les tests gardent la politique figée.</p>
+<p class="note">Cette démo ne garantit pas une politique compétente. Le benchmark séparé utilise cinq graines, 20 000 transitions par graine et 100 épisodes d’évaluation par politique. Les tests rapides ci-dessous ne remplacent pas ce protocole.</p>
+<canvas id="world" width="900" height="210" aria-label="Position de la masse et cible centrale"></canvas>
+<div id="status" role="status">Initialisation du backend CPU…</div><progress id="progress" max="20000" value="0" aria-label="Progression de la session"></progress>
+<div><button id="train" disabled>Entraîner 20 000 transitions</button><button id="stop" disabled>Arrêter</button><button id="infer" disabled>Voir un épisode sans apprendre</button><button id="evaluate" disabled>Tester 20 épisodes · graine 211</button><button id="reset" disabled>Nouvelle politique · graine 11</button></div>
+<div><button id="save" disabled>Sauvegarder dans ce navigateur</button><button id="load" disabled>Recharger la sauvegarde locale</button><button id="download" disabled>Exporter JSON</button><label>Importer JSON <input id="file" type="file" accept="application/json,.json" disabled></label></div>
+<p>Le checkpoint conserve réseaux, configuration, compteurs et RNG. Charger reprend avec un optimiseur et une mémoire de replay neufs. La sauvegarde reste propre à ce navigateur et à cette origine.</p>
+<pre id="metrics">Aucune transition collectée.</pre><p id="error" role="alert"></p><p><a href="https://github.com/IgnitionAI/ignition/issues/33">Plan et critères de livraison #33</a></p>
+<script type="module" src="./app.js"></script></body></html>

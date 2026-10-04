@@ -1,0 +1,13 @@
+{
+  "observedAt": "2026-10-04T12:20:17.048893+00:00",
+  "exitCode": 143,
+  "completedSeeds": [
+    11,
+    29,
+    47
+  ],
+  "lastObservedSeed": 73,
+  "lastObservedInteractions": 15000,
+  "status": "incomplete; not a passing benchmark",
+  "cause": "SIGTERM observed; originating caller not established"
+}
