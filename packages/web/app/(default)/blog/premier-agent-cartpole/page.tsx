@@ -22,7 +22,7 @@ export default function CartpoleArticlePage() {
         <Link href="/blog" className="text-indigo-400 hover:text-indigo-300">← Le blog Ignition</Link>
         <p className="text-sm text-slate-400 mt-8 mb-3"><time dateTime={cartpoleArticle.date}>3 octobre 2026</time> · Tutoriel</p>
         <h1 className="h1 mb-6">{cartpoleArticle.title}</h1>
-        <p className="text-xl text-slate-300">Un premier agent, une simulation visible et du code que vous pouvez exécuter.</p>
+        <p className="text-xl text-slate-300">Lancez l’expérience dans votre navigateur, puis découvrez le code qui la fait tourner.</p>
       </header>
       <div className="prose prose-invert prose-lg max-w-none prose-headings:text-slate-100 prose-a:text-indigo-300 prose-pre:overflow-x-auto prose-pre:bg-slate-950 prose-img:rounded-xl prose-img:border prose-img:border-slate-700">
         <MDXRemote source={readCartpoleArticle()} options={{ mdxOptions: { rehypePlugins: [[rehypePrettyCode, { theme: 'one-dark-pro' }]] } }} />
