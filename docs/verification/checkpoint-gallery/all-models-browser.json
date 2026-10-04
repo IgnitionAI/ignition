@@ -1,0 +1,72 @@
+{
+  "url": "http://127.0.0.1:3107/models",
+  "title": "Checkpoints vérifiés — IgnitionAI",
+  "models": [
+    {
+      "id": "sac-point-mass-11",
+      "seed": 11,
+      "metrics": {
+        "samples": 20000,
+        "updates": 9751,
+        "criticLoss": null,
+        "actorLoss": null
+      },
+      "evaluation": "Export JSON demandé.",
+      "filename": "sac-point-mass.json",
+      "error": ""
+    },
+    {
+      "id": "sac-point-mass-29",
+      "seed": 29,
+      "metrics": {
+        "samples": 20000,
+        "updates": 9751,
+        "criticLoss": null,
+        "actorLoss": null
+      },
+      "evaluation": "Export JSON demandé.",
+      "filename": "sac-point-mass.json",
+      "error": ""
+    },
+    {
+      "id": "sac-point-mass-47",
+      "seed": 47,
+      "metrics": {
+        "samples": 20000,
+        "updates": 9751,
+        "criticLoss": null,
+        "actorLoss": null
+      },
+      "evaluation": "Export JSON demandé.",
+      "filename": "sac-point-mass.json",
+      "error": ""
+    },
+    {
+      "id": "sac-point-mass-73",
+      "seed": 73,
+      "metrics": {
+        "samples": 20000,
+        "updates": 9751,
+        "criticLoss": null,
+        "actorLoss": null
+      },
+      "evaluation": "Export JSON demandé.",
+      "filename": "sac-point-mass.json",
+      "error": ""
+    },
+    {
+      "id": "sac-point-mass-101",
+      "seed": 101,
+      "metrics": {
+        "samples": 20000,
+        "updates": 9751,
+        "criticLoss": null,
+        "actorLoss": null
+      },
+      "evaluation": "Export JSON demandé.",
+      "filename": "sac-point-mass.json",
+      "error": ""
+    }
+  ],
+  "errors": []
+}

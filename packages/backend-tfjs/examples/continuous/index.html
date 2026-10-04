@@ -7,6 +7,7 @@
 <p>Une action réelle entre −2 et +2 contrôle l’accélération. La politique observe la position et la vitesse. Les poids changent pendant l’entraînement ; l’inférence et les tests gardent la politique figée.</p>
 <p class="note">Cette démo ne garantit pas une politique compétente. Le benchmark séparé utilise cinq graines, 20 000 transitions par graine et 100 épisodes d’évaluation par politique. Les tests rapides ci-dessous ne remplacent pas ce protocole.</p>
 <canvas id="world" width="900" height="210" aria-label="Position de la masse et cible centrale"></canvas>
+<p id="physical-state" aria-live="off">Position et vitesse de la masse.</p>
 <div id="status" role="status">Initialisation du backend CPU…</div><progress id="progress" max="20000" value="0" aria-label="Progression de la session"></progress>
 <div><button id="train" disabled>Entraîner 20 000 transitions</button><button id="stop" disabled>Arrêter</button><button id="infer" disabled>Voir un épisode sans apprendre</button><button id="evaluate" disabled>Tester 20 épisodes · graine 211</button><button id="reset" disabled>Nouvelle politique · graine 11</button></div>
 <div><button id="save" disabled>Sauvegarder dans ce navigateur</button><button id="load" disabled>Recharger la sauvegarde locale</button><button id="download" disabled>Exporter JSON</button><label>Importer JSON <input id="file" type="file" accept="application/json,.json" disabled></label></div>

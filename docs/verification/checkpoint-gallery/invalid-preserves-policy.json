@@ -1,0 +1,6 @@
+{
+  "url": "http://localhost:3107/models",
+  "error": "Catalogue invalide. Vérifiez le format v1, les contrats, empreintes, licences et protocoles. Le catalogue actuel est conservé.",
+  "cards": 5,
+  "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}"
+}

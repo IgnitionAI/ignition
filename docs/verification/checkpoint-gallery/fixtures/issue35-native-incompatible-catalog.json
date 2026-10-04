@@ -1,0 +1,74 @@
+{
+  "format": "ignition-checkpoint-catalog-v1",
+  "models": [
+    {
+      "id": "sac-point-mass-11",
+      "name": "Fixture · dimensions natives incompatibles",
+      "contract": {
+        "algorithm": "sac",
+        "checkpointFormat": "sac-v1",
+        "environment": {
+          "id": "point-mass-v1",
+          "version": "1"
+        },
+        "observation": {
+          "id": "position-velocity",
+          "version": "1",
+          "shape": [
+            2
+          ]
+        },
+        "action": {
+          "kind": "box",
+          "id": "acceleration",
+          "version": "1",
+          "shape": [
+            1
+          ],
+          "low": [
+            -2
+          ],
+          "high": [
+            2
+          ]
+        }
+      },
+      "artifact": {
+        "source": {
+          "type": "local",
+          "path": "/models/checkpoints/rejected-native-dimensions.json"
+        },
+        "bytes": 123644,
+        "sha256": "42bc4a3263d65447fa6ae2e92e6c359dd0f256d7ca812be1030eb42c09b57847"
+      },
+      "provenance": {
+        "sourceCommit": "4b1db26aa632e0fdf0f9b4eed4ecb5bf5e33fd2d",
+        "seed": 11,
+        "samples": 20000,
+        "updates": 9751,
+        "backend": "tfjs-cpu",
+        "createdAt": "2026-10-04T12:20:17.923Z",
+        "source": "https://github.com/IgnitionAI/ignition/blob/c7b8b77f5b2fd595bf6a23060a16604e541a00cf/docs/verification/continuous/README.md"
+      },
+      "license": {
+        "id": "MIT",
+        "source": "https://github.com/IgnitionAI/ignition/blob/4b1db26aa632e0fdf0f9b4eed4ecb5bf5e33fd2d/packages/backend-tfjs/package.json",
+        "note": "Licence déclarée dans les métadonnées du package ; aucun document de licence distinct pour les poids."
+      },
+      "evaluation": {
+        "protocol": "sac-point-mass-v1",
+        "protocolSource": "/models/reports/point-mass-v1/protocol.json",
+        "report": "/models/reports/point-mass-v1/report.json",
+        "episodes": 100,
+        "successes": 100,
+        "meanCost": 6.860341881064635
+      },
+      "limits": [
+        "Petite tâche physique contrôlée : aucune promesse pour d’autres environnements.",
+        "Évaluation gloutonne à 100 épisodes, checkpoint final ; aucune sélection du meilleur run.",
+        "Température fixe, TFJS CPU ; la reprise recrée optimiseur et replay.",
+        "Le résultat publié concerne le protocole complet ; le test rapide de la démo ne le remplace pas."
+      ]
+    }
+  ]
+}

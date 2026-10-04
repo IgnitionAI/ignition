@@ -1,0 +1,6 @@
+{
+  "homeAnchor": "http://localhost:3108/#quickstart",
+  "targetPresent": true,
+  "models": "http://localhost:3108/models",
+  "cards": 5
+}
