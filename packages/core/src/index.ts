@@ -31,3 +31,5 @@ export {
 } from './continuous';
 export { ContinuousRunner } from './continuous-runner';
 export type { ContinuousStepResult } from './continuous-runner';
+export { MultiAgentRunner } from './multi-agent';
+export type { AgentId, MultiAgentAction, MultiAgentEnv, MultiAgentStepResult } from './multi-agent';
