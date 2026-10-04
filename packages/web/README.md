@@ -36,3 +36,11 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Lint
+
+From the monorepo root, run `corepack pnpm --filter web lint`.
+ESLint uses the installed Next.js core-web-vitals flat configuration without disabling its rules.
+JavaScript and TypeScript sources are analyzed. Generated `.next`, `out`, public demo artifacts,
+API reference content and `next-env.d.ts` are excluded. MDX prose is outside ESLint's parser scope;
+its embedded components are checked through the production build.

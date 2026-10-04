@@ -6,8 +6,19 @@ import Link from 'next/link'
 export default function MobileMenu() {
   const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false)
 
+  const [navHeight, setNavHeight] = useState(0)
+
   const trigger = useRef<HTMLButtonElement>(null)
   const mobileNav = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const nav = mobileNav.current
+    if (!nav) return
+    const observer = new ResizeObserver(() => setNavHeight(nav.scrollHeight))
+    const content = nav.firstElementChild
+    if (content) observer.observe(content)
+    return () => observer.disconnect()
+  }, [])
 
   // close the mobile menu on click outside
   useEffect(() => {
@@ -71,7 +82,7 @@ export default function MobileMenu() {
         id="mobile-nav"
         ref={mobileNav}
         className="absolute top-full z-20 left-0 w-full px-4 sm:px-6 overflow-hidden transition-all duration-300 ease-in-out"
-        style={mobileNavOpen ? { maxHeight: mobileNav.current?.scrollHeight, opacity: 1 } : { maxHeight: 0, opacity: 0.8 }}
+        style={mobileNavOpen ? { maxHeight: navHeight, opacity: 1 } : { maxHeight: 0, opacity: 0.8 }}
       >
         <ul className="border border-transparent [background:linear-gradient(var(--color-slate-900),var(--color-slate-900))_padding-box,conic-gradient(var(--color-slate-400),var(--color-slate-700)_25%,var(--color-slate-700)_75%,var(--color-slate-400)_100%)_border-box] rounded-lg px-4 py-1.5">
           <li>

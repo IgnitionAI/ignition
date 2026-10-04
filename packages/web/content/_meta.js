@@ -1,4 +1,4 @@
-export default {
+const meta = {
   index: 'Introduction',
   quickstart: 'Quickstart',
   demos: 'Demo catalogue',
@@ -9,3 +9,5 @@ export default {
   r3f: 'React Three Fiber',
   tutorials: 'Tutorials',
 }
+
+export default meta

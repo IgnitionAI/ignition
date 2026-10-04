@@ -8,7 +8,7 @@
     "prebuild": "node scripts/build-demos.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "echo 'WARN: eslint-config-next incompatible with ESLint 9 \u2014 lint skipped. TODO: migrate to flat config or downgrade ESLint'",
+    "lint": "eslint .",
     "build:demos": "node scripts/build-demos.mjs"
   },
   "dependencies": {
