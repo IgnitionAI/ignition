@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { cartpoleArticle } from '@/lib/blog'
+import { blogArticles } from '@/lib/blog'
 
 export const metadata = {
   title: 'Blog',
@@ -13,17 +13,23 @@ export default function BlogPage() {
       <p className="text-indigo-400 mb-3">Le blog Ignition</p>
       <h1 className="h1 mb-4">Apprendre en construisant</h1>
       <p className="text-lg text-slate-400 mb-12">Des expériences reproductibles, du code et des agents en action.</p>
-      <article className="rounded-xl border border-slate-700 overflow-hidden bg-slate-800/30">
-        <Link href={`/blog/${cartpoleArticle.slug}`} className="block group">
-          <Image src={cartpoleArticle.image} alt="La démo CartPole en cours d’entraînement DQN" width={1920} height={600} className="w-full h-auto" />
-          <div className="p-6 sm:p-8">
-            <time dateTime={cartpoleArticle.date} className="text-sm text-slate-400">3 octobre 2026 · Tutoriel</time>
-            <h2 className="text-2xl font-semibold mt-3 mb-3 group-hover:text-indigo-300">{cartpoleArticle.title}</h2>
-            <p className="text-slate-300">{cartpoleArticle.description}</p>
-            <p className="text-indigo-400 mt-5">Lire le tutoriel →</p>
-          </div>
-        </Link>
-      </article>
+      <div className="grid gap-8 md:grid-cols-2">
+        {blogArticles.map(article => (
+          <article key={article.slug} className="rounded-xl border border-slate-700 overflow-hidden bg-slate-800/30">
+            <Link href={`/blog/${article.slug}`} className="block group">
+              <Image src={article.image} alt={article.imageAlt} width={1920} height={1080} className="w-full h-auto" />
+              <div className="p-6 sm:p-8">
+                <time dateTime={article.date} className="text-sm text-slate-400">
+                  {new Date(`${article.date}T12:00:00Z`).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' })} · Tutoriel
+                </time>
+                <h2 className="text-2xl font-semibold mt-3 mb-3 group-hover:text-indigo-300">{article.title}</h2>
+                <p className="text-slate-300">{article.description}</p>
+                <p className="text-indigo-400 mt-5">Lire le tutoriel →</p>
+              </div>
+            </Link>
+          </article>
+        ))}
+      </div>
     </section>
   )
 }

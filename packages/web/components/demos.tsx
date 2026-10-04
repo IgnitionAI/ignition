@@ -1,4 +1,5 @@
 import DEMOS from '../data/demos.json'
+import { blogArticles } from '@/lib/blog'
 export default function Demos() {
   return (
     <section id="demos" className="relative">
@@ -22,9 +23,8 @@ export default function Demos() {
           {/* Demo grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {DEMOS.map((demo) => (
-              <a
+              <article
                 key={demo.title}
-                href={`/demos/${demo.slug}/`}
                 data-aos="fade-up"
                 className={`relative group block p-6 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-indigo-500/50 transition-colors ${
                   demo.featured ? 'lg:col-span-2' : ''
@@ -44,15 +44,14 @@ export default function Demos() {
                     </span>
                   )}
                 </div>
-                <h3 className="text-xl font-bold text-slate-200 mb-2">{demo.title}</h3>
+                <h3 className="text-xl font-bold text-slate-200 mb-2"><a href={`/demos/${demo.slug}/`}>{demo.title}</a></h3>
                 <p className="text-slate-400 text-sm mb-4 leading-relaxed">{demo.description}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-500 font-mono">{demo.algos}</span>
-                  <span className="text-indigo-400 text-sm font-medium group-hover:translate-x-0.5 transition-transform">
-                    View →
-                  </span>
+                  <a href={`/demos/${demo.slug}/`} className="text-indigo-400 text-sm font-medium">View →</a>
                 </div>
-              </a>
+                <a href={`/blog/${blogArticles.find(article => article.environment === demo.slug)?.slug ?? ''}`} className="inline-block mt-4 text-sm text-indigo-300 hover:text-white">Lire le tutoriel →</a>
+              </article>
             ))}
           </div>
 

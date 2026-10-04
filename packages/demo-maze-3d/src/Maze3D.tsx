@@ -109,13 +109,16 @@ function Agent() {
   )
 }
 
+const MAZE_CENTER_X = ((MAZE_LAYOUT[0].length - 1) * CELL_SIZE) / 2
+const MAZE_CENTER_Z = ((MAZE_LAYOUT.length - 1) * CELL_SIZE) / 2
+
 function Scene() {
   const grid = useMemo(() => MAZE_LAYOUT, [])
 
   return (
     <>
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[10, 15, 10]} intensity={1} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
+      <ambientLight intensity={1.5} />
+      <directionalLight position={[10, 30, 10]} intensity={3} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
       <pointLight position={[5, 5, 5]} intensity={0.5} color="#6366f1" />
 
       <Floor />
@@ -134,10 +137,10 @@ function Scene() {
       <Agent />
 
       <OrbitControls
-        target={[2, 0.5, 2]}
+        target={[MAZE_CENTER_X, 0.5, MAZE_CENTER_Z]}
         maxPolarAngle={Math.PI / 2.2}
         minDistance={2}
-        maxDistance={15}
+        maxDistance={50}
       />
     </>
   )
@@ -145,9 +148,9 @@ function Scene() {
 
 export default function Maze3D() {
   return (
-    <Canvas shadows camera={{ position: [3, 6, 7], fov: 50 }}>
+    <Canvas shadows camera={{ position: [MAZE_CENTER_X + 18, 30, MAZE_CENTER_Z + 22], fov: 50 }}>
       <color attach="background" args={['#020617']} />
-      <fog attach="fog" args={['#020617', 15, 35]} />
+      <fog attach="fog" args={['#020617', 45, 100]} />
       <Scene />
     </Canvas>
   )
