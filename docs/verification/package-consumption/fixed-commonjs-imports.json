@@ -1,0 +1,32 @@
+[
+  {
+    "package": "core",
+    "exit": 0,
+    "stdout": "12\n",
+    "stderr": ""
+  },
+  {
+    "package": "storage",
+    "exit": 0,
+    "stdout": "11\n",
+    "stderr": ""
+  },
+  {
+    "package": "backend-tfjs",
+    "exit": 0,
+    "stdout": "17\n",
+    "stderr": ""
+  },
+  {
+    "package": "backend-onnx",
+    "exit": 0,
+    "stdout": "11\n",
+    "stderr": ""
+  },
+  {
+    "package": "environments",
+    "exit": 0,
+    "stdout": "3\n",
+    "stderr": ""
+  }
+]

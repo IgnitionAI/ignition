@@ -1,7 +1,7 @@
 import type { AgentInterface, Experience } from '@ignitionai/core';
-import { OnnxAgentConfigSchema, type OnnxAgentConfig, type OnnxAgentConfigInput } from '../types';
-import { createOnnxSession, runInference, inspectSession, type OrtSession } from '../runtime-universal';
-import { loadOnnxModelFromHub } from '../io/loadOnnxFromHub';
+import { OnnxAgentConfigSchema, type OnnxAgentConfig, type OnnxAgentConfigInput } from '../types.js';
+import { createOnnxSession, runInference, inspectSession, type OrtSession } from '../runtime-universal.js';
+import { loadOnnxModelFromHub } from '../io/loadOnnxFromHub.js';
 
 /**
  * Inference-only RL agent that loads a pre-trained .onnx model and runs forward passes.

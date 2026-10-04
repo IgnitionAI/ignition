@@ -1,0 +1,20 @@
+node:internal/modules/esm/resolve:283
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/core/dist/ignition-env' imported from /srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/core/dist/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:283:11)
+    at moduleResolve (node:internal/modules/esm/resolve:952:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1188:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/core/dist/ignition-env'
+}
+
+Node.js v20.19.2
+
+Exit: 1

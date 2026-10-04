@@ -1,0 +1,100 @@
+[
+  {
+    "archive": "ignitionai-backend-onnx-0.1.0.tgz",
+    "name": "@ignitionai/backend-onnx",
+    "version": "0.1.0",
+    "entry": "dist/index.js",
+    "entryPresent": true,
+    "licenses": [],
+    "compiledTests": [
+      "package/dist/tests/exporter.test.js",
+      "package/dist/tests/onnx-agent.test.js",
+      "package/dist/tests/runtime.test.js",
+      "package/dist/tests/train-to-inference.test.js",
+      "package/dist/tests/exporter.test.d.ts",
+      "package/dist/tests/onnx-agent.test.d.ts",
+      "package/dist/tests/runtime.test.d.ts",
+      "package/dist/tests/train-to-inference.test.d.ts"
+    ],
+    "buildMetadata": [
+      "package/dist/tsconfig.tsbuildinfo"
+    ],
+    "dependencies": {
+      "@huggingface/hub": "^1.1.2",
+      "onnxruntime-common": "^1.17.0",
+      "onnxruntime-node": "^1.17.0",
+      "zod": "^3.22.0",
+      "@ignitionai/core": "0.1.0"
+    }
+  },
+  {
+    "archive": "ignitionai-backend-tfjs-0.1.0.tgz",
+    "name": "@ignitionai/backend-tfjs",
+    "version": "0.1.0",
+    "entry": "dist/index.js",
+    "entryPresent": true,
+    "licenses": [],
+    "compiledTests": [],
+    "buildMetadata": [
+      "package/dist/tsconfig.tsbuildinfo"
+    ],
+    "dependencies": {
+      "@huggingface/hub": "^1.1.2",
+      "@tensorflow/tfjs": "^4.22.0",
+      "@tensorflow/tfjs-backend-cpu": "^4.22.0",
+      "@tensorflow/tfjs-backend-wasm": "^4.22.0",
+      "@tensorflow/tfjs-backend-webgl": "^4.22.0",
+      "@tensorflow/tfjs-backend-webgpu": "^4.22.0",
+      "@tensorflow/tfjs-vis": "^1.5.1",
+      "zod": "^3.24.2",
+      "@ignitionai/core": "0.1.0",
+      "@ignitionai/storage": "0.1.0"
+    }
+  },
+  {
+    "archive": "ignitionai-core-0.1.0.tgz",
+    "name": "@ignitionai/core",
+    "version": "0.1.0",
+    "entry": "dist/index.js",
+    "entryPresent": true,
+    "licenses": [],
+    "compiledTests": [],
+    "buildMetadata": [
+      "package/dist/tsconfig.tsbuildinfo"
+    ],
+    "dependencies": {
+      "zod": "^3.24.2"
+    }
+  },
+  {
+    "archive": "ignitionai-environments-0.1.0.tgz",
+    "name": "@ignitionai/environments",
+    "version": "0.1.0",
+    "entry": "dist/index.js",
+    "entryPresent": true,
+    "licenses": [],
+    "compiledTests": [],
+    "buildMetadata": [
+      "package/dist/tsconfig.tsbuildinfo"
+    ],
+    "dependencies": {
+      "@ignitionai/core": "0.1.0"
+    }
+  },
+  {
+    "archive": "ignitionai-storage-0.1.0.tgz",
+    "name": "@ignitionai/storage",
+    "version": "0.1.0",
+    "entry": "dist/index.js",
+    "entryPresent": true,
+    "licenses": [],
+    "compiledTests": [],
+    "buildMetadata": [
+      "package/dist/tsconfig.tsbuildinfo"
+    ],
+    "dependencies": {
+      "@huggingface/hub": "^1.1.2",
+      "zod": "^3.24.2"
+    }
+  }
+]

@@ -1,4 +1,4 @@
-export { GridWorldEnv } from './gridworld';
-export { CartPoleEnv } from './cartpole';
-export type { CartPoleState } from './cartpole';
-export { MountainCarEnv } from './mountaincar';
+export { GridWorldEnv } from './gridworld.js';
+export { CartPoleEnv } from './cartpole.js';
+export type { CartPoleState } from './cartpole.js';
+export { MountainCarEnv } from './mountaincar.js';

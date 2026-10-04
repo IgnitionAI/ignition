@@ -1,4 +1,4 @@
-import type { BoxSpace } from './types';
+import type { BoxSpace } from './types.js';
 
 /** A vector-action environment with explicit episode boundaries. */
 export interface ContinuousTrainingEnv {

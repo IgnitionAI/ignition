@@ -1,8 +1,8 @@
 import {
   validateContinuousAction, validateContinuousEnv, validateContinuousVector,
   type ContinuousActionBounds, type ContinuousAgent, type ContinuousTrainingEnv,
-} from './continuous';
-import type { StepResult } from './types';
+} from './continuous.js';
+import type { StepResult } from './types.js';
 
 export interface ContinuousStepResult extends StepResult {
   action: number[];

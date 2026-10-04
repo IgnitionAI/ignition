@@ -1,5 +1,5 @@
-import { DQNAgent } from "../agents/dqn";
-import { DQNConfig } from "../types";
+import { DQNAgent } from "../agents/dqn.js";
+import { DQNConfig } from "../types.js";
 import * as tf from '@tensorflow/tfjs';
 
 interface TrainAgentOptions {

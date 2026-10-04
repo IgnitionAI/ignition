@@ -1,4 +1,4 @@
-import type { AgentInterface, Experience } from './types';
+import type { AgentInterface, Experience } from './types.js';
 
 export type AgentId = string;
 export type MultiAgentAction = number | number[];

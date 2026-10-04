@@ -1,14 +1,14 @@
 import * as tf from '@tensorflow/tfjs';
 import { AgentInterface, Experience } from '@ignitionai/core';
 
-import { loadModelFromHub } from '../io/loadModel';
-import { saveModelToHub } from '../io/saveModelToHub';
-import { ReplayBuffer } from '../memory/ReplayBuffer';
-import { buildQNetwork } from '../model/BuildMLP';
-import { DQNConfig } from '../types';
-import { DQN_TARGET_UPDATE_FREQUENCY } from '../defaults';
-import { DQNConfigSchema } from '../schemas';
-import { setBackend } from '../utils/backend-selector';
+import { loadModelFromHub } from '../io/loadModel.js';
+import { saveModelToHub } from '../io/saveModelToHub.js';
+import { ReplayBuffer } from '../memory/ReplayBuffer.js';
+import { buildQNetwork } from '../model/BuildMLP.js';
+import { DQNConfig } from '../types.js';
+import { DQN_TARGET_UPDATE_FREQUENCY } from '../defaults.js';
+import { DQNConfigSchema } from '../schemas.js';
+import { setBackend } from '../utils/backend-selector.js';
 
 export class DQNAgent implements AgentInterface {
   private model: tf.Sequential;

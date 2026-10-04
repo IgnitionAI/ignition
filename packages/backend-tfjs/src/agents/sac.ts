@@ -3,10 +3,10 @@ import {
   validateContinuousAction, validateContinuousVector,
   type ContinuousAgent, type ContinuousExperience, type ContinuousActionBounds,
 } from '@ignitionai/core';
-import { sacCheckpointSchema } from '../sac/checkpoint';
-import { ReplayBuffer } from '../memory/ReplayBuffer';
-import { SACNetwork, type NetworkWeights } from '../sac/network';
-import { resolveSACConfig, type SACConfig, type SACSettings } from '../sac/config';
+import { sacCheckpointSchema } from '../sac/checkpoint.js';
+import { ReplayBuffer } from '../memory/ReplayBuffer.js';
+import { SACNetwork, type NetworkWeights } from '../sac/network.js';
+import { resolveSACConfig, type SACConfig, type SACSettings } from '../sac/config.js';
 
 export interface SACSnapshot {
   algorithm: 'sac';

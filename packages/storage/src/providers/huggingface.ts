@@ -1,9 +1,9 @@
 import { commit, createRepo, uploadFiles, HubApiError } from '@huggingface/hub';
 import * as tf from '@tensorflow/tfjs';
 
-import { parseHFConfig } from '../config';
-import type { HFStorageConfig } from '../config';
-import type { ModelInfo, ModelStorageProvider } from '../types';
+import { parseHFConfig } from '../config.js';
+import type { HFStorageConfig } from '../config.js';
+import type { ModelInfo, ModelStorageProvider } from '../types.js';
 
 async function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
