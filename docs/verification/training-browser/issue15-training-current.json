@@ -1,0 +1,6 @@
+{
+  "url": "http://127.0.0.1:4174/",
+  "title": "IgnitionAI — Car Circuit",
+  "at": "2026-10-04T20:02:30.908Z",
+  "text": "VOTRE PILOTE IA\nApprendre. Tester. Courir.\n1. Entraîner\n2. Tester\n3. Sauver\n4. Courir\nVotre pilote apprend\n\nIl s’exerce en accéléré, d’abord seul puis avec d’autres voitures. Attendez la fin ou arrêtez pour garder ses progrès.\n\n6 % · Conduite en solo\nTester mon pilote\nArrêter\n\nLa voiture à droite est un aperçu de trajectoire par session, pas une course en direct. Pour voir votre pilote conduire en continu, terminez ces étapes puis lancez une course.\n\nRéglages et détails techniques\nMéthode d’un nouveau pilote\nImitation\nDQN\nDouble DQN\nGraine de départ\n\nimitation-mlp · 4 096 exemples / transitions\n\nErreur d’imitation : 1.1452\n\nContinuer l’entraînement\nRecommencer avec un nouveau pilote\nSauvegarder sans attendre les tests\nRefaire les tests\n\nComparer DQN et Double DQN ↗\n\nRetrouver un pilote sauvegardé"
+}

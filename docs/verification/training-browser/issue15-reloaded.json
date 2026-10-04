@@ -1,0 +1,4 @@
+{
+  "url": "http://127.0.0.1:4174/",
+  "text": "VOTRE PILOTE IA\nApprendre. Tester. Courir.\n1. Entraîner\n2. Tester\n3. Sauver\n4. Courir\nVotre pilote est dans le garage\n\nPassez à la course : votre pilote sera déjà sélectionné sur la grille.\n\nFaire courir mon pilote →\n\nLa voiture à droite est un aperçu de trajectoire par session, pas une course en direct. Pour voir votre pilote conduire en continu, terminez ces étapes puis lancez une course.\n\nRéglages et détails techniques\nRetrouver un pilote sauvegardé\nGarage local\nChoisir un pilote\nimitation-mlp · 11 · 6\nCharger ce pilote\n\nPoids rechargés. La reprise recrée l’optimiseur."
+}

@@ -100,7 +100,17 @@ export default function TrainingPanel({
         agent.current = updated;
       }))
       .catch((e) => setError(String(e)))
-      .finally(() => setStatus("idle"));
+      .finally(() => {
+        const currentDriver = agent.current;
+        if (currentDriver) {
+          setProgress((previous) => ({
+            ...previous,
+            samples: currentDriver.samples,
+            loss: controller.current?.signal.aborted ? null : previous.loss,
+          }));
+        }
+        setStatus("idle");
+      });
   };
   const evaluate = () => {
     if (!agent.current || busy) return;
