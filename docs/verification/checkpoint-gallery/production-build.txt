@@ -1,0 +1,480 @@
+
+> web@0.1.0 prebuild /srv/dev/worktrees/ignition-gallery/packages/web
+> node scripts/build-checkpoint-gallery.mjs && node scripts/build-demos.mjs
+
+
+  ../../.scratch/models-lab-stage-9dxfnd/app.js  2.2mb ⚠️
+
+⚡ Done in 204ms
+Verified 5 report-backed checkpoints; built point-mass lab.
+[build-demos] script started
+[build-demos] repoRoot: /srv/dev/worktrees/ignition-gallery
+[build-demos] webPublicDemos: /srv/dev/worktrees/ignition-gallery/packages/web/public/demos
+[build-demos] cwd: /srv/dev/worktrees/ignition-gallery/packages/web
+
+=== Building library packages (topo order) ===
+
+$ pnpm --filter @ignitionai/core --filter @ignitionai/backend-tfjs --filter @ignitionai/backend-onnx --filter @ignitionai/storage --filter @ignitionai/environments build
+Scope: 5 of 18 workspace projects
+packages/core build$ tsc
+packages/storage build$ tsc
+packages/core build: Done
+packages/storage build: Done
+packages/backend-tfjs build$ tsc
+packages/environments build$ tsc
+packages/environments build: Done
+packages/backend-tfjs build: Done
+packages/backend-onnx build$ tsc
+packages/backend-onnx build: Done
+
+=== Building car-circuit (base=/demos/car-circuit/) ===
+
+$ pnpm --filter "./packages/demo-car-circuit" build
+
+> demo-car-circuit@0.0.0 build /srv/dev/worktrees/ignition-gallery/packages/demo-car-circuit
+> vite build
+
+vite v6.3.3 building for production...
+transforming...
+[plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+✓ 1908 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/index.html                                      0.48 kB │ gzip:   0.33 kB
+../dist/assets/index-C28lmmCF.css                      10.12 kB │ gzip:   2.60 kB
+../dist/assets/RaceGarage-D8chRCLm.js                   6.78 kB │ gzip:   3.04 kB
+../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+../dist/assets/TrainingPanel-DBsaNMh7.js              320.14 kB │ gzip:  63.31 kB
+../dist/assets/index-CsChrJbT.js                    1,118.32 kB │ gzip: 313.90 kB
+../dist/assets/training-RutcVkes.js                 1,629.48 kB │ gzip: 257.69 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 13.89s
+Copying /srv/dev/worktrees/ignition-gallery/packages/demo-car-circuit/dist → /srv/dev/worktrees/ignition-gallery/.scratch/demos-stage-oMtosk/car-circuit
+
+=== Building maze (base=/demos/maze/) ===
+
+$ pnpm --filter "./packages/demo-maze" build
+
+> demo-maze@0.0.0 build /srv/dev/worktrees/ignition-gallery/packages/demo-maze
+> vite build
+
+vite v6.3.3 building for production...
+transforming...
+[plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+✓ 2518 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/index.html                                      0.50 kB │ gzip:     0.33 kB
+../dist/assets/index-BE9D5215.css                       0.10 kB │ gzip:     0.11 kB
+../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:     6.19 kB
+../dist/assets/index-D4ifQXr1.js                    5,600.14 kB │ gzip: 1,527.44 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 17.58s
+Copying /srv/dev/worktrees/ignition-gallery/packages/demo-maze/dist → /srv/dev/worktrees/ignition-gallery/.scratch/demos-stage-oMtosk/maze
+
+=== Building cartpole (base=/demos/cartpole/) ===
+
+$ pnpm --filter "./packages/demo-cartpole" build
+
+> demo-cartpole@0.0.0 build /srv/dev/worktrees/ignition-gallery/packages/demo-cartpole
+> tsc -b && vite build
+
+vite v6.3.3 building for production...
+transforming...
+[plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+✓ 1948 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/index.html                                      0.51 kB │ gzip:   0.33 kB
+../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+../dist/assets/index-BS6megIv.js                    2,539.05 kB │ gzip: 485.83 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 9.32s
+Copying /srv/dev/worktrees/ignition-gallery/packages/demo-cartpole/dist → /srv/dev/worktrees/ignition-gallery/.scratch/demos-stage-oMtosk/cartpole
+
+=== Building mountaincar (base=/demos/mountaincar/) ===
+
+$ pnpm --filter "./packages/demo-mountaincar" build
+
+> demo-mountaincar@0.0.0 build /srv/dev/worktrees/ignition-gallery/packages/demo-mountaincar
+> tsc -b && vite build
+
+vite v6.3.3 building for production...
+transforming...
+[plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+✓ 1948 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/index.html                                      0.48 kB │ gzip:   0.33 kB
+../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+../dist/assets/index-B2D8SzfO.js                    2,538.95 kB │ gzip: 485.68 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 9.28s
+Copying /srv/dev/worktrees/ignition-gallery/packages/demo-mountaincar/dist → /srv/dev/worktrees/ignition-gallery/.scratch/demos-stage-oMtosk/mountaincar
+
+=== Building cartpole-3d (base=/demos/cartpole-3d/) ===
+
+$ pnpm --filter "./packages/demo-cartpole-3d" build
+
+> demo-cartpole-3d@0.0.0 build /srv/dev/worktrees/ignition-gallery/packages/demo-cartpole-3d
+> vite build
+
+vite v6.3.3 building for production...
+transforming...
+[plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+✓ 2521 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/index.html                                      0.48 kB │ gzip:   0.33 kB
+../dist/assets/index-bOspBYTK.css                       0.19 kB │ gzip:   0.17 kB
+../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+../dist/assets/index-Dlap7dFs.js                    3,454.06 kB │ gzip: 735.19 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 14.63s
+Copying /srv/dev/worktrees/ignition-gallery/packages/demo-cartpole-3d/dist → /srv/dev/worktrees/ignition-gallery/.scratch/demos-stage-oMtosk/cartpole-3d
+
+=== Building drone-navigation (base=/demos/drone-navigation/) ===
+
+$ pnpm --filter "./packages/demo-drone-navigation" build
+
+> demo-drone-navigation@0.0.0 build /srv/dev/worktrees/ignition-gallery/packages/demo-drone-navigation
+> vite build
+
+vite v6.3.3 building for production...
+transforming...
+[plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+✓ 1895 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/index.html                                      0.43 kB │ gzip:   0.30 kB
+../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+../dist/assets/index-BeF1R43L.js                    3,050.75 kB │ gzip: 625.50 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 11.34s
+Copying /srv/dev/worktrees/ignition-gallery/packages/demo-drone-navigation/dist → /srv/dev/worktrees/ignition-gallery/.scratch/demos-stage-oMtosk/drone-navigation
+
+=== Building maze-3d (base=/demos/maze-3d/) ===
+
+$ pnpm --filter "./packages/demo-maze-3d" build
+
+> demo-maze-3d@0.0.0 build /srv/dev/worktrees/ignition-gallery/packages/demo-maze-3d
+> tsc -b && vite build
+
+vite v6.3.3 building for production...
+transforming...
+[plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+✓ 1896 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/index.html                                      0.53 kB │ gzip:   0.35 kB
+../dist/assets/index-CNsYfq93.css                      11.25 kB │ gzip:   3.10 kB
+../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+../dist/assets/index-DGgH2la9.js                    3,006.94 kB │ gzip: 608.47 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 12.07s
+Copying /srv/dev/worktrees/ignition-gallery/packages/demo-maze-3d/dist → /srv/dev/worktrees/ignition-gallery/.scratch/demos-stage-oMtosk/maze-3d
+
+=== Building gridworld (base=/demos/gridworld/) ===
+
+$ pnpm --filter "./packages/demo-gridworld" build
+
+> demo-gridworld@0.0.0 build /srv/dev/worktrees/ignition-gallery/packages/demo-gridworld
+> tsc -b && vite build
+
+vite v6.3.3 building for production...
+transforming...
+[plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/worktrees/ignition-gallery/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+✓ 1948 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/index.html                                      0.51 kB │ gzip:   0.33 kB
+../dist/assets/index-CXXDzAFT.css                       0.19 kB │ gzip:   0.16 kB
+../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+../dist/assets/index-B08424oo.js                    2,539.40 kB │ gzip: 485.77 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 9.24s
+Copying /srv/dev/worktrees/ignition-gallery/packages/demo-gridworld/dist → /srv/dev/worktrees/ignition-gallery/.scratch/demos-stage-oMtosk/gridworld
+
+✓ All demos built and copied to packages/web/public/demos/
+[build-demos] final listing: [
+  'car-circuit',
+  'cartpole',
+  'cartpole-3d',
+  'drone-navigation',
+  'gridworld',
+  'manifest.json',
+  'maze',
+  'maze-3d',
+  'mountaincar'
+]
+
+> web@0.1.0 build /srv/dev/worktrees/ignition-gallery/packages/web
+> next build
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   ▲ Next.js 16.0.10 (Turbopack)
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/interfaces/ModelStorageProvider.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/interfaces/MultiDiscreteSpace.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/algorithms/ppo.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/classes/HuggingFaceProvider.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/README.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/algorithms/q-table.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/type-aliases/HFStorageConfig.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/variables/hfStorageConfigSchema.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/how-it-works/index.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/how-it-works/storage.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/troubleshooting.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/tutorials/car-circuit.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/functions/saveForOnnxExport.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/type-aliases/OnnxAgentConfig.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/README.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/type-aliases/AlgorithmType.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/type-aliases/ObservationSpace.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/variables/version.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/environments/src/README.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/classes/IgnitionEnvTFJS.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/demos.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/how-it-works/backend-onnx.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/quickstart.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/r3f.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/variables/PPO_DEFAULTS.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/variables/QTableConfigSchema.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/interfaces/InferenceEnv.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/tutorials/drone-navigation.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/classes/OnnxAgent.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/interfaces/ModelInfo.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/README.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/functions/createOnnxSession.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/functions/createOnnxSessionNode.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/interfaces/StepResult.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/functions/generateConversionScript.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/functions/inspectSession.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/functions/inspectSessionNode.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/functions/loadOnnxModelFromHub.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/interfaces/ExportResult.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/variables/ExperienceSchema.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/environments/src/classes/CartPoleEnv.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/environments/src/classes/GridWorldEnv.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/environments/src/classes/MountainCarEnv.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/environments/src/interfaces/CartPoleState.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/README.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/classes/DownloadProvider.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/classes/ReplayBuffer.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/algorithms/dqn.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/classes/PPOAgent.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/tutorials/index.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/tutorials/mountaincar-shaping.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/tutorials/onnx-unity.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/interfaces/DQNConfig.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/interfaces/AgentInterface.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/interfaces/Experience.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/interfaces/QTableConfig.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/interfaces/PPOConfig.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/type-aliases/TFBackend.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/variables/ALGORITHM_DEFAULTS.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/variables/DQNConfigSchema.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/variables/PPOConfigSchema.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/functions/mergeDefaults.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/interfaces/DiscreteSpace.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/functions/validateInferenceEnv.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/functions/validateTrainingEnv.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/interfaces/BoxSpace.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/interfaces/AgentInterface.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/interfaces/CheckpointableAgent.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/type-aliases/TFBackend.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/classes/IndexedDBProvider.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/classes/LocalStorageProvider.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/how-it-works/backend-tfjs.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/how-it-works/core.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/functions/getAvailableBackends.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/tutorials/grid-world.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/tutorials/cartpole-3d.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/variables/DQN_DEFAULTS.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/variables/QTABLE_DEFAULTS.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/README.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/interfaces/Experience.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/interfaces/TrainingEnv.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/type-aliases/ActionSpace.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/type-aliases/AgentFactory.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/functions/runInferenceNode.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/functions/runInference.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-onnx/src/variables/OnnxAgentConfigSchema.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/classes/QTableAgent.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/tutorials/cartpole-observations.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/algorithms/index.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/storage/src/functions/parseHFConfig.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/classes/DQNAgent.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/index.mdx
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/functions/buildQNetwork.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/backend-tfjs/src/functions/setBackend.md
+- [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../../worktrees/ignition-gallery/packages/web/content/api/core/src/classes/IgnitionEnv.md
+ ✓ Compiled successfully in 24.3s
+   Running TypeScript ...
+   Collecting page data using 7 workers ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   Generating static pages using 7 workers (0/106) ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   Generating static pages using 7 workers (26/106)
+   Generating static pages using 7 workers (52/106)
+   Generating static pages using 7 workers (79/106)
+ ✓ Generating static pages using 7 workers (106/106) in 3.1s
+   Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/hello
+├ ○ /blog
+├ ○ /blog/premier-agent-cartpole
+├ ○ /blog/premier-agent-cartpole/opengraph-image-1eyg24
+├ ○ /changelog
+├ ● /docs/[[...mdxPath]]
+│ ├ /docs/algorithms/dqn
+│ ├ /docs/algorithms
+│ ├ /docs/algorithms/ppo
+│ └ [+92 more paths]
+├ ○ /icon.svg
+├ ○ /models
+└ ○ /opengraph-image
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand

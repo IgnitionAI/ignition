@@ -1,0 +1,14 @@
+# Checkpoint gallery — issue #35 verification
+
+Verification layer: local source checkout and genuine Chromium interactions; no deployment or authenticated HF write is claimed.
+
+- Owner suites: 226 tests passed, three HF tests skipped without credentials (`owner-tests.txt`). A whitespace-only protocol was admitted before the repair; the existing public schema-owner test exposes it (`catalog-blank-protocol-before.json`, five pass/one failure), then all six catalogue tests pass (`catalog-blank-protocol-after.json`).
+- Complete web production build, including gallery and eight public demos: PASS (`production-build.txt`). Affected web lint and no-emit TypeScript: PASS. Storage no-emit TypeScript: PASS.
+- All five genuine SAC checkpoints load with 20,000 samples and 9,751 updates. Each actual quick evaluation completes 20/20 episodes, with frozen weights (`quick-evaluations.json`). These quick tests are distinct from the retained 500-episode benchmark.
+- Actual native browser exports exactly match the retained original native checkpoints (`exported-models.json`). The older `all-models-browser.json` status was captured after exporting, so it records the export acknowledgement; use `quick-evaluations.json` for actual evaluation outcomes.
+- Incompatible metadata is refused before a weights request; incompatible native dimensions are refused by the actual consumer; a pinned missing public HF artifact returns a visible HTTP error (`rejections-browser.json`). No token was supplied. Fixtures are retained separately and are not published as site artifacts. To reproduce the native-dimensions case, temporarily serve `fixtures/rejected-native-dimensions.json` at the path referenced by its fixture catalogue.
+- Invalid catalogue import preserves the five-card catalogue and currently loaded native policy (`invalid-preserves-policy.json`).
+- Production preview on localhost:3108: all five artifact sizes and SHA-256 values agree with the manifest, every report/protocol request returns 200, the real first policy evaluates 20/20, no page error (`production.json`).
+- Mobile width 390: outer document width 390, no horizontal overflow. Position/velocity use readable HTML outside the scaled canvas (`mobile-state-fixed.png`). Production laboratory screenshot: `production-lab.png`. All captured screenshots were displayed inline and visually inspected.
+
+Final source review: PASS against scope and repository standards. Production mobile read-back confirms width 390 without overflow, readable state and genuine 20,000/9,751 loaded counters (`production-mobile.png`). Header navigation from models to the home quick-start anchor and back is exercised (`navigation.json`). Every #35 acceptance criterion is covered by the evidence above. Delivery commit and PR are recorded in the GitHub issue comment. Issue #31 requires independent authenticated remote proof and remains open.

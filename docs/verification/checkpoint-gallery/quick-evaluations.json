@@ -1,0 +1,32 @@
+[
+  {
+    "seed": 11,
+    "status": "20/20 épisodes réussis · coût moyen 6.59 · poids figés.",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "error": ""
+  },
+  {
+    "seed": 29,
+    "status": "20/20 épisodes réussis · coût moyen 6.24 · poids figés.",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "error": ""
+  },
+  {
+    "seed": 47,
+    "status": "20/20 épisodes réussis · coût moyen 6.96 · poids figés.",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "error": ""
+  },
+  {
+    "seed": 73,
+    "status": "20/20 épisodes réussis · coût moyen 6.94 · poids figés.",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "error": ""
+  },
+  {
+    "seed": 101,
+    "status": "20/20 épisodes réussis · coût moyen 6.53 · poids figés.",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "error": ""
+  }
+]

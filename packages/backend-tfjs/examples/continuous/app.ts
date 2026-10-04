@@ -3,6 +3,8 @@ import { ContinuousRunner } from '@ignitionai/core';
 import { SACAgent } from '../../src/agents/sac';
 import { sacCheckpointSchema } from '../../src/sac/checkpoint';
 import { PointMassEnv } from './point-mass';
+import { checkpointEntrySchema, loadCatalogCheckpoint } from '../../../storage/src/catalog';
+import { POINT_MASS_CHECKPOINT_CONTRACT } from './catalog-contract';
 
 function element<T extends HTMLElement>(id: string): T {
   const node = document.getElementById(id);
@@ -25,8 +27,7 @@ function draw(state: number[] = env.observe(), action?: number): void {
   context.fillStyle = '#a5b4fc'; context.fillRect(445, 35, 10, 120);
   context.strokeStyle = '#64748b'; context.beginPath(); context.moveTo(50, 125); context.lineTo(850, 125); context.stroke();
   context.fillStyle = '#fbbf24'; context.beginPath(); context.arc(450 + state[0] * 125, 115, 14, 0, Math.PI * 2); context.fill();
-  context.fillStyle = '#e5e7eb'; context.font = '18px system-ui';
-  context.fillText(`Position ${state[0].toFixed(3)} · Vitesse ${state[1].toFixed(3)}${action === undefined ? '' : ` · Action ${action.toFixed(3)}`}`, 30, 185);
+  element<HTMLParagraphElement>('physical-state').textContent = `Position ${state[0].toFixed(3)} · Vitesse ${state[1].toFixed(3)}${action === undefined ? '' : ` · Action ${action.toFixed(3)}`}`;
 }
 function update(): void { metrics.textContent = JSON.stringify(agent.getState(), null, 2); }
 function controls(): void {
@@ -112,4 +113,35 @@ async function initialize(): Promise<void> {
   await replace(new SACAgent({ inputSize: 2, actionSpace: env.actionSpace, seed: 11 }));
   status.textContent = 'CPU prêt. Politique initiale, aucune compétence mesurée.'; controls();
 }
-initialize().catch(failure => { error.textContent = String(failure); });
+const ready = initialize();
+ready.catch(failure => { error.textContent = String(failure); });
+
+/** Public embed protocol: parent supplies metadata, never private policy state. */
+window.addEventListener('message', event => {
+  const data: unknown = event.data;
+  if (event.origin !== window.location.origin || event.source !== window.parent
+    || !data || typeof data !== 'object' || !('type' in data)
+    || data.type !== 'ignition:load-checkpoint' || !('entry' in data)) return;
+  const reply = (state: 'loaded' | 'error', detail: string, id?: string) => {
+    window.parent.postMessage({ type: 'ignition:checkpoint-status', state, detail, id }, event.origin);
+  };
+  void ready.then(async () => {
+    const entry = checkpointEntrySchema.parse(data.entry);
+    if (busy) throw new Error('Le laboratoire exécute déjà une opération.');
+    await operation(async () => {
+      status.textContent = 'Téléchargement et vérification du checkpoint…';
+      try {
+        const checkpoint = await loadCatalogCheckpoint(entry, POINT_MASS_CHECKPOINT_CONTRACT,
+          value => sacCheckpointSchema.parse(value));
+        await restore({ environment: POINT_MASS_CHECKPOINT_CONTRACT.environment.id, checkpoint });
+        status.textContent = `${entry.name} chargé. Checkpoint validé ; optimiseur et replay recréés.`;
+        reply('loaded', status.textContent, entry.id);
+      } catch (failure) {
+        reply('error', String(failure), entry.id); throw failure;
+      }
+    });
+  }).catch(failure => {
+    error.textContent = String(failure); status.textContent = 'Chargement du catalogue refusé.';
+    reply('error', String(failure));
+  });
+});

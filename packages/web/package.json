@@ -5,11 +5,13 @@
   "description": "IgnitionAI landing page + documentation site",
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/build-demos.mjs",
+    "prebuild": "node scripts/build-checkpoint-gallery.mjs && node scripts/build-demos.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "build:demos": "node scripts/build-demos.mjs"
+    "build:demos": "node scripts/build-demos.mjs",
+    "predev": "node scripts/build-checkpoint-gallery.mjs",
+    "build:models": "node scripts/build-checkpoint-gallery.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
