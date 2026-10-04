@@ -27,3 +27,14 @@ python3 -m http.server 4191 --bind 127.0.0.1 --directory .scratch/sac-demo
 Open http://127.0.0.1:4191/. Any equivalent static HTTP server may replace Python. Controls exercise actual training, stop, greedy episodes, a clearly labelled 20-episode quick evaluation, local JSON save/load and file import/export. Demo files wrap the snapshot as `{ environment: "point-mass-v1", checkpoint: ... }`; raw benchmark snapshots must be wrapped with that verified environment identity before importing. The quick test is not the 100-episode benchmark. Resume uses fresh optimizers/replay.
 
 The public contracts, execution lifecycle and checkpoint limits are documented in [the continuous source API](../../../../docs/design/continuous-api.md).
+
+## Recheck a completed benchmark
+
+After the benchmark has written `report.json`, independently reload every final checkpoint and reproduce all baseline/trained evaluation episodes:
+
+```sh
+packages/backend-onnx/node_modules/.bin/esbuild packages/backend-tfjs/scripts/audit-sac-learning.ts --bundle --platform=node --format=cjs --alias:@ignitionai/core=./packages/core/src/index.ts --external:@tensorflow/tfjs-node --outfile=.scratch/audit-sac-learning.cjs
+node .scratch/audit-sac-learning.cjs .scratch/sac-point-mass-v1
+```
+
+The auditor verifies raw checkpoint hashes, frozen protocol, recorded source hashes against both the current files and recorded git commit, exact samples/update budgets, all reproduced episode metrics, frozen policy state, and independently recomputed aggregate criteria. It refuses a missing/incomplete report. Its summary reports learning PASS only when the original protocol passes; successful artifact parsing alone cannot establish learning.

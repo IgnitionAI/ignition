@@ -1,0 +1,64 @@
+{
+  "protocol": {
+    "id": "sac-point-mass-v1",
+    "trainingSeeds": [
+      11,
+      29,
+      47,
+      73,
+      101
+    ],
+    "evaluationSeeds": [
+      211,
+      307,
+      419,
+      509,
+      601
+    ],
+    "trainingInteractions": 20000,
+    "evaluationEpisodesPerSeed": 20,
+    "episodeTicks": 100,
+    "backend": "cpu",
+    "hiddenLayers": [
+      32,
+      32
+    ],
+    "lr": 0.0003,
+    "gamma": 0.99,
+    "alpha": 0.05,
+    "tau": 0.005,
+    "batchSize": 64,
+    "memorySize": 10000,
+    "warmup": 500,
+    "updateEvery": 2,
+    "minimumSuccessesPerPolicy": 70,
+    "minimumPassingPolicies": 4,
+    "minimumMeanCostReduction": 0.5,
+    "selection": "final scheduled checkpoint; preserve all failures"
+  },
+  "protocolSha256": "beef7a91839603e3ed9405536197277c15c90318b944c56a09fec15fe18929ef",
+  "createdAt": "2026-10-04T12:20:17.923Z",
+  "sourceCommit": "4b1db26aa632e0fdf0f9b4eed4ecb5bf5e33fd2d",
+  "sourceHashes": {
+    "docs/design/sac-point-mass-protocol-v1.json": "beef7a91839603e3ed9405536197277c15c90318b944c56a09fec15fe18929ef",
+    "packages/core/src/continuous.ts": "d553cc5633cb05f243a8a42587d8cf5cd17f6717ac5980b0535431352b30190b",
+    "packages/core/src/continuous-runner.ts": "f40656f161a5c7f055fb33af24e5acc4c34d71fbb6bdbfd6f83fef15c45dab14",
+    "packages/backend-tfjs/src/agents/sac.ts": "04398222de6525469732582a2cebcc70d37d386217bac1a1d097460696c1c325",
+    "packages/backend-tfjs/src/sac/config.ts": "d914b656404bf86136f40d31ce7d14a004c47462638b1296383eee57ed6382a1",
+    "packages/backend-tfjs/src/sac/network.ts": "bb8b8ca22125fe68c8537ef2de0503bcea17d3b02e7eb050d374e8ddd23915f8",
+    "packages/backend-tfjs/src/sac/checkpoint.ts": "ad49705f086e994f8dc368e001009557c89ba7bab5883e406be1aaa7d5f4a129",
+    "packages/backend-tfjs/src/memory/ReplayBuffer.ts": "09e9b9b839cb3b4c98eba82ec10a735510bde195daa90efdc3aa17f33af43f80",
+    "packages/backend-tfjs/examples/continuous/point-mass.ts": "436f0b2e482673e092bc9197a70b6560c5b0356c7c853ae112e450cd0794e159",
+    "packages/backend-tfjs/scripts/verify-sac-learning.ts": "25ecba3a509eb1cad7f536aae78b8d566a8d7865444b3c656174d161fe02e649"
+  },
+  "machine": {
+    "node": "v20.19.2",
+    "tfjs": "4.22.0",
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.12.107+deb13-amd64",
+    "cpu": "AMD EPYC 9645 96-Core Processor",
+    "logicalCpus": 8,
+    "memoryBytes": 16773271552
+  }
+}
