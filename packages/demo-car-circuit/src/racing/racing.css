@@ -551,3 +551,5 @@
 
 .recovery-button { position:absolute; z-index:4; bottom:24px; left:24px; padding:10px 14px; border:1px solid #ffffff50; border-radius:4px; color:#fff; background:#182322e8; cursor:pointer; }
 .recovery-button:disabled { opacity:.5; cursor:default; }
+
+.race-next-pass { display: block; margin-top: 4px; color: #e6ee58; }

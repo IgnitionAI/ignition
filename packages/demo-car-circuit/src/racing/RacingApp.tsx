@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { useProgress } from "@react-three/drei";
-import { RaceWorld } from "./race";
+import { RaceWorld, RACE_PROTOCOL } from "./race";
 import { DrivingWorld } from "./driving";
 import { RaceMap } from "./RaceMap";
 import { RacingScene } from "./RacingScene";
@@ -453,6 +453,7 @@ export default function RacingApp() {
               +{race.drivers[learned ? follow : 0].penaltySeconds} s
               <br />
               <span>{lang === "fr" ? "Tour" : "Lap"} {Math.min(3, race.drivers[learned ? follow : 0].laps + 1)}/3</span>
+              {!race.finished && race.drivers[learned ? follow : 0].finishSeconds === null && <small className="race-next-pass">{lang === "fr" ? "Passage suivant" : "Next gate"} {(race.drivers[learned ? follow : 0].gates % RACE_PROTOCOL.checkpoints) + 1}/{RACE_PROTOCOL.checkpoints}</small>}
               {race.ghost && <small className="ghost-race-label">{lang === "fr" ? "MODE FANTÔME" : "GHOST MODE"}</small>}
             </div>
           )}
