@@ -6,6 +6,7 @@ import { saveModelToHub } from '../io/saveModelToHub';
 import { ReplayBuffer } from '../memory/ReplayBuffer';
 import { buildQNetwork } from '../model/BuildMLP';
 import { DQNConfig } from '../types';
+import { DQN_TARGET_UPDATE_FREQUENCY } from '../defaults';
 import { DQNConfigSchema } from '../schemas';
 import { setBackend } from '../utils/backend-selector';
 
@@ -41,7 +42,7 @@ export class DQNAgent implements AgentInterface {
       lr = 0.001,
       batchSize = 32,
       memorySize = 10000,
-      targetUpdateFrequency = 1000,
+      targetUpdateFrequency = DQN_TARGET_UPDATE_FREQUENCY,
       backend = 'auto',
     } = config;
 

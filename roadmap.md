@@ -81,8 +81,8 @@
 ### 1.8 Car Circuit reward fix ✅
 - [x] Replaced `+1 per on-track step` with dense progress shaping (`progressDelta × 300 + alignment + centerline`)
 
-### Known framework bug (low priority)
-- `backend-tfjs/src/defaults.ts:3-13` disagrees with `agents/dqn.ts:43` on `targetUpdateFrequency` (100 vs 1000). Docs cite the runtime value (1000). Cleanup commit needed.
+### DQN target synchronization
+- Both runner and direct-agent construction now default to 100 training updates. Direct-agent users previously relying on 1000 should explicitly set `targetUpdateFrequency: 1000`. Historical benchmark configurations and reports remain unchanged.
 
 ---
 

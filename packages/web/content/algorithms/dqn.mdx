@@ -53,7 +53,7 @@ In IgnitionAI, the default buffer size is **10 000 transitions**, and training s
 
 We said above that using the same network to predict *and* compute the target leads to instability — imagine trying to hit a bullseye that moves every time you pull the bow. DQN's fix is to keep a **second copy of the network** — the *target network* — that is updated less frequently. The target network is used for computing `max_a' Q(s', a')`, so the target is stable for a while.
 
-In IgnitionAI, the target network is synced to the main network every `targetUpdateFrequency` steps. The default is **100 training updates** through `IgnitionEnv`, or **1000** when constructing `DQNAgent` directly. You can tune this lower for faster-learning envs or higher for more stable training.
+In IgnitionAI, the target network is synced to the main network every `targetUpdateFrequency` steps. The default is **100 training updates** through either `IgnitionEnvTFJS` or direct `DQNAgent` construction. You can tune this lower for faster-learning envs or higher for more stable training.
 
 ### 3. Epsilon-greedy exploration
 
@@ -69,7 +69,7 @@ A greedy policy (always pick the argmax Q-value) will get stuck early. The first
 
 ## Default hyperparameters
 
-These are the values used by `env.train('dqn')`, from `packages/backend-tfjs/src/defaults.ts`. Direct `DQNAgent` construction uses `[24, 24]` hidden layers and a target update frequency of 1000 instead.
+These are the values used by `env.train('dqn')`, from `packages/backend-tfjs/src/defaults.ts`. Direct `DQNAgent` construction uses `[24, 24]` hidden layers; both creation paths share the same target update frequency.
 
 | Hyperparameter | Default | What it controls |
 |---|---|---|
