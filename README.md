@@ -1,7 +1,7 @@
 # IgnitionAI
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./LICENSE)
-[![Tests](https://img.shields.io/badge/tests-184%20passing-22c55e?style=flat-square)](https://github.com/IgnitionAI/ignition/actions)
+[![Tests](https://img.shields.io/badge/tests-420%20passing-22c55e?style=flat-square)](https://github.com/IgnitionAI/ignition/actions)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?style=flat-square)](https://www.typescriptlang.org/)
 
 > **The ML-Agents of the JavaScript creative ecosystem.**
@@ -19,26 +19,39 @@ Unity has [ML-Agents](https://github.com/Unity-Technologies/ml-agents). Python h
 - **Browser-native.** TensorFlow.js with WebGPU > WebGL > WASM > CPU auto-selection. No install, no CUDA, no server.
 - **Train → Deploy pipeline.** Train in JS, export to ONNX, deploy in Unity (Sentis), Unreal (NNE), Python, C++, or edge devices.
 - **Three.js / R3F first.** Built for the JS creative stack. Pair it with your 3D scene and watch your agent learn in 3D.
-- **Production-ready.** TypeScript strict mode, Zod validation, 184+ tests, CI/CD, modular monorepo.
+- **Validated core.** TypeScript strict mode, Zod validation, behavioral and convergence tests, and a modular monorepo. See the status section for current validation limits.
 
 ---
 
 ## Install
 
-One package. Everything included.
+The examples below use the **current repository source**. The published modular
+packages are still version 0.1.0; the published TFJS entry point exports
+`DQNAgent`, not the current `IgnitionEnvTFJS`/PPO/Q-table API. Use the workspace
+for these examples until a new release is published:
 
 ```bash
-npm install ignitionai
-# or
-pnpm add ignitionai
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter @ignitionai/backend-tfjs... --filter @ignitionai/environments... build
+pnpm --filter demo-cartpole dev
 ```
+
+`@ignitionai/core`, `@ignitionai/backend-tfjs`, `@ignitionai/backend-onnx`,
+`@ignitionai/storage` and `@ignitionai/environments` exist on npm at 0.1.0.
+The `ignitionai` umbrella is not published. Registry and published TFJS declaration
+checks were performed on 2026-10-04. Package availability does not establish
+parity with the source APIs documented here.
 
 ---
 
 ## Quick Start (7 lines)
 
 ```ts
-import { IgnitionEnvTFJS, CartPoleEnv } from 'ignitionai';
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
+import { CartPoleEnv } from '@ignitionai/environments';
 
 const cartpole = new CartPoleEnv();
 const env = new IgnitionEnvTFJS(cartpole);
@@ -57,7 +70,8 @@ That's it. The agent starts learning. The pole stays up.
 Describe your game world by implementing the `TrainingEnv` interface — 5 methods and an `actions` property.
 
 ```ts
-import { IgnitionEnvTFJS, TrainingEnv } from 'ignitionai';
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
+import type { TrainingEnv } from '@ignitionai/core';
 
 class MyGame implements TrainingEnv {
   // What the agent can do
@@ -151,7 +165,7 @@ Training runs in the browser. ONNX conversion is a separate Node/Python step.
 
 ```ts
 // Browser: call after convergence, and do not resume while saving.
-import { DQNAgent } from 'ignitionai';
+import { DQNAgent } from '@ignitionai/backend-tfjs';
 
 env.stop();
 await env.inferStep(); // Finish behind any training transition already in flight.
@@ -186,7 +200,7 @@ not be disposed while that agent is in use.
 You can also run inference directly in JS using the trained model:
 
 ```ts
-import { createOnnxSession, OnnxAgent } from 'ignitionai';
+import { createOnnxSession, OnnxAgent } from '@ignitionai/backend-onnx';
 
 const session = await createOnnxSession('./my-model.onnx');
 const inputName = session.inputNames[0];
@@ -210,7 +224,8 @@ Pair IgnitionAI with your R3F scene — the env describes the logic, your meshes
 
 ```tsx
 import { Canvas, useFrame } from '@react-three/fiber';
-import { IgnitionEnvTFJS, TrainingEnv } from 'ignitionai';
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
+import type { TrainingEnv } from '@ignitionai/core';
 import { useRef, useEffect } from 'react';
 
 class GameEnv implements TrainingEnv {
@@ -247,7 +262,8 @@ The training loop runs independently of the render loop — the agent learns whi
 ## Save & Load Models (HuggingFace Hub)
 
 ```ts
-import { DQNAgent, HuggingFaceProvider } from 'ignitionai';
+import { DQNAgent } from '@ignitionai/backend-tfjs';
+import { HuggingFaceProvider } from '@ignitionai/storage';
 
 const storage = new HuggingFaceProvider({
   token: process.env.HF_TOKEN,
@@ -279,10 +295,10 @@ The build currently excludes Target Chasing pending a separate compatibility che
 
 ## Packages
 
-IgnitionAI is a pnpm monorepo. The `ignitionai` package is an umbrella that re-exports everything — most users only need that one.
+IgnitionAI is a pnpm monorepo. The modular `@ignitionai/*` packages are published on npm at 0.1.0, but do not yet contain all current source APIs. The local `ignitionai` workspace re-exports them, but is not published on npm (registry checked 2026-10-04).
 
 ```
-ignitionai                  ← single install, everything included
+ignitionai                  ← local umbrella workspace, not published
 ├── @ignitionai/core           IgnitionEnv, TrainingEnv interface, types
 ├── @ignitionai/backend-tfjs   DQN, PPO, Q-Table + IgnitionEnvTFJS
 ├── @ignitionai/backend-onnx   OnnxAgent, TF.js → ONNX exporter
@@ -290,7 +306,7 @@ ignitionai                  ← single install, everything included
 └── @ignitionai/environments   GridWorld, CartPole, MountainCar
 ```
 
-You can also install individual packages if you want fine-grained dependency control.
+Use individual workspace packages for fine-grained dependency control. Check the published declarations before using a source example against npm 0.1.0.
 
 ---
 
@@ -322,14 +338,15 @@ Under the hood: `stepIntervalMs` goes down and `stepsPerTick` batches multiple s
 
 ## Project Status
 
-**v0.1 — first public release.**
+**v0.1 packages, with further development in this repository.**
 
-- Core framework: stable
-- Algorithms (DQN, PPO, Q-Table): stable with convergence tests
-- ONNX export: functional (requires Python conversion step)
-- HuggingFace storage: stable
-- 184+ tests passing across all packages
-- CI/CD: GitHub Actions running tests + build on every PR
+- Core and algorithms have behavioral and convergence coverage; this does not promise convergence on every custom environment.
+- Local full suite on 2026-10-04: **420 tests passed, 3 skipped** because `HF_TOKEN` was absent.
+- Real local ONNX conversion and TFJS/ONNX output parity passed; see [the retained report](docs/verification/onnx/README.md).
+- HuggingFace storage has mocked coverage; the current authenticated remote round-trip remains unverified.
+- Eight public demo entries are defined in the shared catalogue. Cage Duel is a local prototype; Target Chasing is excluded from public builds.
+- Complete web build and local smoke checks passed; follow-up acceptance and CI are tracked in [PR #37](https://github.com/IgnitionAI/ignition/pull/37). A local check does not establish deployed behavior.
+- Published modular npm packages are version 0.1.0; current source changes are not a newly published npm release.
 
 See [roadmap.md](./roadmap.md) for what's coming next (SAC, multi-agent, model hub, more demos).
 

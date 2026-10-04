@@ -12,8 +12,8 @@ pnpm install
 
 Requirements:
 - Node.js 20+
-- pnpm 9+
-- Python 3.10+ (for ONNX export tests)
+- pnpm 10.8.0 (the version pinned by the root package)
+- Python 3.11 with pinned isolated dependencies for real ONNX conversion (see backend-onnx/examples/README.md)
 
 ## Monorepo structure
 
@@ -39,7 +39,7 @@ pnpm test
 pnpm run typecheck
 
 # Single package
-pnpm --filter @ignitionai/backend-tfjs test
+pnpm exec vitest run packages/backend-tfjs/test
 ```
 
 ## Adding a feature

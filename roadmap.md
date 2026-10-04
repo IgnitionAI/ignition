@@ -16,19 +16,19 @@
 - **Environments**: `@ignitionai/environments` — GridWorld, CartPole, MountainCar
 - **Demos 2D**: GridWorld, CartPole, MountainCar
 - **Demos 3D**: CartPole 3D, Car Circuit (dense progress reward), Drone Navigation (rigid-body physics hero demo)
-- **184+ tests** passing
+- Local suite observed 2026-10-04: **420 tests passed, 3 authenticated HF tests skipped**.
 
 ---
 
 ## Phase 1 — Public Launch Prep ✅
 
-> Everything needed to post "Show HN" without getting roasted. **All done.**
+> Launch foundation is implemented. Current consolidation and remaining acceptance are tracked in GitHub epics #22 and #23.
 
 ### 1.1 Landing page ✅
 - [x] Single-page site under `packages/web` (Next.js 16 + Tailwind 4)
 - [x] Hero: install command + "Train your first agent" messaging
 - [x] 7-line code snippet in Quickstart section
-- [x] 6-demo grid (GridWorld, CartPole, MountainCar, CartPole 3D, Car Circuit, Drone Navigation)
+- [x] Shared eight-demo catalogue: GridWorld, CartPole, MountainCar, CartPole 3D, Circuit Racing, Drone Navigation, Maze and Maze 3D.
 - [x] IgnitionAI brand: flame GIF logo, indigo palette, custom SVG feature diagrams
 - [x] Real package install command (`@ignitionai/core` + `@ignitionai/backend-tfjs` + `@ignitionai/environments`)
 - [x] "Recent updates" section reading CHANGELOG.md at build time
@@ -59,7 +59,7 @@
 - [x] Tag `v0.1.0` on GitHub
 
 ### 1.5 Live demos ✅
-- [x] 6 demos embedded as static routes under `/demos/<slug>/` via prebuild pipeline
+- [x] Eight catalogue demos embedded as static routes under `/demos/<slug>/` via prebuild pipeline. Cage Duel and Target Chasing remain excluded.
 - [x] Each demo has `← IgnitionAI` back link
 - [x] Vite configs accept `DEMO_BASE` env var for per-route asset paths
 - [x] Next.js rewrites resolve `/demos/:slug/` to their `index.html`
@@ -218,3 +218,7 @@ Possible models (ranked by feasibility):
 ---
 
 Built by [@salim4n](https://github.com/salim4n) / [@IgnitionAI](https://github.com/IgnitionAI)
+
+## Current delivery tracking
+
+See epics [#22](https://github.com/IgnitionAI/ignition/issues/22), [#23](https://github.com/IgnitionAI/ignition/issues/23), and [#24](https://github.com/IgnitionAI/ignition/issues/24). These distinguish verified corrections, pending acceptance and future extensions. The `ignitionai` umbrella is local-only; published modular packages are still 0.1.0 and lag current source APIs. For current examples use a source workspace.
