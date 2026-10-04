@@ -120,7 +120,7 @@ These are engineered for virality. "AI learns Flappy Bird in JavaScript" is a tw
 
 > Continuous action spaces for real game AI.
 
-- **SAC / continuous actions**: #33 verified, open PR #40; not integrated here. Point-mass benchmark retained; no claim of SAC vehicle steering.
+- **SAC / continuous actions**: #33 verified, source PR #40; integrated in the consolidation branch with combined local verification. Point-mass benchmark retained; no claim of SAC vehicle steering.
 - [ ] **A2C** — lightweight alternative to PPO
 - [ ] Upgrade Drone Navigation + Car Circuit to continuous steering with SAC — smoother control
 - [ ] Benchmark: DQN vs PPO vs SAC on the same env
@@ -131,7 +131,7 @@ These are engineered for virality. "AI learns Flappy Bird in JavaScript" is a tw
 
 > The next level of RL.
 
-- **Multi-agent API**: #34 verified, open PR #39; not integrated here.
+- **Multi-agent API**: #34 verified, source PR #39; integrated in the consolidation branch with combined local verification.
 - [ ] **Self-play**: agent trains against past versions of itself
 - [ ] Demo: **Pong** — two agents learning to beat each other
 - [ ] Demo: **Sumo** — two agents wrestling in a circle
@@ -144,7 +144,7 @@ These are engineered for virality. "AI learns Flappy Bird in JavaScript" is a tw
 
 - [ ] Upload API: `agent.publish('username/model-name')`
 - [ ] Download API: `IgnitionEnv.loadAgent('username/model-name')`
-- **Checkpoint catalogue**: #35 verified, open PR #42; not integrated here. Five documented SAC checkpoints, compatibility checks and a local laboratory; not a general model leaderboard.
+- **Checkpoint catalogue**: #35 verified, source PR #42; integrated in the consolidation branch with combined local verification. Five documented SAC checkpoints, compatibility checks and a local laboratory; not a general model leaderboard.
 - [ ] Top models: car racing, Snake champion, Flappy master, drone pilot
 - [ ] Leaderboard per environment
 

@@ -348,7 +348,7 @@ Under the hood: `stepIntervalMs` goes down and `stepsPerTick` batches multiple s
 - Complete web build and local smoke checks passed; follow-up acceptance and CI are tracked in [PR #37](https://github.com/IgnitionAI/ignition/pull/37). A local check does not establish deployed behavior.
 - Published modular npm packages are version 0.1.0; current source changes are not a newly published npm release.
 
-SAC, multi-agent and the checkpoint catalogue have independently verified implementations in [PR #40](https://github.com/IgnitionAI/ignition/pull/40), [PR #39](https://github.com/IgnitionAI/ignition/pull/39) and [PR #42](https://github.com/IgnitionAI/ignition/pull/42). These open PRs are not integrated in this checkout. See [roadmap.md](./roadmap.md) for delivery status and later work.
+SAC, multi-agent and the checkpoint catalogue have independently verified implementations in [PR #40](https://github.com/IgnitionAI/ignition/pull/40), [PR #39](https://github.com/IgnitionAI/ignition/pull/39) and [PR #42](https://github.com/IgnitionAI/ignition/pull/42). Their implementations are combined in this consolidation branch. Package tests/builds, complete web build and native gallery/SAC checks pass locally; these source PRs document the independent work. This does not establish a published release. See [roadmap.md](./roadmap.md) for delivery status and later work.
 
 ---
 
