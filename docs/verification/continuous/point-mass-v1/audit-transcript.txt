@@ -1,0 +1,9 @@
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+{"seed":11,"status":"checkpoint and all baseline/trained episodes reproduced"}
+{"seed":29,"status":"checkpoint and all baseline/trained episodes reproduced"}
+{"seed":47,"status":"checkpoint and all baseline/trained episodes reproduced"}
+{"seed":73,"status":"checkpoint and all baseline/trained episodes reproduced"}
+{"seed":101,"status":"checkpoint and all baseline/trained episodes reproduced"}
