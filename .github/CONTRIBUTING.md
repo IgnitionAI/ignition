@@ -42,6 +42,15 @@ pnpm run typecheck
 pnpm exec vitest run packages/backend-tfjs/test
 ```
 
+## Cleaning generated artifacts
+
+Install `trash-cli` so that `trash` and `trash-restore` are available, then run
+`pnpm clean`. This moves package `dist` and `node_modules` directories to Trash;
+the root dependency directory and source files are preserved. Symlink targets
+are refused, and missing `trash` stops the command before any files are moved.
+Use `trash-restore` to choose a directory and restore its original path. Do not
+empty Trash until you have confirmed you no longer need these artifacts.
+
 ## Adding a feature
 
 1. **Open an issue first** for non-trivial changes

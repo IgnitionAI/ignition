@@ -14,7 +14,7 @@
     "r3f:preview": "pnpm --filter @ignitionai/r3f preview",
     "publish-packages": "pnpm build && pnpm -r publish",
     "version-packages": "pnpm -r version",
-    "clean": "pnpm -r exec -- rm -rf dist node_modules",
+    "clean": "node scripts/clean.mjs",
     "lint": "pnpm -r lint",
     "typecheck": "tsc --build"
   },
