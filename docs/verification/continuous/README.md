@@ -36,3 +36,11 @@ Commands: pnpm exec vitest run packages/backend-tfjs/test; pnpm --filter @igniti
 ## Point-mass task and benchmark harness
 
 The shared environment implements the predeclared physical/reward equations, acceleration bounds, 100-tick truncation, |position|>3 termination and last-ten-tick success predicate. Two physical-boundary tests plus the six SAC tests pass; strict TypeScript for task/tests/harness and diff check pass. The benchmark freezes its manifest/source hashes before initialization or evaluation, refuses overwrite, retains all baseline/final-policy episodes and failed seeds, checks identical initial evaluation scenarios and unchanged checkpoints during evaluation. A complete five-seed run is still required; no learning outcome is claimed by the harness alone.
+
+## Browser demo proof
+
+A locally built static demo on port 4191 was exercised in Chromium using the CLI. Actual training reached 657 samples/79 updates before stop; local save, page reload and load preserved counters. Its quick evaluation honestly reported 0/20 successes without changing the checkpoint. The first completed full-budget benchmark checkpoint (seed 11, 20,000 samples/9,751 updates) was verified against its recorded SHA256, wrapped with point-mass-v1 identity and imported through the real file control. It achieved 20/20 on the explicitly labelled seed-211 quick evaluation with unchanged checkpoint and no UI error. An incompatible environment wrapper was rejected without changing counters or losing the existing policy; a subsequent visual inference episode succeeded. Snapshots and JSON read-backs are retained alongside this file; all captured screenshots were displayed and inspected.
+
+The CLI path-based file upload is unsupported in its QuickJS sandbox. Recovery preserved the same page; the verified file payload was delivered as a browser File/DataTransfer to the existing file input change handler. No policy, RNG, model weights or application methods were injected.
+
+Strict TypeScript of app.ts and the esbuild browser bundle pass. Review PASS for the local demo lot. The full five-seed benchmark remains running and unproven; no issue closure or public deployment is claimed by these quick browser checks.

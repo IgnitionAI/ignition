@@ -12,3 +12,16 @@ node .scratch/verify-sac-learning.cjs .scratch/sac-point-mass-v1
 ```
 
 The script refuses to overwrite an existing manifest. It records versions, machine, commit and source hashes before training/evaluation, preserves each seed's final checkpoint and all baseline/trained episodes, and reports failure when the predeclared thresholds are not met. Optimizers and replay are not part of checkpoint resume. The task is a small controlled demonstration, not evidence of SAC performance on arbitrary continuous environments.
+
+## Browser demo
+
+Build the local static demo from the repository root:
+
+```sh
+mkdir -p .scratch/sac-demo
+cp packages/backend-tfjs/examples/continuous/index.html .scratch/sac-demo/index.html
+packages/backend-onnx/node_modules/.bin/esbuild packages/backend-tfjs/examples/continuous/app.ts --bundle --platform=browser --format=esm --alias:@ignitionai/core=./packages/core/src/index.ts --outfile=.scratch/sac-demo/app.js
+python3 -m http.server 4191 --bind 127.0.0.1 --directory .scratch/sac-demo
+```
+
+Open http://127.0.0.1:4191/. Any equivalent static HTTP server may replace Python. Controls exercise actual training, stop, greedy episodes, a clearly labelled 20-episode quick evaluation, local JSON save/load and file import/export. Demo files wrap the snapshot as `{ environment: "point-mass-v1", checkpoint: ... }`; raw benchmark snapshots must be wrapped with that verified environment identity before importing. The quick test is not the 100-episode benchmark. Resume uses fresh optimizers/replay.
