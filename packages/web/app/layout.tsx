@@ -9,6 +9,18 @@ const inter = Inter({
 })
 
 export const metadata = {
+  metadataBase: new URL('https://ignitionai.dev'),
+  openGraph: {
+    type: 'website',
+    siteName: 'IgnitionAI',
+    title: 'IgnitionAI — Train RL agents in your browser',
+    description: 'Train reinforcement learning agents with JavaScript. Deploy via ONNX.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'IgnitionAI — Train RL agents in your browser',
+    description: 'Train reinforcement learning agents with JavaScript. Deploy via ONNX.',
+  },
   title: {
     default: 'IgnitionAI — Train RL agents in your browser',
     template: '%s — IgnitionAI',

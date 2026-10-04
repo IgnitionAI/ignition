@@ -6,12 +6,16 @@ import { cartpoleArticle, readCartpoleArticle } from '@/lib/blog'
 export const metadata = {
   title: cartpoleArticle.title,
   description: cartpoleArticle.description,
+  twitter: {
+    card: 'summary_large_image',
+    title: cartpoleArticle.title,
+    description: cartpoleArticle.description,
+  },
   openGraph: {
     type: 'article',
     title: cartpoleArticle.title,
     description: cartpoleArticle.description,
     publishedTime: cartpoleArticle.date,
-    images: [{ url: cartpoleArticle.image, width: 1920, height: 600 }],
   },
 }
 
