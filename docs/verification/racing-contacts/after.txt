@@ -1,0 +1,21 @@
+
+ RUN  v3.1.1 /srv/dev/projects/ignition
+
+ ✓ packages/demo-car-circuit/test/racing-driving.test.ts (6 tests) 91ms
+ ✓ packages/demo-car-circuit/test/racing-race.test.ts (15 tests) 3755ms
+   ✓ completes three ordered laps on track test=false with a labelled rule-based reference  378ms
+   ✓ completes three ordered laps on track test=true with a labelled rule-based reference  432ms
+   ✓ runs four reference drivers on one common clock to completion  2747ms
+stderr | packages/demo-car-circuit/test/learned-race.test.ts > runs separately loaded learned policies to a result without changing their weights
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/demo-car-circuit/test/learned-race.test.ts (5 tests) 3887ms
+   ✓ runs separately loaded learned policies to a result without changing their weights  3616ms
+
+ Test Files  3 passed (3)
+      Tests  26 passed (26)
+   Start at  20:57:49
+   Duration  5.69s (transform 442ms, setup 0ms, collect 1.58s, tests 7.73s, environment 1ms, prepare 440ms)

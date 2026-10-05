@@ -1,0 +1,36 @@
+{
+  "status": 200,
+  "results": [
+    {
+      "path": "/",
+      "countText": "8 interactive environments showing IgnitionAI in action. Each runs in your browser. Circuit Racing supports keyboard play against learned drivers; the other environments explore reinforcement learning.",
+      "links": [
+        "/demos/car-circuit/",
+        "/demos/maze/",
+        "/demos/cartpole/",
+        "/demos/mountaincar/",
+        "/demos/cartpole-3d/",
+        "/demos/drone-navigation/",
+        "/demos/maze-3d/",
+        "/demos/gridworld/"
+      ],
+      "featured": true
+    },
+    {
+      "path": "/docs/demos",
+      "countText": "8 browser demos share this catalogue with the homepage and static build.",
+      "links": [
+        "/demos/car-circuit/",
+        "/demos/maze/",
+        "/demos/cartpole/",
+        "/demos/mountaincar/",
+        "/demos/cartpole-3d/",
+        "/demos/drone-navigation/",
+        "/demos/maze-3d/",
+        "/demos/gridworld/"
+      ],
+      "excluded": true
+    }
+  ],
+  "errors": []
+}

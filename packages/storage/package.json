@@ -1,18 +1,24 @@
 {
   "name": "@ignitionai/storage",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Model storage providers for IgnitionAI (Hugging Face Hub, S3, GCS, local)",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "!dist/tests/**",
+    "!dist/**/*.test.js",
+    "!dist/**/*.test.d.ts",
+    "dist/cjs/package.json",
+    "LICENSE"
   ],
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "node ../../scripts/build-package.mjs",
     "test": "vitest run"
   },
   "dependencies": {
@@ -25,5 +31,19 @@
   "devDependencies": {
     "@tensorflow/tfjs": "^4.22.0",
     "vitest": "^3.1.1"
+  },
+  "type": "module",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
   }
 }

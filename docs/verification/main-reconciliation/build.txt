@@ -1,0 +1,623 @@
+Scope: 17 of 18 workspace projects
+packages/core build$ node ../../scripts/build-package.mjs
+packages/storage build$ node ../../scripts/build-package.mjs
+packages/web prebuild$ node scripts/build-checkpoint-gallery.mjs && node scripts/build-demos.mjs
+packages/web prebuild:   ../../.scratch/models-lab-stage-Znhuc7/app.js  2.2mb ⚠️
+packages/web prebuild: ⚡ Done in 602ms
+packages/web prebuild: Verified 5 report-backed checkpoints; built point-mass lab.
+packages/web prebuild: [build-demos] script started
+packages/web prebuild: [build-demos] repoRoot: /srv/dev/projects/ignition
+packages/web prebuild: [build-demos] webPublicDemos: /srv/dev/projects/ignition/packages/web/public/demos
+packages/web prebuild: [build-demos] cwd: /srv/dev/projects/ignition/packages/web
+packages/web prebuild: === Building library packages (topo order) ===
+packages/web prebuild: $ pnpm --filter @ignitionai/core --filter @ignitionai/backend-tfjs --filter @ignitionai/backend-onnx --filter @ignitionai/storage --filter @ignitionai/environments build
+packages/web prebuild: Scope: 5 of 18 workspace projects
+packages/web prebuild: packages/core build$ node ../../scripts/build-package.mjs
+packages/web prebuild: packages/storage build$ node ../../scripts/build-package.mjs
+packages/core build: Done
+packages/storage build: Done
+packages/web prebuild: packages/core build: Done
+packages/web prebuild: packages/storage build: Done
+packages/web prebuild: packages/backend-tfjs build$ node ../../scripts/build-package.mjs
+packages/web prebuild: packages/environments build$ node ../../scripts/build-package.mjs
+packages/web prebuild: packages/environments build: Done
+packages/web prebuild: packages/backend-tfjs build: Done
+packages/web prebuild: packages/backend-onnx build$ node ../../scripts/build-package.mjs
+packages/web prebuild: packages/backend-onnx build: Done
+packages/web prebuild: === Building car-circuit (base=/demos/car-circuit/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-car-circuit" build
+packages/web prebuild: > demo-car-circuit@0.0.0 build /srv/dev/projects/ignition/packages/demo-car-circuit
+packages/web prebuild: > vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1909 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.48 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-BPou0r8C.css                      10.18 kB │ gzip:   2.61 kB
+packages/web prebuild: ../dist/assets/RaceGarage-A6kt8wiD.js                   6.81 kB │ gzip:   3.03 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/TrainingPanel-wuwiGhW8.js              320.28 kB │ gzip:  63.37 kB
+packages/web prebuild: ../dist/assets/index-4L6kS5vJ.js                    1,118.97 kB │ gzip: 314.07 kB
+packages/web prebuild: ../dist/assets/training-B01xT-nS.js                 1,629.48 kB │ gzip: 257.69 kB
+packages/web prebuild: ✓ built in 17.91s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /srv/dev/projects/ignition/packages/demo-car-circuit/dist → /srv/dev/projects/ignition/.scratch/demos-stage-HCafsn/car-circuit
+packages/web prebuild: === Building maze (base=/demos/maze/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-maze" build
+packages/web prebuild: > demo-maze@0.0.0 build /srv/dev/projects/ignition/packages/demo-maze
+packages/web prebuild: > vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 2519 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.50 kB │ gzip:     0.33 kB
+packages/web prebuild: ../dist/assets/index-BE9D5215.css                       0.10 kB │ gzip:     0.11 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:     6.19 kB
+packages/web prebuild: ../dist/assets/index-C-WkV8sL.js                    5,599.90 kB │ gzip: 1,527.36 kB
+packages/web prebuild: ✓ built in 22.40s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /srv/dev/projects/ignition/packages/demo-maze/dist → /srv/dev/projects/ignition/.scratch/demos-stage-HCafsn/maze
+packages/web prebuild: === Building cartpole (base=/demos/cartpole/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-cartpole" build
+packages/web prebuild: > demo-cartpole@0.0.0 build /srv/dev/projects/ignition/packages/demo-cartpole
+packages/web prebuild: > tsc -b && vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1949 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.51 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-BS6megIv.js                    2,539.05 kB │ gzip: 485.83 kB
+packages/web prebuild: ✓ built in 15.72s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /srv/dev/projects/ignition/packages/demo-cartpole/dist → /srv/dev/projects/ignition/.scratch/demos-stage-HCafsn/cartpole
+packages/web prebuild: === Building mountaincar (base=/demos/mountaincar/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-mountaincar" build
+packages/web prebuild: > demo-mountaincar@0.0.0 build /srv/dev/projects/ignition/packages/demo-mountaincar
+packages/web prebuild: > tsc -b && vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1949 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.48 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-6EeHmYQr.js                    2,538.74 kB │ gzip: 485.58 kB
+packages/web prebuild: ✓ built in 13.85s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /srv/dev/projects/ignition/packages/demo-mountaincar/dist → /srv/dev/projects/ignition/.scratch/demos-stage-HCafsn/mountaincar
+packages/web prebuild: === Building cartpole-3d (base=/demos/cartpole-3d/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-cartpole-3d" build
+packages/web prebuild: > demo-cartpole-3d@0.0.0 build /srv/dev/projects/ignition/packages/demo-cartpole-3d
+packages/web prebuild: > vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 2522 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.48 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-bOspBYTK.css                       0.19 kB │ gzip:   0.17 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-Dlap7dFs.js                    3,454.06 kB │ gzip: 735.19 kB
+packages/web prebuild: ✓ built in 19.94s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /srv/dev/projects/ignition/packages/demo-cartpole-3d/dist → /srv/dev/projects/ignition/.scratch/demos-stage-HCafsn/cartpole-3d
+packages/web prebuild: === Building drone-navigation (base=/demos/drone-navigation/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-drone-navigation" build
+packages/web prebuild: > demo-drone-navigation@0.0.0 build /srv/dev/projects/ignition/packages/demo-drone-navigation
+packages/web prebuild: > vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1896 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.43 kB │ gzip:   0.30 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-BeF1R43L.js                    3,050.75 kB │ gzip: 625.50 kB
+packages/web prebuild: ✓ built in 16.94s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /srv/dev/projects/ignition/packages/demo-drone-navigation/dist → /srv/dev/projects/ignition/.scratch/demos-stage-HCafsn/drone-navigation
+packages/web prebuild: === Building maze-3d (base=/demos/maze-3d/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-maze-3d" build
+packages/web prebuild: > demo-maze-3d@0.0.0 build /srv/dev/projects/ignition/packages/demo-maze-3d
+packages/web prebuild: > tsc -b && vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1897 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.53 kB │ gzip:   0.35 kB
+packages/web prebuild: ../dist/assets/index-dgmPRjlv.css                      11.15 kB │ gzip:   3.10 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-cumoOYGS.js                    3,006.96 kB │ gzip: 608.51 kB
+packages/web prebuild: ✓ built in 19.53s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /srv/dev/projects/ignition/packages/demo-maze-3d/dist → /srv/dev/projects/ignition/.scratch/demos-stage-HCafsn/maze-3d
+packages/web prebuild: === Building gridworld (base=/demos/gridworld/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-gridworld" build
+packages/web prebuild: > demo-gridworld@0.0.0 build /srv/dev/projects/ignition/packages/demo-gridworld
+packages/web prebuild: > tsc -b && vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1949 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.51 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-CXXDzAFT.css                       0.19 kB │ gzip:   0.16 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-B08424oo.js                    2,539.40 kB │ gzip: 485.77 kB
+packages/web prebuild: ✓ built in 17.50s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /srv/dev/projects/ignition/packages/demo-gridworld/dist → /srv/dev/projects/ignition/.scratch/demos-stage-HCafsn/gridworld
+packages/web prebuild: ✓ All demos built and copied to packages/web/public/demos/
+packages/web prebuild: [build-demos] final listing: [
+packages/web prebuild:   'car-circuit',
+packages/web prebuild:   'cartpole',
+packages/web prebuild:   'cartpole-3d',
+packages/web prebuild:   'drone-navigation',
+packages/web prebuild:   'gridworld',
+packages/web prebuild:   'manifest.json',
+packages/web prebuild:   'maze',
+packages/web prebuild:   'maze-3d',
+packages/web prebuild:   'mountaincar'
+packages/web prebuild: ]
+packages/web prebuild: Done
+packages/web build$ next build
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build:    ▲ Next.js 16.0.10 (Turbopack)
+packages/web build:    - Experiments (use with caution):
+packages/web build:      · optimizePackageImports
+packages/web build:    Creating an optimized production build ...
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build:  ✓ Compiled successfully in 43s
+packages/web build:    Running TypeScript ...
+packages/web build:    Collecting page data using 7 workers ...
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build:    Generating static pages using 7 workers (0/113) ...
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build:    Generating static pages using 7 workers (28/113)
+packages/web build:    Generating static pages using 7 workers (56/113)
+packages/web build:    Generating static pages using 7 workers (84/113)
+packages/web build:  ✓ Generating static pages using 7 workers (113/113) in 5.8s
+packages/web build:    Finalizing page optimization ...
+packages/web build: Route (app)
+packages/web build: ┌ ○ /
+packages/web build: ├ ○ /_not-found
+packages/web build: ├ ƒ /api/hello
+packages/web build: ├ ○ /blog
+packages/web build: ├ ● /blog/[slug]
+packages/web build: │ ├ /blog/mountaincar-prendre-elan
+packages/web build: │ ├ /blog/gridworld-valeurs-actions
+packages/web build: │ ├ /blog/cartpole-3d-observations
+packages/web build: │ └ [+4 more paths]
+packages/web build: ├ ○ /blog/premier-agent-cartpole
+packages/web build: ├ ○ /blog/premier-agent-cartpole/opengraph-image-1eyg24
+packages/web build: ├ ○ /changelog
+packages/web build: ├ ● /docs/[[...mdxPath]]
+packages/web build: │ ├ /docs/algorithms/dqn
+packages/web build: │ ├ /docs/algorithms
+packages/web build: │ ├ /docs/algorithms/ppo
+packages/web build: │ └ [+92 more paths]
+packages/web build: ├ ○ /icon.svg
+packages/web build: ├ ○ /models
+packages/web build: └ ○ /opengraph-image
+packages/web build: ○  (Static)   prerendered as static content
+packages/web build: ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+packages/web build: ƒ  (Dynamic)  server-rendered on demand
+packages/web build: Done
+packages/backend-tfjs build$ node ../../scripts/build-package.mjs
+packages/environments build$ node ../../scripts/build-package.mjs
+packages/environments build: Done
+packages/backend-tfjs build: Done
+packages/backend-onnx build$ node ../../scripts/build-package.mjs
+packages/demo-cage-duel build$ vite build
+packages/demo-car-circuit build$ vite build
+packages/demo-cartpole-3d build$ vite build
+packages/demo-cage-duel build: vite v6.3.3 building for production...
+packages/demo-car-circuit build: vite v6.3.3 building for production...
+packages/demo-cage-duel build: transforming...
+packages/demo-cartpole-3d build: vite v6.3.3 building for production...
+packages/demo-car-circuit build: transforming...
+packages/demo-cartpole-3d build: transforming...
+packages/demo-cage-duel build: ✓ 38 modules transformed.
+packages/demo-cage-duel build: rendering chunks...
+packages/demo-cage-duel build: computing gzip size...
+packages/demo-cage-duel build: dist/index.html                            0.58 kB │ gzip:   0.35 kB
+packages/demo-cage-duel build: dist/atelier.html                          1.62 kB │ gzip:   0.92 kB
+packages/demo-cage-duel build: dist/credits.html                          1.68 kB │ gzip:   1.03 kB
+packages/demo-cage-duel build: dist/animations.html                       2.81 kB │ gzip:   1.40 kB
+packages/demo-cage-duel build: dist/combat.html                           3.36 kB │ gzip:   1.55 kB
+packages/demo-cage-duel build: dist/assets/atelier-D1Aa6XMF.css           1.35 kB │ gzip:   0.70 kB
+packages/demo-cage-duel build: dist/assets/combat-DAyH7BV7.css            3.29 kB │ gzip:   1.30 kB
+packages/demo-cage-duel build: dist/assets/animations-DtB_DIh8.css        3.55 kB │ gzip:   1.43 kB
+packages/demo-cage-duel build: dist/assets/main-BHNtUQVg.css              7.75 kB │ gzip:   2.83 kB
+packages/demo-cage-duel build: dist/assets/atelier-BwJrIMXW.js            3.55 kB │ gzip:   1.76 kB
+packages/demo-cage-duel build: dist/assets/animations-DktM8ok5.js         6.40 kB │ gzip:   3.03 kB
+packages/demo-cage-duel build: dist/assets/OrbitControls-CWNZohEv.js     13.43 kB │ gzip:   3.85 kB
+packages/demo-cage-duel build: dist/assets/mixamo-catalog-DQ0SwWLv.js    13.51 kB │ gzip:   3.33 kB
+packages/demo-cage-duel build: dist/assets/combat-CsgzIcfg.js            24.13 kB │ gzip:   9.47 kB
+packages/demo-cage-duel build: dist/assets/main-BXSA60G4.js              94.07 kB │ gzip:  26.78 kB
+packages/demo-cage-duel build: dist/assets/RoomEnvironment-DnBG-FH6.js  577.58 kB │ gzip: 148.25 kB
+packages/demo-cage-duel build: ✓ built in 4.30s
+packages/demo-cage-duel build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-cage-duel build: - Using dynamic import() to code-split the application
+packages/demo-cage-duel build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-cage-duel build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-cartpole-3d build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cartpole-3d build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cage-duel build: Done
+packages/demo-drone-navigation build$ vite build
+packages/demo-drone-navigation build: vite v6.3.3 building for production...
+packages/demo-drone-navigation build: transforming...
+packages/demo-drone-navigation build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-drone-navigation build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/backend-onnx build: Done
+packages/demo-gridworld build$ tsc -b && vite build
+packages/demo-gridworld build: vite v6.3.3 building for production...
+packages/demo-gridworld build: transforming...
+packages/demo-car-circuit build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-car-circuit build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-gridworld build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-gridworld build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ✓ 1909 modules transformed.
+packages/demo-car-circuit build: rendering chunks...
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: computing gzip size...
+packages/demo-car-circuit build: ../dist/index.html                                      0.44 kB │ gzip:   0.32 kB
+packages/demo-car-circuit build: ../dist/assets/index-BPou0r8C.css                      10.18 kB │ gzip:   2.61 kB
+packages/demo-car-circuit build: ../dist/assets/RaceGarage-DPkQPYsG.js                   6.79 kB │ gzip:   3.02 kB
+packages/demo-car-circuit build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-car-circuit build: ../dist/assets/TrainingPanel-Dh-BL7hG.js              320.26 kB │ gzip:  63.36 kB
+packages/demo-car-circuit build: ../dist/assets/index-Be31X-9K.js                    1,118.94 kB │ gzip: 314.05 kB
+packages/demo-car-circuit build: ../dist/assets/training-DrgPbIqt.js                 1,629.48 kB │ gzip: 257.69 kB
+packages/demo-car-circuit build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-car-circuit build: - Using dynamic import() to code-split the application
+packages/demo-car-circuit build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-car-circuit build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-car-circuit build: ✓ built in 35.00s
+packages/demo-car-circuit build: Done
+packages/demo-maze build$ vite build
+packages/demo-drone-navigation build: ✓ 1896 modules transformed.
+packages/demo-maze build: vite v6.3.3 building for production...
+packages/demo-maze build: transforming...
+packages/demo-cartpole-3d build: ✓ 2522 modules transformed.
+packages/demo-drone-navigation build: rendering chunks...
+packages/demo-cartpole-3d build: rendering chunks...
+packages/demo-drone-navigation build: computing gzip size...
+packages/demo-drone-navigation build: ../dist/index.html                                      0.41 kB │ gzip:   0.29 kB
+packages/demo-drone-navigation build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-drone-navigation build: ../dist/assets/index-BUeiZC7y.js                    3,050.73 kB │ gzip: 625.48 kB
+packages/demo-drone-navigation build: ✓ built in 35.06s
+packages/demo-drone-navigation build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-drone-navigation build: - Using dynamic import() to code-split the application
+packages/demo-drone-navigation build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-drone-navigation build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-drone-navigation build: Done
+packages/demo-maze-3d build$ tsc -b && vite build
+packages/demo-maze build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-maze build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cartpole-3d build: computing gzip size...
+packages/demo-cartpole-3d build: ../dist/index.html                                      0.44 kB │ gzip:   0.32 kB
+packages/demo-cartpole-3d build: ../dist/assets/index-bOspBYTK.css                       0.19 kB │ gzip:   0.17 kB
+packages/demo-cartpole-3d build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-cartpole-3d build: ../dist/assets/index-DjjHd3qY.js                    3,454.04 kB │ gzip: 735.17 kB
+packages/demo-cartpole-3d build: ✓ built in 41.97s
+packages/demo-cartpole-3d build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-cartpole-3d build: - Using dynamic import() to code-split the application
+packages/demo-cartpole-3d build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-cartpole-3d build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-cartpole-3d build: Done
+packages/demo-mountaincar build$ tsc -b && vite build
+packages/demo-gridworld build: ✓ 1949 modules transformed.
+packages/demo-gridworld build: rendering chunks...
+packages/demo-gridworld build: computing gzip size...
+packages/demo-gridworld build: ../dist/index.html                                      0.48 kB │ gzip:   0.32 kB
+packages/demo-gridworld build: ../dist/assets/index-CXXDzAFT.css                       0.19 kB │ gzip:   0.16 kB
+packages/demo-gridworld build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-gridworld build: ../dist/assets/index--7bgtrA5.js                    2,539.38 kB │ gzip: 485.76 kB
+packages/demo-gridworld build: ✓ built in 29.82s
+packages/demo-gridworld build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-gridworld build: - Using dynamic import() to code-split the application
+packages/demo-gridworld build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-gridworld build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-gridworld build: Done
+packages/demo-target-chasing build$ tsc -b && vite build
+packages/demo-mountaincar build: vite v6.3.3 building for production...
+packages/demo-mountaincar build: transforming...
+packages/demo-maze-3d build: vite v6.3.3 building for production...
+packages/demo-maze-3d build: transforming...
+packages/demo-mountaincar build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-mountaincar build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-maze-3d build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-maze-3d build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-target-chasing build: vite v6.3.3 building for production...
+packages/demo-target-chasing build: (!) outDir /srv/dev/projects/ignition/packages/demo-target-chasing/dist is not inside project root and will not be emptied.
+packages/demo-target-chasing build: Use --emptyOutDir to override.
+packages/demo-target-chasing build: transforming...
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ✓ 1949 modules transformed.
+packages/demo-mountaincar build: rendering chunks...
+packages/demo-mountaincar build: computing gzip size...
+packages/demo-mountaincar build: ../dist/index.html                                      0.45 kB │ gzip:   0.32 kB
+packages/demo-mountaincar build: ../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+packages/demo-mountaincar build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-mountaincar build: ../dist/assets/index-Wtgp6R0K.js                    2,538.72 kB │ gzip: 485.57 kB
+packages/demo-mountaincar build: ✓ built in 21.98s
+packages/demo-mountaincar build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-mountaincar build: - Using dynamic import() to code-split the application
+packages/demo-mountaincar build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-mountaincar build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-mountaincar build: Done
+packages/demo-maze build: ✓ 2519 modules transformed.
+packages/demo-maze build: rendering chunks...
+packages/demo-maze-3d build: ✓ 1897 modules transformed.
+packages/demo-maze-3d build: rendering chunks...
+packages/demo-maze build: computing gzip size...
+packages/demo-maze build: ../dist/index.html                                      0.48 kB │ gzip:     0.32 kB
+packages/demo-maze build: ../dist/assets/index-BE9D5215.css                       0.10 kB │ gzip:     0.11 kB
+packages/demo-maze build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:     6.19 kB
+packages/demo-maze build: ../dist/assets/index-B_pN1PLv.js                    5,599.88 kB │ gzip: 1,527.35 kB
+packages/demo-maze build: ✓ built in 39.59s
+packages/demo-maze build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-maze build: - Using dynamic import() to code-split the application
+packages/demo-maze build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-maze build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-maze build: Done
+packages/demo-maze-3d build: computing gzip size...
+packages/demo-maze-3d build: ../dist/index.html                                      0.50 kB │ gzip:   0.34 kB
+packages/demo-maze-3d build: ../dist/assets/index-dgmPRjlv.css                      11.15 kB │ gzip:   3.10 kB
+packages/demo-maze-3d build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-maze-3d build: ../dist/assets/index-9W0a9Bo2.js                    3,006.94 kB │ gzip: 608.49 kB
+packages/demo-maze-3d build: ✓ built in 27.74s
+packages/demo-maze-3d build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-maze-3d build: - Using dynamic import() to code-split the application
+packages/demo-maze-3d build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-maze-3d build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-maze-3d build: Done
+packages/demo-target-chasing build: ✓ 2428 modules transformed.
+packages/demo-target-chasing build: rendering chunks...
+packages/demo-target-chasing build: computing gzip size...
+packages/demo-target-chasing build: ../dist/index.html                                      0.53 kB │ gzip:     0.36 kB
+packages/demo-target-chasing build: ../dist/assets/index-B5DZHykP.css                       7.32 kB │ gzip:     1.61 kB
+packages/demo-target-chasing build: ../dist/assets/FileBlob-7MRLQ6TG-DixbCowo.js            0.22 kB │ gzip:     0.14 kB
+packages/demo-target-chasing build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:     6.19 kB
+packages/demo-target-chasing build: ../dist/assets/index-C9FG5-NS.js                    5,624.41 kB │ gzip: 1,545.24 kB
+packages/demo-target-chasing build: ✓ built in 27.63s
+packages/demo-target-chasing build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-target-chasing build: - Using dynamic import() to code-split the application
+packages/demo-target-chasing build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-target-chasing build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-target-chasing build: Done
+packages/demo-cartpole build$ tsc -b && vite build
+packages/ignitionai build$ tsc
+packages/ignitionai build: Done
+packages/demo-cartpole build: vite v6.3.3 building for production...
+packages/demo-cartpole build: transforming...
+packages/demo-cartpole build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cartpole build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/srv/dev/projects/ignition/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ✓ 1949 modules transformed.
+packages/demo-cartpole build: rendering chunks...
+packages/demo-cartpole build: computing gzip size...
+packages/demo-cartpole build: ../dist/index.html                                      0.48 kB │ gzip:   0.32 kB
+packages/demo-cartpole build: ../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+packages/demo-cartpole build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-cartpole build: ../dist/assets/index-TbOGYKpw.js                    2,539.03 kB │ gzip: 485.82 kB
+packages/demo-cartpole build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-cartpole build: - Using dynamic import() to code-split the application
+packages/demo-cartpole build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-cartpole build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-cartpole build: ✓ built in 13.69s
+packages/demo-cartpole build: Done

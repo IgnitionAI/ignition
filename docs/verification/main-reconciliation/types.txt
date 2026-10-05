@@ -1,0 +1,3 @@
+
+> ignition-monorepo@ typecheck /srv/dev/projects/ignition
+> tsc --build

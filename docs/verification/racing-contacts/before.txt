@@ -1,0 +1,49 @@
+
+ RUN  v3.1.1 /srv/dev/projects/ignition
+
+stderr | packages/demo-car-circuit/test/learned-race.test.ts > resolves vehicle contact in a learned race with human=false without changing policy weights
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ❯ packages/demo-car-circuit/test/learned-race.test.ts (5 tests | 2 failed | 3 skipped) 284ms
+   ↓ runs separately loaded learned policies to a result without changing their weights
+   ↓ rejects a missing or incompatible opponent instead of substituting reference rules
+   ↓ applies human commands on the same clock while the saved opponent uses its own policy
+   × resolves vehicle contact in a learned race with human=false without changing policy weights 213ms
+     → expected 0 to be greater than 1
+   × resolves vehicle contact in a learned race with human=true without changing policy weights 70ms
+     → expected 0.00230555555555547 to be greater than 1
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/demo-car-circuit/test/learned-race.test.ts > resolves vehicle contact in a learned race with human=false without changing policy weights
+AssertionError: expected 0 to be greater than 1
+ ❯ packages/demo-car-circuit/test/learned-race.test.ts:82:24
+     80|     session.step(4);
+     81|     const separation = Math.hypot(first.world.car.x - second.world.car…
+     82|     expect(separation).toBeGreaterThan(1);
+       |                        ^
+     83|     expect(first.collisions).toBeGreaterThan(0);
+     84|     expect(second.collisions).toBeGreaterThan(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  packages/demo-car-circuit/test/learned-race.test.ts > resolves vehicle contact in a learned race with human=true without changing policy weights
+AssertionError: expected 0.00230555555555547 to be greater than 1
+ ❯ packages/demo-car-circuit/test/learned-race.test.ts:82:24
+     80|     session.step(4);
+     81|     const separation = Math.hypot(first.world.car.x - second.world.car…
+     82|     expect(separation).toBeGreaterThan(1);
+       |                        ^
+     83|     expect(first.collisions).toBeGreaterThan(0);
+     84|     expect(second.collisions).toBeGreaterThan(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 skipped (5)
+   Start at  20:56:18
+   Duration  1.64s (transform 283ms, setup 0ms, collect 739ms, tests 284ms, environment 0ms, prepare 161ms)

@@ -1,4 +1,4 @@
-import type { TFBackend } from './utils/backend-selector';
+import type { TFBackend } from './utils/backend-selector.js';
 import type { ModelStorageProvider } from '@ignitionai/storage';
 
 // Re-export core types for convenience

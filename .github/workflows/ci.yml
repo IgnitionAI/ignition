@@ -26,8 +26,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Lint source
+        run: pnpm run lint
+
       - name: Build all packages
         run: pnpm -r run build
+
+      - name: Typecheck workspace
+        run: pnpm run typecheck
 
       - name: Run all tests
         run: pnpm exec vitest run

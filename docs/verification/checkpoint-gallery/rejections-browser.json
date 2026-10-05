@@ -1,0 +1,34 @@
+[
+  {
+    "fixture": "issue35-incompatible-catalog.json",
+    "status": "Checkpoint refusé.",
+    "error": "Error: Incompatible checkpoint contract",
+    "metrics": "{\n  \"samples\": 0,\n  \"updates\": 0,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "childError": "Error: Incompatible checkpoint contract",
+    "requestedResources": [
+      "http://127.0.0.1:3107/models/lab/app.js"
+    ]
+  },
+  {
+    "fixture": "issue35-native-incompatible-catalog.json",
+    "status": "Checkpoint refusé.",
+    "error": "Error: Dimensions ou bornes incompatibles",
+    "metrics": "{\n  \"samples\": 0,\n  \"updates\": 0,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "childError": "Error: Dimensions ou bornes incompatibles",
+    "requestedResources": [
+      "http://127.0.0.1:3107/models/lab/app.js",
+      "http://127.0.0.1:3107/models/checkpoints/rejected-native-dimensions.json"
+    ]
+  },
+  {
+    "fixture": "issue35-missing-hf-catalog.json",
+    "status": "Checkpoint refusé.",
+    "error": "Error: Checkpoint unavailable: HTTP 401",
+    "metrics": "{\n  \"samples\": 0,\n  \"updates\": 0,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "childError": "Error: Checkpoint unavailable: HTTP 401",
+    "requestedResources": [
+      "http://127.0.0.1:3107/models/lab/app.js",
+      "https://huggingface.co/IgnitionAI/ignition-gallery-missing-verification/resolve/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/missing.json"
+    ]
+  }
+]

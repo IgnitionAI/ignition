@@ -11,9 +11,8 @@ description: The training loop, the TrainingEnv interface, and auto-configuratio
 
 ## Install
 
-```bash
-npm install @ignitionai/core
-```
+Use the [source-checkout setup](/docs/quickstart). The API inventory below
+reflects the current source, rather than the older npm 0.1.0 declarations.
 
 You almost never install `core` alone — you typically install it together with a backend like `@ignitionai/backend-tfjs`. But the types and the `TrainingEnv` interface come from here, so it's still the first package to understand.
 
@@ -26,7 +25,7 @@ You almost never install `core` alone — you typically install it together with
 | `InferenceEnv` | type | Same idea, for inference-only deployment. |
 | `AgentInterface` | type | Contract every agent (DQN, PPO, Q-Table, OnnxAgent, …) must satisfy. |
 | `AgentFactory` | type | A function `(config) => AgentInterface`. Backends register one per algorithm. |
-| `AlgorithmType` | type | String literal union: `'dqn' | 'ppo' | 'qtable'`. |
+| `AlgorithmType` | type | String literal union: `'dqn' | 'double-dqn' | 'ppo' | 'qtable'`. |
 | `CheckpointableAgent` | type | Extension of `AgentInterface` for agents that can save/load weights. |
 | `Experience` | type | One transition tuple `(state, action, reward, nextState, terminated, truncated)`. |
 | `StepResult` | type | Return type of one env step. |

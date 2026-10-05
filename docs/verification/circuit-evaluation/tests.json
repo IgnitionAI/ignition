@@ -1,0 +1,92 @@
+{
+  "sourceCommit": "229eb2654b92f6c8a381cdfb5a73832c2d973c56",
+  "passed": 17,
+  "failed": 0,
+  "cases": [
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv implements TrainingEnv: has actions, observe, step, reward, done, reset",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv actions has 3 options",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv observe returns 5 normalized values",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv step changes car position",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv step(0) turns left, step(2) turns right",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv reward is positive when on track",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv done returns false initially",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv done returns true after max steps",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv reset puts car back on track",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "CircuitEnv car going off track triggers done",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "records a time limit separately from failure and preserves its transition count on reset",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/circuit-env.test.ts",
+      "name": "returns to the configured starting position and direction",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/evaluation.test.ts",
+      "name": "evaluates a fixed policy reproducibly without training or recording experience",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/evaluation.test.ts",
+      "name": "declares different training and held-out circuits before evaluation",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/evaluation.test.ts",
+      "name": "reports complete laps and simulated lap times for a lane-following reference controller",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/evaluation.test.ts",
+      "name": "rejects invalid policy actions instead of silently treating them as straight",
+      "status": "passed"
+    },
+    {
+      "file": "demo-car-circuit/test/evaluation.test.ts",
+      "name": "yields to browser tasks while evaluating without changing the report",
+      "status": "passed"
+    }
+  ]
+}

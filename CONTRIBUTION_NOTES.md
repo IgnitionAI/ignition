@@ -1,5 +1,7 @@
 # Contribution Notes: IgnitionAI Enhancements (April 2025)
 
+> Historical experiment notes. Paths, examples and completion claims below describe April 2025 and are not current setup instructions. Use [README.md](README.md), [roadmap.md](roadmap.md) and [the demo catalogue](packages/web/data/demos.json) for the present repository. Target Chasing remains excluded from public builds.
+
 This document details the enhancements and modifications made to the IgnitionAI project, specifically focusing on the `r3f/target-chasing` demo application. The goal was to generalize the project, add visualization capabilities, implement a user-friendly configuration interface, and provide a foundation for a visual network designer, all while keeping long-term contribution in mind.
 
 ## 1. Project Setup & Analysis

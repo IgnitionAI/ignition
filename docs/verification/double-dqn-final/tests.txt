@@ -1,0 +1,45 @@
+
+ RUN  v3.1.1 /srv/dev/projects/ignition
+
+stderr | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=false
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=false
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=true
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/double-dqn.test.ts (2 tests) 148ms
+stderr | packages/backend-tfjs/test/dqn-export.test.ts > exports the current public DQN model with its trained predictions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/dqn-export.test.ts > exports the current public DQN model with its trained predictions
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stderr | packages/backend-tfjs/test/double-dqn-api.test.ts > trains and restores serialized Double DQN for greedy inference through IgnitionEnv
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/backend-tfjs/test/dqn-export.test.ts (1 test) 142ms
+stdout | packages/backend-tfjs/test/double-dqn-api.test.ts > trains and restores serialized Double DQN for greedy inference through IgnitionEnv
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/double-dqn-api.test.ts (1 test) 241ms
+
+ Test Files  3 passed (3)
+      Tests  4 passed (4)
+   Start at  22:13:02
+   Duration  2.15s (transform 684ms, setup 0ms, collect 2.61s, tests 531ms, environment 1ms, prepare 588ms)

@@ -7,7 +7,7 @@ import {
 } from '@huggingface/hub';
 import * as tf from '@tensorflow/tfjs-node';
 
-// import { loadModelFromHub } from './loadModel';
+// import { loadModelFromHub } from './loadModel.js';
 
 // Classe File polyfill pour Node.js
 /**

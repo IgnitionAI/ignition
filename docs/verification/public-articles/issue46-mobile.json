@@ -1,0 +1,98 @@
+[
+  {
+    "environment": "mountaincar",
+    "url": "https://ignitionai.dev/blog/mountaincar-prendre-elan",
+    "status": 200,
+    "heading": "MountainCar : apprendre à prendre de l’élan",
+    "overflow": false,
+    "width": 390,
+    "articleWidth": 390,
+    "headingWidth": 358,
+    "bodyLength": 4895,
+    "screenshot": null
+  },
+  {
+    "environment": "gridworld",
+    "url": "https://ignitionai.dev/blog/gridworld-valeurs-actions",
+    "status": 200,
+    "heading": "GridWorld : rendre les décisions d’un agent lisibles",
+    "overflow": false,
+    "width": 390,
+    "articleWidth": 390,
+    "headingWidth": 358,
+    "bodyLength": 5642,
+    "screenshot": "/home/dev/.dev-browser/tmp/issue46-gridworld-mobile.png"
+  },
+  {
+    "environment": "cartpole-3d",
+    "url": "https://ignitionai.dev/blog/cartpole-3d-observations",
+    "status": 200,
+    "heading": "CartPole 3D : une scène visible, quatre observations",
+    "overflow": false,
+    "width": 390,
+    "articleWidth": 390,
+    "headingWidth": 358,
+    "bodyLength": 4933,
+    "screenshot": null
+  },
+  {
+    "environment": "drone-navigation",
+    "url": "https://ignitionai.dev/blog/drone-navigation-controle",
+    "status": 200,
+    "heading": "Drone Navigation : relier moteurs, mouvement et récompense",
+    "overflow": false,
+    "width": 390,
+    "articleWidth": 390,
+    "headingWidth": 358,
+    "bodyLength": 5087,
+    "screenshot": null
+  },
+  {
+    "environment": "maze",
+    "url": "https://ignitionai.dev/blog/maze-capteurs-recompenses",
+    "status": 200,
+    "heading": "Maze : guider un agent avec des capteurs et des récompenses",
+    "overflow": false,
+    "width": 390,
+    "articleWidth": 390,
+    "headingWidth": 358,
+    "bodyLength": 4953,
+    "screenshot": null
+  },
+  {
+    "environment": "maze-3d",
+    "url": "https://ignitionai.dev/blog/maze-3d-cles-portes",
+    "status": 200,
+    "heading": "Maze 3D : une clé change la valeur du chemin",
+    "overflow": false,
+    "width": 390,
+    "articleWidth": 390,
+    "headingWidth": 358,
+    "bodyLength": 5152,
+    "screenshot": null
+  },
+  {
+    "environment": "car-circuit",
+    "url": "https://ignitionai.dev/blog/circuit-racing-pilotes",
+    "status": 200,
+    "heading": "Circuit Racing : entraîner un pilote, puis mesurer sa course",
+    "overflow": false,
+    "width": 390,
+    "articleWidth": 390,
+    "headingWidth": 358,
+    "bodyLength": 5034,
+    "screenshot": null
+  },
+  {
+    "environment": "cartpole",
+    "url": "https://ignitionai.dev/blog/premier-agent-cartpole",
+    "status": 200,
+    "heading": "Entraîner son premier agent avec Ignition sur CartPole",
+    "overflow": false,
+    "width": 390,
+    "articleWidth": 390,
+    "headingWidth": 358,
+    "bodyLength": 7752,
+    "screenshot": "/home/dev/.dev-browser/tmp/issue46-cartpole-mobile.png"
+  }
+]

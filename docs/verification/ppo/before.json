@@ -1,0 +1,48 @@
+{
+  "protocol": {
+    "id": "ppo-public-reward-v1",
+    "seeds": [
+      11,
+      29,
+      47
+    ],
+    "trainingTransitions": 512,
+    "evaluationActions": 200,
+    "rewardedActionThreshold": 0.8,
+    "environment": "one observation, two actions; action 1 rewards +1, action 0 rewards -1; every step terminates",
+    "config": {
+      "hiddenLayers": [
+        8
+      ],
+      "lr": 0.01,
+      "entropyCoef": 0,
+      "batchSize": 32
+    }
+  },
+  "sourceCommit": "9be2a38b4d0aa0637a10d864803de5e3c57ead46",
+  "tensorflowVersion": "4.22.0",
+  "results": [
+    {
+      "seed": 11,
+      "before": 95,
+      "after": 96,
+      "rate": 0.48,
+      "passed": false
+    },
+    {
+      "seed": 29,
+      "before": 111,
+      "after": 87,
+      "rate": 0.435,
+      "passed": false
+    },
+    {
+      "seed": 47,
+      "before": 97,
+      "after": 97,
+      "rate": 0.485,
+      "passed": false
+    }
+  ],
+  "passed": false
+}

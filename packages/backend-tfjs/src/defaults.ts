@@ -1,5 +1,7 @@
 import type { AlgorithmType } from '@ignitionai/core';
 
+export const DQN_TARGET_UPDATE_FREQUENCY = 100;
+
 export const DQN_DEFAULTS: Record<string, unknown> = {
   hiddenLayers: [64, 64],
   gamma: 0.99,
@@ -9,7 +11,7 @@ export const DQN_DEFAULTS: Record<string, unknown> = {
   lr: 0.001,
   batchSize: 32,
   memorySize: 10000,
-  targetUpdateFrequency: 100,
+  targetUpdateFrequency: DQN_TARGET_UPDATE_FREQUENCY,
 };
 
 export const PPO_DEFAULTS: Record<string, unknown> = {

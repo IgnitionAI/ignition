@@ -1,6 +1,7 @@
 import './css/style.css'
 
 import { Inter } from 'next/font/google'
+import { Head } from 'nextra/components'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -9,6 +10,18 @@ const inter = Inter({
 })
 
 export const metadata = {
+  metadataBase: new URL('https://ignitionai.dev'),
+  openGraph: {
+    type: 'website',
+    siteName: 'IgnitionAI',
+    title: 'IgnitionAI — Train RL agents in your browser',
+    description: 'Train reinforcement learning agents with JavaScript. Deploy via ONNX.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'IgnitionAI — Train RL agents in your browser',
+    description: 'Train reinforcement learning agents with JavaScript. Deploy via ONNX.',
+  },
   title: {
     default: 'IgnitionAI — Train RL agents in your browser',
     template: '%s — IgnitionAI',
@@ -24,6 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning className="scroll-smooth">
+      <Head />
       <body className={`${inter.variable} font-inter antialiased bg-slate-900 text-slate-100 tracking-tight`}>
         <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip">
           {children}

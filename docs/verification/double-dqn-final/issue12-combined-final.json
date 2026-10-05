@@ -1,0 +1,53 @@
+{
+  "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/index.html",
+  "title": "DQN / Double DQN — Circuit Racing",
+  "text": "← Circuit Racing\n\nEXPÉRIENCE REPRODUCTIBLE · RACING Q-LEARNING V3\n\nDQN et Double DQN,\nà budget égal.\n\nCinq graines par méthode · 20 courses figées par pilote · 20 000 transitions d’entraînement · tensorflow, TensorFlow.js 4.22.0\n\nDQN\n42/100\n\ncourses réussies · 61/100 terminées\n\nRéussite par graine : moyenne 42.0 %, écart-type 38.0 points ; 0.0–85.0 %.\n\nDouble DQN\n33/100\n\ncourses réussies · 77/100 terminées\n\nRéussite par graine : moyenne 33.0 %, écart-type 33.0 points ; 0.0–80.0 %.\n\nExpérience archivée du 2026-09-06 (source 020ba09b). Ce benchmark mesure les courses en mode contact (circuit-race-v2). Les courses interactives utilisent désormais les contacts entre voitures et les barrières. Ces scores restent liés aux sources archivées et ne constituent pas une nouvelle mesure du code actuel.\n\nCes résultats décrivent ce circuit, ce curriculum et ce budget. Ils ne démontrent pas une supériorité générale de l’un des algorithmes. Les graines d’évaluation ne varient que légèrement le cap initial ; ces courses ne constituent pas 200 scénarios indépendants. Tous les checkpoints finaux et tous les échecs sont conservés.\n\nChaque graine, sans sélection\nMéthode\tGraine\tRéussies\tTerminées\tEntraînement\tÉvaluation\tCheckpoint\ndqn\t11\t17/20\t20/20\t20.3 s\t18.3 s\tPoids\ndqn\t29\t0/20\t6/20\t19.4 s\t27.7 s\tPoids\ndqn\t47\t0/20\t2/20\t18.9 s\t33.0 s\tPoids\ndqn\t73\t8/20\t14/20\t23.4 s\t24.2 s\tPoids\ndqn\t101\t17/20\t19/20\t18.5 s\t19.9 s\tPoids\ndouble-dqn\t11\t13/20\t20/20\t19.4 s\t14.8 s\tPoids\ndouble-dqn\t29\t16/20\t20/20\t19.6 s\t17.4 s\tPoids\ndouble-dqn\t47\t3/20\t11/20\t19.6 s\t23.2 s\tPoids\ndouble-dqn\t73\t1/20\t10/20\t19.7 s\t26.1 s\tPoids\ndouble-dqn\t101\t0/20\t16/20\t18.9 s\t24.6 s\tPoids\nCe qui est identique\nRéseau 20 → 32 → 32 → 9, ReLU et sorties Q linéaires ; Adam 0,001 ; replay 10 000 ; batch 32 ; gamma 0,99.\n20 000 décisions, chacune maintenue six ticks physiques de 1/60 s. Mise à jour toutes les quatre transitions et copie cible toutes les 100 mises à jour. Dernier checkpoint programmé ; aucune sélection sur l’évaluation.\nExploration, replay et initialisation pilotés par la graine. Pas de mélange aléatoire supplémentaire dans fit.\nEntraînement sur Alpine Park : 10 000 décisions solo, puis 10 000 avec trois références figées ; départs variés sur la piste, vitesse initiale 4–12 m/s, épisodes limités à 600 décisions. Les sorties restent récupérables avec les mêmes remises en piste et pénalités que la course. Récompense de progression, checkpoints et pénalités. Aucun label ni remplacement par un pilote à règles.\nConduite et course V2 : barrières continues, collisions voiture/voiture et voiture/rail, sortie ralentie (+2 s), remise après immobilisation dans un rayon de 1 m pendant 5 s (+5 s). Ces contraintes s’appliquent à l’entraînement et à l’évaluation du benchmark en mode contact.\nÉvaluation complète : cinq caps initiaux par circuit et par condition solo/trafic. Alpine Park et Harbour Test, trois tours, plafond 300 s. Trafic constitué de références à règles figées identiques pour les deux méthodes.\nRéussite : trois tours, aucune remise en piste, pénalité ≤ 10 s. Une course terminée peut échouer à ce critère.\nTemps et limites\n\nTemps réels mesurés sur darwin/arm64, Node v22.14.0, Apple M4, 16 Gio. La machine exécutait aussi la démo navigateur ; les temps ne proviennent pas d’une machine isolée. Le premier passage inclut davantage de démarrage à froid ; les temps ne servent pas de classement de vitesse. Les départs variés du curriculum d’entraînement diffèrent des départs de course arrêtés : les échecs de transfert restent mesurés.\n\nLes reprises navigateur rechargent les poids et recréent optimiseur, replay et exploration. Ce benchmark utilise uniquement des entraînements neufs. Les poids de cette page sont des résultats expérimentaux ; leur présence ne garantit pas un adversaire compétent.\n\nTélécharger les 200 résultats bruts, paramètres, versions et empreintes des sources\n\nReproduction : pnpm exec tsx --tsconfig scripts/tsconfig.racing.json scripts/compare-racing-q.mts, puis node scripts/report-racing-q.mjs. Le script refuse d’écraser un protocole existant ; déplacer le dossier de résultats avant une nouvelle expérience.\n\nCalcul Double DQN : sélection online, évaluation cible, selon van Hasselt, Guez et Silver.",
+  "rows": 10,
+  "statuses": [
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/dqn-11.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/dqn-29.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/dqn-47.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/dqn-73.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/dqn-101.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/double-dqn-11.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/double-dqn-29.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/double-dqn-47.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/double-dqn-73.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/double-dqn-101.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3110/demos/car-circuit/reports/racing-q-v3/results.json",
+      "status": 200
+    }
+  ],
+  "sha256": "24d67258fe557a768c80a954a68c4a080356111bd413869c7c98636ee84341b7"
+}

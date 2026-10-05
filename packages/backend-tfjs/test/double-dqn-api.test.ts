@@ -3,16 +3,31 @@ import * as tf from '@tensorflow/tfjs';
 import { IgnitionEnvTFJS } from '../src/ignition-env-tfjs';
 import type { ModelStorageProvider } from '@ignitionai/storage';
 
-it('creates, trains, saves and greedily infers Double DQN through IgnitionEnv', async () => {
+it('trains and restores serialized Double DQN for greedy inference through IgnitionEnv', async () => {
   await tf.setBackend('cpu');
   let metadata: Record<string, unknown> | undefined;
   let saved: tf.Sequential | undefined;
+  let artifacts: tf.io.ModelArtifacts | undefined;
+  let restored: tf.LayersModel | undefined;
   const provider: ModelStorageProvider = {
-    async save(_id, model, meta) { saved = model as tf.Sequential; metadata = meta; return 'memory'; },
-    async load() { throw new Error('Not used'); },
+    async save(_id, model, meta) {
+      saved = model as tf.Sequential;
+      metadata = meta;
+      await model.save(tf.io.withSaveHandler(async value => {
+        artifacts = value;
+        return { modelArtifactsInfo: tf.io.getModelArtifactsInfoForJSON(value) };
+      }));
+      return 'memory';
+    },
+    async load() {
+      if (!artifacts) throw new Error('No saved model');
+      restored = await tf.loadLayersModel(tf.io.fromMemory(artifacts));
+      return restored;
+    },
     async list() { return []; }, async exists() { return true; }, async delete() {},
   };
-  const game = { actions: 2, observe: () => [0], step: (_action: number) => {},
+  let lastAction: number | undefined;
+  const game = { actions: 2, observe: () => [0], step: (action: number) => { lastAction = action; },
     reward: () => 1, done: () => true, reset: () => {} };
   const env = new IgnitionEnvTFJS(game);
   try {
@@ -28,7 +43,12 @@ it('creates, trains, saves and greedily infers Double DQN through IgnitionEnv', 
     expect(tf.memory().numTensors).toBe(tensors);
     failedFit.mockRestore();
     const before = saved!.getWeights().map(t => Array.from(t.dataSync()));
+    const expectedAction = await env.agent!.getAction([0], true);
+    await env.load('double');
+    expect(restored).not.toBe(saved);
+    expect(restored!.getWeights().map(t => Array.from(t.dataSync()))).toEqual(before);
     await env.inferStep();
-    expect(saved!.getWeights().map(t => Array.from(t.dataSync()))).toEqual(before);
+    expect(lastAction).toBe(expectedAction);
+    expect(restored!.getWeights().map(t => Array.from(t.dataSync()))).toEqual(before);
   } finally { env.stop(); env.agent?.dispose?.(); }
 });

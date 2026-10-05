@@ -1,3 +1,7 @@
+# Historical enhancement checklist
+
+This checklist describes an earlier experiment and is not the current project status. Its old paths and package names are historical. Use [roadmap.md](roadmap.md) and GitHub epics #22–#24 for current work.
+
 # IgnitionAI Enhancement Project Todo List
 
 - [X] **Step 1: Setup & Initial Exploration**

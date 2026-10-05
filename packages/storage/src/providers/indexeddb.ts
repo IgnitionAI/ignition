@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
-import type { ModelInfo, ModelStorageProvider } from '../types';
+import type { ModelInfo, ModelStorageProvider } from '../types.js';
 
 const META_PREFIX = 'ignition:meta:';
 

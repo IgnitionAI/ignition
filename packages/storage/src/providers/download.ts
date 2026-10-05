@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
-import type { ModelInfo, ModelStorageProvider } from '../types';
+import type { ModelInfo, ModelStorageProvider } from '../types.js';
 
 /**
  * Browser-only provider that triggers a file download of the model.

@@ -1,0 +1,11 @@
+{
+  "url": "http://127.0.0.1:4191/",
+  "filename": "sac-point-mass.json",
+  "bytes": 123334,
+  "sha256": "8a436bbd3d334a89925fbf5e8a4aed36c4fc72d093d35d311ce3502f01433beb",
+  "environment": "point-mass-v1",
+  "samples": 20000,
+  "updates": 9751,
+  "checkpointExactlyEqualsVerifiedSeed11": true,
+  "transport": "native Chromium download, configured through CLI CDP to permitted tmp directory; default download behavior restored"
+}

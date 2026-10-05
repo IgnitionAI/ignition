@@ -1,0 +1,9 @@
+.documentation {
+  min-height: 100vh;
+  background: rgb(var(--nextra-bg));
+  color: #1f2937;
+}
+
+.dark .documentation {
+  color: #e5e7eb;
+}

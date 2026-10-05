@@ -1,0 +1,1006 @@
+
+ RUN  v3.1.1 /srv/dev/projects/ignition
+
+ ✓ packages/storage/test/huggingface.test.ts (20 tests) 74ms
+stderr | packages/backend-tfjs/test/schemas.test.ts > DQNAgent constructor validation > constructs successfully with valid config
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/demo-cage-duel/test/combat.test.ts (15 tests) 21ms
+ ✓ packages/backend-tfjs/test/schemas.test.ts (30 tests) 57ms
+stderr | packages/demo-target-chasing/test/runStore.test.ts > runStore > startRun > auto-prunes oldest runs beyond 100
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+
+ ✓ packages/demo-target-chasing/test/runStore.test.ts (14 tests) 12ms
+ ✓ packages/core/test/multi-agent.test.ts (5 tests) 137ms
+stderr | packages/backend-tfjs/test/sac.test.ts > updates genuine actor/twin critics and Polyak targets while greedy inference stays frozen
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/backend-tfjs/test/sac.test.ts (6 tests) 344ms
+ ✓ packages/storage/test/catalog.test.ts (6 tests) 139ms
+ ✓ packages/demo-car-circuit/test/racing-race.test.ts (15 tests) 3027ms
+   ✓ completes three ordered laps on track test=false with a labelled rule-based reference  360ms
+   ✓ completes three ordered laps on track test=true with a labelled rule-based reference  384ms
+   ✓ runs four reference drivers on one common clock to completion  2148ms
+stdout | packages/backend-tfjs/test/qtable.test.ts > QTableAgent — convergence GridWorld 5×5 > la récompense moyenne augmente sur 300 épisodes
+[QTable convergence] premiers 50 épisodes: -0.562, derniers 50 épisodes: 0.246, états visités: 25, epsilon final: 0.050
+
+ ✓ packages/backend-tfjs/test/qtable.test.ts (5 tests) 15ms
+stderr | packages/backend-onnx/src/tests/train-to-inference.test.ts > Train → Export → Inference pipeline > Train: creates DQN agent with TrainingEnv, agent produces actions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-onnx/src/tests/train-to-inference.test.ts > Train → Export → Inference pipeline > Train: creates DQN agent with TrainingEnv, agent produces actions
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-onnx/src/tests/train-to-inference.test.ts > Train → Export → Inference pipeline > Full pipeline: TrainingEnv → train → verify model topology
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-onnx/src/tests/train-to-inference.test.ts > Train → Export → Inference pipeline > Algorithm switch: DQN → PPO on same env
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-onnx/src/tests/train-to-inference.test.ts (5 tests) 80ms
+stderr | packages/demo-car-circuit/test/racing-learning.test.ts > learns, serializes actual weights, and reloads identical frozen decisions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/core/test/continuous-runner.test.ts (8 tests) 15ms
+ ✓ packages/core/test/lifecycle.test.ts (10 tests) 34ms
+stderr | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — interface > getAction retourne un indice d'action valide
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/demo-car-circuit/test/racing-learning.test.ts (9 tests) 2286ms
+   ✓ learns, serializes actual weights, and reloads identical frozen decisions  345ms
+   ✓ completes a race using persisted learned weights without changing them  1227ms
+   ✓ does not publish an obsolete training world when cancelled during the update  657ms
+stderr | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":true,"expected":0}
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":true,"truncated":false,"expected":1}
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] ✅ Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] ✅ Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] ✅ Saved actor: memory, critic: memory
+
+ ✓ packages/backend-tfjs/test/ppo-bootstrap.test.ts (6 tests) 169ms
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() creates a DQN agent with deduced inputSize=4, actionSize=4
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stderr | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() creates a DQN agent with deduced inputSize=4, actionSize=4
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > agent can produce actions after train()
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() defaults to DQN
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() is idempotent when already training same algo
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > stop() then train() resumes with same agent
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 2: Algorithm selection > switching algorithm disposes the old agent
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 3: Overrides > overrides lr and hiddenLayers
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 3: Overrides > actions as number works
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/auto-config.test.ts (10 tests) 86ms
+ ✓ packages/demo-maze/test/maze-env.test.ts (7 tests) 71ms
+stdout | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+[PPO convergence] premiers 40 épisodes: 0.444, derniers 40 épisodes: 0.860
+
+ ✓ packages/backend-tfjs/test/ppo.test.ts (4 tests) 4055ms
+   ✓ PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)  3893ms
+ ↓ packages/storage/test/huggingface-live.test.ts (1 test | 1 skipped)
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+========== DQN AGENT TEST ==========
+[TFJS] Current backend: undefined
+[TFJS Memory - START] { numTensors: 0, numBytes: 0, numDataBuffers: 0, unreliable: true }
+Config: {
+  "inputSize": 1,
+  "actionSize": 2,
+  "hiddenLayers": [
+    16
+  ],
+  "epsilon": 0.5,
+  "epsilonDecay": 0.99,
+  "minEpsilon": 0.01,
+  "lr": 0.001,
+  "gamma": 0.9,
+  "batchSize": 4,
+  "memorySize": 100,
+  "targetUpdateFrequency": 10
+}
+Agent initialized
+[TFJS Memory - AFTER AGENT INIT] { numTensors: 12, numBytes: 544, numDataBuffers: 8, unreliable: true }
+[TFJS Memory - STEP 0] { numTensors: 12, numBytes: 544, numDataBuffers: 8, unreliable: true }
+
+Step 1/50: State=0.993, Correct action=1
+
+stderr | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 1/1 (100.0%)
+Memory size: 1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.500
+
+Step 2/50: State=0.059, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 1/2 (50.0%)
+Memory size: 2
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.500
+
+Step 3/50: State=0.531, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 1/3 (33.3%)
+Memory size: 3
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.500
+
+Step 4/50: State=0.109, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 1/4 (25.0%)
+Memory size: 4
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.495
+
+Step 5/50: State=0.175, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 2/5 (40.0%)
+Memory size: 5
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.490
+
+Step 6/50: State=0.080, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 2/6 (33.3%)
+Memory size: 6
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.485
+
+Step 7/50: State=0.606, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 2/7 (28.6%)
+Memory size: 7
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.480
+
+Step 8/50: State=0.580, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 3/8 (37.5%)
+Memory size: 8
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.475
+
+Step 9/50: State=0.546, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 4/9 (44.4%)
+Memory size: 9
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.471
+
+Step 10/50: State=0.071, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 4/10 (40.0%)
+Memory size: 10
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.466
+[TFJS Memory - STEP 10] {
+  numTensors: 20,
+  numBytes: 1072,
+  numDataBuffers: 20,
+  unreliable: true
+}
+
+Step 11/50: State=0.114, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 4/11 (36.4%)
+Memory size: 11
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.461
+
+Step 12/50: State=0.421, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 4/12 (33.3%)
+Memory size: 12
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.457
+
+Step 13/50: State=0.559, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 4/13 (30.8%)
+Memory size: 13
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.452
+
+Step 14/50: State=0.689, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 4/14 (28.6%)
+Memory size: 14
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.448
+
+Step 15/50: State=0.851, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 4/15 (26.7%)
+Memory size: 15
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.443
+
+Step 16/50: State=0.397, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 4/16 (25.0%)
+Memory size: 16
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.439
+
+Step 17/50: State=0.179, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 4/17 (23.5%)
+Memory size: 17
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.434
+
+Step 18/50: State=0.772, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 5/18 (27.8%)
+Memory size: 18
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.430
+
+Step 19/50: State=0.389, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 5/19 (26.3%)
+Memory size: 19
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.426
+
+Step 20/50: State=0.325, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 5/20 (25.0%)
+Memory size: 20
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.421
+[TFJS Memory - STEP 20] {
+  numTensors: 20,
+  numBytes: 1072,
+  numDataBuffers: 20,
+  unreliable: true
+}
+
+Step 21/50: State=0.429, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 5/21 (23.8%)
+Memory size: 21
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.417
+
+Step 22/50: State=0.325, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 5/22 (22.7%)
+Memory size: 22
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.413
+
+Step 23/50: State=0.427, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 5/23 (21.7%)
+Memory size: 23
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.409
+
+Step 24/50: State=0.907, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 6/24 (25.0%)
+Memory size: 24
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.405
+
+Step 25/50: State=0.431, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 7/25 (28.0%)
+Memory size: 25
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.401
+
+Step 26/50: State=0.983, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 8/26 (30.8%)
+Memory size: 26
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.397
+
+Step 27/50: State=0.191, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 8/27 (29.6%)
+Memory size: 27
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.393
+
+Step 28/50: State=0.124, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 8/28 (28.6%)
+Memory size: 28
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.389
+
+Step 29/50: State=0.469, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 8/29 (27.6%)
+Memory size: 29
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.385
+
+Step 30/50: State=0.072, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 8/30 (26.7%)
+Memory size: 30
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.381
+[TFJS Memory - STEP 30] {
+  numTensors: 20,
+  numBytes: 1072,
+  numDataBuffers: 20,
+  unreliable: true
+}
+
+Step 31/50: State=0.954, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 9/31 (29.0%)
+Memory size: 31
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.377
+
+Step 32/50: State=0.408, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 9/32 (28.1%)
+Memory size: 32
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.374
+
+Step 33/50: State=0.900, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 10/33 (30.3%)
+Memory size: 33
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.370
+
+Step 34/50: State=0.756, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 10/34 (29.4%)
+Memory size: 34
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.366
+
+Step 35/50: State=0.555, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 11/35 (31.4%)
+Memory size: 35
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.362
+
+Step 36/50: State=0.722, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 12/36 (33.3%)
+Memory size: 36
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.359
+
+Step 37/50: State=0.411, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 13/37 (35.1%)
+Memory size: 37
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.355
+
+Step 38/50: State=0.722, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 14/38 (36.8%)
+Memory size: 38
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.352
+
+Step 39/50: State=0.233, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 14/39 (35.9%)
+Memory size: 39
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.348
+
+Step 40/50: State=0.597, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 15/40 (37.5%)
+Memory size: 40
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.345
+[TFJS Memory - STEP 40] {
+  numTensors: 20,
+  numBytes: 1072,
+  numDataBuffers: 20,
+  unreliable: true
+}
+
+Step 41/50: State=0.830, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 16/41 (39.0%)
+Memory size: 41
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.341
+
+Step 42/50: State=0.500, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 16/42 (38.1%)
+Memory size: 42
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.338
+
+Step 43/50: State=0.849, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 17/43 (39.5%)
+Memory size: 43
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.334
+
+Step 44/50: State=0.696, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 18/44 (40.9%)
+Memory size: 44
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.331
+
+Step 45/50: State=0.772, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 19/45 (42.2%)
+Memory size: 45
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.328
+
+Step 46/50: State=0.612, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 20/46 (43.5%)
+Memory size: 46
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.325
+
+Step 47/50: State=0.131, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 20/47 (42.6%)
+Memory size: 47
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.321
+
+Step 48/50: State=0.171, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 21/48 (43.8%)
+Memory size: 48
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.318
+
+Step 49/50: State=0.396, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 21/49 (42.9%)
+Memory size: 49
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.315
+
+Step 50/50: State=0.022, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 22/50 (44.0%)
+Memory size: 50
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.312
+
+========== TRAINING SUMMARY ==========
+Final score: 22/50 (44.0%)
+Total reward: -6
+Final epsilon: 0.312
+[TFJS] Current backend: cpu
+[TFJS Memory - END OF TRAINING] {
+  numTensors: 20,
+  numBytes: 1072,
+  numDataBuffers: 20,
+  unreliable: true
+}
+
+Test prediction for state [0.9]
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Agent chose: 1 (Expected: 1)
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+[TFJS Memory - END OF TEST] { numTensors: 0, numBytes: 0, numDataBuffers: 0, unreliable: true }
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+[TFJS] After cleanup: {
+  unreliable: true,
+  reasons: [
+    'The reported memory is an upper bound. Due to automatic garbage collection, the true allocated memory may be less.'
+  ],
+  numTensors: 0,
+  numDataBuffers: 0,
+  numBytes: 0
+}
+
+ ✓ packages/backend-tfjs/test/dqn.test.ts (1 test) 355ms
+   ✓ DQNAgent > should train on a fake environment  354ms
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"inputSize":2}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"actionSize":3}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"stateBins":6}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"stateLow":[-1]}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"stateHigh":[2]}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > restores greedy actions and epsilon, keeps current lr and discards pending experience
+[QTable] ✅ Saved to localStorage (ignition:qtable:good)
+
+ ✓ packages/backend-tfjs/test/qtable-contract.test.ts (22 tests) 51ms
+stderr | packages/storage/test/huggingface-roundtrip.test.ts > HuggingFaceProvider real TFJS transport > reloads exactly the saved topology, named weights and fixed-observation inference
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/storage/test/huggingface-roundtrip.test.ts (3 tests) 110ms
+ ✓ packages/demo-target-chasing/test/graphToConfig.test.ts (8 tests) 26ms
+stderr | packages/demo-car-circuit/test/learned-race.test.ts > runs separately loaded learned policies to a result without changing their weights
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/demo-car-circuit/test/learned-race.test.ts (5 tests) 3339ms
+   ✓ runs separately loaded learned policies to a result without changing their weights  3089ms
+ ✓ packages/demo-cage-duel/test/blender-assets.test.ts (3 tests) 27ms
+stdout | packages/demo-target-chasing/test/networkDesigner.integration.test.ts > Network Designer → Agent integration > graph change → hiddenLayers → can create a DQNAgent with correct config
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stderr | packages/demo-target-chasing/test/networkDesigner.integration.test.ts > Network Designer → Agent integration > graph change → hiddenLayers → can create a DQNAgent with correct config
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/demo-target-chasing/test/networkDesigner.integration.test.ts > Network Designer → Agent integration > agent can be disposed and recreated with different architecture
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-target-chasing/test/networkDesigner.integration.test.ts (4 tests) 55ms
+ ✓ packages/core/test/env-validation.test.ts (15 tests) 18ms
+ ✓ packages/demo-car-circuit/test/circuit-env.test.ts (12 tests) 28ms
+stderr | packages/backend-tfjs/test/dqn.convergence.test.ts > DQN — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/demo-target-chasing/test/dashboard.integration.test.ts (3 tests) 6ms
+ ✓ packages/core/test/persistence.test.ts (5 tests) 17ms
+ ✓ packages/demo-gridworld/test/gridworld-env.test.ts (12 tests) 21ms
+ ✓ packages/environments/test/gridworld.test.ts (12 tests) 10ms
+stdout | packages/backend-tfjs/test/dqn.convergence.test.ts > DQN — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+[DQN convergence] premiers 50 épisodes: 0.744, derniers 50 épisodes: 0.841
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn.convergence.test.ts (1 test) 2333ms
+   ✓ DQN — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)  2315ms
+stdout | packages/backend-tfjs/test/qtable-persistence.test.ts > QTableAgent persistence > save() serializes qTable and config to localStorage
+[QTable] ✅ Saved to localStorage (ignition:qtable:test-model)
+
+stdout | packages/backend-tfjs/test/qtable-persistence.test.ts > QTableAgent persistence > load() restores qTable and state from localStorage
+[QTable] ✅ Saved to localStorage (ignition:qtable:test-model)
+
+ ✓ packages/backend-tfjs/test/qtable-persistence.test.ts (3 tests) 25ms
+2026-10-04 23:29:56.087811: I tensorflow/core/util/util.cc:169] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-10-04 23:29:56.128833: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+stderr | packages/backend-tfjs/test/hubIntegration.test.ts
+⚠️ Missing HF_TOKEN in .env — skipping Hugging Face test
+
+ ↓ packages/backend-tfjs/test/hubIntegration.test.ts (1 test | 1 skipped)
+ ✓ packages/demo-target-chasing/test/networkStore.test.ts (5 tests) 12ms
+ ✓ packages/demo-cage-duel/test/duel.test.ts (6 tests) 9ms
+ ✓ packages/demo-car-circuit/test/evaluation.test.ts (5 tests) 298ms
+2026-10-04 23:29:57.788026: I tensorflow/core/util/util.cc:169] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-10-04 23:29:57.819735: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX512F AVX512_VNNI AVX512_BF16 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+ ✓ packages/backend-tfjs/test/setBackend.test.ts (7 tests) 47ms
+stderr | packages/backend-tfjs/test/double-dqn-api.test.ts > trains and restores serialized Double DQN for greedy inference through IgnitionEnv
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/double-dqn-api.test.ts > trains and restores serialized Double DQN for greedy inference through IgnitionEnv
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/double-dqn-api.test.ts (1 test) 150ms
+ ✓ packages/demo-mountaincar/test/mountaincar-env.test.ts (13 tests) 14ms
+stderr | packages/demo-car-circuit/test/q-training.test.ts > trains dqn and reloads its actual weights into frozen racing opponents
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/environments/test/mountaincar.test.ts (13 tests) 25ms
+stdout | packages/demo-car-circuit/test/q-training.test.ts > trains dqn and reloads its actual weights into frozen racing opponents
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-car-circuit/test/q-training.test.ts > trains double-dqn and reloads its actual weights into frozen racing opponents
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-car-circuit/test/q-training.test.ts (5 tests) 749ms
+   ✓ trains dqn and reloads its actual weights into frozen racing opponents  496ms
+ ✓ packages/core/test/ignition-env.test.ts (9 tests) 7ms
+ ✓ packages/core/test/continuous.test.ts (18 tests) 10ms
+stderr | packages/backend-tfjs/test/dqn-target-cadence.test.ts > bootstraps from the refreshed target (false, undefined)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/demo-car-circuit/test/track.test.ts (9 tests) 48ms
+stdout | packages/backend-tfjs/test/dqn-target-cadence.test.ts > bootstraps from the refreshed target (false, undefined)
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/dqn-target-cadence.test.ts > bootstraps from the refreshed target (true, undefined)
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/dqn-target-cadence.test.ts > bootstraps from the refreshed target (false, 2)
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/dqn-target-cadence.test.ts > bootstraps from the refreshed target (true, 2)
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn-target-cadence.test.ts (4 tests) 549ms
+   ✓ bootstraps from the refreshed target (false, undefined)  348ms
+ ✓ packages/backend-onnx/src/tests/onnx-agent.test.ts (7 tests) 46ms
+ ✓ packages/demo-cartpole/test/cartpole-env.test.ts (10 tests) 24ms
+ ✓ packages/environments/test/cartpole.test.ts (10 tests) 33ms
+ ✓ packages/backend-onnx/src/tests/runtime.test.ts (4 tests) 42ms
+stderr | packages/backend-tfjs/test/checkpoint.test.ts
+⚠️ HF_TOKEN missing, skipping checkpoint test
+
+ ↓ packages/backend-tfjs/test/checkpoint.test.ts (1 test | 1 skipped)
+ ✓ packages/core/test/episode-end.test.ts (7 tests) 17ms
+ ✓ packages/backend-onnx/src/tests/exporter.test.ts (6 tests) 361ms
+   ✓ generated ONNX conversion script > delivers literal paths and formats to the converter without shell expansion  358ms
+stderr | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=false
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=false
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=true
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/double-dqn.test.ts (2 tests) 77ms
+ ✓ packages/demo-cage-duel/test/learning.test.ts (3 tests) 27ms
+ ✓ packages/demo-car-circuit/test/racing-driving.test.ts (6 tests) 32ms
+stderr | packages/backend-tfjs/test/ppo-public.test.ts > PPO learns rewarded actions through the public loop (seed 11)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stderr | packages/backend-tfjs/test/trainer.test.ts
+⚠️ HF_TOKEN is missing — skipping trainAgent test
+
+ ↓ packages/backend-tfjs/test/trainer.test.ts (1 test | 1 skipped)
+stderr | packages/backend-tfjs/test/dqn-truncation.test.ts > DQN bootstraps unless terminated=false
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/dqn-truncation.test.ts > DQN bootstraps unless terminated=false
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/dqn-truncation.test.ts > DQN bootstraps unless terminated=true
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn-truncation.test.ts (2 tests) 55ms
+ ✓ packages/backend-tfjs/test/ppo-public.test.ts (5 tests) 1350ms
+   ✓ PPO learns rewarded actions through the public loop (seed 11)  692ms
+   ✓ PPO learns rewarded actions through the public loop (seed 29)  330ms
+   ✓ PPO learns rewarded actions through the public loop (seed 47)  304ms
+ ✓ packages/core/test/defaults.test.ts (6 tests) 8ms
+stderr | packages/backend-tfjs/test/dqn-seed.test.ts > repeats initialization, exploration and replay updates with a supplied seed
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/dqn-seed.test.ts > repeats initialization, exploration and replay updates with a supplied seed
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn-seed.test.ts (1 test) 247ms
+stderr | packages/backend-tfjs/test/dqn-export.test.ts > exports the current public DQN model with its trained predictions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/dqn-export.test.ts > exports the current public DQN model with its trained predictions
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn-export.test.ts (1 test) 62ms
+ ✓ packages/backend-tfjs/test/point-mass.test.ts (2 tests) 8ms
+ ✓ packages/demo-car-circuit/test/racing-camera.test.ts (3 tests) 5ms
+ ✓ packages/core/test/schemas.test.ts (4 tests) 7ms
+ ✓ packages/backend-tfjs/test/backend-selector.test.ts (4 tests) 7ms
+stderr | packages/demo-car-circuit/test/racing-garage.test.ts > keeps a saved local driver available when bundled assets fail
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+ ✓ packages/demo-car-circuit/test/racing-garage.test.ts (1 test) 17ms
+ ✓ packages/demo-cage-duel/test/blender-warrior.test.ts (1 test) 6ms
+ ✓ packages/web/test/catalogue.test.ts (1 test) 3ms
+stderr | packages/backend-tfjs/test/dqn-load-memory.test.ts > releases replaced networks and owned optimizers after repeated loads
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details.
+============================
+
+stdout | packages/backend-tfjs/test/dqn-load-memory.test.ts > releases replaced networks and owned optimizers after repeated loads
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn-load-memory.test.ts (1 test) 21ms
+ ✓ packages/backend-tfjs/test/qtable-truncation.test.ts (1 test) 4ms
+
+ Test Files  67 passed | 4 skipped (71)
+      Tests  467 passed | 4 skipped (471)
+   Start at  23:29:34
+   Duration  36.80s (transform 1.90s, setup 0ms, collect 17.34s, tests 21.42s, environment 28ms, prepare 8.48s)

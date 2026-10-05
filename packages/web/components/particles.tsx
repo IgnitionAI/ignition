@@ -21,38 +21,26 @@ export default function Particles({
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const canvasContainerRef = useRef<HTMLDivElement>(null)
   const context = useRef<CanvasRenderingContext2D | null>(null)
-  const circles = useRef<any[]>([])
+  const circles = useRef<Circle[]>([])
   const mousePosition = MousePosition()
   const mouse = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
   const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 })
   const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1
 
-  useEffect(() => {    
-    if (canvasRef.current) {
-      context.current = canvasRef.current.getContext('2d')
-    }
-    initCanvas()
-    animate()
-    window.addEventListener('resize', initCanvas)
-
-    return () => {
-      window.removeEventListener('resize', initCanvas)
-    }
-  }, [])
-
-  useEffect(() => {
-    onMouseMove()
-  }, [mousePosition.x, mousePosition.y])
-
-  useEffect(() => {
-    initCanvas()
-  }, [refresh])  
-
-  const initCanvas = () => {
-    resizeCanvas()
-    drawParticles()
+  type Circle = {
+    x: number
+    y: number
+    translateX: number
+    translateY: number
+    size: number
+    alpha: number
+    targetAlpha: number
+    dx: number
+    dy: number
+    magnetism: number
   }
 
+  useEffect(() => {
   const onMouseMove = () => {
     if (canvasRef.current) {
       const rect = canvasRef.current.getBoundingClientRect()
@@ -67,17 +55,14 @@ export default function Particles({
     }
   }
 
-  type Circle = {
-    x: number
-    y: number
-    translateX: number
-    translateY: number
-    size: number
-    alpha: number
-    targetAlpha: number
-    dx: number
-    dy: number
-    magnetism: number
+    onMouseMove()
+  }, [mousePosition.x, mousePosition.y])
+
+  useEffect(() => {
+    let frame = 0
+  const initCanvas = () => {
+    resizeCanvas()
+    drawParticles()
   }
 
   const resizeCanvas = () => {
@@ -198,8 +183,17 @@ export default function Particles({
         )
       }
     })
-    window.requestAnimationFrame(animate)
+    frame = window.requestAnimationFrame(animate)
   }
+    context.current = canvasRef.current?.getContext('2d') ?? null
+    initCanvas()
+    animate()
+    window.addEventListener('resize', initCanvas)
+    return () => {
+      window.removeEventListener('resize', initCanvas)
+      window.cancelAnimationFrame(frame)
+    }
+  }, [quantity, staticity, ease, refresh, dpr])
 
   return (
     <div className={className} ref={canvasContainerRef} aria-hidden="true">

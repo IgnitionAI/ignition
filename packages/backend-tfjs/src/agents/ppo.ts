@@ -15,8 +15,8 @@
  */
 
 import * as tf from '@tensorflow/tfjs';
-import { AgentInterface, Experience, PPOConfig } from '../types';
-import { PPOConfigSchema } from '../schemas';
+import { AgentInterface, Experience, PPOConfig } from '../types.js';
+import { PPOConfigSchema } from '../schemas.js';
 
 // ---------------------------------------------------------------------------
 // Types internes

@@ -1,0 +1,14 @@
+[
+  {
+    "entry": "consumer.mts",
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "entry": "consumer.cts",
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

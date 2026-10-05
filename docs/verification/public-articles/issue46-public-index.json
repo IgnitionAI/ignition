@@ -1,0 +1,92 @@
+{
+  "url": "https://ignitionai.dev/blog",
+  "title": "Blog — IgnitionAI",
+  "status": 200,
+  "links": [
+    {
+      "text": "4 octobre 2026 · TutorielMountainCar : apprendre à prendre de l’élanComprendre pourquoi reculer peut aider un agent à atteindre le sommet.Lire le tutoriel →",
+      "href": "https://ignitionai.dev/blog/mountaincar-prendre-elan"
+    },
+    {
+      "text": "4 octobre 2026 · TutorielGridWorld : rendre les décisions d’un agent lisiblesUne grille, quatre actions et une récompense : explorez le Q-learning pas à pas.Lire le tutoriel →",
+      "href": "https://ignitionai.dev/blog/gridworld-valeurs-actions"
+    },
+    {
+      "text": "4 octobre 2026 · TutorielCartPole 3D : une scène visible, quatre observationsSéparez le rendu 3D de ce que le réseau reçoit réellement.Lire le tutoriel →",
+      "href": "https://ignitionai.dev/blog/cartpole-3d-observations"
+    },
+    {
+      "text": "4 octobre 2026 · TutorielDrone Navigation : relier moteurs, mouvement et récompenseObservez les compromis entre atteindre une cible et garder le drone stable.Lire le tutoriel →",
+      "href": "https://ignitionai.dev/blog/drone-navigation-controle"
+    },
+    {
+      "text": "4 octobre 2026 · TutorielMaze : guider un agent avec des capteurs et des récompensesDécouvrez comment un agent explore une arène avec portes et dangers mobiles.Lire le tutoriel →",
+      "href": "https://ignitionai.dev/blog/maze-capteurs-recompenses"
+    },
+    {
+      "text": "4 octobre 2026 · TutorielMaze 3D : une clé change la valeur du cheminExplorez un labyrinthe où l’état de la porte compte autant que la position.Lire le tutoriel →",
+      "href": "https://ignitionai.dev/blog/maze-3d-cles-portes"
+    },
+    {
+      "text": "4 octobre 2026 · TutorielCircuit Racing : entraîner un pilote, puis mesurer sa coursePrenez le volant et découvrez comment distinguer imitation, DQN et évaluation.Lire le tutoriel →",
+      "href": "https://ignitionai.dev/blog/circuit-racing-pilotes"
+    },
+    {
+      "text": "3 octobre 2026 · TutorielEntraîner son premier agent avec Ignition sur CartPoleLancez votre premier entraînement DQN dans le navigateur et observez ses décisions sur CartPole. Code exécutable et captures réelles à l’appui.Lire le tutoriel →",
+      "href": "https://ignitionai.dev/blog/premier-agent-cartpole"
+    }
+  ],
+  "images": [
+    {
+      "src": "https://ignitionai.dev/_next/static/media/ignition-flame.9f4f1f52.gif",
+      "complete": true,
+      "width": 380
+    },
+    {
+      "src": "https://ignitionai.dev/_next/image?url=%2Fimages%2Fblog%2Fmountaincar%2Factive.png&w=1920&q=75",
+      "complete": true,
+      "width": 1920
+    },
+    {
+      "src": "https://ignitionai.dev/_next/image?url=%2Fimages%2Fblog%2Fgridworld%2Factive.png&w=1920&q=75",
+      "complete": true,
+      "width": 1920
+    },
+    {
+      "src": "https://ignitionai.dev/_next/image?url=%2Fimages%2Fblog%2Fcartpole-3d%2Factive.png&w=1920&q=75",
+      "complete": true,
+      "width": 1920
+    },
+    {
+      "src": "https://ignitionai.dev/_next/image?url=%2Fimages%2Fblog%2Fdrone-navigation%2Factive.png&w=1920&q=75",
+      "complete": true,
+      "width": 1920
+    },
+    {
+      "src": "https://ignitionai.dev/_next/image?url=%2Fimages%2Fblog%2Fmaze%2Factive.png&w=1920&q=75",
+      "complete": true,
+      "width": 1920
+    },
+    {
+      "src": "https://ignitionai.dev/_next/image?url=%2Fimages%2Fblog%2Fmaze-3d%2Factive.png&w=1920&q=75",
+      "complete": true,
+      "width": 1920
+    },
+    {
+      "src": "https://ignitionai.dev/_next/image?url=%2Fimages%2Fblog%2Fcar-circuit%2Factive.png&w=1920&q=75",
+      "complete": true,
+      "width": 1920
+    },
+    {
+      "src": "https://ignitionai.dev/_next/image?url=%2Fimages%2Fblog%2Fcartpole%2Ftraining.png&w=1920&q=75",
+      "complete": true,
+      "width": 1920
+    },
+    {
+      "src": "https://ignitionai.dev/_next/static/media/ignition-flame.9f4f1f52.gif",
+      "complete": true,
+      "width": 380
+    }
+  ],
+  "body": "IgnitionAI\nQuick Start\nFeatures\nDemos\nDocs\nBlog\nnpm\nStar on GitHub\n->\n\nLe blog Ignition\n\nApprendre en construisant\n\nDes expériences reproductibles, du code et des agents en action.\n\n4 octobre 2026 · Tutoriel\nMountainCar : apprendre à prendre de l’élan\n\nComprendre pourquoi reculer peut aider un agent à atteindre le sommet.\n\nLire le tutoriel →\n\n4 octobre 2026 · Tutoriel\nGridWorld : rendre les décisions d’un agent lisibles\n\nUne grille, quatre actions et une récompense : explorez le Q-learning pas à pas.\n\nLire le tutoriel →\n\n4 octobre 2026 · Tutoriel\nCartPole 3D : une scène visible, quatre observations\n\nSéparez le rendu 3D de ce que le réseau reçoit réellement.\n\nLire le tutoriel →\n\n4 octobre 2026 · Tutoriel\nDrone Navigation : relier moteurs, mouvement et récompense\n\nObservez les compromis entre atteindre une cible et garder le drone stable.\n\nLire le tutoriel →\n\n4 octobre 2026 · Tutoriel\nMaze : guider un agent avec des capteurs et des récompenses\n\nDécouvrez comment un agent explore une arène avec portes et dangers mobiles.\n\nLire le tutoriel →\n\n4 octobre 2026 · Tutoriel\nMaze 3D : une clé change la valeur du chemin\n\nExplorez un labyrinthe où l’état de la porte compte autant que la position.\n\nLire le tutoriel →\n\n4 octobre 2026 · Tutoriel\nCircuit Racing : entraîner un pilote, puis mesurer sa course\n\nPrenez le volant et découvrez comment distinguer imitation, DQN et évaluation.\n\nLire le tutoriel →\n\n3 octobre 2026 · Tutoriel\nEntraîner son premier agent avec Ignition sur CartPole\n\nLancez votre premier entraînement DQN dans le navigateur et observez ses décisions sur CartPole. Code exécutable et captures réelles à l’appui.\n\nLire le tutoriel →\n\nIgnitionAI\nThe ML-Agents of the JavaScript creative ecosystem. MIT licensed — use it for anything.\n© 2026 — A project by IgnitionAI\nProject\nG"
+}

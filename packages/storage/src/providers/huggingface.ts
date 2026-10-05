@@ -1,29 +1,42 @@
-import { commit, createRepo, uploadFiles } from '@huggingface/hub';
+import { commit, createRepo, uploadFiles, HubApiError } from '@huggingface/hub';
 import * as tf from '@tensorflow/tfjs';
 
-import { parseHFConfig } from '../config';
-import type { HFStorageConfig } from '../config';
-import type { ModelInfo, ModelStorageProvider } from '../types';
+import { parseHFConfig } from '../config.js';
+import type { HFStorageConfig } from '../config.js';
+import type { ModelInfo, ModelStorageProvider } from '../types.js';
 
 async function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/**
- * Serialize a LayersModel weights into a single Float32Array buffer.
- * Mirrors the approach in packages/backend-tfjs/src/io/saveModelToHub.ts
- * but without writing to disk.
- */
-function serializeWeights(model: tf.LayersModel): ArrayBuffer {
-  const weights = model.getWeights();
-  const totalSize = weights.reduce((acc, w) => acc + w.size, 0);
-  const data = new Float32Array(totalSize);
+/** Preserve the binary format emitted by TFJS, including multiple weight buffers. */
+function combineWeightData(data: NonNullable<tf.io.ModelArtifacts['weightData']>): ArrayBuffer {
+  const buffers = Array.isArray(data) ? data : [data];
+  const combined = new Uint8Array(buffers.reduce((size, buffer) => size + buffer.byteLength, 0));
   let offset = 0;
-  for (const w of weights) {
-    data.set(w.dataSync(), offset);
-    offset += w.size;
+  for (const buffer of buffers) {
+    combined.set(new Uint8Array(buffer), offset);
+    offset += buffer.byteLength;
   }
-  return data.buffer;
+  return combined.buffer;
+}
+
+async function serializeModel(model: tf.LayersModel): Promise<{ document: string; weights: ArrayBuffer }> {
+  let serialized: { document: string; weights: ArrayBuffer } | undefined;
+  await model.save(tf.io.withSaveHandler(async artifacts => {
+    if (!artifacts.modelTopology || !artifacts.weightSpecs || !artifacts.weightData) {
+      throw new Error('[HFProvider] Model save did not supply topology and weights');
+    }
+    const { modelTopology, format, generatedBy, convertedBy, trainingConfig, weightSpecs } = artifacts;
+    serialized = {
+      document: JSON.stringify({ modelTopology, format, generatedBy, convertedBy, trainingConfig,
+        weightsManifest: [{ paths: ['weights.bin'], weights: weightSpecs }] }),
+      weights: combineWeightData(artifacts.weightData),
+    };
+    return { modelArtifactsInfo: tf.io.getModelArtifactsInfoForJSON(artifacts) };
+  }));
+  if (!serialized) throw new Error('[HFProvider] Model serialization failed');
+  return serialized;
 }
 
 export class HuggingFaceProvider implements ModelStorageProvider {
@@ -44,17 +57,16 @@ export class HuggingFaceProvider implements ModelStorageProvider {
     model: tf.LayersModel,
     metadata?: Record<string, unknown>
   ): Promise<string> {
-    const modelJSON = model.toJSON();
-    const weightBuffer = serializeWeights(model);
+    const { document, weights } = await serializeModel(model);
 
     const files: { path: string; content: Blob }[] = [
       {
         path: `${modelId}/model.json`,
-        content: new Blob([JSON.stringify(modelJSON)], { type: 'application/json' }),
+        content: new Blob([document], { type: 'application/json' }),
       },
       {
         path: `${modelId}/weights.bin`,
-        content: new Blob([weightBuffer], { type: 'application/octet-stream' }),
+        content: new Blob([weights], { type: 'application/octet-stream' }),
       },
     ];
 
@@ -70,8 +82,8 @@ export class HuggingFaceProvider implements ModelStorageProvider {
         repo: this.config.repoId,
         accessToken: this.config.token,
       });
-    } catch {
-      // Repo already exists — not an error
+    } catch (error) {
+      if (!(error instanceof HubApiError) || error.statusCode !== 409) throw error;
     }
 
     await uploadFiles({
@@ -81,7 +93,6 @@ export class HuggingFaceProvider implements ModelStorageProvider {
     });
 
     const uri = `hf://${this.config.repoId}/${modelId}`;
-    console.log(`[HFProvider] ✅ Saved to ${uri}`);
     return uri;
   }
 
@@ -93,21 +104,21 @@ export class HuggingFaceProvider implements ModelStorageProvider {
     initialDelay = 2000
   ): Promise<tf.LayersModel> {
     const url = `https://huggingface.co/${this.config.repoId}/resolve/main/${modelId}/model.json`;
-    console.log(`[HFProvider] Loading model from: ${url}`);
+    if (!Number.isSafeInteger(maxRetries) || maxRetries < 1
+      || !Number.isFinite(initialDelay) || initialDelay < 0) {
+      throw new Error('[HFProvider] Retry count must be positive and delay finite/nonnegative');
+    }
 
     let lastError: unknown;
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
-        const model = (await tf.loadLayersModel(url)) as tf.LayersModel;
-        console.log(`[HFProvider] ✅ Model loaded (${modelId})`);
+        const model = await tf.loadLayersModel(url, {
+          requestInit: { headers: { Authorization: `Bearer ${this.config.token}` } },
+        });
         return model;
       } catch (err) {
         lastError = err;
-        const delay = initialDelay * Math.pow(2, attempt);
-        console.warn(
-          `[HFProvider] ⚠️ Attempt ${attempt + 1}/${maxRetries} failed. Retrying in ${delay}ms…`
-        );
-        await sleep(delay);
+        if (attempt + 1 < maxRetries) await sleep(initialDelay * Math.pow(2, attempt));
       }
     }
 
@@ -157,7 +168,6 @@ export class HuggingFaceProvider implements ModelStorageProvider {
         { operation: 'delete', path: `${modelId}/metadata.json` },
       ],
     });
-    console.log(`[HFProvider] ✅ Deleted model "${modelId}"`);
   }
 
   // ── exists ────────────────────────────────────────────────────────────────

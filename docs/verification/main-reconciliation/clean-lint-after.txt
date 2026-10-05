@@ -1,0 +1,6 @@
+
+> demo-cage-duel@0.0.0 lint /srv/dev/projects/ignition/packages/demo-cage-duel
+> tsc --noEmit
+
+
+Exit: 0

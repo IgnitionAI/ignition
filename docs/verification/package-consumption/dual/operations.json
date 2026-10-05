@@ -1,0 +1,44 @@
+[
+  {
+    "node": "v20.19.2",
+    "entry": "smoke.mjs",
+    "exit": 0,
+    "stdout": "[DQN] Disposing model...\n[DQN] \u2705 DQNAgent disposed\nPASS: public runner/environment, Q-table update, real DQN inference, storage validation, ONNX lifecycle guard.\n",
+    "stderr": "\n============================\nHi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. \n============================\n"
+  },
+  {
+    "node": "v20.19.2",
+    "entry": "smoke.cjs",
+    "exit": 0,
+    "stdout": "[DQN] Disposing model...\n[DQN] \u2705 DQNAgent disposed\nPASS: public runner/environment, Q-table update, real DQN inference, storage validation, ONNX lifecycle guard.\n",
+    "stderr": "\n============================\nHi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. \n============================\n"
+  },
+  {
+    "node": "v22.23.3",
+    "entry": "smoke.mjs",
+    "exit": 0,
+    "stdout": "[DQN] Disposing model...\n[DQN] \u2705 DQNAgent disposed\nPASS: public runner/environment, Q-table update, real DQN inference, storage validation, ONNX lifecycle guard.\n",
+    "stderr": "\n============================\nHi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. \n============================\n"
+  },
+  {
+    "node": "v22.23.3",
+    "entry": "smoke.cjs",
+    "exit": 0,
+    "stdout": "[DQN] Disposing model...\n[DQN] \u2705 DQNAgent disposed\nPASS: public runner/environment, Q-table update, real DQN inference, storage validation, ONNX lifecycle guard.\n",
+    "stderr": "\n============================\nHi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. \n============================\n"
+  },
+  {
+    "node": "v20.0.0",
+    "entry": "smoke.mjs",
+    "exit": 0,
+    "stdout": "[DQN] Disposing model...\n[DQN] \u2705 DQNAgent disposed\nPASS: public runner/environment, Q-table update, real DQN inference, storage validation, ONNX lifecycle guard.\n",
+    "stderr": "\n============================\nHi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. \n============================\n"
+  },
+  {
+    "node": "v20.0.0",
+    "entry": "smoke.cjs",
+    "exit": 0,
+    "stdout": "[DQN] Disposing model...\n[DQN] \u2705 DQNAgent disposed\nPASS: public runner/environment, Q-table update, real DQN inference, storage validation, ONNX lifecycle guard.\n",
+    "stderr": "\n============================\nHi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. \n============================\n"
+  }
+]

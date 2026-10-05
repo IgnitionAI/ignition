@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Cta() {
   return (
     <section>
@@ -37,9 +39,9 @@ export default function Cta() {
               <a className="btn text-slate-900 bg-linear-to-r from-white/80 via-white to-white/80 hover:bg-white transition duration-150 ease-in-out group" href="https://github.com/IgnitionAI/ignition">
                 Star on GitHub <span className="tracking-normal text-indigo-500 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
               </a>
-              <a className="btn text-slate-200 hover:text-white bg-slate-900/40 hover:bg-slate-900/60 border border-slate-800 transition duration-150 ease-in-out" href="/docs">
+              <Link className="btn text-slate-200 hover:text-white bg-slate-900/40 hover:bg-slate-900/60 border border-slate-800 transition duration-150 ease-in-out" href="/docs">
                 Read the docs
-              </a>
+              </Link>
             </div>
           </div>
         </div>

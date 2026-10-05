@@ -1,0 +1,52 @@
+[
+  {
+    "slot": 0,
+    "visibleStatus": [
+      "SAC · graine 11 chargé. Checkpoint validé ; optimiseur et replay recréés."
+    ],
+    "nativeStatus": "SAC · graine 11 chargé. Checkpoint validé ; optimiseur et replay recréés.",
+    "nativeError": "",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "alerts": []
+  },
+  {
+    "slot": 1,
+    "visibleStatus": [
+      "SAC · graine 29 chargé. Checkpoint validé ; optimiseur et replay recréés."
+    ],
+    "nativeStatus": "SAC · graine 29 chargé. Checkpoint validé ; optimiseur et replay recréés.",
+    "nativeError": "",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "alerts": []
+  },
+  {
+    "slot": 2,
+    "visibleStatus": [
+      "SAC · graine 47 chargé. Checkpoint validé ; optimiseur et replay recréés."
+    ],
+    "nativeStatus": "SAC · graine 47 chargé. Checkpoint validé ; optimiseur et replay recréés.",
+    "nativeError": "",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "alerts": []
+  },
+  {
+    "slot": 3,
+    "visibleStatus": [
+      "SAC · graine 73 chargé. Checkpoint validé ; optimiseur et replay recréés."
+    ],
+    "nativeStatus": "SAC · graine 73 chargé. Checkpoint validé ; optimiseur et replay recréés.",
+    "nativeError": "",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "alerts": []
+  },
+  {
+    "slot": 4,
+    "visibleStatus": [
+      "SAC · graine 101 chargé. Checkpoint validé ; optimiseur et replay recréés."
+    ],
+    "nativeStatus": "SAC · graine 101 chargé. Checkpoint validé ; optimiseur et replay recréés.",
+    "nativeError": "",
+    "metrics": "{\n  \"samples\": 20000,\n  \"updates\": 9751,\n  \"criticLoss\": null,\n  \"actorLoss\": null\n}",
+    "alerts": []
+  }
+]

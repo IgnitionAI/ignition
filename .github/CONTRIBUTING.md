@@ -12,19 +12,19 @@ pnpm install
 
 Requirements:
 - Node.js 20+
-- pnpm 9+
-- Python 3.10+ (for ONNX export tests)
+- pnpm 10.8.0 (the version pinned by the root package)
+- Python 3.11 with pinned isolated dependencies for real ONNX conversion (see backend-onnx/examples/README.md)
 
 ## Monorepo structure
 
 ```
 packages/
-├── core/            # TrainingEnv interface, types, schemas
-├── backend-tfjs/    # DQN, PPO, QTable agents (TF.js)
+├── core/            # Discrete/continuous contracts and mono/multi-agent runners
+├── backend-tfjs/    # DQN, Double DQN, PPO, QTable and SAC agents (TF.js)
 ├── backend-onnx/    # ONNX export + inference runtime
 ├── storage/         # Model persistence providers
 ├── environments/    # Built-in envs (CartPole, MountainCar, GridWorld)
-├── ignitionai/      # Public facade (exports everything)
+├── ignitionai/      # Local-only facade; not published on npm
 ├── web/             # Next.js 16 landing + Nextra docs
 └── demo-*/          # Standalone demo apps
 ```
@@ -39,8 +39,17 @@ pnpm test
 pnpm run typecheck
 
 # Single package
-pnpm --filter @ignitionai/backend-tfjs test
+pnpm exec vitest run packages/backend-tfjs/test
 ```
+
+## Cleaning generated artifacts
+
+Install `trash-cli` so that `trash` and `trash-restore` are available, then run
+`pnpm clean`. This moves package `dist` and `node_modules` directories to Trash;
+the root dependency directory and source files are preserved. Symlink targets
+are refused, and missing `trash` stops the command before any files are moved.
+Use `trash-restore` to choose a directory and restore its original path. Do not
+empty Trash until you have confirmed you no longer need these artifacts.
 
 ## Adding a feature
 
@@ -74,10 +83,10 @@ Example: `feat(backend-tfjs): add GRU support to DQNAgent`
 ## Release process
 
 Maintainers only:
-1. Update `CHANGELOG.md`
-2. Bump versions in affected `package.json` files
-3. Run `pnpm -r publish`
-4. Tag the release on GitHub
+Follow the [candidate preparation and recovery checklist](../docs/design/release-candidate.md).
+Approve the scope/version, validate the five modular archives outside the
+workspace and their licences, then authorize publication separately. The
+umbrella remains local-only. A local build or draft PR is not a published release.
 
 ## Questions?
 

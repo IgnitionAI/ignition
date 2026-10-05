@@ -6,33 +6,33 @@
 
 ---
 
-## Done
+## Implemented in source
 
 - **Core**: TrainingEnv/InferenceEnv interfaces, auto-config, IgnitionEnv with train/infer/stop/setSpeed
-- **Algos**: DQN, PPO, Q-Table — with greedy mode for inference
-- **Infrastructure**: pnpm monorepo, Zod validation, CI/CD, `ignitionai` umbrella package
+- **Algos**: DQN, Double DQN, PPO, Q-Table — with greedy mode for inference
+- **Infrastructure**: pnpm monorepo, Zod validation, CI/CD, local-only `ignitionai` umbrella package
 - **ONNX**: OnnxAgent, TF.js→ONNX exporter, HF Hub loader
 - **Storage**: HuggingFace Hub provider
 - **Environments**: `@ignitionai/environments` — GridWorld, CartPole, MountainCar
 - **Demos 2D**: GridWorld, CartPole, MountainCar
 - **Demos 3D**: CartPole 3D, Car Circuit (dense progress reward), Drone Navigation (rigid-body physics hero demo)
-- **184+ tests** passing
+- Historical suite at source `52610b5`, observed 2026-10-04: **420 tests passed, 3 authenticated HF tests skipped**. Later commits require their own results.
 
 ---
 
-## Phase 1 — Public Launch Prep ✅
+## Phase 1 — Public Launch Prep
 
-> Everything needed to post "Show HN" without getting roasted. **All done.**
+> Launch foundation is implemented. Current consolidation and remaining acceptance are tracked in GitHub epics #22 and #23.
 
 ### 1.1 Landing page ✅
 - [x] Single-page site under `packages/web` (Next.js 16 + Tailwind 4)
 - [x] Hero: install command + "Train your first agent" messaging
 - [x] 7-line code snippet in Quickstart section
-- [x] 6-demo grid (GridWorld, CartPole, MountainCar, CartPole 3D, Car Circuit, Drone Navigation)
+- [x] Shared eight-demo catalogue: GridWorld, CartPole, MountainCar, CartPole 3D, Circuit Racing, Drone Navigation, Maze and Maze 3D.
 - [x] IgnitionAI brand: flame GIF logo, indigo palette, custom SVG feature diagrams
 - [x] Real package install command (`@ignitionai/core` + `@ignitionai/backend-tfjs` + `@ignitionai/environments`)
 - [x] "Recent updates" section reading CHANGELOG.md at build time
-- [x] Deployed on Vercel at `ignitionai.dev`
+- Historical Vercel site: `ignitionai.dev`. Current PR previews and local builds do not prove publication of the latest source.
 
 ### 1.2 Documentation site ✅
 - [x] Docs at `/docs` via Nextra 4, same Next.js deployment (single Vercel build)
@@ -42,7 +42,7 @@
 - [x] React Three Fiber page: why R3F-first + full training-loop/render-loop split
 - [x] 7 tutorials: GridWorld, CartPole observations, MountainCar reward shaping, CartPole 3D, Car Circuit, ONNX → Unity, Drone Navigation (physics + "IgnitionAI philosophy" section)
 - [x] Auto-generated sidebar via `_meta.js` contracts, dark-mode matches landing
-- [x] 26 routes built statically (landing, /changelog, /docs/*, 6 demo SPAs)
+- [x] Static site/docs routes and eight catalogue demo SPAs; see `packages/web/data/demos.json` and the retained web verification report
 
 ### 1.3 README + branding
 - [x] README rewritten for v0.1 with current API + all demos
@@ -50,7 +50,7 @@
 - [x] Flame GIF logo (IgnitionAI brand asset)
 - [x] Flame SVG favicon across all pages + demos (`app/icon.svg` + `public/favicon.svg`)
 - [x] Root metadata: title template "— IgnitionAI", real description
-- [ ] Social card image for Twitter/OG
+- [x] Social card and metadata locally verified in #32; latest deployment remains a separate check
 - [ ] Hero GIF of Car Circuit or Drone demo in README
 
 ### 1.4 npm publish v0.1.0 ✅
@@ -59,7 +59,7 @@
 - [x] Tag `v0.1.0` on GitHub
 
 ### 1.5 Live demos ✅
-- [x] 6 demos embedded as static routes under `/demos/<slug>/` via prebuild pipeline
+- [x] Eight catalogue demos embedded as static routes under `/demos/<slug>/` via prebuild pipeline. Cage Duel and Target Chasing remain excluded.
 - [x] Each demo has `← IgnitionAI` back link
 - [x] Vite configs accept `DEMO_BASE` env var for per-route asset paths
 - [x] Next.js rewrites resolve `/demos/:slug/` to their `index.html`
@@ -81,8 +81,8 @@
 ### 1.8 Car Circuit reward fix ✅
 - [x] Replaced `+1 per on-track step` with dense progress shaping (`progressDelta × 300 + alignment + centerline`)
 
-### Known framework bug (low priority)
-- `backend-tfjs/src/defaults.ts:3-13` disagrees with `agents/dqn.ts:43` on `targetUpdateFrequency` (100 vs 1000). Docs cite the runtime value (1000). Cleanup commit needed.
+### DQN target synchronization
+- Both runner and direct-agent construction now default to 100 training updates. Direct-agent users previously relying on 1000 should explicitly set `targetUpdateFrequency: 1000`. Historical benchmark configurations and reports remain unchanged.
 
 ---
 
@@ -96,7 +96,7 @@
 - [ ] **Reddit r/reinforcementlearning + r/javascript + r/threejs + r/reactjs**
 - [ ] **Product Hunt** submission
 - [ ] **Discord server**: community + support channel
-- [ ] Social card image for Twitter/OG meta tags
+- [x] Social card and metadata locally verified in #32; latest deployment remains a separate check
 - [ ] Hero GIF in README (Drone Navigation or Car Circuit)
 - [ ] Track metrics: GitHub stars, npm downloads, demo page views
 
@@ -120,7 +120,7 @@ These are engineered for virality. "AI learns Flappy Bird in JavaScript" is a tw
 
 > Continuous action spaces for real game AI.
 
-- [ ] **SAC** (Soft Actor-Critic) — continuous actions (steering angle, throttle)
+- **SAC / continuous actions**: #33 verified, source PR #40; integrated in the consolidation branch with combined local verification. Point-mass benchmark retained; no claim of SAC vehicle steering.
 - [ ] **A2C** — lightweight alternative to PPO
 - [ ] Upgrade Drone Navigation + Car Circuit to continuous steering with SAC — smoother control
 - [ ] Benchmark: DQN vs PPO vs SAC on the same env
@@ -131,7 +131,7 @@ These are engineered for virality. "AI learns Flappy Bird in JavaScript" is a tw
 
 > The next level of RL.
 
-- [ ] **Multi-agent API**: multiple agents in the same environment
+- **Multi-agent API**: #34 verified, source PR #39; integrated in the consolidation branch with combined local verification.
 - [ ] **Self-play**: agent trains against past versions of itself
 - [ ] Demo: **Pong** — two agents learning to beat each other
 - [ ] Demo: **Sumo** — two agents wrestling in a circle
@@ -144,7 +144,7 @@ These are engineered for virality. "AI learns Flappy Bird in JavaScript" is a tw
 
 - [ ] Upload API: `agent.publish('username/model-name')`
 - [ ] Download API: `IgnitionEnv.loadAgent('username/model-name')`
-- [ ] Gallery page: browse published agents
+- **Checkpoint catalogue**: #35 verified, source PR #42; integrated in the consolidation branch with combined local verification. Five documented SAC checkpoints, compatibility checks and a local laboratory; not a general model leaderboard.
 - [ ] Top models: car racing, Snake champion, Flappy master, drone pilot
 - [ ] Leaderboard per environment
 
@@ -218,3 +218,20 @@ Possible models (ranked by feasibility):
 ---
 
 Built by [@salim4n](https://github.com/salim4n) / [@IgnitionAI](https://github.com/IgnitionAI)
+
+## Current delivery tracking
+
+See epics [#22](https://github.com/IgnitionAI/ignition/issues/22), [#23](https://github.com/IgnitionAI/ignition/issues/23), and [#24](https://github.com/IgnitionAI/ignition/issues/24). These distinguish verified corrections, pending acceptance and future extensions. The `ignitionai` umbrella is local-only; published modular packages are still 0.1.0 and lag current source APIs. For current examples use a source workspace.
+
+## Acceptance snapshot — 2026-10-04
+
+- Circuit driving/rules/training/AI-racing: #13–#16 verified; source proofs under `docs/verification/racing-acceptance`, `training-browser` and `racing-four`.
+- Player acceptance #17 remains open: complete human-keyboard race against a learned checkpoint is not proven. AI/API or rule-controlled browser runs cannot replace it. Parents #9/#6 remain open.
+- Double DQN #11: native train/save/reload and all20 evaluations verified with unchanged weights (6000-transition partial checkpoint,0/20 successful). Comparison #12 retains the independently audited200-outcome equal-budget experiment and its verified production-local report link. Human-player acceptance remains separate.
+- HF #31 remains open: the provider repair and protected opt-in live test from PR #41 are integrated in the consolidation branch. Authenticated remote round-trip requires dedicated credentials and is not proven.
+- Epics #22/#23 remain open. Epic #24 has combined local API/runtime verification in PR #37; this does not establish a published release.
+- Blog PR #38: public index/eight articles, seventeen PNGs and demo links verified on 2026-10-04 in #46. GitHub Production deployment identifies 761e0f7; the technical Vercel hostname requires login, while canonical-domain behavior is retained separately in `docs/verification/public-articles`.
+- Cleanup #44 is verified and closed; `pnpm clean` moves package artifacts to Trash.
+- Licence #45 awaits copyright confirmation; public article verification is tracked in #46.
+- Release preparation #47 remains open. Local archives pass ESM/CommonJS imports and operations on Node 20.0.0, 20.19.2 and 22.23.3; tests/build metadata are excluded. These are candidate archives, not a new npm publication.
+- Documentation #29 has criterion-level reconciliation of #6–#17, preserving the outstanding human acceptance. See `docs/verification/status-reconciliation` for dated GitHub readbacks and local link checks.

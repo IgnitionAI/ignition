@@ -52,12 +52,13 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Install command */}
+            {/* Source demo command */}
             <div className="mt-12" data-aos="fade-down" data-aos-delay="600">
               <div className="inline-flex items-center gap-2 bg-slate-900/60 border border-slate-800 rounded-lg px-4 py-2 font-mono text-sm text-slate-300">
                 <span className="text-indigo-400">$</span>
-                <span>npm install @ignitionai/core @ignitionai/backend-tfjs @ignitionai/environments</span>
+                <span>corepack pnpm --filter demo-cartpole dev</span>
               </div>
+              <p className="mt-3 text-sm text-slate-400">Run from the source checkout after installing dependencies. See the quickstart for setup.</p>
             </div>
 
           </div>

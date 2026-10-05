@@ -1,0 +1,48 @@
+{
+  "verifiedAt": "2026-10-04T12:42:15.839Z",
+  "directory": ".scratch/sac-point-mass-v1-complete",
+  "reportSha256": "7e43c7e7059ab542fdf44c5d50bdf30fb8c62a5ed0029741bf5147702b191b96",
+  "provenanceVerified": true,
+  "checkpointsReloaded": 5,
+  "episodesReproduced": 1000,
+  "policies": [
+    {
+      "seed": 11,
+      "successes": 100,
+      "meanBaselineCost": 109.68757249653756,
+      "meanTrainedCost": 6.860341881064635
+    },
+    {
+      "seed": 29,
+      "successes": 100,
+      "meanBaselineCost": 123.05495517447409,
+      "meanTrainedCost": 6.491431519821021
+    },
+    {
+      "seed": 47,
+      "successes": 100,
+      "meanBaselineCost": 21.144839078906426,
+      "meanTrainedCost": 7.251335617827178
+    },
+    {
+      "seed": 73,
+      "successes": 100,
+      "meanBaselineCost": 144.38026660559754,
+      "meanTrainedCost": 7.159917391681866
+    },
+    {
+      "seed": 101,
+      "successes": 100,
+      "meanBaselineCost": 188.15353635636282,
+      "meanTrainedCost": 6.79627759894137
+    }
+  ],
+  "summary": {
+    "passed": true,
+    "failures": 0,
+    "passingPolicies": 5,
+    "meanBaselineCost": 117.28423394237568,
+    "meanTrainedCost": 6.911860801867213,
+    "costReduction": 0.9410674344749256
+  }
+}

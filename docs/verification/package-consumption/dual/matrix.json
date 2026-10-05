@@ -1,0 +1,296 @@
+[
+  {
+    "node": "v20.19.2",
+    "package": "core",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "core",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "storage",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "storage",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-tfjs",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-tfjs",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-onnx",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-onnx",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "environments",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "environments",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-onnx/node",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-onnx/node",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-onnx/web",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "package": "backend-onnx/web",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "core",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "core",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "storage",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "storage",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-tfjs",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-tfjs",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-onnx",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-onnx",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "environments",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "environments",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-onnx/node",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-onnx/node",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-onnx/web",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "package": "backend-onnx/web",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "core",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "core",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "storage",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "storage",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-tfjs",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-tfjs",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-onnx",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-onnx",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "environments",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "environments",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-onnx/node",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-onnx/node",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-onnx/web",
+    "mode": "esm",
+    "exit": 0,
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "package": "backend-onnx/web",
+    "mode": "require",
+    "exit": 0,
+    "stderr": ""
+  }
+]

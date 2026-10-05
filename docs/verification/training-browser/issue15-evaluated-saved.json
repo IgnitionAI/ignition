@@ -1,0 +1,157 @@
+{
+  "url": "http://127.0.0.1:4174/",
+  "at": "2026-10-04T20:10:32.618Z",
+  "text": "VOTRE PILOTE IA\nApprendre. Tester. Courir.\n1. Entraîner\n2. Tester\n3. Sauver\n4. Courir\nVotre pilote est dans le garage\n\nPassez à la course : votre pilote sera déjà sélectionné sur la grille.\n\nFaire courir mon pilote →\n\nLa voiture à droite est un aperçu de trajectoire par session, pas une course en direct. Pour voir votre pilote conduire en continu, terminez ces étapes puis lancez une course.\n\nVoir les résultats des courses (12/12)\n\nRéussite : 3 tours, sans remise en piste et avec au plus 10 s de pénalité.\n\nAlpine · solo · 101 : ✓ 55.5 s\nAlpine · solo · 307 : ✓ 55.5 s\nAlpine · solo · 509 : ✓ 55.3 s\nAlpine · trafic · 101 : ✓ 119.6 s\nAlpine · trafic · 307 : ✓ 120.6 s\nAlpine · trafic · 509 : ✓ 121.0 s\nHarbour · solo · 101 : ✓ 63.7 s\nHarbour · solo · 307 : ✓ 64.1 s\nHarbour · solo · 509 : ✓ 64.0 s\nHarbour · trafic · 101 : ✓ 226.2 s\nHarbour · trafic · 307 : ✓ 166.4 s\nHarbour · trafic · 509 : ✓ 265.3 s\nRéglages et détails techniques\nMéthode d’un nouveau pilote\nImitation\nDQN\nDouble DQN\nGraine de départ\n\nimitation-mlp · 8 192 exemples / transitions\n\nContinuer l’entraînement\nRecommencer avec un nouveau pilote\nSauvegarder sans attendre les tests\nRefaire les tests\n\nComparer DQN et Double DQN ↗\n\nRetrouver un pilote sauvegardé\nGarage local\nChoisir un pilote\nimitation-mlp · 11 · 6\nimitation-mlp · 11 · 12\nimitation-mlp · 11 · 6\nCharger ce pilote\n\nPilote sauvegardé dans ce navigateur.",
+  "persistence": {
+    "id": "driver-11-1791144626835",
+    "samples": 8192,
+    "updates": 6,
+    "weightsEqual": true,
+    "reports": [
+      {
+        "seed": 101,
+        "test": false,
+        "traffic": false,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 55.5,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 0
+      },
+      {
+        "seed": 307,
+        "test": false,
+        "traffic": false,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 55.483333333333334,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 0
+      },
+      {
+        "seed": 509,
+        "test": false,
+        "traffic": false,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 55.25,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 0
+      },
+      {
+        "seed": 101,
+        "test": false,
+        "traffic": true,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 119.64999999999999,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 3346
+      },
+      {
+        "seed": 307,
+        "test": false,
+        "traffic": true,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 120.63333333333333,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 3567
+      },
+      {
+        "seed": 509,
+        "test": false,
+        "traffic": true,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 121,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 3784
+      },
+      {
+        "seed": 101,
+        "test": true,
+        "traffic": false,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 63.733333333333334,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 0
+      },
+      {
+        "seed": 307,
+        "test": true,
+        "traffic": false,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 64.1,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 0
+      },
+      {
+        "seed": 509,
+        "test": true,
+        "traffic": false,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 64,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 0
+      },
+      {
+        "seed": 101,
+        "test": true,
+        "traffic": true,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 226.16666666666666,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 6065
+      },
+      {
+        "seed": 307,
+        "test": true,
+        "traffic": true,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 166.4,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 4360
+      },
+      {
+        "seed": 509,
+        "test": true,
+        "traffic": true,
+        "completed": true,
+        "success": true,
+        "laps": 3,
+        "finishSeconds": 265.26666666666665,
+        "penaltySeconds": 0,
+        "rescues": 0,
+        "contacts": 6253
+      }
+    ]
+  }
+}

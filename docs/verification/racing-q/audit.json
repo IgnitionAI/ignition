@@ -1,0 +1,157 @@
+{
+  "protocol": "racing-q-learning-v3",
+  "measuredCommit": "020ba09b92b06cf1cebae344d5774ea833970064",
+  "backend": "tensorflow",
+  "policies": 10,
+  "episodes": 200,
+  "sourceChecks": [
+    {
+      "path": "packages/demo-car-circuit/src/racing/q-training.ts",
+      "archivedHash": "d318d252bab4e4e3a9c98c58c60fa7c0e97f6d94d90c10d577624fb6e34396cc",
+      "currentMatches": true
+    },
+    {
+      "path": "packages/demo-car-circuit/src/racing/q-protocol.ts",
+      "archivedHash": "332e8c1c22cba8a4cdbbf8708835ca364ed9d654e3f68698ed4d9b0bb823d0e1",
+      "currentMatches": true
+    },
+    {
+      "path": "packages/demo-car-circuit/src/racing/learned-driver.ts",
+      "archivedHash": "67dd9890d773d8f1935f6b02da8585da9e09bbb6190af0239e37c71bc548e361",
+      "currentMatches": true
+    },
+    {
+      "path": "packages/demo-car-circuit/src/racing/training.ts",
+      "archivedHash": "04e2eb652afd50eb316a812d12f1eac5b9001b9811861f420da54c24cc826ccd",
+      "currentMatches": true
+    },
+    {
+      "path": "packages/demo-car-circuit/src/racing/driving.ts",
+      "archivedHash": "7a0c694794810a651525746d613549859a8dc5ba6c81e94e61a5201f1e589979",
+      "currentMatches": false
+    },
+    {
+      "path": "packages/demo-car-circuit/src/racing/race.ts",
+      "archivedHash": "e83a8e10fc984f6e9ee22c74e0e56af97e9a508916a57ba97956371f2045ad68",
+      "currentMatches": false
+    },
+    {
+      "path": "packages/demo-car-circuit/src/racing/observations.ts",
+      "archivedHash": "284640c1e5c00d854013ac724910b4a565596320477f0346dbc7c43f3bb9f9e4",
+      "currentMatches": true
+    },
+    {
+      "path": "packages/demo-car-circuit/src/racing/reference.ts",
+      "archivedHash": "152745f44908c0953568de46df75a09f78f5c57bcb5f99f31708e01a01d23b24",
+      "currentMatches": true
+    },
+    {
+      "path": "packages/backend-tfjs/src/agents/dqn.ts",
+      "archivedHash": "acc73079c7d5c95e59628311517e0a9e3b1e668200e2fd6c84cb1178e2afb648",
+      "currentMatches": false
+    },
+    {
+      "path": "packages/backend-tfjs/src/model/BuildMLP.ts",
+      "archivedHash": "f359df8f1ec1544d8c0b5d5b9e1b53f63ef38f8ddd190ddf7997fe5e9375e28e",
+      "currentMatches": true
+    },
+    {
+      "path": "packages/backend-tfjs/src/memory/ReplayBuffer.ts",
+      "archivedHash": "09e9b9b839cb3b4c98eba82ec10a735510bde195daa90efdc3aa17f33af43f80",
+      "currentMatches": true
+    }
+  ],
+  "stats": [
+    {
+      "algorithm": "dqn",
+      "successes": 42,
+      "completed": 61,
+      "mean": 42,
+      "populationStd": 38.02630668366309,
+      "min": 0,
+      "max": 85
+    },
+    {
+      "algorithm": "double-dqn",
+      "successes": 33,
+      "completed": 77,
+      "mean": 33,
+      "populationStd": 32.95451410656816,
+      "min": 0,
+      "max": 80
+    }
+  ],
+  "rows": [
+    {
+      "identity": "dqn-11",
+      "successes": 17,
+      "completed": 20,
+      "trainingSeconds": 20.268202582999997,
+      "evaluationSeconds": 18.286260125000005
+    },
+    {
+      "identity": "dqn-29",
+      "successes": 0,
+      "completed": 6,
+      "trainingSeconds": 19.354727291999996,
+      "evaluationSeconds": 27.695169916999998
+    },
+    {
+      "identity": "dqn-47",
+      "successes": 0,
+      "completed": 2,
+      "trainingSeconds": 18.929095499999995,
+      "evaluationSeconds": 32.961104208000016
+    },
+    {
+      "identity": "dqn-73",
+      "successes": 8,
+      "completed": 14,
+      "trainingSeconds": 23.377249374999984,
+      "evaluationSeconds": 24.209969583
+    },
+    {
+      "identity": "dqn-101",
+      "successes": 17,
+      "completed": 19,
+      "trainingSeconds": 18.509864499999996,
+      "evaluationSeconds": 19.90444
+    },
+    {
+      "identity": "double-dqn-11",
+      "successes": 13,
+      "completed": 20,
+      "trainingSeconds": 19.357375624999985,
+      "evaluationSeconds": 14.820086458000006
+    },
+    {
+      "identity": "double-dqn-29",
+      "successes": 16,
+      "completed": 20,
+      "trainingSeconds": 19.588850874999974,
+      "evaluationSeconds": 17.360047083000012
+    },
+    {
+      "identity": "double-dqn-47",
+      "successes": 3,
+      "completed": 11,
+      "trainingSeconds": 19.644881458999997,
+      "evaluationSeconds": 23.20549349999998
+    },
+    {
+      "identity": "double-dqn-73",
+      "successes": 1,
+      "completed": 10,
+      "trainingSeconds": 19.733418707999984,
+      "evaluationSeconds": 26.09760725
+    },
+    {
+      "identity": "double-dqn-101",
+      "successes": 0,
+      "completed": 16,
+      "trainingSeconds": 18.915386750000007,
+      "evaluationSeconds": 24.592432750000036
+    }
+  ],
+  "passed": true
+}

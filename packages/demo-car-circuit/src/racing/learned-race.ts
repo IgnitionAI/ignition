@@ -24,7 +24,6 @@ export class LearnedRace {
     this.race = new RaceWorld({
       count: entries.length + (human ? 1 : 0),
       test,
-      ghost: true,
     });
     try {
       for (const entry of entries)
@@ -59,7 +58,7 @@ export class LearnedRace {
           return this.previousActions[i];
         })(),
     );
-    this.race.step(actions, this.human ? 0 : undefined);
+    this.race.step(actions);
   }
   snapshots() {
     return this.policies.map((p) => p.exportCheckpoint());

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import MousePosition from './utils/mouse-position'
 
 type HighlighterProps = {
@@ -17,57 +17,20 @@ export default function Highlighter({
 
   const containerRef = useRef<HTMLDivElement>(null)
   const mousePosition = MousePosition()
-  const mouse = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
-  const containerSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 })
-  const [boxes, setBoxes] = useState<Array<HTMLElement>>([])
-
-  useEffect(() => {    
-    containerRef.current && setBoxes(Array.from(containerRef.current.children).map((el) => el as HTMLElement))
-  }, [])
-  
-  useEffect(() => {    
-    initContainer()
-    window.addEventListener('resize', initContainer)
-
-    return () => {
-      window.removeEventListener('resize', initContainer)
-    }
-  }, [setBoxes])  
-
   useEffect(() => {
-    onMouseMove()
-  }, [mousePosition])
-
-  useEffect(() => {
-    initContainer()
-  }, [refresh])  
-
-  const initContainer = () => {
-    if(containerRef.current) {
-      containerSize.current.w = containerRef.current.offsetWidth
-      containerSize.current.h = containerRef.current.offsetHeight
-    }
-  }  
-  
-  const onMouseMove = () => {    
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      const { w, h } = containerSize.current
-      const x = mousePosition.x - rect.left
-      const y = mousePosition.y - rect.top
-      const inside = x < w && x > 0 && y < h && y > 0      
-      if (inside) {
-        mouse.current.x = x
-        mouse.current.y = y
-        boxes.forEach((box) => {
-          const boxX = -(box.getBoundingClientRect().left - rect.left) + mouse.current.x
-          const boxY = -(box.getBoundingClientRect().top - rect.top) + mouse.current.y
-          box.style.setProperty('--mouse-x', `${boxX}px`)
-          box.style.setProperty('--mouse-y', `${boxY}px`)
-        })
-      }
-    }
-  }  
+    const container = containerRef.current
+    if (!container) return
+    const rect = container.getBoundingClientRect()
+    const x = mousePosition.x - rect.left
+    const y = mousePosition.y - rect.top
+    if (x <= 0 || y <= 0 || x >= rect.width || y >= rect.height) return
+    Array.from(container.children).forEach((child) => {
+      if (!(child instanceof HTMLElement)) return
+      const box = child.getBoundingClientRect()
+      child.style.setProperty('--mouse-x', `${mousePosition.x - box.left}px`)
+      child.style.setProperty('--mouse-y', `${mousePosition.y - box.top}px`)
+    })
+  }, [mousePosition.x, mousePosition.y, refresh])
 
   return (
     <div className={className} ref={containerRef}>{children}</div>

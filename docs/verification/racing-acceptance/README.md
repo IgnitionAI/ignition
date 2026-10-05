@@ -1,0 +1,21 @@
+# Circuit acceptance reconciliation — #13 / #14
+
+Source reviewed: 22e48bb113c67ba2119fe78483fa633cfe9776b2. This report reconciles existing implementation, rather than changing the approved scope. Analyze: identify every issue criterion and distinguish browser, API, historical training and software-rendering evidence. Plan: inspect authoritative sources and prior raw reports, rerun affected public owner suites, reread the retained finished browser race, preserve current screenshots, then review and verify.
+
+## #13
+
+1. PASS: Kenney Car Kit 3.1 provenance and original CC0 license retained under src/public/models. SHA256 of race.glb and sedan-sports.glb matches PROVENANCE.md. Models appear in genuine races. Real HTTP fixture at localhost:4175 returns 404 for race.glb; asset-error.png shows explicit failure and Retry. This screenshot was displayed and inspected.
+2. PASS: DRIVING_CONTRACT circuit-racing-v2, dt=1/60, nine actions. DrivingWorld has no renderer dependency; RacingScene accumulates fixed ticks.
+3. PASS: shared-driving/browser.json covers acceleration, braking and Escape pause; driving-focus/coast.json and paused.png prove genuine trusted tab blur and clearing held acceleration, after inconclusive headless attempts. Public help documents keys.
+4. PASS: current racing-driving and racing-camera suites: 9 tests / 2 files, exit 0. Movement, braking, deterministic commands, containment, camera stability and frame-rate consistency covered. Current race screenshot shows vehicle, varied track and chase camera.
+5. PASS for measurement, not 60 FPS: driving-focus/render-measurement.json retains Chrome145/Linux, 8 logical CPUs, 1050x793, ANGLE Vulkan SwiftShader, 44 frames/5.0492 s = 8.714 FPS, p50 116.6 ms, p95 166.6 ms; race.glb 5.1 ms and 167572 transferred bytes. Host AMD EPYC9645. Concurrent contexts and software rendering prevent extrapolating to hardware desktop performance. Proposed 60 FPS objective is not established.
+
+## #14
+
+1. PASS: racing-race tests reject teleports/backward start crossings and complete ordered gates on both tracks. Source only awards the next ordered gate on a forward, on-road, bounded-distance crossing.
+2. PASS: contact separation and rail containment, moving-offroad penalty, immobilization rescue, manual recovery and finish-before-rescue tested. Public garage states contacts and penalties.
+3. PASS: LearnedRace collects every observation and action before its single RaceWorld.step batch; training/evaluation also assemble actions before advancing. The full human/opponent test compares canonical per-tick car states and retained frozen weights; no private policy injection.
+4. PASS: 20 current tests in racing-race and learned-race, exit 0, including deterministic tied standings and full learned-policy finish with unchanged weights. Current actual browser page issue17-hud-timing reached results with bundled-29 103.27 s and bundled-11 115.40 s, both 3/3; results.json / results.png reread without restarting. Four-driver genuine browser completion is separately retained in ../racing-four. Screenshots displayed and inspected.
+5. PASS for versioned predeclared setup: racing-learning-v2 selects the last scheduled training-only update; Alpine Park and held-out Harbour have separate IDs, three training seeds and three evaluation seeds. protocol.json was written with exclusive creation before the training loop; its seven source hashes all match delivered commit 020ba09. Its recorded HEAD 5847b76 is the earlier clean HEAD during a dirty-source run, so hashes identify the trained source more precisely. Historical checkpoints/reports are retained. Current differences include optional ghost mode, manual recovery and outward-contact sign for reverse; historical reports must not be labelled byte-identical current-source measurements. These changes preserve held-out geometry and the predeclared selection criterion.
+
+Review: specification PASS for #13/#14 scoped criteria; standards PASS, no source changes or new test seams. Verification above does not establish #17 human completion, authenticated HF, hardware 60 FPS or remote deployment. CodeQL passed source head22e48bb; Vercel was pending. Broader parent issues remain open.

@@ -29,7 +29,7 @@ This is the contract. Anything implementing it is a valid storage backend:
 
 ```ts
 export interface ModelStorageProvider {
-  save(modelId: string, model: tf.LayersModel, metadata?: Record<string, unknown>): Promise<void>
+  save(modelId: string, model: tf.LayersModel, metadata?: Record<string, unknown>): Promise<string>
   load(modelId: string): Promise<tf.LayersModel>
   list(): Promise<ModelInfo[]>
   delete(modelId: string): Promise<void>
@@ -60,37 +60,44 @@ const env = new IgnitionEnvTFJS(new CartPoleEnv())
 env.train('dqn', { storageProvider: new IndexedDBProvider() })
 
 // Later — save the current checkpoint
-await env.save('cartpole-dqn-v1', { reward: 195.4 })
+await env.save('cartpole-dqn-v1')
 
-// Even later — load it back
-await env.load('cartpole-dqn-v1')
+// In a fresh session, initialize the same algorithm and architecture.
+const restored = new IgnitionEnvTFJS(new CartPoleEnv())
+restored.train('dqn', { storageProvider: new IndexedDBProvider() })
+restored.stop()
+await restored.load('cartpole-dqn-v1')
+restored.infer()
 ```
 
-`env.save()` serializes the model weights **and** the agent's internal state (`epsilon`, `trainStepCounter`, `bestReward`). `env.load()` restores both. No manual bookkeeping.
+DQN and Double DQN save their model weights and supply state metadata to the provider. PPO saves separate actor and critic models. These agents' `load()` methods restore the networks, not their saved agent-state metadata. Do not treat loading as an exact training continuation: exploration/counters, replay or rollout history and optimizer progress are not automatically restored. Use compatible algorithm, dimensions and architecture; the runner must have an agent before calling `load()`.
 
-### LocalStorage — for configs and Q-Tables
+### LocalStorage and Q-Table persistence
 
 ```ts filename="localstorage-save.ts"
-import { LocalStorageProvider } from '@ignitionai/storage'
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from '@ignitionai/environments'
 
 const env = new IgnitionEnvTFJS(new CartPoleEnv())
-env.train('qtable', { storageProvider: new LocalStorageProvider() })
+env.train('qtable')
 
 await env.save('cartpole-qtable-v1')
 ```
 
-Q-Table agents serialize their entire table as JSON, so `LocalStorageProvider` is a perfect fit. For neural-network agents, prefer `IndexedDBProvider` — TF.js weights can easily exceed the 5 MB localStorage limit.
+Q-Table agents write their own JSON payload directly to `localStorage` under `ignition:qtable:<modelId>`; they do not use `ModelStorageProvider`. Loading validates the discretization contract and restores the table and epsilon. Create a Q-table agent with matching input/action sizes, bins and bounds first. `LocalStorageProvider` instead stores small TensorFlow.js models and metadata; prefer `IndexedDBProvider` for larger networks. Browser quotas vary.
 
 ### Download — export for external use
 
 ```ts filename="download.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from '@ignitionai/environments'
 import { DownloadProvider } from '@ignitionai/storage'
 
 const env = new IgnitionEnvTFJS(new CartPoleEnv())
-env.train('dqn')
+env.train('dqn', { storageProvider: new DownloadProvider() })
 
-// Triggers a browser download of model.json + weights.bin
-await env.save('my-model', { download: true })
+// After training: triggers a browser download of model.json + weights.bin
+await env.save('my-model')
 ```
 
 `DownloadProvider` is write-only. Use it when you want to hand off a trained model to someone else or archive it outside the browser.
@@ -180,7 +187,7 @@ These aren't mutually exclusive. A common workflow is: save TF.js checkpoints to
 
 ## Adding your own storage backend
 
-To add an S3 backend:
+The following scaffold shows the interface for an S3 backend. It deliberately throws until storage operations are implemented; it is not a working S3 integration.
 
 ```ts filename="s3-provider.ts"
 import type { ModelStorageProvider, ModelInfo } from '@ignitionai/storage'
@@ -189,17 +196,17 @@ import * as tf from '@tensorflow/tfjs'
 export class S3Provider implements ModelStorageProvider {
   constructor(private bucket: string, private region: string) {}
 
-  async save(modelId: string, model: tf.LayersModel, metadata?: Record<string, unknown>): Promise<void> {
-    // ... serialize model, upload to S3 ...
+  async save(modelId: string, model: tf.LayersModel, metadata?: Record<string, unknown>): Promise<string> {
+    throw new Error("S3 upload is not implemented")
   }
 
   async load(modelId: string): Promise<tf.LayersModel> {
-    // ... download from S3, deserialize ...
+    throw new Error("S3 download is not implemented")
   }
 
-  async list(): Promise<ModelInfo[]> { /* ... */ return [] }
-  async delete(modelId: string): Promise<void> { /* ... */ }
-  async exists(modelId: string): Promise<boolean> { /* ... */ return false }
+  async list(): Promise<ModelInfo[]> { throw new Error("S3 listing is not implemented") }
+  async delete(modelId: string): Promise<void> { throw new Error("S3 deletion is not implemented") }
+  async exists(modelId: string): Promise<boolean> { throw new Error("S3 lookup is not implemented") }
 }
 ```
 

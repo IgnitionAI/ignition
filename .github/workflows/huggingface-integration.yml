@@ -1,0 +1,38 @@
+name: Hugging Face storage integration
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authenticated-roundtrip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_TEST_REPO_ID: ${{ secrets.HF_TEST_REPO_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Require dedicated integration configuration
+        run: |
+          node -e 'if (!process.env.HF_TOKEN || !process.env.HF_TEST_REPO_ID) { console.error("Configure HF_TOKEN and private HF_TEST_REPO_ID before dispatching this integration."); process.exit(1); }'
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run authenticated storage round-trip
+        run: pnpm exec vitest run packages/storage/test/huggingface-live.test.ts --reporter=json --outputFile=.scratch/hf-live-tests.json
+      - name: Retain sanitized runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: huggingface-storage-roundtrip
+          path: |
+            .scratch/hf-live-tests.json
+            .scratch/hf-live-roundtrip.json
+          if-no-files-found: warn

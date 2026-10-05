@@ -1,13 +1,14 @@
 import path from 'path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   root: 'src',
   base: process.env.DEMO_BASE ?? '/',
   build: { outDir: '../dist', emptyOutDir: true },
   server: { port: 3020 },
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       '@ignitionai/backend-tfjs': path.resolve(__dirname, '../backend-tfjs/src'),

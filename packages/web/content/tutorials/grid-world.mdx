@@ -23,6 +23,25 @@ Estimated time: **25–35 minutes** on a machine that already has Node installed
 
 You do **not** need TensorFlow, Python, CUDA, a GPU, or any prior ML experience.
 
+## Source package prerequisite
+
+Follow the [Quickstart source setup](/docs/quickstart) first. These examples use
+current workspace APIs absent from npm 0.1.0. Create the tutorial project next to
+the `ignition` checkout so the relative package paths below resolve. Build and pack the workspace packages before installing them in the tutorial project.
+From the checkout root, run:
+
+```bash
+mkdir -p .scratch/source-packages
+corepack pnpm --dir packages/core pack --pack-destination ../../.scratch/source-packages
+corepack pnpm --dir packages/backend-tfjs pack --pack-destination ../../.scratch/source-packages
+corepack pnpm --dir packages/environments pack --pack-destination ../../.scratch/source-packages
+corepack pnpm --dir packages/storage pack --pack-destination ../../.scratch/source-packages
+```
+
+These archives contain the built checkout APIs. Packing rewrites workspace
+references for npm; installing the raw workspace directories would leave
+unsupported `workspace:*` dependencies.
+
 ## Step 1 — Create a fresh Vite project
 
 Open a terminal, pick a directory, and run:
@@ -36,10 +55,10 @@ npm install
 Vite gives you a minimal TypeScript project with a dev server. Now install the two IgnitionAI packages:
 
 ```bash
-npm install @ignitionai/core @ignitionai/backend-tfjs
+npm install ../ignition/.scratch/source-packages/ignitionai-core-0.1.0.tgz ../ignition/.scratch/source-packages/ignitionai-backend-tfjs-0.1.0.tgz ../ignition/.scratch/source-packages/ignitionai-storage-0.1.0.tgz
 ```
 
-**What to observe**: `package.json` should now list both `@ignitionai/core` and `@ignitionai/backend-tfjs` under `dependencies`. If the install failed, you probably have Node < 20 — upgrade and retry.
+**What to observe**: `package.json` should now list both `@ignitionai/core` and `@ignitionai/backend-tfjs` under `dependencies`. If installation fails, check the checkout paths, package builds and Node version.
 
 **Why this step exists**: Vite is the fastest way to get a TypeScript project with hot reload in the browser. IgnitionAI's TF.js backend needs a bundler that can serve ES modules, which Vite handles out of the box.
 

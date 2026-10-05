@@ -1,0 +1,52 @@
+{
+  "url": "http://127.0.0.1:4174/reports/racing-q-v3/index.html",
+  "note": "Expérience archivée du 2026-09-06 (source 020ba09b). Ce benchmark mesure les courses en mode contact (circuit-race-v2). Les courses interactives utilisent désormais les contacts entre voitures et les barrières. Ces scores restent liés aux sources archivées et ne constituent pas une nouvelle mesure du code actuel.",
+  "rows": 10,
+  "statuses": [
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/dqn-11.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/dqn-29.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/dqn-47.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/dqn-73.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/dqn-101.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/double-dqn-11.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/double-dqn-29.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/double-dqn-47.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/double-dqn-73.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/double-dqn-101.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:4174/reports/racing-q-v3/results.json",
+      "status": 200
+    }
+  ],
+  "htmlSha256": "24d67258fe557a768c80a954a68c4a080356111bd413869c7c98636ee84341b7"
+}

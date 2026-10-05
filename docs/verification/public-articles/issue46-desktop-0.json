@@ -1,0 +1,60 @@
+[
+  {
+    "environment": "mountaincar",
+    "url": "https://ignitionai.dev/blog/mountaincar-prendre-elan",
+    "status": 200,
+    "errors": [],
+    "heading": "MountainCar : apprendre à prendre de l’élan",
+    "overflow": false,
+    "images": [
+      {
+        "src": "https://ignitionai.dev/images/blog/mountaincar/initial.png",
+        "status": 200
+      },
+      {
+        "src": "https://ignitionai.dev/images/blog/mountaincar/active.png",
+        "status": 200
+      }
+    ],
+    "demos": [
+      {
+        "href": "https://ignitionai.dev/demos/mountaincar/",
+        "status": 200
+      },
+      {
+        "href": "https://ignitionai.dev/demos/mountaincar/",
+        "status": 200
+      }
+    ],
+    "screenshot": "/home/dev/.dev-browser/tmp/issue46-mountaincar-desktop.png"
+  },
+  {
+    "environment": "gridworld",
+    "url": "https://ignitionai.dev/blog/gridworld-valeurs-actions",
+    "status": 200,
+    "errors": [],
+    "heading": "GridWorld : rendre les décisions d’un agent lisibles",
+    "overflow": false,
+    "images": [
+      {
+        "src": "https://ignitionai.dev/images/blog/gridworld/initial.png",
+        "status": 200
+      },
+      {
+        "src": "https://ignitionai.dev/images/blog/gridworld/active.png",
+        "status": 200
+      }
+    ],
+    "demos": [
+      {
+        "href": "https://ignitionai.dev/demos/gridworld/",
+        "status": 200
+      },
+      {
+        "href": "https://ignitionai.dev/demos/gridworld/",
+        "status": 200
+      }
+    ],
+    "screenshot": "/home/dev/.dev-browser/tmp/issue46-gridworld-desktop.png"
+  }
+]

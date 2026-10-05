@@ -1,4 +1,4 @@
-export default {
+const meta = {
   index: 'Tutorials',
   'grid-world': {
     title: 'GridWorld · Start here',
@@ -10,3 +10,5 @@ export default {
   'onnx-unity': 'Export to Unity (ONNX)',
   'drone-navigation': 'Drone Navigation (physics)',
 }
+
+export default meta

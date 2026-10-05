@@ -1,0 +1,93 @@
+{
+  "links": [
+    {
+      "href": "dqn-11.json",
+      "status": 200,
+      "algorithm": "dqn",
+      "seed": 11,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "dqn-29.json",
+      "status": 200,
+      "algorithm": "dqn",
+      "seed": 29,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "dqn-47.json",
+      "status": 200,
+      "algorithm": "dqn",
+      "seed": 47,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "dqn-73.json",
+      "status": 200,
+      "algorithm": "dqn",
+      "seed": 73,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "dqn-101.json",
+      "status": 200,
+      "algorithm": "dqn",
+      "seed": 101,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "double-dqn-11.json",
+      "status": 200,
+      "algorithm": "double-dqn",
+      "seed": 11,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "double-dqn-29.json",
+      "status": 200,
+      "algorithm": "double-dqn",
+      "seed": 29,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "double-dqn-47.json",
+      "status": 200,
+      "algorithm": "double-dqn",
+      "seed": 47,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "double-dqn-73.json",
+      "status": 200,
+      "algorithm": "double-dqn",
+      "seed": 73,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "double-dqn-101.json",
+      "status": 200,
+      "algorithm": "double-dqn",
+      "seed": 101,
+      "weights": 6,
+      "reports": null
+    },
+    {
+      "href": "results.json",
+      "status": 200,
+      "algorithm": null,
+      "seed": null,
+      "weights": null,
+      "reports": 10
+    }
+  ],
+  "htmlHash": "65f2b7db2f7d9f008dcaae0f6e1ab02b07c56db0791c582a07c0385fdb001421"
+}

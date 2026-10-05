@@ -144,7 +144,7 @@ export class RaceWorld {
     d.rescues++;
     d.penaltySeconds += RACE_PROTOCOL.rescuePenalty;
   }
-  step(actions: readonly number[], humanId?: number) {
+  step(actions: readonly number[]) {
     if (
       actions.length !== this.drivers.length ||
       actions.some((a) => !Number.isInteger(a) || a < 0 || a > 8)
@@ -156,7 +156,7 @@ export class RaceWorld {
     this.elapsedTicks++;
     const railContacts = new Set<number>();
     for (const d of this.drivers)
-      if (d.finishSeconds === null && d.world.step(actions[d.id], d.id === humanId)) railContacts.add(d.id);
+      if (d.finishSeconds === null && d.world.step(actions[d.id])) railContacts.add(d.id);
     if (!this.ghost) this.resolveContacts(railContacts);
     for (const id of railContacts) this.drivers[id].collisions++;
     for (const d of this.drivers) {

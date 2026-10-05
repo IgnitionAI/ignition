@@ -1,9 +1,9 @@
 import { IgnitionEnv, type TrainingEnv, type AgentFactory } from '@ignitionai/core';
-import { DQNAgent } from './agents/dqn';
-import { PPOAgent } from './agents/ppo';
-import { QTableAgent } from './agents/qtable';
-import { ALGORITHM_DEFAULTS } from './defaults';
-import type { DQNConfig, PPOConfig, QTableConfig } from './types';
+import { DQNAgent } from './agents/dqn.js';
+import { PPOAgent } from './agents/ppo.js';
+import { QTableAgent } from './agents/qtable.js';
+import { ALGORITHM_DEFAULTS } from './defaults.js';
+import type { DQNConfig, PPOConfig, QTableConfig } from './types.js';
 
 const FACTORIES: Record<string, AgentFactory> = {
   'double-dqn': (config) => new DQNAgent({ ...(config as unknown as DQNConfig), doubleQ: true }),

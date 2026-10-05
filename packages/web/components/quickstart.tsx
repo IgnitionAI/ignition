@@ -43,7 +43,7 @@ env.train('dqn');      // Zero config. It just works.
               </pre>
             </div>
             <p className="text-center text-sm text-slate-500 mt-4">
-              That's it. The agent learns. The pole stays up.
+              That&apos;s it. The agent learns. The pole stays up.
             </p>
           </div>
 

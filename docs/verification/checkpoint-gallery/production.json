@@ -1,0 +1,54 @@
+{
+  "url": "http://localhost:3108/models",
+  "title": "Checkpoints vérifiés — IgnitionAI",
+  "cards": 5,
+  "assets": [
+    {
+      "id": "sac-point-mass-11",
+      "status": 200,
+      "size": 123644,
+      "sizeValid": true,
+      "sha256Valid": true,
+      "report": 200,
+      "protocol": 200
+    },
+    {
+      "id": "sac-point-mass-29",
+      "status": 200,
+      "size": 123976,
+      "sizeValid": true,
+      "sha256Valid": true,
+      "report": 200,
+      "protocol": 200
+    },
+    {
+      "id": "sac-point-mass-47",
+      "status": 200,
+      "size": 123706,
+      "sizeValid": true,
+      "sha256Valid": true,
+      "report": 200,
+      "protocol": 200
+    },
+    {
+      "id": "sac-point-mass-73",
+      "status": 200,
+      "size": 123277,
+      "sizeValid": true,
+      "sha256Valid": true,
+      "report": 200,
+      "protocol": 200
+    },
+    {
+      "id": "sac-point-mass-101",
+      "status": 200,
+      "size": 123752,
+      "sizeValid": true,
+      "sha256Valid": true,
+      "report": 200,
+      "protocol": 200
+    }
+  ],
+  "evaluation": "20/20 épisodes réussis · coût moyen 6.59 · poids figés.",
+  "errors": []
+}

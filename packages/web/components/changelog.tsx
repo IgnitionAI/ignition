@@ -22,10 +22,10 @@ export default function Changelog() {
               Recent updates
             </div>
             <h2 className="h2 bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-4">
-              What's new
+              What&apos;s new
             </h2>
             <p className="text-lg text-slate-400">
-              IgnitionAI ships fast. Here's the latest release — everything else lives on the{' '}
+              IgnitionAI ships fast. Here&apos;s the latest release — everything else lives on the{' '}
               <Link href="/changelog" className="text-indigo-400 hover:text-indigo-300 underline">
                 full changelog
               </Link>

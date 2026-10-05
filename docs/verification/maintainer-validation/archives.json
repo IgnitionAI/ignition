@@ -1,0 +1,44 @@
+[
+  {
+    "name": "@ignitionai/backend-onnx",
+    "version": "0.2.0",
+    "sha256": "ba51a71e95f49ec9bfbaceab933b7a0484abc97d117b7723185ddb71b9d97f45",
+    "licenseMatch": true,
+    "internalDependencies": {
+      "@ignitionai/core": "0.2.0"
+    }
+  },
+  {
+    "name": "@ignitionai/backend-tfjs",
+    "version": "0.2.0",
+    "sha256": "fc6298782b1655c2c43b5bdf6d6831b9a6ac3e65516368e2b3ff8dbd85da960e",
+    "licenseMatch": true,
+    "internalDependencies": {
+      "@ignitionai/storage": "0.2.0",
+      "@ignitionai/core": "0.2.0"
+    }
+  },
+  {
+    "name": "@ignitionai/core",
+    "version": "0.2.0",
+    "sha256": "b5a47f77eeb99dcb9e779017dbdddc26597488bc2030fa62c4b60a760158c3b7",
+    "licenseMatch": true,
+    "internalDependencies": {}
+  },
+  {
+    "name": "@ignitionai/environments",
+    "version": "0.2.0",
+    "sha256": "8485b60703f7d0e349dbdd31389fe628c975a6c81f82417f633d68ee444616bb",
+    "licenseMatch": true,
+    "internalDependencies": {
+      "@ignitionai/core": "0.2.0"
+    }
+  },
+  {
+    "name": "@ignitionai/storage",
+    "version": "0.2.0",
+    "sha256": "8818fd564b313cd7e0203a71e69b5cf06b90b2a1791f8a511f874f7ab576ceae",
+    "licenseMatch": true,
+    "internalDependencies": {}
+  }
+]

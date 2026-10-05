@@ -1,0 +1,14 @@
+{
+  "url": "http://127.0.0.1:4174/",
+  "text": "VOTRE PILOTE IA\nApprendre. Tester. Courir.\n1. Entraîner\n2. Tester\n3. Sauver\n4. Courir\nVotre pilote est dans le garage\n\nPassez à la course : votre pilote sera déjà sélectionné sur la grille.\n\nFaire courir mon pilote →\n\nLa voiture à droite est un aperçu de trajectoire par session, pas une course en direct. Pour voir votre pilote conduire en continu, terminez ces étapes puis lancez une course.\n\nRéglages et détails techniques\nMéthode d’un nouveau pilote\nImitation\nDQN\nDouble DQN\nGraine de départ\n\nimitation-mlp · 4 096 exemples / transitions\n\nErreur d’imitation : 1.1452\n\nContinuer l’entraînement\nRecommencer avec un nouveau pilote\nSauvegarder sans attendre les tests\nRefaire les tests\n\nComparer DQN et Double DQN ↗\n\nRetrouver un pilote sauvegardé\n\nPilote sauvegardé dans ce navigateur.",
+  "record": {
+    "id": "driver-11-1791144182320",
+    "name": "imitation-mlp · 11 · 6",
+    "seed": 11,
+    "samples": 8192,
+    "updates": 6,
+    "driving": "circuit-racing-v2",
+    "weightArrays": 6,
+    "reports": 0
+  }
+}

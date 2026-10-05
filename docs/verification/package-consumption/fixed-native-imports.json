@@ -1,0 +1,32 @@
+[
+  {
+    "package": "core",
+    "exit": 0,
+    "stdout": "ContinuousRunner, ExperienceSchema, IgnitionEnv, MultiAgentRunner, mergeDefaults, validateContinuousAction, validateContinuousBounds, validateContinuousEnv, validateContinuousVector, validateInferenceEnv, validateTrainingEnv, version\n",
+    "stderr": ""
+  },
+  {
+    "package": "storage",
+    "exit": 0,
+    "stdout": "DownloadProvider, HuggingFaceProvider, IndexedDBProvider, LocalStorageProvider, checkpointCatalogSchema, checkpointContractSchema, checkpointEntrySchema, getCheckpointArtifactURL, hfStorageConfigSchema, loadCatalogCheckpoint, parseHFConfig\n",
+    "stderr": ""
+  },
+  {
+    "package": "backend-tfjs",
+    "exit": 0,
+    "stdout": "ALGORITHM_DEFAULTS, DQNAgent, DQNConfigSchema, DQN_DEFAULTS, IgnitionEnv, IgnitionEnvTFJS, PPOAgent, PPOConfigSchema, PPO_DEFAULTS, QTABLE_DEFAULTS, QTableAgent, QTableConfigSchema, ReplayBuffer, SACAgent, buildQNetwork, getAvailableBackends, setBackend\n",
+    "stderr": ""
+  },
+  {
+    "package": "backend-onnx",
+    "exit": 0,
+    "stdout": "OnnxAgent, OnnxAgentConfigSchema, createOnnxSession, createOnnxSessionNode, generateConversionScript, inspectSession, inspectSessionNode, loadOnnxModelFromHub, runInference, runInferenceNode, saveForOnnxExport\n",
+    "stderr": ""
+  },
+  {
+    "package": "environments",
+    "exit": 0,
+    "stdout": "CartPoleEnv, GridWorldEnv, MountainCarEnv\n",
+    "stderr": ""
+  }
+]

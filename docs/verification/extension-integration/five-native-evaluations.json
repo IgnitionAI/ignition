@@ -1,0 +1,33 @@
+[
+  {
+    "url": "http://127.0.0.1:3110/models",
+    "seed": 101,
+    "status": "20/20 épisodes réussis · coût moyen 6.53 · poids figés.",
+    "error": "",
+    "busy": false
+  },
+  {
+    "seed": 11,
+    "status": "20/20 épisodes réussis · coût moyen 6.59 · poids figés.",
+    "error": "",
+    "busy": false
+  },
+  {
+    "seed": 29,
+    "status": "20/20 épisodes réussis · coût moyen 6.24 · poids figés.",
+    "error": "",
+    "busy": false
+  },
+  {
+    "seed": 47,
+    "status": "20/20 épisodes réussis · coût moyen 6.96 · poids figés.",
+    "error": "",
+    "busy": false
+  },
+  {
+    "seed": 73,
+    "status": "20/20 épisodes réussis · coût moyen 6.94 · poids figés.",
+    "error": "",
+    "busy": false
+  }
+]

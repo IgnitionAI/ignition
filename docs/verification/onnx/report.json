@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "trainingSteps": 64,
+  "observations": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0.1,
+      -0.2,
+      0.03,
+      0.4
+    ],
+    [
+      -0.4,
+      0.2,
+      -0.1,
+      -0.3
+    ]
+  ],
+  "inputName": "dense_dense1_input",
+  "outputName": "dense_Dense2",
+  "absoluteTolerance": 1e-05,
+  "relativeTolerance": 1e-05,
+  "maxAbsoluteError": 0,
+  "sourceCommit": "e8a4ae3fdcb782fdc46a94bb0f2ca3f4c3ea363a",
+  "modelSha256": "685b0c37edfcdac37679a88231899a2bbd9fe78fa1bd50dfb54d88ab107a4ab2",
+  "pythonPackages": {
+    "tensorflow": "2.15.0",
+    "tensorflowjs": "4.15.0",
+    "tf2onnx": "1.16.1",
+    "numpy": "1.26.4",
+    "onnx": "1.17.0"
+  },
+  "inputShape": [
+    1,
+    4
+  ],
+  "outputShape": [
+    1,
+    2
+  ],
+  "limitations": "Three fixed observations; confirms conversion parity, not CartPole convergence or arbitrary architecture support."
+}

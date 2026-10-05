@@ -1,0 +1,44 @@
+[
+  {
+    "node": "v20.19.2",
+    "entry": "onnx.mjs",
+    "exit": 0,
+    "stdout": "{\"names\":{\"inputs\":[\"dense_dense1_input\"],\"outputs\":[\"dense_Dense2\"]},\"actions\":[0,0,1]}\n",
+    "stderr": ""
+  },
+  {
+    "node": "v20.19.2",
+    "entry": "onnx.cjs",
+    "exit": 0,
+    "stdout": "{\"names\":{\"inputs\":[\"dense_dense1_input\"],\"outputs\":[\"dense_Dense2\"]},\"actions\":[0,0,1]}\n",
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "entry": "onnx.mjs",
+    "exit": 0,
+    "stdout": "{\"names\":{\"inputs\":[\"dense_dense1_input\"],\"outputs\":[\"dense_Dense2\"]},\"actions\":[0,0,1]}\n",
+    "stderr": ""
+  },
+  {
+    "node": "v22.23.3",
+    "entry": "onnx.cjs",
+    "exit": 0,
+    "stdout": "{\"names\":{\"inputs\":[\"dense_dense1_input\"],\"outputs\":[\"dense_Dense2\"]},\"actions\":[0,0,1]}\n",
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "entry": "onnx.mjs",
+    "exit": 0,
+    "stdout": "{\"names\":{\"inputs\":[\"dense_dense1_input\"],\"outputs\":[\"dense_Dense2\"]},\"actions\":[0,0,1]}\n",
+    "stderr": ""
+  },
+  {
+    "node": "v20.0.0",
+    "entry": "onnx.cjs",
+    "exit": 0,
+    "stdout": "{\"names\":{\"inputs\":[\"dense_dense1_input\"],\"outputs\":[\"dense_Dense2\"]},\"actions\":[0,0,1]}\n",
+    "stderr": ""
+  }
+]

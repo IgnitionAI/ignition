@@ -1,0 +1,180 @@
+[
+  {
+    "environment": "cartpole-3d",
+    "url": "https://ignitionai.dev/blog/cartpole-3d-observations",
+    "status": 200,
+    "errors": [],
+    "heading": "CartPole 3D : une scène visible, quatre observations",
+    "overflow": false,
+    "articleWidth": 896,
+    "images": [
+      {
+        "src": "https://ignitionai.dev/images/blog/cartpole-3d/initial.png",
+        "status": 200
+      },
+      {
+        "src": "https://ignitionai.dev/images/blog/cartpole-3d/active.png",
+        "status": 200
+      }
+    ],
+    "demos": [
+      {
+        "href": "https://ignitionai.dev/demos/cartpole-3d/",
+        "status": 200
+      },
+      {
+        "href": "https://ignitionai.dev/demos/cartpole-3d/",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "environment": "drone-navigation",
+    "url": "https://ignitionai.dev/blog/drone-navigation-controle",
+    "status": 200,
+    "errors": [],
+    "heading": "Drone Navigation : relier moteurs, mouvement et récompense",
+    "overflow": false,
+    "articleWidth": 896,
+    "images": [
+      {
+        "src": "https://ignitionai.dev/images/blog/drone-navigation/initial.png",
+        "status": 200
+      },
+      {
+        "src": "https://ignitionai.dev/images/blog/drone-navigation/active.png",
+        "status": 200
+      }
+    ],
+    "demos": [
+      {
+        "href": "https://ignitionai.dev/demos/drone-navigation/",
+        "status": 200
+      },
+      {
+        "href": "https://ignitionai.dev/demos/drone-navigation/",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "environment": "maze",
+    "url": "https://ignitionai.dev/blog/maze-capteurs-recompenses",
+    "status": 200,
+    "errors": [],
+    "heading": "Maze : guider un agent avec des capteurs et des récompenses",
+    "overflow": false,
+    "articleWidth": 896,
+    "images": [
+      {
+        "src": "https://ignitionai.dev/images/blog/maze/initial.png",
+        "status": 200
+      },
+      {
+        "src": "https://ignitionai.dev/images/blog/maze/active.png",
+        "status": 200
+      }
+    ],
+    "demos": [
+      {
+        "href": "https://ignitionai.dev/demos/maze/",
+        "status": 200
+      },
+      {
+        "href": "https://ignitionai.dev/demos/maze/",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "environment": "maze-3d",
+    "url": "https://ignitionai.dev/blog/maze-3d-cles-portes",
+    "status": 200,
+    "errors": [],
+    "heading": "Maze 3D : une clé change la valeur du chemin",
+    "overflow": false,
+    "articleWidth": 896,
+    "images": [
+      {
+        "src": "https://ignitionai.dev/images/blog/maze-3d/initial.png",
+        "status": 200
+      },
+      {
+        "src": "https://ignitionai.dev/images/blog/maze-3d/active.png",
+        "status": 200
+      }
+    ],
+    "demos": [
+      {
+        "href": "https://ignitionai.dev/demos/maze-3d/",
+        "status": 200
+      },
+      {
+        "href": "https://ignitionai.dev/demos/maze-3d/",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "environment": "car-circuit",
+    "url": "https://ignitionai.dev/blog/circuit-racing-pilotes",
+    "status": 200,
+    "errors": [],
+    "heading": "Circuit Racing : entraîner un pilote, puis mesurer sa course",
+    "overflow": false,
+    "articleWidth": 896,
+    "images": [
+      {
+        "src": "https://ignitionai.dev/images/blog/car-circuit/initial.png",
+        "status": 200
+      },
+      {
+        "src": "https://ignitionai.dev/images/blog/car-circuit/active.png",
+        "status": 200
+      }
+    ],
+    "demos": [
+      {
+        "href": "https://ignitionai.dev/demos/car-circuit/",
+        "status": 200
+      },
+      {
+        "href": "https://ignitionai.dev/demos/car-circuit/",
+        "status": 200
+      }
+    ]
+  },
+  {
+    "environment": "cartpole",
+    "url": "https://ignitionai.dev/blog/premier-agent-cartpole",
+    "status": 200,
+    "errors": [],
+    "heading": "Entraîner son premier agent avec Ignition sur CartPole",
+    "overflow": false,
+    "articleWidth": 896,
+    "images": [
+      {
+        "src": "https://ignitionai.dev/images/blog/cartpole/initial.png",
+        "status": 200
+      },
+      {
+        "src": "https://ignitionai.dev/images/blog/cartpole/training.png",
+        "status": 200
+      },
+      {
+        "src": "https://ignitionai.dev/images/blog/cartpole/inference.png",
+        "status": 200
+      }
+    ],
+    "demos": [
+      {
+        "href": "https://ignitionai.dev/demos/cartpole/",
+        "status": 200
+      },
+      {
+        "href": "https://ignitionai.dev/demos/cartpole/",
+        "status": 200
+      }
+    ]
+  }
+]

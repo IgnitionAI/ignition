@@ -19,7 +19,7 @@ export default function ChangelogPage() {
             Changelog
           </div>
           <h1 className="h1 bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-4">
-            What we've shipped
+            What we&apos;ve shipped
           </h1>
           <p className="text-lg text-slate-400">
             Every release, with its full list of changes. Source of truth is{' '}

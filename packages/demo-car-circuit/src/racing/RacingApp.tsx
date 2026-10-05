@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { useProgress } from "@react-three/drei";
-import { RaceWorld } from "./race";
+import { RaceWorld, RACE_PROTOCOL } from "./race";
 import { DrivingWorld } from "./driving";
 import { RaceMap } from "./RaceMap";
 import { RacingScene } from "./RacingScene";
@@ -38,7 +38,7 @@ const copy = {
     reset: "Retour aux stands",
     controls: "COMMANDES",
     gas: "Accélérer",
-    brake: "Freiner / maintenir pour reculer",
+    brake: "Freiner",
     steer: "Tourner",
     track: "ALPINE PARK",
     layout: "10 virages · Circuit école",
@@ -72,7 +72,7 @@ const copy = {
     reset: "Back to pits",
     controls: "CONTROLS",
     gas: "Accelerate",
-    brake: "Brake / hold to reverse",
+    brake: "Brake",
     steer: "Steer",
     track: "ALPINE PARK",
     layout: "10 corners · Training circuit",
@@ -136,7 +136,7 @@ export default function RacingApp() {
     setLearned(undefined);
     setFollow(0);
     const next = competitive
-      ? new RaceWorld({ count: references ? 4 : 1, ghost: true })
+      ? new RaceWorld({ count: references ? 4 : 1 })
       : undefined;
     setReference(references);
     setRace(next);
@@ -453,6 +453,7 @@ export default function RacingApp() {
               +{race.drivers[learned ? follow : 0].penaltySeconds} s
               <br />
               <span>{lang === "fr" ? "Tour" : "Lap"} {Math.min(3, race.drivers[learned ? follow : 0].laps + 1)}/3</span>
+              {!race.finished && race.drivers[learned ? follow : 0].finishSeconds === null && <small className="race-next-pass">{lang === "fr" ? "Passage suivant" : "Next gate"} {(race.drivers[learned ? follow : 0].gates % RACE_PROTOCOL.checkpoints) + 1}/{RACE_PROTOCOL.checkpoints}</small>}
               {race.ghost && <small className="ghost-race-label">{lang === "fr" ? "MODE FANTÔME" : "GHOST MODE"}</small>}
             </div>
           )}

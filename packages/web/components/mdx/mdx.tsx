@@ -17,7 +17,7 @@ const transformToSlug = (input: string) => {
 };
 
 const generateHeading = (headingLevel: number) => {
-  return ({ children }: { children: React.ReactNode }) => {
+  return function Heading({ children }: { children: React.ReactNode }) {
     const textContent = React.Children.toArray(children).join("");
     const slug = transformToSlug(textContent);
     return React.createElement(`h${headingLevel}`, { id: slug }, [

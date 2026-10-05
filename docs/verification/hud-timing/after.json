@@ -1,0 +1,35 @@
+{
+  "seconds": 4.4217999999523165,
+  "frames": 8,
+  "updates": 7,
+  "samples": [
+    {
+      "ms": 614.2999999523163,
+      "text": "2/2 · 5.6 s · +0 sTour 1/3Passage suivant 1/20"
+    },
+    {
+      "ms": 1254.7999999523163,
+      "text": "2/2 · 5.7 s · +0 sTour 1/3Passage suivant 1/20"
+    },
+    {
+      "ms": 1844.5,
+      "text": "2/2 · 5.8 s · +0 sTour 1/3Passage suivant 1/20"
+    },
+    {
+      "ms": 2543.699999809265,
+      "text": "2/2 · 5.9 s · +0 sTour 1/3Passage suivant 1/20"
+    },
+    {
+      "ms": 3155.699999809265,
+      "text": "2/2 · 6.0 s · +0 sTour 1/3Passage suivant 1/20"
+    },
+    {
+      "ms": 3835.199999809265,
+      "text": "2/2 · 6.1 s · +0 sTour 1/3Passage suivant 1/20"
+    },
+    {
+      "ms": 4436.799999952316,
+      "text": "2/2 · 6.2 s · +0 sTour 1/3Passage suivant 1/20"
+    }
+  ]
+}

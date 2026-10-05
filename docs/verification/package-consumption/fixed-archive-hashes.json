@@ -1,0 +1,27 @@
+[
+  {
+    "archive": "ignitionai-backend-onnx-0.1.0.tgz",
+    "sha256": "547b79f8dbb36a322e1d955d2e4c0d755d447e9cfabf50dac8e52a509dda5c7e",
+    "bytes": 9418
+  },
+  {
+    "archive": "ignitionai-backend-tfjs-0.1.0.tgz",
+    "sha256": "35ec12af95b72867a87e368e53ce09e957ec147bdb89046a995bf739f1551a17",
+    "bytes": 24980
+  },
+  {
+    "archive": "ignitionai-core-0.1.0.tgz",
+    "sha256": "40b3d2ba632480ee4ff0aad96586cda4ac061abd534df8ee050ef4107a131b32",
+    "bytes": 8934
+  },
+  {
+    "archive": "ignitionai-environments-0.1.0.tgz",
+    "sha256": "875ea9bd49eac7367d72ab8ee6ae7ece5397c959cc86c43c13b1d8d9dec8e80b",
+    "bytes": 2381
+  },
+  {
+    "archive": "ignitionai-storage-0.1.0.tgz",
+    "sha256": "4cdf37a99c8f624203d2ed4471ef32c7b02962678ef15a0ccd18e709404984b9",
+    "bytes": 9544
+  }
+]

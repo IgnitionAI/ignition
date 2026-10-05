@@ -1,0 +1,35 @@
+{
+  "results": [
+    {
+      "path": "/docs/quickstart",
+      "status": 200,
+      "sourceNotice": true,
+      "h1": "Quickstart"
+    },
+    {
+      "path": "/docs/tutorials/grid-world",
+      "status": 200,
+      "sourceNotice": true,
+      "h1": "GridWorld — Start here"
+    },
+    {
+      "path": "/docs/tutorials/cartpole-3d",
+      "status": 200,
+      "sourceNotice": true,
+      "h1": "CartPole 3D — React Three Fiber"
+    },
+    {
+      "path": "/docs/how-it-works/backend-tfjs",
+      "status": 200,
+      "sourceNotice": true,
+      "h1": "@ignitionai/backend-tfjs"
+    },
+    {
+      "path": "/docs",
+      "status": 200,
+      "sourceNotice": true,
+      "h1": "IgnitionAI"
+    }
+  ],
+  "errors": []
+}

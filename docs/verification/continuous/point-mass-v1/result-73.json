@@ -1,0 +1,3413 @@
+{
+  "seed": 73,
+  "baseline": [
+    {
+      "seed": 211,
+      "episode": 0,
+      "initial": [
+        -0.5907049209810793,
+        -0.08280831053853036
+      ],
+      "final": [
+        2.0525451391250167,
+        1.478185484700349
+      ],
+      "cost": 65.72778460512768,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 1,
+      "initial": [
+        -0.6869920628610999,
+        -0.04447982301935555
+      ],
+      "final": [
+        2.56015530426609,
+        1.7533279312922982
+      ],
+      "cost": 101.76029221453693,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 2,
+      "initial": [
+        0.5755238445475698,
+        0.13866850119084123
+      ],
+      "final": [
+        3.060279876711742,
+        1.8189984849745513
+      ],
+      "cost": 169.46606842344335,
+      "steps": 61,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 3,
+      "initial": [
+        0.8220578111242502,
+        -0.10682663330808283
+      ],
+      "final": [
+        3.0483964228603067,
+        1.7663540679079146
+      ],
+      "cost": 181.07962722607135,
+      "steps": 64,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 4,
+      "initial": [
+        0.8389300788752735,
+        -0.12652855925261974
+      ],
+      "final": [
+        3.02302448110421,
+        1.7511864819022263
+      ],
+      "cost": 179.1901557464275,
+      "steps": 64,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 5,
+      "initial": [
+        -0.9165058333892375,
+        0.007576371449977165
+      ],
+      "final": [
+        3.0042480853881086,
+        2.017200677257208
+      ],
+      "cost": 152.26145005428452,
+      "steps": 95,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 6,
+      "initial": [
+        0.6311724435538053,
+        -0.062316501699388044
+      ],
+      "final": [
+        3.017498452453597,
+        1.784542384848339
+      ],
+      "cost": 171.6169082881973,
+      "steps": 70,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 7,
+      "initial": [
+        0.5791540229227394,
+        -0.04885668950155378
+      ],
+      "final": [
+        3.0283731676515644,
+        1.797739676636301
+      ],
+      "cost": 171.18735675626073,
+      "steps": 72,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 8,
+      "initial": [
+        -0.8700019230134786,
+        -0.023377545177936554
+      ],
+      "final": [
+        3.03965952997881,
+        2.0172672420441975
+      ],
+      "cost": 156.1009873627218,
+      "steps": 98,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 9,
+      "initial": [
+        -0.6790598264429719,
+        -0.04541341429576279
+      ],
+      "final": [
+        2.528636738141592,
+        1.7363049296812114
+      ],
+      "cost": 99.19161185845768,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 10,
+      "initial": [
+        0.5964948019012809,
+        0.051903717778623126
+      ],
+      "final": [
+        3.047377515158149,
+        1.804732300480827
+      ],
+      "cost": 171.33778598344313,
+      "steps": 65,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 11,
+      "initial": [
+        0.5953939776401966,
+        -0.06986122513189913
+      ],
+      "final": [
+        3.070923947807169,
+        1.8161587284008331
+      ],
+      "cost": 176.5931793275566,
+      "steps": 73,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 12,
+      "initial": [
+        0.6079967721365392,
+        0.019549299404025083
+      ],
+      "final": [
+        3.009780717372247,
+        1.7840492012886573
+      ],
+      "cost": 168.41738309593194,
+      "steps": 66,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 13,
+      "initial": [
+        0.688026510970667,
+        0.11877476917579771
+      ],
+      "final": [
+        3.0501930410598463,
+        1.794373718989478
+      ],
+      "cost": 171.3610512264163,
+      "steps": 58,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 14,
+      "initial": [
+        -0.8006343007087708,
+        0.004758171923458565
+      ],
+      "final": [
+        3.0802690643326645,
+        2.0135767672373124
+      ],
+      "cost": 158.35359402023408,
+      "steps": 99,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 15,
+      "initial": [
+        0.9858221260365099,
+        0.19310407666489482
+      ],
+      "final": [
+        3.082041910098048,
+        1.7563342674851563
+      ],
+      "cost": 176.8925973018172,
+      "steps": 47,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 16,
+      "initial": [
+        -0.4864567347802222,
+        0.08715635910630226
+      ],
+      "final": [
+        2.7769186255363443,
+        1.801328134041442
+      ],
+      "cost": 116.91333685648068,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 17,
+      "initial": [
+        0.7496029103640467,
+        -0.050131161417812126
+      ],
+      "final": [
+        3.0361865120277405,
+        1.772679496368786
+      ],
+      "cost": 176.46591686428556,
+      "steps": 64,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 211,
+      "episode": 18,
+      "initial": [
+        -0.5844523081555962,
+        -0.17207675147801638
+      ],
+      "final": [
+        1.7488449280388951,
+        1.332821079018304
+      ],
+      "cost": 51.232351103724255,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 19,
+      "initial": [
+        0.759509865893051,
+        0.04512373050674795
+      ],
+      "final": [
+        3.0459837434022257,
+        1.776006384494181
+      ],
+      "cost": 175.0017814463244,
+      "steps": 59,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 0,
+      "initial": [
+        -0.6130279407836496,
+        -0.19001065269112588
+      ],
+      "final": [
+        1.801372242626816,
+        1.3744312153326719
+      ],
+      "cost": 55.11562662646697,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 1,
+      "initial": [
+        0.4191347392741591,
+        -0.13238252690061927
+      ],
+      "final": [
+        3.091831739474279,
+        1.8525524339698678
+      ],
+      "cost": 174.3356791369179,
+      "steps": 92,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 2,
+      "initial": [
+        0.8032569037750363,
+        0.07332962434738877
+      ],
+      "final": [
+        3.0253643129063055,
+        1.758378810612476
+      ],
+      "cost": 172.65410871940819,
+      "steps": 56,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 3,
+      "initial": [
+        -0.5310910395812243,
+        0.18996068527922033
+      ],
+      "final": [
+        3.0529019155076167,
+        1.9502544226066938
+      ],
+      "cost": 150.12789023802952,
+      "steps": 91,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 4,
+      "initial": [
+        -0.7061373750679195,
+        -0.15878406874835493
+      ],
+      "final": [
+        2.1902183562631725,
+        1.5959978546216236
+      ],
+      "cost": 78.77150969483748,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 5,
+      "initial": [
+        0.7635907505173236,
+        0.19126833500340584
+      ],
+      "final": [
+        3.010515395188855,
+        1.7676389083056558
+      ],
+      "cost": 165.47895443849387,
+      "steps": 52,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 6,
+      "initial": [
+        0.4296230997890234,
+        0.07542370203882454
+      ],
+      "final": [
+        3.022296589245456,
+        1.8168451486058852
+      ],
+      "cost": 164.40546928280003,
+      "steps": 71,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 7,
+      "initial": [
+        -0.5980950453784317,
+        -0.09521507518365979
+      ],
+      "final": [
+        2.0308783006219366,
+        1.4710138228600962
+      ],
+      "cost": 64.8328653164082,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 8,
+      "initial": [
+        0.43211066173389556,
+        0.19077907949686052
+      ],
+      "final": [
+        3.0419716954624536,
+        1.8356211287854314
+      ],
+      "cost": 162.83043567615417,
+      "steps": 63,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 9,
+      "initial": [
+        -0.4625900513026864,
+        0.05937501722946764
+      ],
+      "final": [
+        2.4357817157594304,
+        1.6298426555772283
+      ],
+      "cost": 88.8701940167008,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 10,
+      "initial": [
+        0.8424716031178832,
+        -0.15689934287220242
+      ],
+      "final": [
+        3.075974437637748,
+        1.7783201718906165
+      ],
+      "cost": 185.80268661435522,
+      "steps": 66,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 11,
+      "initial": [
+        0.7235992546658963,
+        0.16370215928182008
+      ],
+      "final": [
+        3.069932086039745,
+        1.8012498383788724
+      ],
+      "cost": 172.43952780945253,
+      "steps": 55,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 12,
+      "initial": [
+        0.7466586410067976,
+        0.11990611366927623
+      ],
+      "final": [
+        3.0473880186269935,
+        1.7825741049600585
+      ],
+      "cost": 172.17215221697785,
+      "steps": 56,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 13,
+      "initial": [
+        -0.7274238117504865,
+        -0.11949819875881076
+      ],
+      "final": [
+        2.3876793436364734,
+        1.6918038558639317
+      ],
+      "cost": 91.46016373679592,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 14,
+      "initial": [
+        0.6327072694897652,
+        -0.004251025430858146
+      ],
+      "final": [
+        3.0742316765768685,
+        1.8110310873373172
+      ],
+      "cost": 176.60463791723015,
+      "steps": 67,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 15,
+      "initial": [
+        0.9344828350003809,
+        -0.11613186867907643
+      ],
+      "final": [
+        3.047911004946139,
+        1.7427230101475828
+      ],
+      "cost": 184.29630554765794,
+      "steps": 60,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 16,
+      "initial": [
+        -0.8435712241567672,
+        -0.12774614021182062
+      ],
+      "final": [
+        2.731236651287586,
+        1.8847394006177822
+      ],
+      "cost": 121.2196249711865,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 17,
+      "initial": [
+        -0.47558666267432276,
+        -0.035259626712650066
+      ],
+      "final": [
+        1.8354955992136526,
+        1.3211876928165238
+      ],
+      "cost": 50.89062634157829,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 18,
+      "initial": [
+        0.6464099729433656,
+        0.09049670230597257
+      ],
+      "final": [
+        3.059776347385807,
+        1.8043378441293874
+      ],
+      "cost": 172.56241356037648,
+      "steps": 61,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 307,
+      "episode": 19,
+      "initial": [
+        0.8767495572101325,
+        0.018914718832820643
+      ],
+      "final": [
+        3.0314766096838937,
+        1.7449042030323823
+      ],
+      "cost": 176.82957128815087,
+      "steps": 56,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 0,
+      "initial": [
+        -0.6390714638866484,
+        0.08491994813084602
+      ],
+      "final": [
+        3.016910312175218,
+        1.946171480668354
+      ],
+      "cost": 149.09898058976083,
+      "steps": 98,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 1,
+      "initial": [
+        0.5066345284227282,
+        0.1650643185712397
+      ],
+      "final": [
+        3.061161348241172,
+        1.8319375140920213
+      ],
+      "cost": 167.2298442034366,
+      "steps": 62,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 2,
+      "initial": [
+        0.9689454728737473,
+        0.0637676013633609
+      ],
+      "final": [
+        3.0834741346059604,
+        1.7520015249452165
+      ],
+      "cost": 182.7784088761869,
+      "steps": 52,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 3,
+      "initial": [
+        0.7916298061143607,
+        0.06954589029774072
+      ],
+      "final": [
+        3.0657943602138973,
+        1.7804479820995982
+      ],
+      "cost": 177.02296661921378,
+      "steps": 57,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 4,
+      "initial": [
+        0.9512125539593399,
+        0.07025117017328741
+      ],
+      "final": [
+        3.059990336601908,
+        1.7443978529783428
+      ],
+      "cost": 179.507430018718,
+      "steps": 52,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 5,
+      "initial": [
+        0.8851898205000908,
+        0.07224229248240588
+      ],
+      "final": [
+        3.0718398123545785,
+        1.7647327169781937
+      ],
+      "cost": 179.49745067175823,
+      "steps": 54,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 6,
+      "initial": [
+        -0.6944821987301111,
+        -0.16387939359992743
+      ],
+      "final": [
+        2.1371012735324086,
+        1.5670158433878407
+      ],
+      "cost": 75.28723664838273,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 7,
+      "initial": [
+        -0.6201929049100727,
+        -0.08263319181278349
+      ],
+      "final": [
+        2.1584690957127406,
+        1.5414912789857695
+      ],
+      "cost": 72.82543465924829,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 8,
+      "initial": [
+        -0.521237523574382,
+        -0.1593715250492096
+      ],
+      "final": [
+        1.5637580061256648,
+        1.2076040925830689
+      ],
+      "cost": 40.87461396881716,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 9,
+      "initial": [
+        0.4100419803056866,
+        0.1149615206755698
+      ],
+      "final": [
+        3.029385694598366,
+        1.8249698281658557
+      ],
+      "cost": 163.63739101512044,
+      "steps": 69,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 10,
+      "initial": [
+        -0.7294445378705859,
+        0.19949708636850122
+      ],
+      "final": [
+        3.0933460297633366,
+        2.0171553070024997
+      ],
+      "cost": 152.9071705530057,
+      "steps": 88,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 11,
+      "initial": [
+        -0.6731720778625458,
+        -0.09714055890217424
+      ],
+      "final": [
+        2.2870544445001877,
+        1.6236683834192316
+      ],
+      "cost": 82.66346142894328,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 12,
+      "initial": [
+        0.7084308213554322,
+        -0.02967760302126407
+      ],
+      "final": [
+        3.066561488762543,
+        1.7946979215284804
+      ],
+      "cost": 178.26133601580403,
+      "steps": 65,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 13,
+      "initial": [
+        -0.9733873293269426,
+        0.13585000531747937
+      ],
+      "final": [
+        3.0545081030166306,
+        2.062554959838463
+      ],
+      "cost": 153.1726386815802,
+      "steps": 88,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 14,
+      "initial": [
+        -0.43679239973425865,
+        -0.1480950890108943
+      ],
+      "final": [
+        1.296315627798725,
+        1.0234859343609377
+      ],
+      "cost": 28.357513230450508,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 15,
+      "initial": [
+        -0.8745869954582304,
+        -0.0769071382470429
+      ],
+      "final": [
+        3.021845710496642,
+        2.012882652312273
+      ],
+      "cost": 156.38628743473788,
+      "steps": 100,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 16,
+      "initial": [
+        0.4602047950960696,
+        0.08820094391703603
+      ],
+      "final": [
+        3.0657644214069206,
+        1.834229476637464
+      ],
+      "cost": 169.35141074637272,
+      "steps": 69,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 17,
+      "initial": [
+        -0.6559010403696448,
+        0.182090497110039
+      ],
+      "final": [
+        3.0543302503730616,
+        1.9789527949405914
+      ],
+      "cost": 149.71220705200955,
+      "steps": 90,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 18,
+      "initial": [
+        0.5186939151957631,
+        0.13016573172062634
+      ],
+      "final": [
+        3.002227906598298,
+        1.798966065328735
+      ],
+      "cost": 162.40093437843535,
+      "steps": 63,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 419,
+      "episode": 19,
+      "initial": [
+        -0.41352919708006086,
+        0.1216708718799055
+      ],
+      "final": [
+        2.9656251945926893,
+        1.8756831939513465
+      ],
+      "cost": 134.77804902040256,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 0,
+      "initial": [
+        -0.6599992949515581,
+        -0.0655822476372123
+      ],
+      "final": [
+        2.3706021352774655,
+        1.6568297801497027
+      ],
+      "cost": 87.52143948931769,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 1,
+      "initial": [
+        0.7055182875599713,
+        -0.11734446631744505
+      ],
+      "final": [
+        3.0529252912501463,
+        1.7910071403405252
+      ],
+      "cost": 178.48244227102828,
+      "steps": 70,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 2,
+      "initial": [
+        0.8449452158994972,
+        -0.022487595677375793
+      ],
+      "final": [
+        3.040619125612319,
+        1.7559136900046277
+      ],
+      "cost": 178.5160815995305,
+      "steps": 59,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 3,
+      "initial": [
+        0.8938484577927739,
+        -0.0772159985266626
+      ],
+      "final": [
+        3.0688848209360864,
+        1.7607140200087805
+      ],
+      "cost": 184.50492324861034,
+      "steps": 60,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 4,
+      "initial": [
+        -0.9017193941399455,
+        -0.10998836997896433
+      ],
+      "final": [
+        2.973245386366018,
+        2.003132276766825
+      ],
+      "cost": 143.54331806384798,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 5,
+      "initial": [
+        0.8543319303076714,
+        -0.18054649168625475
+      ],
+      "final": [
+        3.0122976628214495,
+        1.7457487897742765
+      ],
+      "cost": 179.5505046254649,
+      "steps": 66,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 6,
+      "initial": [
+        -0.618029688950628,
+        -0.08474795259535313
+      ],
+      "final": [
+        2.1423892804489526,
+        1.5329498764707925
+      ],
+      "cost": 71.80928217993795,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 7,
+      "initial": [
+        0.4129501134622842,
+        0.09890582161024214
+      ],
+      "final": [
+        3.0202493890611595,
+        1.8191906957486381
+      ],
+      "cost": 163.20283223183804,
+      "steps": 70,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 8,
+      "initial": [
+        -0.860714466124773,
+        -0.18359968941658736
+      ],
+      "final": [
+        2.604301715854623,
+        1.841608661543169
+      ],
+      "cost": 113.47771177788123,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 9,
+      "initial": [
+        0.43210156611166894,
+        -0.06179932476952674
+      ],
+      "final": [
+        3.0618655727231188,
+        1.834144469360639
+      ],
+      "cost": 171.1434081851187,
+      "steps": 83,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 10,
+      "initial": [
+        0.6600477890111507,
+        0.07874421700835227
+      ],
+      "final": [
+        3.0499563682676265,
+        1.7967680047953847
+      ],
+      "cost": 172.17133845867855,
+      "steps": 61,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 11,
+      "initial": [
+        -0.41836452507413924,
+        -0.07817488601431251
+      ],
+      "final": [
+        1.425657549467216,
+        1.0764610004328872
+      ],
+      "cost": 31.565649272643743,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 12,
+      "initial": [
+        0.7634263234212995,
+        -0.08559308964759112
+      ],
+      "final": [
+        3.011310053842841,
+        1.7586931113789468
+      ],
+      "cost": 174.9399481575097,
+      "steps": 65,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 13,
+      "initial": [
+        -0.48532229880802336,
+        0.16246909787878394
+      ],
+      "final": [
+        3.000525824455283,
+        1.9124944808285753
+      ],
+      "cost": 146.18360491182852,
+      "steps": 94,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 14,
+      "initial": [
+        -0.6543608079664409,
+        -0.006541211530566221
+      ],
+      "final": [
+        2.644457831650742,
+        1.7813005999613492
+      ],
+      "cost": 107.38972472813066,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 15,
+      "initial": [
+        -0.8264564101118594,
+        -0.16681583700701597
+      ],
+      "final": [
+        2.550091534791476,
+        1.804312236060079
+      ],
+      "cost": 107.60484187024709,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 16,
+      "initial": [
+        0.9449996288865805,
+        -0.18827014919370413
+      ],
+      "final": [
+        3.056079428332264,
+        1.7485242428461945
+      ],
+      "cost": 187.30098174315145,
+      "steps": 63,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 17,
+      "initial": [
+        0.8865108081605285,
+        -0.07896743910387159
+      ],
+      "final": [
+        3.037739085260874,
+        1.7467453344291324
+      ],
+      "cost": 180.88309884731848,
+      "steps": 60,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 18,
+      "initial": [
+        0.7267792259342969,
+        0.076328344643116
+      ],
+      "final": [
+        3.076180617127106,
+        1.797816838670937
+      ],
+      "cost": 176.56460607789944,
+      "steps": 59,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 509,
+      "episode": 19,
+      "initial": [
+        0.8984414076898247,
+        0.14709992343559863
+      ],
+      "final": [
+        3.007385669150057,
+        1.7341218534896392
+      ],
+      "cost": 169.381965158341,
+      "steps": 50,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 0,
+      "initial": [
+        0.6813921889290213,
+        -0.06831782553344964
+      ],
+      "final": [
+        3.0293571848586827,
+        1.7819997876777387
+      ],
+      "cost": 174.3477845886962,
+      "steps": 68,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 1,
+      "initial": [
+        0.9488216857891529,
+        0.19841544246301057
+      ],
+      "final": [
+        3.0186548208569546,
+        1.7334676350150093
+      ],
+      "cost": 168.98227769153,
+      "steps": 47,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 2,
+      "initial": [
+        -0.6381893976591527,
+        -0.1017706859856844
+      ],
+      "final": [
+        2.1479413366902014,
+        1.5443240483566139
+      ],
+      "cost": 72.93654532075863,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 3,
+      "initial": [
+        -0.4650053017307073,
+        -0.07612815154716374
+      ],
+      "final": [
+        1.6121748699561749,
+        1.198619578528348
+      ],
+      "cost": 40.222262888987345,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 4,
+      "initial": [
+        0.824459719657898,
+        -0.10756656657904387
+      ],
+      "final": [
+        3.0540644451693044,
+        1.7687071337841154
+      ],
+      "cost": 181.79192325801776,
+      "steps": 64,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 5,
+      "initial": [
+        0.7827883092220873,
+        -0.02117502661421894
+      ],
+      "final": [
+        3.018120501097729,
+        1.7571098943847367
+      ],
+      "cost": 174.53277668809858,
+      "steps": 61,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 6,
+      "initial": [
+        0.8998782345093786,
+        0.14725307598710063
+      ],
+      "final": [
+        3.0113008887185173,
+        1.7357948428189258
+      ],
+      "cost": 169.8290338347319,
+      "steps": 50,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 7,
+      "initial": [
+        -0.8811019266489893,
+        -0.06218763133510949
+      ],
+      "final": [
+        3.0010176795429855,
+        2.0057246924154715
+      ],
+      "cost": 153.94224378413605,
+      "steps": 99,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 8,
+      "initial": [
+        0.7410686740651726,
+        -0.1283662574365735
+      ],
+      "final": [
+        3.063419125094832,
+        1.79022200859254
+      ],
+      "cost": 180.86303275712658,
+      "steps": 69,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 9,
+      "initial": [
+        -0.774651364935562,
+        -0.14471041122451425
+      ],
+      "final": [
+        2.456011029251864,
+        1.7419898498012636
+      ],
+      "cost": 98.35078706329202,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 10,
+      "initial": [
+        -0.6957755568437278,
+        -0.07135871611535549
+      ],
+      "final": [
+        2.4685068644483534,
+        1.7149833776401542
+      ],
+      "cost": 95.46346373456849,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 11,
+      "initial": [
+        0.8912279155571013,
+        -0.12100997595116497
+      ],
+      "final": [
+        3.058898492743247,
+        1.7578762714222724
+      ],
+      "cost": 184.49156616171177,
+      "steps": 62,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 12,
+      "initial": [
+        -0.6463106144219637,
+        0.17724885735660795
+      ],
+      "final": [
+        3.000171547176504,
+        1.9527703883209224
+      ],
+      "cost": 144.5134041128581,
+      "steps": 90,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 13,
+      "initial": [
+        -0.7730780453886836,
+        0.10079083694145086
+      ],
+      "final": [
+        3.0720336886271564,
+        2.0070046722923265
+      ],
+      "cost": 154.21209410317184,
+      "steps": 94,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 14,
+      "initial": [
+        -0.9434307363815606,
+        -0.18184169232845307
+      ],
+      "final": [
+        2.854791911855771,
+        1.9742402340850094
+      ],
+      "cost": 136.83520718603398,
+      "steps": 100,
+      "success": false,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 15,
+      "initial": [
+        0.7772562562022358,
+        -0.0631669512949884
+      ],
+      "final": [
+        3.079675827838826,
+        1.7890743199897923
+      ],
+      "cost": 182.31838194557938,
+      "steps": 64,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 16,
+      "initial": [
+        -0.587234347872436,
+        0.08911495562642813
+      ],
+      "final": [
+        3.00114928502817,
+        1.9265858063388972
+      ],
+      "cost": 147.60939110922646,
+      "steps": 99,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 17,
+      "initial": [
+        -0.9489119041245431,
+        -0.11471555167809129
+      ],
+      "final": [
+        3.0950761042227932,
+        2.0668880276678467
+      ],
+      "cost": 166.62063181946547,
+      "steps": 100,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 18,
+      "initial": [
+        0.6861553213559091,
+        -0.005372095480561251
+      ],
+      "final": [
+        3.0097005979028584,
+        1.7707626533576315
+      ],
+      "cost": 170.88436503224474,
+      "steps": 64,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "seed": 601,
+      "episode": 19,
+      "initial": [
+        0.8607961118686944,
+        -0.11135037941858172
+      ],
+      "final": [
+        3.081363327095736,
+        1.7749847297585262
+      ],
+      "cost": 185.93935585708738,
+      "steps": 63,
+      "success": false,
+      "terminated": true,
+      "truncated": false
+    }
+  ],
+  "trained": [
+    {
+      "seed": 211,
+      "episode": 0,
+      "initial": [
+        -0.5907049209810793,
+        -0.08280831053853036
+      ],
+      "final": [
+        0.037819041991211576,
+        -0.00010637504220227597
+      ],
+      "cost": 4.441298609917501,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 1,
+      "initial": [
+        -0.6869920628610999,
+        -0.04447982301935555
+      ],
+      "final": [
+        0.03782956123694796,
+        -0.00013223812153709171
+      ],
+      "cost": 5.942655535938272,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 2,
+      "initial": [
+        0.5755238445475698,
+        0.13866850119084123
+      ],
+      "final": [
+        0.037808184629169315,
+        -0.00014807409769940447
+      ],
+      "cost": 5.184794782319944,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 3,
+      "initial": [
+        0.8220578111242502,
+        -0.10682663330808283
+      ],
+      "final": [
+        0.037836529578672194,
+        -0.00024502541323717035
+      ],
+      "cost": 8.756097627964818,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 4,
+      "initial": [
+        0.8389300788752735,
+        -0.12652855925261974
+      ],
+      "final": [
+        0.037837883243899625,
+        -0.0002495459795784495
+      ],
+      "cost": 9.020918831793733,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 5,
+      "initial": [
+        -0.9165058333892375,
+        0.007576371449977165
+      ],
+      "final": [
+        0.037862197127930146,
+        -0.00021085676388265785
+      ],
+      "cost": 10.846880129939883,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 6,
+      "initial": [
+        0.6311724435538053,
+        -0.062316501699388044
+      ],
+      "final": [
+        0.03780360861506498,
+        -0.00013171143643196737
+      ],
+      "cost": 5.2515499298154324,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 7,
+      "initial": [
+        0.5791540229227394,
+        -0.04885668950155378
+      ],
+      "final": [
+        0.037796584198968176,
+        -0.00010586986497152168
+      ],
+      "cost": 4.47477126548174,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 8,
+      "initial": [
+        -0.8700019230134786,
+        -0.023377545177936554
+      ],
+      "final": [
+        0.037856828820431225,
+        -0.00019794213558460108
+      ],
+      "cost": 9.871008028091591,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 9,
+      "initial": [
+        -0.6790598264429719,
+        -0.04541341429576279
+      ],
+      "final": [
+        0.03782852748292346,
+        -0.00012970987775040265
+      ],
+      "cost": 5.798116067041241,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 10,
+      "initial": [
+        0.5964948019012809,
+        0.051903717778623126
+      ],
+      "final": [
+        0.03780516804668819,
+        -0.00013733842319216908
+      ],
+      "cost": 5.139286192567433,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 11,
+      "initial": [
+        0.5953939776401966,
+        -0.06986122513189913
+      ],
+      "final": [
+        0.03779777518516582,
+        -0.00011031911209193941
+      ],
+      "cost": 4.6497756470429135,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 12,
+      "initial": [
+        0.6079967721365392,
+        0.019549299404025083
+      ],
+      "final": [
+        0.03780489145735657,
+        -0.0001363509502165641
+      ],
+      "cost": 5.19330943369429,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 13,
+      "initial": [
+        0.688026510970667,
+        0.11877476917579771
+      ],
+      "final": [
+        0.03783050515706076,
+        -0.00022490917247485568
+      ],
+      "cost": 7.1936687681750735,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 14,
+      "initial": [
+        -0.8006343007087708,
+        0.004758171923458565
+      ],
+      "final": [
+        0.03784288006905624,
+        -0.00016482130882590972
+      ],
+      "cost": 8.009266917998822,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 15,
+      "initial": [
+        0.9858221260365099,
+        0.19310407666489482
+      ],
+      "final": [
+        0.03793219481475048,
+        -0.000545437736968588
+      ],
+      "cost": 15.905246768838838,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 16,
+      "initial": [
+        -0.4864567347802222,
+        0.08715635910630226
+      ],
+      "final": [
+        0.03780162309456413,
+        -0.00006364554105005486
+      ],
+      "cost": 2.518711982441567,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 17,
+      "initial": [
+        0.7496029103640467,
+        -0.050131161417812126
+      ],
+      "final": [
+        0.0378270344054448,
+        -0.00021325374449061534
+      ],
+      "cost": 7.515194026067495,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 18,
+      "initial": [
+        -0.5844523081555962,
+        -0.17207675147801638
+      ],
+      "final": [
+        0.03782345919811601,
+        -0.00011667334355832972
+      ],
+      "cost": 4.744852172908069,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 211,
+      "episode": 19,
+      "initial": [
+        0.759509865893051,
+        0.04512373050674795
+      ],
+      "final": [
+        0.03783955946117788,
+        -0.000255011676052849
+      ],
+      "cost": 8.277564936954223,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 0,
+      "initial": [
+        -0.6130279407836496,
+        -0.19001065269112588
+      ],
+      "final": [
+        0.037828690764690705,
+        -0.00012925180215460374
+      ],
+      "cost": 5.338437374506108,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 1,
+      "initial": [
+        0.4191347392741591,
+        -0.13238252690061927
+      ],
+      "final": [
+        0.03777930459645503,
+        -0.00003525871860901865
+      ],
+      "cost": 2.280892240499117,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 2,
+      "initial": [
+        0.8032569037750363,
+        0.07332962434738877
+      ],
+      "final": [
+        0.03785446254384768,
+        -0.0003036222134086449
+      ],
+      "cost": 9.484750196848388,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 3,
+      "initial": [
+        -0.5310910395812243,
+        0.18996068527922033
+      ],
+      "final": [
+        0.03780269315778076,
+        -0.0000666527255403943
+      ],
+      "cost": 2.8018552335429114,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 4,
+      "initial": [
+        -0.7061373750679195,
+        -0.15878406874835493
+      ],
+      "final": [
+        0.03784089886681625,
+        -0.00015871931698692953
+      ],
+      "cost": 6.99365061318683,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 5,
+      "initial": [
+        0.7635907505173236,
+        0.19126833500340584
+      ],
+      "final": [
+        0.037862102481498315,
+        -0.0003280573594820267
+      ],
+      "cost": 9.415856528079907,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 6,
+      "initial": [
+        0.4296230997890234,
+        0.07542370203882454
+      ],
+      "final": [
+        0.03778651668646289,
+        -0.00006654995899765194
+      ],
+      "cost": 2.916006303538388,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 7,
+      "initial": [
+        -0.5980950453784317,
+        -0.09521507518365979
+      ],
+      "final": [
+        0.03782065546599587,
+        -0.0001102909861282957
+      ],
+      "cost": 4.614519541123105,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 8,
+      "initial": [
+        0.43211066173389556,
+        0.19077907949686052
+      ],
+      "final": [
+        0.037792785885973096,
+        -0.00009130320585244581
+      ],
+      "cost": 3.3408388513206826,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 9,
+      "initial": [
+        -0.4625900513026864,
+        0.05937501722946764
+      ],
+      "final": [
+        0.037800402047906405,
+        -0.00006042917109707831
+      ],
+      "cost": 2.3225784441971613,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 10,
+      "initial": [
+        0.8424716031178832,
+        -0.15689934287220242
+      ],
+      "final": [
+        0.03783552827783628,
+        -0.0002417483342259267
+      ],
+      "cost": 8.929225414922103,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 11,
+      "initial": [
+        0.7235992546658963,
+        0.16370215928182008
+      ],
+      "final": [
+        0.03784583835479018,
+        -0.00027554696589951276
+      ],
+      "cost": 8.260416655564741,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 12,
+      "initial": [
+        0.7466586410067976,
+        0.11990611366927623
+      ],
+      "final": [
+        0.037845923831263645,
+        -0.0002758401694018549
+      ],
+      "cost": 8.480228727448324,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 13,
+      "initial": [
+        -0.7274238117504865,
+        -0.11949819875881076
+      ],
+      "final": [
+        0.03784114550170998,
+        -0.0001596261370517062
+      ],
+      "cost": 7.195129588474196,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 14,
+      "initial": [
+        0.6327072694897652,
+        -0.004251025430858146
+      ],
+      "final": [
+        0.03780754307888943,
+        -0.0001458279569624308
+      ],
+      "cost": 5.5123431785569235,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 15,
+      "initial": [
+        0.9344828350003809,
+        -0.11613186867907643
+      ],
+      "final": [
+        0.037858219123192496,
+        -0.00031585341851999064
+      ],
+      "cost": 11.400039937297668,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 16,
+      "initial": [
+        -0.8435712241567672,
+        -0.12774614021182062
+      ],
+      "final": [
+        0.03786224601847532,
+        -0.00020962372749700175
+      ],
+      "cost": 10.03141790660654,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 17,
+      "initial": [
+        -0.47558666267432276,
+        -0.035259626712650066
+      ],
+      "final": [
+        0.03780443391015314,
+        -0.0000703690329837785
+      ],
+      "cost": 2.6923356047455997,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 18,
+      "initial": [
+        0.6464099729433656,
+        0.09049670230597257
+      ],
+      "final": [
+        0.037817902864187146,
+        -0.00018207875183631823
+      ],
+      "cost": 6.208412482293449,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 307,
+      "episode": 19,
+      "initial": [
+        0.8767495572101325,
+        0.018914718832820643
+      ],
+      "final": [
+        0.03786510763060795,
+        -0.0003377742567481278
+      ],
+      "cost": 10.920469734874935,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 0,
+      "initial": [
+        -0.6390714638866484,
+        0.08491994813084602
+      ],
+      "final": [
+        0.037816708125998355,
+        -0.00010145886476125981
+      ],
+      "cost": 4.5522165360701345,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 1,
+      "initial": [
+        0.5066345284227282,
+        0.1650643185712397
+      ],
+      "final": [
+        0.03779992575290214,
+        -0.00011821950206743511
+      ],
+      "cost": 4.236085032604285,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 2,
+      "initial": [
+        0.9689454728737473,
+        0.0637676013633609
+      ],
+      "final": [
+        0.037896837384988655,
+        -0.00043738926871109753
+      ],
+      "cost": 13.919294095812356,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 3,
+      "initial": [
+        0.7916298061143607,
+        0.06954589029774072
+      ],
+      "final": [
+        0.037850885955369874,
+        -0.00029202306252906865
+      ],
+      "cost": 9.178431899421378,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 4,
+      "initial": [
+        0.9512125539593399,
+        0.07025117017328741
+      ],
+      "final": [
+        0.03789329320846698,
+        -0.0004263954773424483
+      ],
+      "cost": 13.4490022452893,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 5,
+      "initial": [
+        0.8851898205000908,
+        0.07224229248240588
+      ],
+      "final": [
+        0.03787615898648303,
+        -0.0003727739436910315
+      ],
+      "cost": 11.583701244046345,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 6,
+      "initial": [
+        -0.6944821987301111,
+        -0.16387939359992743
+      ],
+      "final": [
+        0.037839426029082995,
+        -0.00015515446388006645
+      ],
+      "cost": 6.780308000966216,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 7,
+      "initial": [
+        -0.6201929049100727,
+        -0.08263319181278349
+      ],
+      "final": [
+        0.037822767371224315,
+        -0.00011550042864967174
+      ],
+      "cost": 4.926704071997802,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 8,
+      "initial": [
+        -0.521237523574382,
+        -0.1593715250492096
+      ],
+      "final": [
+        0.0378145846519997,
+        -0.00009509442116667438
+      ],
+      "cost": 3.69648692338697,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 9,
+      "initial": [
+        0.4100419803056866,
+        0.1149615206755698
+      ],
+      "final": [
+        0.037786340191750124,
+        -0.00006580380423263861
+      ],
+      "cost": 2.80950324406335,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 10,
+      "initial": [
+        -0.7294445378705859,
+        0.19949708636850122
+      ],
+      "final": [
+        0.037822006517451025,
+        -0.0001152377640072515
+      ],
+      "cost": 5.6252786487740725,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 11,
+      "initial": [
+        -0.6731720778625458,
+        -0.09714055890217424
+      ],
+      "final": [
+        0.03783108540945841,
+        -0.00013560715777057432
+      ],
+      "cost": 5.958372701340733,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 12,
+      "initial": [
+        0.7084308213554322,
+        -0.02967760302126407
+      ],
+      "final": [
+        0.03782019922796933,
+        -0.0001900254338176928
+      ],
+      "cost": 6.79199901341166,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 13,
+      "initial": [
+        -0.9733873293269426,
+        0.13585000531747937
+      ],
+      "final": [
+        0.03786061172346572,
+        -0.00020833546825262334
+      ],
+      "cost": 11.368853430133415,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 14,
+      "initial": [
+        -0.43679239973425865,
+        -0.1480950890108943
+      ],
+      "final": [
+        0.03780495304558452,
+        -0.00007122616392654943
+      ],
+      "cost": 2.561220246822895,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 15,
+      "initial": [
+        -0.8745869954582304,
+        -0.0769071382470429
+      ],
+      "final": [
+        0.037862866108282975,
+        -0.000211602452603308
+      ],
+      "cost": 10.423907830878406,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 16,
+      "initial": [
+        0.4602047950960696,
+        0.08820094391703603
+      ],
+      "final": [
+        0.03779017961358056,
+        -0.00008124403749779442
+      ],
+      "cost": 3.32844814311628,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 17,
+      "initial": [
+        -0.6559010403696448,
+        0.182090497110039
+      ],
+      "final": [
+        0.03781463809673368,
+        -0.00009678671526600774
+      ],
+      "cost": 4.48441467761469,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 18,
+      "initial": [
+        0.5186939151957631,
+        0.13016573172062634
+      ],
+      "final": [
+        0.037799037286364384,
+        -0.00011494915313220264
+      ],
+      "cost": 4.2627248137467815,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 419,
+      "episode": 19,
+      "initial": [
+        -0.41352919708006086,
+        0.1216708718799055
+      ],
+      "final": [
+        0.03779531931799998,
+        -0.000047422941775484516
+      ],
+      "cost": 1.7410452658836544,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 0,
+      "initial": [
+        -0.6599992949515581,
+        -0.0655822476372123
+      ],
+      "final": [
+        0.03782714481743263,
+        -0.00012626474704738745
+      ],
+      "cost": 5.547311116853209,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 1,
+      "initial": [
+        0.7055182875599713,
+        -0.11734446631744505
+      ],
+      "final": [
+        0.03781292268389213,
+        -0.00016486291475352067
+      ],
+      "cost": 6.337431648787409,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 2,
+      "initial": [
+        0.8449452158994972,
+        -0.022487595677375793
+      ],
+      "final": [
+        0.03785146427542293,
+        -0.00029395996789196736
+      ],
+      "cost": 9.817218191195455,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 3,
+      "initial": [
+        0.8938484577927739,
+        -0.0772159985266626
+      ],
+      "final": [
+        0.03785506409621757,
+        -0.000305670413676437
+      ],
+      "cost": 10.642219140246215,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 4,
+      "initial": [
+        -0.9017193941399455,
+        -0.10998836997896433
+      ],
+      "final": [
+        0.037871824184494,
+        -0.00023224781970735062
+      ],
+      "cost": 11.46581705313572,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 5,
+      "initial": [
+        0.8543319303076714,
+        -0.18054649168625475
+      ],
+      "final": [
+        0.03783536607279935,
+        -0.00024122236026702612
+      ],
+      "cost": 9.061944111272126,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 6,
+      "initial": [
+        -0.618029688950628,
+        -0.08474795259535313
+      ],
+      "final": [
+        0.037822608654021005,
+        -0.00011510449275661776
+      ],
+      "cost": 4.899683769213121,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 7,
+      "initial": [
+        0.4129501134622842,
+        0.09890582161024214
+      ],
+      "final": [
+        0.03778591887608538,
+        -0.00006408526330235244
+      ],
+      "cost": 2.793221491298914,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 8,
+      "initial": [
+        -0.860714466124773,
+        -0.18359968941658736
+      ],
+      "final": [
+        0.03787208047456415,
+        -0.00023201414320864587
+      ],
+      "cost": 11.002362836267476,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 9,
+      "initial": [
+        0.43210156611166894,
+        -0.06179932476952674
+      ],
+      "final": [
+        0.0377818762510598,
+        -0.0000469779990541682
+      ],
+      "cost": 2.5702969025355613,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 10,
+      "initial": [
+        0.6600477890111507,
+        0.07874421700835227
+      ],
+      "final": [
+        0.03781972143113164,
+        -0.00018835280895151648
+      ],
+      "cost": 6.4065608478766,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 11,
+      "initial": [
+        -0.41836452507413924,
+        -0.07817488601431251
+      ],
+      "final": [
+        0.0378007963779624,
+        -0.00006090401188175752
+      ],
+      "cost": 2.173590224910012,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 12,
+      "initial": [
+        0.7634263234212995,
+        -0.08559308964759112
+      ],
+      "final": [
+        0.03782666453793724,
+        -0.00021201280526104407
+      ],
+      "cost": 7.616121493470395,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 13,
+      "initial": [
+        -0.48532229880802336,
+        0.16246909787878394
+      ],
+      "final": [
+        0.03779963628416671,
+        -0.00005877608425698067
+      ],
+      "cost": 2.35588080329888,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 14,
+      "initial": [
+        -0.6543608079664409,
+        -0.006541211530566221
+      ],
+      "final": [
+        0.037822957448617155,
+        -0.00011635760160788144
+      ],
+      "cost": 5.1702306551340955,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 15,
+      "initial": [
+        -0.8264564101118594,
+        -0.16681583700701597
+      ],
+      "final": [
+        0.037863191185042305,
+        -0.0002114648565518974
+      ],
+      "cost": 9.916570357644497,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 16,
+      "initial": [
+        0.9449996288865805,
+        -0.18827014919370413
+      ],
+      "final": [
+        0.03785099034528605,
+        -0.0002925746056584908
+      ],
+      "cost": 11.164525814218685,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 17,
+      "initial": [
+        0.8865108081605285,
+        -0.07896743910387159
+      ],
+      "final": [
+        0.03785326803332708,
+        -0.0002998654376487164
+      ],
+      "cost": 10.447054475776527,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 18,
+      "initial": [
+        0.7267792259342969,
+        0.076328344643116
+      ],
+      "final": [
+        0.037835150380420866,
+        -0.0002403787450711062
+      ],
+      "cost": 7.754283812438417,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 509,
+      "episode": 19,
+      "initial": [
+        0.8984414076898247,
+        0.14709992343559863
+      ],
+      "final": [
+        0.037894564553688954,
+        -0.00043023981548380246
+      ],
+      "cost": 12.649154370305943,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 0,
+      "initial": [
+        0.6813921889290213,
+        -0.06831782553344964
+      ],
+      "final": [
+        0.03781195793324157,
+        -0.0001614630763174236
+      ],
+      "cost": 6.10405093730811,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 1,
+      "initial": [
+        0.9488216857891529,
+        0.19841544246301057
+      ],
+      "final": [
+        0.03792212621750097,
+        -0.000514824273515715
+      ],
+      "cost": 14.746245656431915,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 2,
+      "initial": [
+        -0.6381893976591527,
+        -0.1017706859856844
+      ],
+      "final": [
+        0.03782641588813324,
+        -0.0001242771427606729
+      ],
+      "cost": 5.33365738972717,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 3,
+      "initial": [
+        -0.4650053017307073,
+        -0.07612815154716374
+      ],
+      "final": [
+        0.037804896731980814,
+        -0.00007138319025031201
+      ],
+      "cost": 2.6810565225774137,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 4,
+      "initial": [
+        0.824459719657898,
+        -0.10756656657904387
+      ],
+      "final": [
+        0.03783694613210323,
+        -0.0002464167969506639
+      ],
+      "cost": 8.80540163773298,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 5,
+      "initial": [
+        0.7827883092220873,
+        -0.02117502661421894
+      ],
+      "final": [
+        0.0378373011123305,
+        -0.00024755271324963964
+      ],
+      "cost": 8.386298355247817,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 6,
+      "initial": [
+        0.8998782345093786,
+        0.14725307598710063
+      ],
+      "final": [
+        0.0378950320229353,
+        -0.00043169367798288346
+      ],
+      "cost": 12.692599977509051,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 7,
+      "initial": [
+        -0.8811019266489893,
+        -0.06218763133510949
+      ],
+      "final": [
+        0.03786259254184369,
+        -0.00021107730556658356
+      ],
+      "cost": 10.474486083887578,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 8,
+      "initial": [
+        0.7410686740651726,
+        -0.1283662574365735
+      ],
+      "final": [
+        0.03781872325442901,
+        -0.00018496615905988137
+      ],
+      "cost": 6.963098212628511,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 9,
+      "initial": [
+        -0.774651364935562,
+        -0.14471041122451425
+      ],
+      "final": [
+        0.03785129235471136,
+        -0.00018360682372995814
+      ],
+      "cost": 8.440438020073351,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 10,
+      "initial": [
+        -0.6957755568437278,
+        -0.07135871611535549
+      ],
+      "final": [
+        0.037832649832862726,
+        -0.00013952971393739745
+      ],
+      "cost": 6.255671812278877,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 11,
+      "initial": [
+        0.8912279155571013,
+        -0.12100997595116497
+      ],
+      "final": [
+        0.03784893645252057,
+        -0.0002858015539424143
+      ],
+      "cost": 10.279146139231356,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 12,
+      "initial": [
+        -0.6463106144219637,
+        0.17724885735660795
+      ],
+      "final": [
+        0.03781379816183317,
+        -0.0000946532658826779
+      ],
+      "cost": 4.3544568006339786,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 13,
+      "initial": [
+        -0.7730780453886836,
+        0.10079083694145086
+      ],
+      "final": [
+        0.037832448604039275,
+        -0.00014030256805882058
+      ],
+      "cost": 6.878280051157758,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 14,
+      "initial": [
+        -0.9434307363815606,
+        -0.18184169232845307
+      ],
+      "final": [
+        0.03789029643474997,
+        -0.00027418976478597824
+      ],
+      "cost": 13.457744883270374,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 15,
+      "initial": [
+        0.7772562562022358,
+        -0.0631669512949884
+      ],
+      "final": [
+        0.037831664246549615,
+        -0.000228825198784141
+      ],
+      "cost": 8.025896782260045,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 16,
+      "initial": [
+        -0.587234347872436,
+        0.08911495562642813
+      ],
+      "final": [
+        0.037810947333808,
+        -0.00008714919713711386
+      ],
+      "cost": 3.7681995072127377,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 17,
+      "initial": [
+        -0.9489119041245431,
+        -0.11471555167809129
+      ],
+      "final": [
+        0.037882390782693974,
+        -0.00025675906636643504
+      ],
+      "cost": 12.904944611155619,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 18,
+      "initial": [
+        0.6861553213559091,
+        -0.005372095480561251
+      ],
+      "final": [
+        0.037817788559858824,
+        -0.00018170270864565385
+      ],
+      "cost": 6.481629400211919,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 601,
+      "episode": 19,
+      "initial": [
+        0.8607961118686944,
+        -0.11135037941858172
+      ],
+      "final": [
+        0.03784398565334324,
+        -0.00026962942925150865
+      ],
+      "cost": 9.614586993769882,
+      "steps": 100,
+      "success": true,
+      "terminated": false,
+      "truncated": true
+    }
+  ],
+  "successes": 100,
+  "samples": 20000,
+  "updates": 9751,
+  "trainingMs": 229614.72724099993,
+  "totalMs": 235409.16366800002,
+  "checkpointSha256": "65be8100812d09252c747b98a61ef8e9d286a85313a00e5ee459f6a782253673"
+}

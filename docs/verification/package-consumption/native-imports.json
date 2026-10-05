@@ -1,0 +1,32 @@
+[
+  {
+    "package": "@ignitionai/backend-onnx",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "node:internal/modules/esm/resolve:283\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module '/srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/backend-onnx/dist/agents/onnx-agent' imported from /srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/backend-onnx/dist/index.js\n    at finalizeResolution (node:internal/modules/esm/resolve:283:11)\n    at moduleResolve (node:internal/modules/esm/resolve:952:10)\n    at defaultResolve (node:internal/modules/esm/resolve:1188:11)\n    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)\n    at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)\n    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)\n    at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/backend-onnx/dist/agents/onnx-agent'\n}\n\nNode.js v20.19.2\n"
+  },
+  {
+    "package": "@ignitionai/backend-tfjs",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "node:internal/modules/esm/resolve:283\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module '/srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/backend-tfjs/dist/agents/dqn' imported from /srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/backend-tfjs/dist/index.js\n    at finalizeResolution (node:internal/modules/esm/resolve:283:11)\n    at moduleResolve (node:internal/modules/esm/resolve:952:10)\n    at defaultResolve (node:internal/modules/esm/resolve:1188:11)\n    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)\n    at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)\n    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)\n    at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/backend-tfjs/dist/agents/dqn'\n}\n\nNode.js v20.19.2\n"
+  },
+  {
+    "package": "@ignitionai/core",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "node:internal/modules/esm/resolve:283\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module '/srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/core/dist/ignition-env' imported from /srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/core/dist/index.js\n    at finalizeResolution (node:internal/modules/esm/resolve:283:11)\n    at moduleResolve (node:internal/modules/esm/resolve:952:10)\n    at defaultResolve (node:internal/modules/esm/resolve:1188:11)\n    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)\n    at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)\n    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)\n    at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/core/dist/ignition-env'\n}\n\nNode.js v20.19.2\n"
+  },
+  {
+    "package": "@ignitionai/environments",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "node:internal/modules/esm/resolve:283\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module '/srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/environments/dist/gridworld' imported from /srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/environments/dist/index.js\n    at finalizeResolution (node:internal/modules/esm/resolve:283:11)\n    at moduleResolve (node:internal/modules/esm/resolve:952:10)\n    at defaultResolve (node:internal/modules/esm/resolve:1188:11)\n    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)\n    at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)\n    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)\n    at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/environments/dist/gridworld'\n}\n\nNode.js v20.19.2\n"
+  },
+  {
+    "package": "@ignitionai/storage",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "node:internal/modules/esm/resolve:283\n    throw new ERR_MODULE_NOT_FOUND(\n          ^\n\nError [ERR_MODULE_NOT_FOUND]: Cannot find module '/srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/storage/dist/src/index' imported from /srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/storage/dist/index.js\n    at finalizeResolution (node:internal/modules/esm/resolve:283:11)\n    at moduleResolve (node:internal/modules/esm/resolve:952:10)\n    at defaultResolve (node:internal/modules/esm/resolve:1188:11)\n    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:642:12)\n    at #cachedDefaultResolve (node:internal/modules/esm/loader:591:25)\n    at ModuleLoader.resolve (node:internal/modules/esm/loader:574:38)\n    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:236:38)\n    at ModuleJob._link (node:internal/modules/esm/module_job:130:49) {\n  code: 'ERR_MODULE_NOT_FOUND',\n  url: 'file:///srv/dev/tmp/ignition-package-consumer-36zfp35w/node_modules/@ignitionai/storage/dist/src/index'\n}\n\nNode.js v20.19.2\n"
+  }
+]
