@@ -1,6 +1,6 @@
 {
   "name": "@ignitionai/backend-onnx",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ONNX inference backend for IgnitionAI \u2014 cross-platform, production-ready RL inference",
   "main": "dist/cjs/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,8 @@
     "!dist/tests/**",
     "!dist/**/*.test.js",
     "!dist/**/*.test.d.ts",
-    "dist/cjs/package.json"
+    "dist/cjs/package.json",
+    "LICENSE"
   ],
   "scripts": {
     "build": "node ../../scripts/build-package.mjs",

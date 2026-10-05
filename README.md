@@ -1,6 +1,6 @@
 # IgnitionAI
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./package.json)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](./LICENSE)
 [![CI](https://github.com/IgnitionAI/ignition/actions/workflows/ci.yml/badge.svg)](https://github.com/IgnitionAI/ignition/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?style=flat-square)](https://www.typescriptlang.org/)
 
@@ -375,7 +375,7 @@ The codebase follows:
 
 ## License
 
-The root [package metadata](./package.json) declares MIT. A root LICENSE text is currently missing; retain the separate licences and provenance supplied with demo assets.
+The framework is distributed under the [MIT licence](./LICENSE), copyright 2025–2026 Salim Laimeche. Retain the separate licences and provenance supplied with demo assets.
 
 ---
 

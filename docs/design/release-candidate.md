@@ -1,14 +1,16 @@
 # Release candidate preparation — epic #47
 
-This is a reviewable proposal, not an approved release. Version and copyright
-identity remain maintainer decisions. No publish, merge or deployment occurred.
+The maintainer approved preparation of version 0.2.0 for the five modular
+packages on 2026-10-05, retaining the umbrella local-only, and confirmed
+Salim Laimeche as copyright holder. Years 2025–2026 follow repository history.
+Publication, merge and deployment remain separate steps.
 
 ## Proposed scope
 
 Prepare the five existing modular packages together: core, backend-tfjs,
 backend-onnx, storage and environments. Keep the ignitionai umbrella local-only.
 Do not overwrite the public 0.1.0 release or advertise workspace-only changes
-as already available from npm. Select a new version after compatibility review.
+as already available from npm. Prepare version 0.2.0; it is not yet published.
 
 ## Candidate release notes
 

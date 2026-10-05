@@ -1,0 +1,14 @@
+[
+  {
+    "mode": "esm",
+    "exit": 0,
+    "stdout": "@ignitionai/core\n@ignitionai/storage\n@ignitionai/backend-tfjs\n@ignitionai/backend-onnx\n@ignitionai/environments\n@ignitionai/backend-onnx/node\n@ignitionai/backend-onnx/web\n",
+    "stderr": ""
+  },
+  {
+    "mode": "cjs",
+    "exit": 0,
+    "stdout": "@ignitionai/core\n@ignitionai/storage\n@ignitionai/backend-tfjs\n@ignitionai/backend-onnx\n@ignitionai/environments\n@ignitionai/backend-onnx/node\n@ignitionai/backend-onnx/web\n",
+    "stderr": ""
+  }
+]
