@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { blogArticles } from '@/lib/blog'
+import { getBlogArticles } from '@/lib/blog'
 import { getDictionary } from '@/lib/i18n'
 import { isLocale, type Locale } from '@/lib/locales'
 
@@ -25,7 +25,7 @@ export default async function BlogPage({ params }: BlogParams) {
       <h1 className="h1 mb-4">{t.blog.heading}</h1>
       <p className="text-lg text-slate-400 mb-12">{t.blog.subheading}</p>
       <div className="grid gap-8 md:grid-cols-2">
-        {blogArticles.map(article => (
+        {getBlogArticles(locale).map(article => (
           <article key={article.slug} className="rounded-xl border border-slate-700 overflow-hidden bg-slate-800/30">
             <Link href={`/${locale}/blog/${article.slug}`} className="block group">
               <Image src={article.image} alt={article.imageAlt} width={1920} height={1080} className="w-full h-auto" />

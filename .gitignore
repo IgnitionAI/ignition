@@ -35,3 +35,4 @@ ehthumbs.db
 .env
 .env.*
 !.env.example
+.scratch/

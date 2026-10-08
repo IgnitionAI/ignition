@@ -1,0 +1,73 @@
+Brake before the corner, pick your line, and avoid the other cars: Circuit Racing gives you a visible playground for understanding the difference between driving, learning, and measuring.
+
+A driver can imitate a reference controller or learn from rewards. The final race must then use a frozen policy. Separating these steps prevents you from mistaking training progress for racing performance.
+
+**You will run the experiment and understand the link between its observations, its decisions, and its outcome.**
+
+[**Try Circuit Racing in the browser →**](/demos/car-circuit/)
+
+## Start with the demo
+
+Open the garage, pick a car, and **Take the wheel** to discover the track with the keyboard. Then move on to **Train**: the page distinguishes training, testing, saving, and racing. The example below produces a DQN checkpoint after a small budget of transitions.
+
+![The Circuit Racing demo before interaction.](/images/blog/car-circuit/initial.png)
+
+*Initial state captured in Chromium. Screenshots show the walkthrough, they do not guarantee a score.*
+
+## What the agent receives
+
+The racing-observation-v1 contract contains 20 values: speed, heading, lateral offset, heading error, four line cues, and three sets of four values for nearby opponents. The network chooses among nine actions. For DQN and Double DQN, a decision is held for six physics ticks.
+
+## What the reward encourages
+
+Q-learning rewards progress on the track and gates crossed, then subtracts penalties, a per-decision cost, and off-track exits. MLP imitation, by contrast, learns from labels provided by the reference controller: its loss is not a racing reward. Any comparison must name the mechanism used.
+
+The full contract lives in [racing/q-training.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-car-circuit/src/racing/q-training.ts). Read `observe()`, `step()`, and `reward()` together: a benchmark's name is not enough to define its implementation.
+
+## Reproduce the experiment with code
+
+Use Node.js 20 or 22 and pnpm 10.8.0. From the repository:
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter demo-car-circuit dev --host 127.0.0.1 --port 5173
+```
+
+Open [localhost:5173](http://localhost:5173). On a VPS, use an SSH tunnel to that port to access it from your computer.
+
+The example is loaded directly from [blog-experiment.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-car-circuit/src/examples/blog-experiment.ts): the article's code and the repository's code stay in sync.
+
+<!-- FIRST_AGENT_CODE -->
+
+While Vite is running, you can import this module in the browser console:
+
+```js
+const { trainSmallExperiment } = await import('/examples/blog-experiment.ts');
+const checkpoint = await trainSmallExperiment();
+checkpoint.algorithm; // dqn
+```
+
+The checkpoint is a result of this small training run; load it into a LearnedDriver to apply the policy. This module uses the CPU backend required by trainQDriver().
+
+## Observe, then evaluate
+
+![The Circuit Racing demo after its main interaction.](/images/blog/car-circuit/active.png)
+
+*Screenshot of the same session after interaction. The presence of a scene and an active indicator confirms the walkthrough, not a converged policy.*
+
+The declared Q protocol uses 20,000 transitions and an evaluation across multiple seeds, two tracks, and solo/traffic modes. Our 64-transition example is an execution check, not that full protocol. During an evaluation, keep failures, off-track exits, and penalties as well; do not only select the prettiest race.
+
+## Verification of this edition
+
+The demo was opened in Chromium and free runs were enabled. The CPU example produced a `dqn` checkpoint after 64 transitions, with 9 updates and 6 weight tensors. No complete race result is claimed.
+
+## Your turn to run the experiment
+
+Reproduce the walkthrough, then change a single element of the contract and compare your observations. You will have a concrete case to discuss what the agent knows, what it chooses, and what the reward values.
+
+[**Open Circuit Racing →**](/demos/car-circuit/)
+
+To go further, see [the Ignition runner](/docs/how-it-works/core) and [the available algorithms](/docs/algorithms).
