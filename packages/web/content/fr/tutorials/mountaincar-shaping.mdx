@@ -1,0 +1,205 @@
+---
+title: 'MountainCar : reward shaping'
+description: Les récompenses sparse cassent le RL. Construis l'env MountainCar classique, regarde DQN échouer, puis corrige-le avec un shaping dense basé sur la distance.
+---
+
+# MountainCar — Reward shaping
+
+MountainCar est le **piège canonique de la récompense sparse**. Une petite voiture est au fond d'une vallée. Son moteur est trop faible pour gravir directement la colline de droite — elle doit prendre de l'élan en oscillant d'abord. Le signal de récompense d'origine est `-1 par étape`, et `0` au but. Ça semble raisonnable — et pourtant la plupart des algorithmes RL classiques échouent à l'apprendre pendant des milliers d'épisodes.
+
+À la fin de ce tutoriel, tu sauras exactement pourquoi, et tu auras une recette concrète pour corriger des problèmes similaires sur tes propres envs.
+
+Durée estimée : **25–35 minutes**.
+
+## Prérequis
+
+- Tutoriel GridWorld terminé, ou expérience équivalente avec `TrainingEnv`.
+- Projet Vite + TypeScript avec `@ignitionai/core` et `@ignitionai/backend-tfjs` installés.
+- De la patience. Une partie de ce tutoriel consiste à *attendre qu'un agent sparse n'apprenne pas*, et c'est le propos.
+
+## Étape 1 — Le MountainCar à récompense sparse
+
+Crée `src/mountaincar-env.ts` :
+
+```ts filename="src/mountaincar-env.ts"
+import type { TrainingEnv } from '@ignitionai/core'
+
+const FORCE = 0.001
+const GRAVITY = 0.0025
+const MIN_POS = -1.2
+const MAX_POS = 0.6
+const GOAL_POS = 0.5
+const MAX_STEPS = 200
+
+export class MountainCarEnv implements TrainingEnv {
+  actions = ['push_left', 'none', 'push_right']
+  position = -0.5
+  velocity = 0
+  stepCount = 0
+
+  constructor() { this.reset() }
+
+  observe(): number[] {
+    return [this.position, this.velocity]
+  }
+
+  step(action: number | number[]): void {
+    const a = typeof action === 'number' ? action : action[0]
+    const force = (a - 1) * FORCE
+    this.velocity += force - GRAVITY * Math.cos(3 * this.position)
+    this.velocity = Math.max(-0.07, Math.min(0.07, this.velocity))
+    this.position += this.velocity
+    this.position = Math.max(MIN_POS, Math.min(MAX_POS, this.position))
+    if (this.position <= MIN_POS) this.velocity = 0
+    this.stepCount++
+  }
+
+  // CLASSIC SPARSE REWARD — this is the problem
+  reward(): number {
+    return -1
+  }
+
+  done(): boolean {
+    return this.position >= GOAL_POS || this.stepCount >= MAX_STEPS
+  }
+
+  reset(): void {
+    this.position = -0.5 + (Math.random() * 0.2 - 0.1)
+    this.velocity = 0
+    this.stepCount = 0
+  }
+}
+```
+
+Entraîne-le :
+
+```ts filename="src/main.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { MountainCarEnv } from './mountaincar-env'
+
+const env = new IgnitionEnvTFJS(new MountainCarEnv())
+env.train('dqn')
+env.setSpeed(50)
+
+setInterval(() => {
+  console.log(`step ${env.stepCount}`)
+}, 2000)
+```
+
+**Qu'observer** : lance-le pendant 5 minutes à `setSpeed(50)`. Regarde la console. Rien de bien ne se passe. La récompense reste au niveau de la politique aléatoire. Les épisodes se terminent systématiquement au timeout de 200 étapes. L'agent n'atteint jamais le but.
+
+**Pourquoi cette étape existe** : tu dois ressentir la douleur. Le signal de récompense sparse dit « l'épisode était mauvais » à la fin de chaque épisode raté, mais il ne dit jamais « cette action t'a rapproché du but » — parce que l'agent n'atteint jamais le but pendant l'exploration aléatoire. **Il reçoit un retour indiscernable d'un bruit aléatoire.**
+
+## Étape 2 — Comprendre pourquoi le sparse échoue
+
+Mets l'entraînement en pause et réfléchis à ce que l'agent DQN voit dans son replay buffer :
+
+| Étape | État | Action | Récompense | État suivant |
+|---|---|---|---|---|
+| 1 | `[-0.5, 0]` | push_right | `-1` | `[-0.499, 0.0003]` |
+| 2 | `[-0.499, 0.0003]` | push_left | `-1` | `[-0.499, -0.0015]` |
+| … | … | … | `-1` | … |
+| 200 | `[-0.52, 0.01]` | none | `-1` | `[-0.51, 0.01]` (timeout) |
+
+Chaque transition a la même récompense. La règle de mise à jour de Bellman (voir [DQN](/docs/algorithms/dqn)) dit :
+
+```text
+Q(s, a) ← r + γ · max_a' Q(s', a')
+```
+
+Si `r` vaut toujours `-1` et que `Q(s', a')` vaut aussi toujours à peu près la même chose, alors `Q(s, a)` converge vers le même nombre pour chaque paire état-action. **Le gradient n'a aucune direction.** L'agent n'a aucun moyen de distinguer « push_right » de « push_left » parce que les deux donnent toujours `-1`.
+
+C'est le mode d'échec de la récompense sparse. Ce n'est pas un bug de DQN. C'est un bug de la fonction de récompense.
+
+## Étape 3 — Ajouter une récompense de shaping
+
+Crée une nouvelle version qui ajoute un signal de progression dense :
+
+```ts filename="src/mountaincar-shaped.ts"
+import { MountainCarEnv } from './mountaincar-env'
+
+export class ShapedMountainCarEnv extends MountainCarEnv {
+  reward(): number {
+    if (this.position >= 0.5) return 10                          // hit the goal
+    // Dense shaping: reward for how far right and how fast
+    const positionBonus = (this.position - (-1.2)) / (0.5 - (-1.2))   // 0…1, scaled from valley to goal
+    const velocityBonus = Math.abs(this.velocity) * 5                  // faster in any direction is better
+    return positionBonus + velocityBonus - 1                           // still net-negative per step
+  }
+}
+```
+
+Échange-le dans `main.ts` et réentraîne.
+
+**Qu'observer** : en 30 secondes à `setSpeed(50)`, l'agent commence à produire des épisodes où il oscille avec une amplitude croissante. En 1–2 minutes, il atteint le but de façon constante. Compare ça à l'Étape 1 où tu as regardé rien se passer pendant 5 minutes.
+
+**Pourquoi cette étape existe** : tu as ajouté deux morceaux de signal dense. Le `positionBonus` dit « être à droite est mieux qu'être à gauche ». Le `velocityBonus` dit « bouger est mieux que rester immobile ». Ensemble, ils créent un gradient que l'agent peut réellement suivre. L'agent doit encore découvrir *comment* bouger, mais il a maintenant un retour qui lui dit *s'il* réussit.
+
+## Étape 4 — Ce que la récompense de shaping fait *vraiment*
+
+Fais une pause et regarde encore la fonction de récompense. Il y a quatre composants :
+
+1. **Bonus au but** (`+10`) : une grosse récompense positive quand la voiture atteint le drapeau.
+2. **Bonus de position** (`0 → 1`) : récompense la position vers la droite en continu.
+3. **Bonus de vitesse** (`0 → +∞`) : récompense la vitesse absolue, encourage l'élan.
+4. **Pénalité constante** (`-1`) : garde la récompense nette par étape négative pour que l'agent veuille quand même finir vite.
+
+C'est une **récompense de shaping basée sur le potentiel** déguisée — le terme `positionBonus` est proportionnel à une métrique de distance au but, et le `velocityBonus` est un proxy de « progression ». Le shaping basé sur le potentiel a une jolie propriété théorique : **il ne change pas la politique optimale**, seulement le signal d'apprentissage. L'agent apprend toujours à atteindre le but en un minimum d'étapes ; il apprend juste plus vite parce que le gradient est informatif dès le premier épisode.
+
+C'est le modèle vers lequel tu devrais tendre sur tes propres envs :
+
+- **Récompense au but** : grosse positive en cas de succès.
+- **Terme de distance/progression continu** : négatif ou positif, mis à l'échelle de la distance au but.
+- **Pénalité par étape** : petite constante négative pour décourager les tergiversations.
+- **Bonus d'exploration optionnel** : sur les envs où le but est vraiment dur à trouver.
+
+## Étape 5 — Régler la force du shaping
+
+Échange les poids du shaping et observe :
+
+```ts
+// Aggressive shaping — emphasize the gradient
+reward(): number {
+  if (this.position >= 0.5) return 10
+  const positionBonus = (this.position - (-1.2)) / (0.5 - (-1.2))
+  const velocityBonus = Math.abs(this.velocity) * 5
+  return positionBonus * 5 + velocityBonus * 10 - 1  // × 5 and × 10
+}
+```
+
+vs.
+
+```ts
+// Minimal shaping — barely dense
+reward(): number {
+  if (this.position >= 0.5) return 10
+  const positionBonus = (this.position - (-1.2)) / (0.5 - (-1.2))
+  return positionBonus * 0.1 - 1  // tiny
+}
+```
+
+**Qu'observer** :
+- Le **shaping agressif** converge le plus vite mais la politique est parfois biscornue — l'agent apprend à maximiser la vitesse pour elle-même et oublie d'atteindre le but.
+- Le **shaping minimal** converge lentement mais la politique finale est plus propre.
+- **L'original** (les deux bonus à leur poids de base) est le point d'équilibre.
+
+**Pourquoi cette étape existe** : les récompenses de shaping sont un levier, pas un interrupteur. Trop, et tu apprends à l'agent à exploiter ton terme de shaping. Trop peu, et tu retombes dans le sparse. Commence modéré, puis réduis si la politique devient bizarre.
+
+## Ce que tu viens d'apprendre
+
+1. **Les récompenses sparse sont un mode d'échec, pas une baseline.** DQN (et PPO et Q-Table) ne peuvent pas apprendre d'un signal qui ne varie pas. Si ton env renvoie une récompense à l'air constant pendant des centaines d'étapes, ce n'est pas la faute de l'algorithme.
+
+2. **Le shaping basé sur la distance est le correctif universel.** Tout env où tu peux définir « plus près du but » peut être shapé. C'est le cas de la plupart des envs.
+
+3. **Le shaping est un hyperparamètre.** Règle les poids. Trop agressif = exploitation. Trop doux = sparse.
+
+4. **Le reward shaping > le réglage des hyperparamètres.** Avant de toucher à `lr` ou `hiddenLayers`, assure-toi que ton signal de récompense a réellement un gradient. Neuf échecs sur dix se corrigent ici, pas dans la config du réseau.
+
+## Prochaines étapes
+
+- **[CartPole 3D avec React Three Fiber](/docs/tutorials/cartpole-3d)** — prends un agent entraîné et rends-le dans une scène 3D.
+- **[Algorithmes → DQN · Échec 1](/docs/algorithms/dqn)** — revisite les modes d'échec maintenant que tu sais à quoi ressemble une mauvaise récompense.
+
+---
+
+Précédent : **[← CartPole : observations personnalisées](/docs/tutorials/cartpole-observations)** · Suivant : **[CartPole 3D →](/docs/tutorials/cartpole-3d)**

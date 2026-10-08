@@ -1,0 +1,181 @@
+---
+title: DQN — Deep Q-Network
+description: Une explication pédagogique du fonctionnement de DQN dans IgnitionAI — replay buffer, réseau cible, exploration epsilon-greedy, les valeurs par défaut, et quand ça échoue.
+---
+
+# DQN — Deep Q-Network
+
+DQN apprend les valeurs d'action pour des environnements à actions discrètes en utilisant un replay buffer et un réseau cible. Ses résultats dépendent des observations, du design de récompense et du budget d'entraînement.
+
+Cette page est volontairement détaillée. À la fin, tu devrais comprendre *pourquoi* DQN marche, pas juste comment appeler `env.train('dqn')`.
+
+## Intuition — apprendre la valeur de chaque coup
+
+Imagine que tu joues aux échecs. À n'importe quelle position, tu pourrais demander : **« Si je joue ce coup, puis que je joue de façon optimale jusqu'à la fin de la partie, quelle est la récompense totale que j'obtiendrai ? »** Ce nombre est la **Q-value** de ce coup, dans cette position. Si tu connaissais la Q-value de chaque coup légal, choisir le meilleur coup serait trivial — prends celui qui a la Q-value la plus élevée.
+
+Le problème, c'est que tu ne *connais* pas les Q-values. DQN les apprend. Il part d'un réseau de neurones initialisé aléatoirement qui mappe `(état) → (Q-value de chaque action possible)`, et il met à jour le réseau pour que ses prédictions correspondent progressivement aux récompenses actualisées qu'il observe en jouant.
+
+Une fois les Q-values précises, la politique est triviale : **prendre toujours l'action à plus haute Q**. C'est tout. C'est tout l'algorithme.
+
+> **Quand utiliser DQN** : espaces d'action discrets, espaces d'observation petits à moyens, et structures de récompense suffisamment denses pour observer *un* signal en quelques centaines d'épisodes. CartPole, GridWorld, MountainCar, Atari, la plupart des jeux d'arcade — DQN gère tout ça.
+
+## La règle de mise à jour cœur — l'équation de Bellman
+
+La mise à jour que DQN effectue est une version un pas de l'**équation de Bellman** :
+
+```text
+Q(state, action) ← reward + γ · max_a' Q(next_state, a')
+```
+
+En français clair : « La valeur de prendre cette action dans cet état doit être égale à la récompense que je viens d'obtenir, plus la valeur actualisée de la meilleure action que je prendrai depuis l'état suivant. »
+
+- `γ` (gamma) est le **facteur d'actualisation** — combien une récompense future vaut par rapport à une récompense immédiate. `γ = 0.99` signifie « une récompense dans 100 pas vaut 37 % d'une récompense immédiate ».
+- `max_a'` signifie « la plus haute Q-value disponible dans l'état suivant » — on suppose qu'on jouera de façon optimale à partir de là.
+
+DQN transforme ça en perte d'apprentissage supervisé : pour chaque transition `(s, a, r, s')` qu'on a observée, la prédiction du réseau `Q(s, a)` doit être égale à `r + γ · max_a' Q(s', a')`. On minimise l'erreur quadratique entre les deux.
+
+Il y a une subtilité cachée dans cette dernière phrase — si on calcule la cible `max_a' Q(s', a')` avec le *même* réseau qu'on met à jour, on poursuit une cible mouvante et l'entraînement devient instable. DQN corrige ça avec l'astuce du **réseau cible** ci-dessous.
+
+## Les trois choses que DQN ajoute au Q-learning vanille
+
+Le Q-learning vanille (le tabulaire) marche bien sur de petites grilles mais s'effondre dès qu'on remplace la table de recherche par un réseau de neurones. DQN ajoute trois ingrédients pour que ça marche :
+
+### 1. Replay buffer d'expérience
+
+À chaque pas, DQN stocke la transition `(état, action, récompense, état_suivant, terminé)` dans un tampon circulaire. À l'entraînement, il échantillonne un *minibatch aléatoire* depuis le tampon au lieu de s'entraîner sur les transitions les plus récentes. Ça a deux effets énormes :
+
+- **Décorrèle les échantillons d'entraînement.** Les frames de jeu consécutives sont fortement corrélées. Si tu t'entraînes dessus dans l'ordre, le réseau sur-apprend la trajectoire courante. L'échantillonnage aléatoire brise cette corrélation.
+- **Réutilise les données.** Une seule expérience sert pour de nombreuses mises à jour de gradient, pas juste une. C'est pourquoi DQN est « sample-efficient » — il presse chaque goutte d'apprentissage de ses données.
+
+Chez IgnitionAI, la taille par défaut du buffer est de **10 000 transitions**, et l'entraînement démarre une fois que le buffer a assez d'échantillons pour un minibatch.
+
+### 2. Réseau cible
+
+On a dit plus haut qu'utiliser le même réseau pour prédire *et* calculer la cible mène à l'instabilité — imagine essayer de toucher une cible qui bouge à chaque fois que tu bandes l'arc. La solution de DQN est de garder une **seconde copie du réseau** — le *réseau cible* — mise à jour moins fréquemment. Le réseau cible sert à calculer `max_a' Q(s', a')`, donc la cible est stable pendant un moment.
+
+Chez IgnitionAI, le réseau cible est synchronisé sur le réseau principal toutes les `targetUpdateFrequency` mises à jour. La valeur par défaut est de **100 mises à jour d'entraînement** via `IgnitionEnv`, ou **1000** en construisant `DQNAgent` directement. Tu peux régler plus bas pour des envs à apprentissage rapide, ou plus haut pour un entraînement plus stable.
+
+### 3. Exploration epsilon-greedy
+
+Une politique gourmande (toujours prendre l'argmax Q-value) se bloque tôt. Les premières rollouts de politique aléatoire donneront une image trompeuse des actions « bonnes », et le réseau s'y verrouillera. Pour forcer l'exploration, DQN utilise l'**epsilon-greedy** : avec probabilité `ε`, prendre une action aléatoire au lieu de la gourmande.
+
+`ε` démarre haut (presque pure exploration) et décroît au fil du temps vers un petit plancher (presque pure exploitation). Chez IgnitionAI :
+
+- `epsilon = 1.0` au départ (100 % aléatoire)
+- À chaque mise à jour d'entraînement réussie, `epsilon *= 0.995` (demi-vie d'environ 138 mises à jour)
+- `minEpsilon = 0.01` est le plancher (1 % aléatoire pour toujours, pour éviter le verrouillage dur)
+
+> **Erreur courante** : si tu mets `minEpsilon = 0`, l'agent finira par cesser d'explorer totalement et ne pourra pas récupérer d'estimations précoces trompeuses. Laisse toujours un petit plancher epsilon.
+
+## Hyperparamètres par défaut
+
+Ce sont les valeurs utilisées par `env.train('dqn')`, issues de `packages/backend-tfjs/src/defaults.ts`. La construction directe de `DQNAgent` utilise des couches cachées `[24, 24]` et une fréquence de mise à jour cible de 1000 à la place.
+
+| Hyperparamètre | Défaut | Ce qu'il contrôle |
+|---|---|---|
+| `hiddenLayers` | `[64, 64]` | Deux couches cachées de 64 unités chacune. |
+| `lr` | `0.001` | Taux d'apprentissage Adam. |
+| `gamma` | `0.99` | Facteur d'actualisation. |
+| `epsilon` | `1.0` | Taux d'exploration initial (aléatoire pur). |
+| `epsilonDecay` | `0.995` | Décroissance multiplicative appliquée à chaque mise à jour d'entraînement. |
+| `minEpsilon` | `0.01` | Plancher — l'exploration ne descend jamais sous 1 %. |
+| `batchSize` | `32` | Taille du minibatch échantillonné depuis le replay buffer par mise à jour. |
+| `memorySize` | `10000` | Capacité du tampon circulaire pour le replay d'expérience. |
+| `targetUpdateFrequency` | `100` | Mises à jour d'entraînement entre synchronisations du réseau cible. |
+| `backend` | `'auto'` | Backend TF.js — sélectionne automatiquement WebGPU → WebGL → WASM → CPU. |
+
+## Double DQN
+
+Sélectionne Double DQN via la même API publique :
+
+```ts
+env.train('double-dqn', { backend: 'cpu' });
+// Direct construction: new DQNAgent({ inputSize, actionSize, doubleQ: true })
+```
+
+DQN utilise la valeur d'état suivant maximale du réseau cible. Double DQN sélectionne plutôt une action avec le réseau en ligne et évalue cette action avec le réseau cible :
+
+```text
+nextAction = argmax_a Q_online(nextState, a)
+target = reward + gamma * Q_target(nextState, nextAction)
+```
+
+Les deux n'utilisent que la récompense après une vraie terminaison et préservent l'amorçage après une troncature de limite de temps. Le replay, l'optimisation et la synchronisation cible sont par ailleurs partagés. Cette séparation suit [van Hasselt, Guez et Silver, Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/abs/1509.06461). Elle ne garantit pas de meilleurs résultats sur chaque environnement.
+
+Circuit Racing expose les deux méthodes dans son sélecteur d'entraînement. Sa [comparaison de course à budget fixe](/demos/car-circuit/reports/racing-q-v3/index.html) inclut chaque graine, échec et checkpoint final.
+
+Les sauvegardes via provider incluent l'`algorithm` effectif (`dqn` ou `double-dqn`) dans les métadonnées. L'inférence utilise la sélection d'action gourmande pour les deux. Pour reprendre l'entraînement, construis l'algorithme correspondant avant de charger : l'API de stockage actuelle charge les poids, pas le choix d'algorithme ni l'état de l'optimiseur/replay. Les appels DQN existants conservent leur comportement par défaut.
+
+## Guide de réglage — quels boutons tourner, et dans quel ordre
+
+Si DQN marche, ne touche à rien. Sinon, règle dans cet ordre :
+
+1. **Reward shaping d'abord.** Neuf fois sur dix, un DQN qui n'apprend pas a une récompense trop sparse ou non informative. Ajoute des récompenses intermédiaires denses (par ex. « la distance à l'objectif a diminué de 0,1 → récompense +0.01 ») et réessaie. Ne touche pas aux hyperparamètres tant que le signal de récompense n'est pas bon.
+
+2. **Normalisation des observations.** Vérifie que `observe()` retourne des valeurs grosso modo dans `[-1, 1]` ou `[0, 1]`. Les réseaux de neurones détestent les entrées non bornées. Une seule feature dans les milliers dominera toutes les autres.
+
+3. **Taille du réseau.** Si l'environnement a un état non trivial (plus de ~6 features), monte `hiddenLayers` à `[64, 64]` ou `[128, 128]`. Les petits réseaux sous-apprennent vite.
+
+4. **Taux d'apprentissage.** `0.001` est un bon défaut. Si l'entraînement diverge (les récompenses s'effondrent et restent au fond), baisse à `0.0005`. S'il est glacial, monte à `0.0025`. Ne dépasse jamais `0.01`.
+
+5. **Décroissance epsilon.** Si l'agent converge trop tôt sur une politique bête, ralentis la décroissance (`0.998` au lieu de `0.995`) pour forcer plus d'exploration. S'il dérive sans fin, accélère-la (`0.99`).
+
+6. **Gamma.** Ne le touche que si tu as une raison claire. Baisser à `0.9` rend l'agent myope (gourmand à court terme) ; monter à `0.999` lui fait planifier plus loin mais ralentit la convergence.
+
+## Modes d'échec courants
+
+### Échec 1 — Les récompenses ne montent jamais
+
+**Symptôme** : la récompense moyenne reste plate ou bruitée autour de la baseline de politique aléatoire pendant des centaines d'épisodes.
+
+**Diagnostic** :
+- La récompense est trop sparse. Si ton env ne donne que `+1` en fin d'épisode et `0` sinon, DQN aura du mal à trouver le signal.
+- Les observations ne sont pas normalisées. Affiche la sortie de `observe()` — si une feature dépasse 10 en magnitude, c'est ton bug.
+- Le réseau est trop petit pour l'état.
+
+**Solution** : ajoute des récompenses denses (basées sur la distance, le progrès, ou du shaping), normalise les observations, ou monte `hiddenLayers` à `[64, 64]`.
+
+### Échec 2 — Les récompenses montent, puis s'effondrent
+
+**Symptôme** : l'agent apprend une politique raisonnable, puis les récompenses s'effondrent soudainement et ne récupèrent jamais. L'« oubli catastrophique » classique.
+
+**Diagnostic** : l'entraînement est instable. Causé en général par un taux d'apprentissage trop élevé ou des mises à jour du réseau cible trop fréquentes.
+
+**Solution** : divise par deux le taux d'apprentissage (`lr: 0.0005`) et double `targetUpdateFrequency`. Réessaie.
+
+### Échec 3 — L'agent reste bloqué sur une politique bête
+
+**Symptôme** : l'agent trouve une stratégie médiocre dans les 50 premiers épisodes et ne s'améliore plus. Fréquent dans les envs avec des optima locaux trompeurs (par ex. « rester immobile » est un coup localement optimal dans MountainCar).
+
+**Diagnostic** : l'exploration s'est effondrée trop vite. Epsilon a décroît avant que l'agent ne trouve la meilleure politique.
+
+**Solution** : ralentis la décroissance epsilon (`epsilonDecay: 0.998`) et/ou monte le plancher (`minEpsilon: 0.05`). Pour les cas pathologiques, pré-remplis le replay buffer avec de l'exploration aléatoire pendant les 1000 premiers pas.
+
+### Échec 4 — L'entraînement est lent
+
+**Symptôme** : l'entraînement tourne correctement mais prend 10× plus de temps que prévu.
+
+**Diagnostic** : tu tournes à vitesse temps réel (`stepIntervalMs = 50` par défaut). C'est là pour que le navigateur reste réactif.
+
+**Solution** : appelle `env.setSpeed(50)` pour accélérer l'entraînement par 50. Les visuels vont saccader mais l'intégrité de l'entraînement est préservée. Repasse à `setSpeed(1)` quand tu veux voir la politique jouer.
+
+### Échec 5 — Les Q-values explosent
+
+**Symptôme** : les Q-values croissent sans borne. Souvent corrélé avec des récompenses divergentes ou des pertes `NaN`.
+
+**Diagnostic** : les récompenses sont trop grandes. Les cibles de DQN sont proportionnelles à la magnitude des récompenses, et si ta récompense est de ±1000, le réseau va souffrir.
+
+**Solution** : divise les récompenses par 10–100. Règle empirique : les magnitudes de récompense devraient être grosso modo dans `[-10, +10]` après mise à l'échelle.
+
+## DQN vs PPO — quand basculer
+
+DQN est un excellent défaut, mais il a deux angles morts :
+
+- **Espaces d'action continus.** L'`argmax` de DQN exige des actions discrètes. Si ton env a « braquer entre -1 et 1 », DQN ne peut pas le gérer directement. Utilise PPO.
+- **Épisodes très longs avec attribution de crédit différée.** L'amorçage un pas de DQN souffre quand le signal de récompense est séparé de l'action pertinente par des milliers de pas. Le GAE de PPO (Generalized Advantage Estimation) gère mieux les horizons longs.
+
+Si DQN converge et que tu es content, reste. Sinon, essaie PPO comme prochaine expérience — c'est un mot : `env.train('ppo')`.
+
+---
+
+Précédent : **[← Algorithmes](/docs/algorithms)** · Suivant : **[PPO →](/docs/algorithms/ppo)**
