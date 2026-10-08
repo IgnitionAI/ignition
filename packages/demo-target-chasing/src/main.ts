@@ -68,11 +68,7 @@ const env: IgnitionEnv = new IgnitionEnv({
 // Étendre la méthode step pour gérer les checkpoints
 const originalStep = env.step.bind(env);
 env.step = async () => {
-<<<<<<< HEAD
   const stepResult = await originalStep();
-=======
-  const result = await originalStep();
->>>>>>> feat/53-build-runtime-fix
   
   const d = Math.abs(position - target);
   
@@ -111,12 +107,7 @@ env.step = async () => {
     env.stop();
     process.exit(0);
   }
-<<<<<<< HEAD
   return stepResult;
-=======
-
-  return result;
->>>>>>> feat/53-build-runtime-fix
 };
 
 env.start();

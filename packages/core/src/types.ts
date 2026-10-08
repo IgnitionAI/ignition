@@ -31,8 +31,10 @@ export interface Experience {
   action: number | number[];
   reward: number;
   nextState: number[];
-  /** True when the episode ended (terminal condition or time/step limit) */
-  done: boolean;
+  /** True when the episode ended due to a terminal condition (agent failed, goal reached…) */
+  terminated: boolean;
+  /** True when the episode ended due to a time/step limit, not a terminal condition */
+  truncated: boolean;
   info?: Record<string, unknown>;
 }
 
@@ -41,18 +43,15 @@ export interface Experience {
 export interface StepResult {
   observation: number[];
   reward: number;
-  done: boolean;
+  terminated: boolean;
+  truncated: boolean;
   info?: Record<string, unknown>;
 }
 
 // ─── Agent interfaces ────────────────────────────────────────────────────────
 
 export interface AgentInterface {
-<<<<<<< HEAD
   getAction(observation: number[], greedy?: boolean): Promise<number | number[]>;
-=======
-  getAction(observation: number[]): Promise<number>;
->>>>>>> feat/53-build-runtime-fix
   remember(experience: Experience): void;
   train(): Promise<void>;
   /** Release TF/GPU/WASM resources held by the agent */
