@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Particles from './particles'
+import type { clients as ClientsMessages } from '@/messages/en/clients'
 
 import Client01 from '@/public/images/client-01.svg'
 import Client02 from '@/public/images/client-02.svg'
@@ -12,18 +13,18 @@ import Client08 from '@/public/images/client-08.svg'
 import Client09 from '@/public/images/client-09.svg'
 
 const logos = [
-  { src: Client01, alt: "Client 01" },
-  { src: Client02, alt: "Client 02" },
-  { src: Client03, alt: "Client 03" },
-  { src: Client04, alt: "Client 04" },
-  { src: Client05, alt: "Client 05" },
-  { src: Client06, alt: "Client 06" },
-  { src: Client07, alt: "Client 07" },
-  { src: Client08, alt: "Client 08" },
-  { src: Client09, alt: "Client 09" },
+  { src: Client01 },
+  { src: Client02 },
+  { src: Client03 },
+  { src: Client04 },
+  { src: Client05 },
+  { src: Client06 },
+  { src: Client07 },
+  { src: Client08 },
+  { src: Client09 },
 ];
 
-export default function Clients() {
+export default function Clients({ t }: { t: typeof ClientsMessages }) {
   return (
     <section>
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
@@ -39,7 +40,7 @@ export default function Clients() {
               <ul className="flex animate-infinite-scroll items-center justify-center md:justify-start [&_img]:max-w-none [&_li]:mx-8">
                 {logos.map((logo, index) => (
                   <li key={index}>
-                    <Image src={logo.src} alt={logo.alt} />
+                    <Image src={logo.src} alt={t.logos[index]} />
                   </li>
                 ))}
               </ul>
@@ -49,7 +50,7 @@ export default function Clients() {
               >
                 {logos.map((logo, index) => (
                   <li key={index}>
-                    <Image src={logo.src} alt={logo.alt} />
+                    <Image src={logo.src} alt={t.logos[index]} />
                   </li>
                 ))}
               </ul>

@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { getLatestHighlights } from '@/lib/changelog'
+import type { changelog as ChangelogMessages } from '@/messages/en/changelog'
 
-export default function Changelog() {
+export default function Changelog({ t }: { t: (typeof ChangelogMessages)['section'] }) {
   const { release, highlights } = getLatestHighlights(5)
   if (!release) return null
 
@@ -19,17 +20,17 @@ export default function Changelog() {
           {/* Header */}
           <div className="max-w-3xl mx-auto text-center pb-8 md:pb-12">
             <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-3">
-              Recent updates
+              {t.eyebrow}
             </div>
             <h2 className="h2 bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-4">
-              What's new
+              {t.title}
             </h2>
             <p className="text-lg text-slate-400">
-              IgnitionAI ships fast. Here's the latest release — everything else lives on the{' '}
+              {t.descriptionBefore}
               <Link href="/changelog" className="text-indigo-400 hover:text-indigo-300 underline">
-                full changelog
+                {t.fullChangelog}
               </Link>
-              .
+              {t.descriptionAfter}
             </p>
           </div>
 
@@ -65,7 +66,7 @@ export default function Changelog() {
                 href="/changelog"
                 className="text-indigo-400 hover:text-indigo-300 text-sm font-medium"
               >
-                See full changelog →
+                {t.seeFull}
               </Link>
             </div>
           </div>

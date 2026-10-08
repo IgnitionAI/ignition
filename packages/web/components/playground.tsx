@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
+import type { playground as PlaygroundMessages } from '@/messages/en/playground'
 
 interface Episode {
   episode: number
@@ -16,10 +17,10 @@ function generateEpisodeReward(episode: number, algo: 'dqn' | 'ppo'): number {
   return Math.max(10, Math.min(plateau, rise + noise + 20))
 }
 
-export default function Playground() {
+export default function Playground({ t }: { t: typeof PlaygroundMessages }) {
   const [isTraining, setIsTraining] = useState(false)
   const [episodes, setEpisodes] = useState<Episode[]>([])
-  const [status, setStatus] = useState('Ready')
+  const [status, setStatus] = useState(t.status.ready)
   const [speed, setSpeed] = useState(1)
   const [algorithm, setAlgorithm] = useState<'dqn' | 'ppo'>('dqn')
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -38,7 +39,7 @@ export default function Playground() {
     setIsTraining(true)
     setEpisodes([])
     episodeRef.current = 0
-    setStatus('Training...')
+    setStatus(t.status.training)
 
     const intervalMs = Math.max(50, 1000 / speed)
     intervalRef.current = setInterval(tick, intervalMs)
@@ -50,7 +51,7 @@ export default function Playground() {
       intervalRef.current = null
     }
     setIsTraining(false)
-    setStatus('Stopped')
+    setStatus(t.status.stopped)
   }, [])
 
   useEffect(() => {
@@ -84,13 +85,13 @@ export default function Playground() {
 
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-16">
             <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-3">
-              Interactive Playground
+              {t.eyebrow}
             </div>
             <h2 className="h2 bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-4">
-              Train an agent in your browser
+              {t.title}
             </h2>
             <p className="text-lg text-slate-400">
-              Pick an algorithm, hit Train, and watch the reward climb in real time. This is a simulation — open a live demo below to run real RL.
+              {t.description}
             </p>
           </div>
 
@@ -98,7 +99,7 @@ export default function Playground() {
             {/* Controls */}
             <div className="flex flex-wrap items-center gap-4 mb-6">
               <div className="flex items-center gap-2">
-                <label className="text-sm text-slate-400">Algorithm</label>
+                <label className="text-sm text-slate-400">{t.labels.algorithm}</label>
                 <select
                   value={algorithm}
                   onChange={e => setAlgorithm(e.target.value as 'dqn' | 'ppo')}
@@ -111,7 +112,7 @@ export default function Playground() {
               </div>
 
               <div className="flex items-center gap-2">
-                <label className="text-sm text-slate-400">Speed</label>
+                <label className="text-sm text-slate-400">{t.labels.speed}</label>
                 <input
                   type="range"
                   min={1}
@@ -130,14 +131,14 @@ export default function Playground() {
                   onClick={startTraining}
                   className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-lg transition-colors"
                 >
-                  Train
+                  {t.actions.train}
                 </button>
               ) : (
                 <button
                   onClick={stopTraining}
                   className="px-4 py-2 bg-red-600/80 hover:bg-red-500 text-white text-sm font-medium rounded-lg transition-colors"
                 >
-                  Stop
+                  {t.actions.stop}
                 </button>
               )}
             </div>
@@ -147,7 +148,7 @@ export default function Playground() {
               <div className={`w-2 h-2 rounded-full ${isTraining ? 'bg-green-400 animate-pulse' : 'bg-slate-600'}`} />
               <span className="text-sm text-slate-400">{status}</span>
               <span className="text-xs text-slate-500 ml-2">
-                {episodes.length > 0 ? `${episodes.length} episodes` : ''}
+                {episodes.length > 0 ? t.episodes.replace('{count}', String(episodes.length)) : ''}
               </span>
             </div>
 
@@ -155,7 +156,7 @@ export default function Playground() {
             <div className="relative h-64 bg-slate-950/50 rounded-lg border border-slate-800 overflow-hidden">
               {episodes.length === 0 ? (
                 <div className="absolute inset-0 flex items-center justify-center text-slate-600 text-sm">
-                  Click Train to start
+                  {t.emptyChart}
                 </div>
               ) : (
                 <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 w-full h-full">
@@ -182,12 +183,12 @@ export default function Playground() {
                 </svg>
               )}
 
-              <div className="absolute bottom-2 left-2 text-[10px] text-slate-600">Episode 0</div>
+              <div className="absolute bottom-2 left-2 text-[10px] text-slate-600">{t.axes.episode.replace('{count}', '0')}</div>
               <div className="absolute bottom-2 right-2 text-[10px] text-slate-600">
-                Episode {maxEpisodes}
+                {t.axes.episode.replace('{count}', String(maxEpisodes))}
               </div>
               <div className="absolute top-2 left-2 text-[10px] text-slate-600">
-                Reward {Math.round(maxReward)}
+                {t.axes.reward.replace('{count}', String(Math.round(maxReward)))}
               </div>
             </div>
 
@@ -196,19 +197,19 @@ export default function Playground() {
               <div className="mt-4 grid grid-cols-3 gap-4 text-center">
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-2xl font-bold text-slate-200">{episodes.length}</div>
-                  <div className="text-xs text-slate-500">Episodes</div>
+                  <div className="text-xs text-slate-500">{t.stats.episodes}</div>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-2xl font-bold text-indigo-400">
                     {episodes[episodes.length - 1].reward.toFixed(1)}
                   </div>
-                  <div className="text-xs text-slate-500">Latest reward</div>
+                  <div className="text-xs text-slate-500">{t.stats.latestReward}</div>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="text-2xl font-bold text-emerald-400">
                     {Math.max(...episodes.map(e => e.reward)).toFixed(1)}
                   </div>
-                  <div className="text-xs text-slate-500">Best reward</div>
+                  <div className="text-xs text-slate-500">{t.stats.bestReward}</div>
                 </div>
               </div>
             )}
