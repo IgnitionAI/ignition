@@ -2,10 +2,12 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { Physics } from '@react-three/rapier'
 import Experience from './Experience'
-import { useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Themes, ThemeName } from './themes'
 
 function App() {
+  const { t, i18n } = useTranslation()
   const [currentTheme, setCurrentTheme] = useState<ThemeName>('Futuristic')
   const [isTraining, setIsTraining] = useState(false)
   const [episodeCount, setEpisodeCount] = useState(0)
@@ -52,6 +54,12 @@ function App() {
     trainingControlsRef.current = controls
   }
 
+  useEffect(() => {
+    document.documentElement.lang = i18n.language
+    document.title = t('page.title')
+    localStorage.setItem('lang', i18n.language)
+  }, [i18n.language, t])
+
   return (
     <>
       <div className="theme-selector" style={{ 
@@ -96,23 +104,44 @@ function App() {
         fontFamily: 'Arial, sans-serif',
         maxWidth: '300px'
       }}>
-        <h3 style={{ margin: '0 0 10px 0', color: Themes[currentTheme].colors.secondary }}>
-          IgnitionAI - Entraînement
-        </h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h3 style={{ margin: 0, color: Themes[currentTheme].colors.secondary }}>
+            {t('hud.header')}
+          </h3>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            {(['fr', 'en'] as const).map((lng) => (
+              <button
+                key={lng}
+                onClick={() => void i18n.changeLanguage(lng)}
+                style={{
+                  background: i18n.language === lng ? Themes[currentTheme].colors.primary : '#333',
+                  color: 'white',
+                  border: 'none',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontWeight: i18n.language === lng ? 'bold' : 'normal'
+                }}
+              >
+                {t(`language.${lng}`)}
+              </button>
+            ))}
+          </div>
+        </div>
         
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span>Épisodes:</span>
+          <span>{t('hud.episodes')}</span>
           <span>{episodeCount}</span>
         </div>
         
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span>Récompense:</span>
+          <span>{t('hud.reward')}</span>
           <span>{totalReward.toFixed(2)}</span>
         </div>
         
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span>Temps écoulé:</span>
-          <span>{episodeTime} / 60 sec</span>
+          <span>{t('hud.timeElapsed')}</span>
+          <span>{t('hud.seconds', { count: episodeTime })}</span>
         </div>
         
         <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
@@ -129,7 +158,7 @@ function App() {
                 flex: 1
               }}
             >
-              Démarrer
+              {t('actions.start')}
             </button>
           ) : (
             <button 
@@ -144,7 +173,7 @@ function App() {
                 flex: 1
               }}
             >
-              Arrêter
+              {t('actions.stop')}
             </button>
           )}
           
@@ -160,7 +189,7 @@ function App() {
               flex: 1
             }}
           >
-            Réinitialiser
+            {t('actions.reset')}
           </button>
         </div>
       </div>
