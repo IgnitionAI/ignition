@@ -1,0 +1,220 @@
+---
+title: React Three Fiber
+description: IgnitionAI est conçu pour React Three Fiber. Cette page explique pourquoi, et te montre comment associer un <Canvas> à un agent apprenant sans perdre une seule frame.
+---
+
+# React Three Fiber
+
+IgnitionAI est, avant tout, **un framework pour les développeurs JavaScript créatifs**. La majorité de ces développeurs travaillent avec React Three Fiber (R3F) — c'est le standard de facto pour construire des scènes 3D dans l'écosystème React. Cette page existe parce que l'intégration n'est pas une réflexion après coup. C'est le cas d'usage de première classe.
+
+## Pourquoi R3F d'abord ?
+
+Trois raisons :
+
+1. **Les utilisateurs de R3F pensent déjà en composants et props.** Ton monde de jeu est déjà un arbre de composants React avec un état local. Une classe `TrainingEnv` n'est qu'un concept de plus, proche des composants — facile à ajouter, facile à raisonner dessus.
+2. **La boucle de rendu est sacrée.** Perdre une seule frame dans une scène 3D, ça se voit. La boucle d'entraînement d'IgnitionAI est découplée de `requestAnimationFrame` pour que ton `<Canvas>` reste fluide même quand l'agent enchaîne mille pas d'entraînement par seconde.
+3. **R3F est une passerelle vers les internes de Three.js.** Ton agent peut observer un état arbitraire de la scène — positions, vitesses, raycasts, corps physiques — via les mêmes hooks `useRef` / `useFrame` que tu utilises déjà pour l'animation. Pas de seconde copie de l'état du monde, pas de couche de sérialisation.
+
+Si tu construis une expérience 3D créative en React et que tu veux y mettre un agent apprenant, c'est le chemin rapide.
+
+## L'exemple minimal viable
+
+Voici un composant autonome qui câble un `TrainingEnv` dans un `<Canvas>` R3F :
+
+```tsx filename="Game.tsx"
+import { Canvas } from '@react-three/fiber'
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import type { TrainingEnv } from '@ignitionai/core'
+import { useEffect, useRef } from 'react'
+import * as THREE from 'three'
+
+// 1. Describe your world
+class MyGameEnv implements TrainingEnv {
+  actions = ['left', 'right', 'noop']
+
+  // Shared state with the scene — owned by the env
+  playerX = 0
+  playerVx = 0
+  goalX = 0.8
+
+  observe(): number[] {
+    return [this.playerX, this.playerVx, this.goalX - this.playerX]
+  }
+
+  step(action: number): void {
+    const force = action === 0 ? -0.01 : action === 1 ? 0.01 : 0
+    this.playerVx += force
+    this.playerVx *= 0.95   // friction
+    this.playerX += this.playerVx
+  }
+
+  reward(): number {
+    return -Math.abs(this.goalX - this.playerX)   // dense reward
+  }
+
+  done(): boolean {
+    return Math.abs(this.goalX - this.playerX) < 0.02 || Math.abs(this.playerX) > 1
+  }
+
+  reset(): void {
+    this.playerX = 0
+    this.playerVx = 0
+    this.goalX = Math.random() * 1.6 - 0.8
+  }
+}
+
+// 2. The scene reads from the env
+function PlayerMesh({ env }: { env: MyGameEnv }) {
+  const ref = useRef<THREE.Mesh>(null!)
+  useFrame(() => {
+    // Every render, read the env state and update the mesh
+    ref.current.position.x = env.playerX
+  })
+  return (
+    <mesh ref={ref}>
+      <sphereGeometry args={[0.05]} />
+      <meshStandardMaterial color="#818CF8" />
+    </mesh>
+  )
+}
+
+function GoalMesh({ env }: { env: MyGameEnv }) {
+  const ref = useRef<THREE.Mesh>(null!)
+  useFrame(() => {
+    ref.current.position.x = env.goalX
+  })
+  return (
+    <mesh ref={ref}>
+      <sphereGeometry args={[0.04]} />
+      <meshStandardMaterial color="#F8FAFC" />
+    </mesh>
+  )
+}
+
+// 3. The training loop lives outside useFrame
+function Game() {
+  const envRef = useRef<MyGameEnv>(new MyGameEnv())
+  const trainerRef = useRef<IgnitionEnvTFJS | null>(null)
+
+  useEffect(() => {
+    const trainer = new IgnitionEnvTFJS(envRef.current)
+    trainer.train('dqn')
+    trainer.setSpeed(10)   // turbo: 10× faster than real-time
+    trainerRef.current = trainer
+    return () => trainer.stop()
+  }, [])
+
+  return (
+    <Canvas>
+      <ambientLight intensity={0.4} />
+      <pointLight position={[2, 2, 2]} />
+      <PlayerMesh env={envRef.current} />
+      <GoalMesh env={envRef.current} />
+    </Canvas>
+  )
+}
+
+import { useFrame } from '@react-three/fiber'
+export default Game
+```
+
+Lance-le et tu verras la sphère joueur bouger d'abord au hasard, puis se verrouiller progressivement sur l'objectif au fur et à mesure que l'agent DQN apprend le gradient de la récompense dense.
+
+## Boucle d'entraînement vs boucle de rendu — la séparation
+
+C'est la chose la plus importante à comprendre à propos de l'intégration R3F.
+
+**Il y a deux boucles qui tournent en parallèle, sur le même thread principal, complètement indépendantes l'une de l'autre :**
+
+### La boucle de rendu (R3F)
+
+- Pilotée par `requestAnimationFrame`.
+- Tourne à 60 fps (ou au rythme du taux de rafraîchissement de l'écran).
+- Chaque frame, les hooks `useFrame` s'exécutent, les positions des meshes se mettent à jour, React réconcilie, Three.js rend.
+- Ne sait rien de l'entraînement.
+
+### La boucle d'entraînement (IgnitionAI)
+
+- Pilotée par `setTimeout` avec un intervalle configurable (`stepIntervalMs`, 50 ms par défaut).
+- Tourne à son propre rythme.
+- Chaque tick, appelle `env.step()` → `env.observe()` → `agent.remember()` → `agent.train()`.
+- Ne sait rien du rendu.
+
+**Elles communiquent par un état mutable partagé sur l'instance `TrainingEnv`.** La méthode `step()` de ton env mute des champs sur `this` (`this.playerX`, `this.playerVx`, etc.). Les hooks `useFrame` de tes meshes lisent ces mêmes champs. Rien de plus sophistiqué que ça.
+
+Pourquoi ça marche en pratique :
+
+- **Pas de race conditions.** JavaScript est mono-threadé. Le callback `setTimeout` de la boucle d'entraînement et le callback `requestAnimationFrame` de la boucle de rendu ne peuvent jamais tourner en même temps. L'un finit avant que l'autre ne démarre.
+- **Pas de frame drops.** La boucle d'entraînement rend explicitement la main via `setTimeout` entre des lots de pas. La boucle d'événements du navigateur a alors la chance d'exécuter `requestAnimationFrame` et de rendre une frame.
+- **Compromis réglable.** `env.setSpeed(50)` signifie « fais 25 pas d'entraînement par rendez-vous au lieu de 1 ». Le rendu ralentit un peu mais l'entraînement tourne 50× plus vite. `env.setSpeed(1)` rétablit un rendu fluide à 60 fps.
+
+Le modèle mental : **ton env est la source de vérité. La scène en est une vue. L'agent est un cerveau qui la mute.**
+
+## Pièges courants
+
+### Piège 1 — Créer un nouvel env à chaque render
+
+```tsx
+function Game() {
+  const env = new MyGameEnv()   // ❌ New instance every render!
+  // ...
+}
+```
+
+Mets-le dans un `useRef` ou un `useMemo` pour qu'il persiste entre les renders :
+
+```tsx
+const envRef = useRef<MyGameEnv>(new MyGameEnv())   // ✅ stable reference
+```
+
+### Piège 2 — Muter l'état de l'env dans `useFrame`
+
+```tsx
+useFrame(() => {
+  env.playerX += 0.01   // ❌ Your render loop is now "doing physics"
+})
+```
+
+`useFrame` sert à *lire* l'état de l'env et à mettre à jour les visuels. Toute mutation a sa place dans `TrainingEnv.step()`. Garde les responsabilités propres.
+
+### Piège 3 — Oublier `stop()` au démontage
+
+```tsx
+useEffect(() => {
+  const trainer = new IgnitionEnvTFJS(envRef.current)
+  trainer.train('dqn')
+  // ❌ No cleanup — training loop leaks when component unmounts
+}, [])
+```
+
+Retourne toujours un cleanup qui appelle `trainer.stop()` :
+
+```tsx
+useEffect(() => {
+  const trainer = new IgnitionEnvTFJS(envRef.current)
+  trainer.train('dqn')
+  return () => trainer.stop()   // ✅
+}, [])
+```
+
+Sans ça, naviguer hors de la page ou recharger le composant en hot-reload laissera des boucles d'entraînement zombies tourner en arrière-plan.
+
+## Démos 3D en direct
+
+Deux démos R3F complètes sont livrées avec le monorepo et montrent le pattern en production :
+
+- **CartPole 3D** — le cart-pole classique rendu dans React Three Fiber avec des matériaux métalliques, des ombres de contact et un environnement coucher de soleil. Le même agent DQN que la version 2D, juste plus joli.
+- **Car Circuit** — une voiture 3D apprend à rouler sur un circuit ovale. Caméra de poursuite, piste avec marquages et bordures, minimap, traînée qui s'estompe, curseur de vitesse 1×–50×. C'est la chose la plus proche qu'IgnitionAI ait d'une « démo phare ».
+
+Clone le repo et lance l'une ou l'autre avec :
+
+```bash
+pnpm --filter demo-cartpole-3d dev     # http://localhost:3010
+pnpm --filter demo-car-circuit dev     # http://localhost:3020
+```
+
+Les deux démos sont du code open-source de référence. Si tu démarres ton propre projet R3F, copie la structure de la scène de celle qui se rapproche le plus de ce que tu veux construire.
+
+---
+
+Précédent : **[← @ignitionai/storage](/docs/how-it-works/storage)** · Suivant : **[Tutoriels →](/docs/tutorials)**

@@ -1,0 +1,159 @@
+---
+title: 'Export vers Unity (ONNX)'
+description: Toute l'histoire du déploiement. Entraîne une politique CartPole dans le navigateur, exporte en ONNX, convertis avec tf2onnx, exécute l'inférence dans Unity Sentis.
+---
+
+# Export vers Unity via ONNX
+
+Entraîne un agent CartPole dans le navigateur, télécharge son modèle TF.js, prépare la conversion dans Node, puis convertis-le en ONNX avec Python. La dernière étape illustre le chargement de ce modèle dans Unity Sentis ; adapte l'API Unity et la physique à ton projet.
+
+Durée estimée : **50–75 minutes**. La majeure partie consiste à installer Python et Unity si tu ne les as pas déjà.
+
+## Prérequis
+
+- Tu as fait le [Quickstart](/docs/quickstart) et entraîné une politique CartPole. Tu as `src/cartpole-env.ts` + `src/main.ts` qui fonctionnent.
+- **Python 3.11** dans un environnement virtuel isolé avec `pip`. Vérifie avec `python --version`.
+- **Unity 2022.3 LTS ou plus récent** avec le paquet **Sentis**. Si tu n'as pas Unity, ce tutoriel fait aussi office de raison de l'installer.
+- `@ignitionai/backend-onnx` installé : `npm install @ignitionai/backend-onnx`.
+
+## Étape 1 — Entraîner et télécharger dans le navigateur
+
+Utilise ton runner CartPole du Quickstart. Après convergence, déclenche ça depuis un
+bouton dans le navigateur :
+
+```ts
+import { DQNAgent } from '@ignitionai/backend-tfjs'
+
+env.stop()
+await env.inferStep() // Finish behind an already-running training transition.
+if (!(env.agent instanceof DQNAgent)) throw new Error('Expected DQN')
+await env.agent.getModel().save('downloads://ignition-dqn')
+```
+
+Le navigateur télécharge `ignition-dqn.json` et `ignition-dqn.weights.bin`. Garde
+les deux fichiers ensemble sans les renommer. Ne reprends pas l'entraînement pendant la sauvegarde.
+Cette étape produit des fichiers TF.js, pas un fichier ONNX ni un SavedModel.
+
+## Étape 2 — Préparer la conversion dans Node
+
+Enregistre `@tensorflow/tfjs-node` pour activer la sauvegarde sur le système de fichiers. Charge le modèle
+téléchargé et écris le script renvoyé par l'exporter :
+
+```ts
+import '@tensorflow/tfjs-node'
+import * as tf from '@tensorflow/tfjs'
+import { writeFile } from 'node:fs/promises'
+import { saveForOnnxExport } from '@ignitionai/backend-onnx'
+
+const model = await tf.loadLayersModel('file:///absolute/path/ignition-dqn.json')
+const { modelDir, conversionScript } = await saveForOnnxExport(model, './export')
+await writeFile(`${modelDir}/convert.sh`, conversionScript)
+model.dispose()
+```
+
+`saveForOnnxExport` écrit le JSON TF.js et les poids. Il renvoie le texte du script
+et n'exécute pas Python. Voir les
+[exemples d'export complets](https://github.com/IgnitionAI/ignition/blob/main/packages/backend-onnx/examples/README.md)
+pour les commandes d'installation et d'exécution.
+
+## Étape 3 — Convertir avec Python
+
+Active un environnement Python 3.11 isolé et installe les
+[exigences de conversion testées](https://github.com/IgnitionAI/ignition/blob/main/packages/backend-onnx/examples/requirements-onnx.txt).
+Puis lance `bash ./export/convert.sh`.
+
+Le script convertit TF.js Layers → TensorFlow SavedModel → ONNX.
+Le résultat est `./export.onnx` par défaut. Inspecte-le avec Netron, et vérifie que
+les sorties converties correspondent à TF.js avant de déployer ta propre politique.
+
+## Étape 4 — Charger dans Unity Sentis
+
+Ouvre Unity et crée un nouveau projet 3D (ou ouvres-en un existant). Installe le paquet Sentis via le Package Manager (`com.unity.sentis`).
+
+Dépose ton fichier `.onnx` converti dans le dossier `Assets/` du projet. Unity l'importera comme un asset `ONNX Model`.
+
+Crée un nouveau script C# `CartPoleAgent.cs` dans `Assets/Scripts/` :
+
+```csharp filename="Assets/Scripts/CartPoleAgent.cs"
+using UnityEngine;
+using Unity.Sentis;
+
+public class CartPoleAgent : MonoBehaviour
+{
+    public ModelAsset modelAsset;
+    private Model runtimeModel;
+    private IWorker worker;
+
+    // Cart-pole state
+    private float x = 0f;
+    private float xDot = 0f;
+    private float theta = 0.05f;
+    private float thetaDot = 0f;
+
+    void Start()
+    {
+        runtimeModel = ModelLoader.Load(modelAsset);
+        worker = WorkerFactory.CreateWorker(BackendType.GPUCompute, runtimeModel);
+    }
+
+    void FixedUpdate()
+    {
+        // 1. Build the input tensor
+        using var input = new TensorFloat(new TensorShape(1, 4), new[] { x, xDot, theta, thetaDot });
+
+        // 2. Run inference
+        worker.Execute(input);
+
+        // 3. Read the Q-values
+        var output = worker.PeekOutput() as TensorFloat;
+        output.MakeReadable();
+        float qLeft = output[0, 0];
+        float qRight = output[0, 1];
+
+        // 4. Pick the action with the higher Q-value
+        int action = qRight > qLeft ? 1 : 0;
+
+        // 5. Step the physics with the chosen action
+        ApplyPhysics(action);
+    }
+
+    private void ApplyPhysics(int action)
+    {
+        // ... identical Euler integration to the browser CartPoleEnv ...
+    }
+
+    void OnDestroy()
+    {
+        worker?.Dispose();
+    }
+}
+```
+
+Crée un GameObject vide, attache `CartPoleAgent`, et glisse ton `model.onnx` dans l'emplacement `Model Asset` de l'Inspector.
+
+Appuie sur Play. L'agent exécute la politique entraînée au rythme de la physique de Unity (50 Hz par défaut).
+
+**Qu'observer** : l'état cart-pole interne de la scène Unity évolue selon la même politique DQN qui tournait dans ton navigateur. Mêmes poids, même inférence, autre runtime.
+
+**Pourquoi cette étape existe** : c'est toute la promesse d'IgnitionAI. Tu as entraîné dans un navigateur avec zéro Python, puis déployé vers un moteur de jeu qui exige typiquement un pipeline à saveur Python. Le fichier `.onnx` est le pont.
+
+## Ce que tu viens de livrer
+
+- Une politique RL entraînée qui tourne dans **deux runtimes complètement différents** à partir d'une seule session d'entraînement navigateur.
+- Une expérience concrète du pipeline en 4 étapes Entraîner → Exporter → Convertir → Déployer.
+- Un plan pour déployer vers Unreal (NNE), Python (ONNX Runtime), mobile (Core ML / NNAPI), ou toute autre cible qui parle ONNX. L'extrait Unity est illustratif ; le fichier `.onnx` lui-même est portable.
+
+## Dépannage
+
+- **« Input shape mismatch »** côté Unity : le modèle attend `[1, 4]` mais tu lui passes autre chose. Utilise `inspectSession` depuis le navigateur avant d'exporter pour confirmer la forme.
+- **Mauvaise politique dans Unity, bonne dans le navigateur** : le plus probable, c'est que l'intégration physique dans `ApplyPhysics` a divergé du `CartPoleEnv.step()` du navigateur. Elles doivent être identiques à l'octet près (même DT, mêmes constantes).
+- **Erreurs de worker Sentis** : la surface d'API de Sentis a changé entre les versions d'Unity. L'extrait ci-dessus cible Sentis 1.x. Vérifie la version de ton paquet.
+
+## Prochaines étapes
+
+- **[Comment ça marche → backend-onnx](/docs/how-it-works/backend-onnx)** — revisite l'architecture maintenant que tu as livré le pipeline de bout en bout.
+- **Déployer vers Unreal** : le même fichier `.onnx` fonctionne avec le [NNE](https://dev.epicgames.com/documentation/en-us/unreal-engine/nne-overview-in-unreal-engine) d'Unreal. Le code d'inférence C++ est structurellement similaire à l'extrait Unity.
+
+---
+
+Précédent : **[← Circuit de voiture](/docs/tutorials/car-circuit)** · Suivant : **[Navigation de drone →](/docs/tutorials/drone-navigation)**

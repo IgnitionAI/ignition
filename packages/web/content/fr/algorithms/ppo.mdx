@@ -1,0 +1,164 @@
+---
+title: PPO — Proximal Policy Optimization
+description: Une explication pédagogique du fonctionnement de PPO dans IgnitionAI — policy gradients, l'objectif surrogé clippé, GAE, les valeurs par défaut, et quand PPO bat DQN.
+---
+
+# PPO — Proximal Policy Optimization
+
+PPO est l'algorithme qu'OpenAI a utilisé pour entraîner des agents Dota 2. C'est le choix par défaut dans la plupart des labos RL modernes, et c'est ce que tu devrais utiliser quand DQN ne marche pas ou quand ton espace d'action est continu. Il est plus complexe que DQN, mais cette complexité achète de la stabilité et de la généralité.
+
+Cette page suppose que tu as lu la [page DQN](/docs/algorithms/dqn) — on fera le contraste avec DQN tout du long.
+
+## Intuition — apprendre une politique directement
+
+DQN apprend les **Q-values** puis choisit les actions de façon gourmande. PPO saute l'intermédiaire et apprend la **politique directement** — un réseau de neurones qui mappe `(état) → (distribution de probabilité sur les actions)`.
+
+Pourquoi c'est utile ?
+
+- **Espaces d'action continus.** Un réseau de politique peut sortir la moyenne et l'écart-type d'une gaussienne, te donnant un contrôle fluide du braquage, de l'accélérateur ou des angles articulaires. DQN ne peut pas faire ça — il lui faut une liste finie d'actions.
+- **Politiques stochastiques.** Parfois la stratégie optimale est réellement aléatoire (pierre-feuille-ciseaux). PPO peut la représenter ; DQN ne peut pas.
+- **Stabilité.** Les policy gradients mettent à jour la politique en petits pas sûrs. L'astuce de clipping de PPO (ci-dessous) garantit que tu ne fais jamais un pas assez grand pour détruire la politique que tu viens d'apprendre.
+
+Le compromis est l'**efficacité d'échantillonnage**. PPO est on-policy — il doit jeter ses données après chaque mise à jour et collecter de nouvelles rollouts avec la nouvelle politique. DQN peut réutiliser son replay buffer indéfiniment.
+
+> **Quand utiliser PPO** : espaces d'action continus, épisodes très longs avec attribution de crédit différée, ou environnements où DQN s'est révélé instable. CartPole, envs de robotique, envs de conduite, et tout ce qui sent le « c'est compliqué ».
+
+## Intuition du policy gradient — pousser les probabilités
+
+L'idée cœur des méthodes de policy gradient est étonnamment simple :
+
+**Si une action a bien fonctionné (récompense élevée), rends la politique plus susceptible de la prendre. Si elle a mal fonctionné, rends la politique moins susceptible de la prendre.**
+
+Formellement, c'est `∇θ log π(a|s) · A(s, a)`, mais la formule est moins importante que l'image. Le réseau de politique sort des probabilités. On échantillonne une action. On observe combien elle s'est révélée bonne (l'**avantage** — plus de détails plus bas). On pousse la probabilité de cette action vers le haut ou le bas proportionnellement à l'avantage, via la rétropropagation.
+
+Les policy gradients vanille font ça en petits pas honnêtes. Ils sont lents et bruités mais corrects. PPO ajoute deux ingrédients qui les rendent *rapides* et *stables*.
+
+## Les deux astuces de PPO
+
+### Astuce 1 — L'objectif surrogé clippé
+
+Le policy gradient vanille a un mode d'échec vicieux : si une seule mise à jour pousse la politique trop loin, la nouvelle politique peut être si différente de celle qui a collecté les données que l'estimation du gradient devient bidon, et l'entraînement s'effondre. C'est le problème du « pas est difficile dans l'espace des politiques ».
+
+PPO le résout avec une **astuce de ratio clippé**. À chaque mise à jour, il calcule le ratio entre la probabilité de la nouvelle politique et celle de l'ancienne pour chaque action prise :
+
+```text
+r(θ) = π_new(a|s) / π_old(a|s)
+```
+
+Si `r(θ)` est proche de `1.0`, les politiques nouvelle et ancienne sont d'accord — mise à jour sûre. Si `r(θ)` dérive au-dessus de `1 + clipRatio` ou en dessous de `1 - clipRatio`, PPO **clippe** la mise à jour et refuse de laisser la politique aller plus loin dans cette direction. Ça borne combien une seule mise à jour peut changer la politique, aussi tentant soit le gradient.
+
+Chez IgnitionAI, `clipRatio = 0.2`, ce qui signifie que la probabilité de la nouvelle politique pour une action donnée ne peut pas dépasser celle de l'ancienne de plus de 20 % dans un sens ou dans l'autre. C'est la valeur canonique du [papier PPO original](https://arxiv.org/abs/1707.06347) et elle a rarement besoin d'être réglée.
+
+### Astuce 2 — GAE (Generalized Advantage Estimation)
+
+L'**avantage** `A(s, a)` répond à « cette action était-elle meilleure ou pire que la moyenne depuis cet état ? ». Avantage positif → renforcer l'action. Avantage négatif → la décourager.
+
+La façon naïve d'estimer l'avantage est le **retour Monte Carlo** — simplement sommer les récompenses réelles jusqu'à la fin de l'épisode et comparer à une fonction de valeur de base `V(s)`. C'est sans biais mais extrêmement bruité sur les épisodes longs.
+
+L'autre extrême est l'**estimation TD à 1 pas** — utiliser la fonction de valeur comme amorçage : `A = r + γV(s') - V(s)`. C'est faible variance mais biaisé (la fonction de valeur est une estimation).
+
+Le **GAE** interpole entre les deux. Le paramètre `λ` (lambda GAE) contrôle l'interpolation :
+
+- `λ = 0` → TD pur (faible variance, biais élevé)
+- `λ = 1` → Monte Carlo pur (variance élevée, faible biais)
+
+IgnitionAI utilise `λ = 0.95`, ce qui signifie « surtout Monte Carlo, avec une pointe de TD pour la stabilité ». C'est encore la valeur canonique du papier GAE — et elle a, encore, rarement besoin d'être réglée.
+
+## Le critique — pourquoi PPO a deux réseaux
+
+PPO est une méthode **acteur-critique**. Elle utilise deux réseaux :
+
+- **Acteur** (la politique) — mappe `état → probabilités d'action`. C'est ce qu'on appelle `π(a|s)`.
+- **Critique** (la fonction de valeur) — mappe `état → retour estimé`. C'est `V(s)`, utilisé par le GAE pour calculer les avantages.
+
+Les deux réseaux sont entraînés simultanément. L'acteur est entraîné à maximiser l'objectif surrogé clippé. Le critique est entraîné à minimiser l'erreur quadratique entre ses prédictions et les retours réels actualisés observés pendant les rollouts.
+
+Chez IgnitionAI, les deux réseaux partagent la même forme de couches cachées (`[64, 64]` par défaut), mais ce sont des réseaux séparés avec des poids séparés. La perte totale est :
+
+```text
+loss = -clipped_actor_objective
+     + valueLossCoef * critic_squared_error
+     - entropyCoef * policy_entropy
+```
+
+Le troisième terme — le **bonus d'entropie** — récompense la politique pour être stochastique. C'est une pression d'exploration intégrée. Sans elle, PPO tend à s'effondrer en une politique quasi déterministe trop tôt, ce qui limite combien il peut explorer.
+
+## Hyperparamètres par défaut
+
+Source : `packages/backend-tfjs/src/agents/ppo.ts`.
+
+| Hyperparamètre | Défaut | Ce qu'il contrôle |
+|---|---|---|
+| `hiddenLayers` | `[64, 64]` | Forme des MLP de l'acteur et du critique. |
+| `lr` | `3e-4` (`0.0003`) | Taux d'apprentissage Adam. Le « taux d'apprentissage Adam canonique pour PPO ». |
+| `gamma` | `0.99` | Facteur d'actualisation. |
+| `gaeLambda` | `0.95` | Interpolation GAE entre TD et Monte Carlo. |
+| `clipRatio` | `0.2` | Borne de clipping sur le ratio de politique — combien une seule mise à jour peut déplacer la politique. |
+| `epochs` | `4` | Nombre d'époques de gradient par lot de rollouts collectés. |
+| `batchSize` | `64` | Taille du minibatch dans chaque époque. |
+| `entropyCoef` | `0.01` | Poids du bonus d'entropie (pression d'exploration). |
+| `valueLossCoef` | `0.5` | Poids de la perte de valeur du critique dans la perte totale. |
+
+Les valeurs `lr = 3e-4`, `clipRatio = 0.2`, `gaeLambda = 0.95`, `entropyCoef = 0.01` et `valueLossCoef = 0.5` viennent toutes droit du papier PPO original. Elles marchent sur une grande variété d'envs et ne devraient pas être tes premiers suspects quand l'entraînement échoue.
+
+## Guide de réglage
+
+L'ordre des choses à essayer quand PPO ne marche pas :
+
+1. **Reward shaping et normalisation des observations.** Mêmes règles que DQN — aucun hyperparamètre ne te sauvera d'un signal de récompense cassé.
+
+2. **Taille du réseau.** Monte `hiddenLayers` à `[128, 128]` ou `[256, 256]` pour les espaces d'observation complexes. PPO tolère de plus gros réseaux que DQN parce que le gradient on-policy est bien comporté.
+
+3. **Coefficient d'entropie.** Si la politique s'effondre en un comportement déterministe trop tôt, monte `entropyCoef` à `0.02` ou `0.05`. Si la politique refuse de s'engager sur quoi que ce soit et que les récompenses restent sur la baseline aléatoire, baisse `entropyCoef` à `0.005` pour encourager plus d'exploitation.
+
+4. **Époques par mise à jour.** Si tu vois la politique osciller, baisse `epochs` à `3`. Si l'entraînement est trop lent, monte à `8`. Au-dessus de 10, c'est presque toujours trop.
+
+5. **Taux d'apprentissage.** `3e-4` est la valeur canonique. Baisse à `1e-4` si tu vois la politique s'effondrer à répétition.
+
+6. **Clip ratio.** N'y touche pas. Vraiment. Si `clipRatio = 0.2` ne marche pas, le bug est ailleurs.
+
+## Modes d'échec courants
+
+### Échec 1 — Les récompenses plafonnent à la baseline aléatoire
+
+**Symptôme** : la récompense moyenne reste plate autour de la baseline de politique aléatoire. Pas de signal, pas de progrès.
+
+**Diagnostic** : comme DQN — récompense trop sparse ou observations non normalisées en général. PPO n'est pas magique ; il a encore besoin d'un gradient à suivre.
+
+**Solution** : corrige la récompense. Normalise les observations. Puis réessaie.
+
+### Échec 2 — La politique s'effondre en déchet déterministe
+
+**Symptôme** : la politique se verrouille très vite sur une action (par ex. « toujours aller à gauche ») et ne récupère jamais. Récompense effondrée tôt.
+
+**Diagnostic** : le bonus d'entropie est trop faible, ou les rollouts initiales ont donné une image trompeuse.
+
+**Solution** : monte `entropyCoef` à `0.05`. Si ça n'aide pas, divise aussi le taux d'apprentissage par deux.
+
+### Échec 3 — Récompenses oscillantes
+
+**Symptôme** : la récompense moyenne rebondit entre bonne et mauvaise tous les quelques épisodes, ne se stabilise jamais.
+
+**Diagnostic** : trop d'époques par mise à jour — tu sur-apprends chaque lot de rollouts puis tu désapprends sur le suivant.
+
+**Solution** : baisse `epochs` de 4 à 3, ou de 3 à 2.
+
+### Échec 4 — Convergence lente comparée à DQN
+
+**Symptôme** : PPO converge correctement mais prend 5 à 10× plus de temps que DQN sur le même env.
+
+**Diagnostic** : c'est normal — PPO est on-policy et moins sample-efficient. Sur les envs simples, DQN est en général plus rapide.
+
+**Solution** : si DQN marche sur ton env, utilise-le. L'avantage de PPO est sur les envs complexes ou continus où DQN ne marche pas du tout.
+
+### Échec 5 — La valeur du critique explose
+
+**Symptôme** : les prédictions de valeur du critique croissent sans borne. En général corrélé avec un entraînement divergent.
+
+**Diagnostic** : la magnitude des récompenses est trop grande, comme l'échec 5 de DQN.
+
+**Solution** : mets les récompenses à l'échelle grosso modo dans `[-10, +10]` et réessaie.
+
+---
+
+Précédent : **[← DQN](/docs/algorithms/dqn)** · Suivant : **[Q-Table →](/docs/algorithms/q-table)**
