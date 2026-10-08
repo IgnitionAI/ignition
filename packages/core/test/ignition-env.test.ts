@@ -7,13 +7,13 @@ import { AgentInterface, Experience, StepResult } from '../src/types';
 class MockAgent implements AgentInterface {
   public experiences: Experience[] = [];
   public trainCallCount = 0;
-  private fixedAction: number | number[];
+  private fixedAction: number;
 
-  constructor(action: number | number[] = 0) {
+  constructor(action: number = 0) {
     this.fixedAction = action;
   }
 
-  async getAction(_obs: number[]): Promise<number | number[]> {
+  async getAction(_obs: number[]): Promise<number> {
     return this.fixedAction;
   }
 
@@ -29,8 +29,7 @@ class MockAgent implements AgentInterface {
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function makeEnv(overrides: Partial<{
-  terminated: boolean;
-  truncated: boolean;
+  done: boolean;
   agent: AgentInterface;
   onReset: () => void;
 }> = {}) {
@@ -42,8 +41,7 @@ function makeEnv(overrides: Partial<{
     getObservation: () => [...obs],
     applyAction: (action) => { obs = [Number(Array.isArray(action) ? action[0] : action), 0]; },
     computeReward: () => 1.0,
-    isTerminated: () => overrides.terminated ?? false,
-    isTruncated: overrides.truncated !== undefined ? () => overrides.truncated! : undefined,
+    isDone: () => overrides.done ?? false,
     onReset: overrides.onReset,
   });
 }
@@ -58,8 +56,7 @@ describe('IgnitionEnv', () => {
     expect(result).toMatchObject<StepResult>({
       observation: expect.any(Array),
       reward: 1.0,
-      terminated: false,
-      truncated: false,
+      done: false,
     });
   });
 
@@ -81,8 +78,7 @@ describe('IgnitionEnv', () => {
     const exp = agent.experiences[0];
     expect(exp.action).toBe(2);
     expect(exp.reward).toBe(1.0);
-    expect(exp.terminated).toBe(false);
-    expect(exp.truncated).toBe(false);
+    expect(exp.done).toBe(false);
   });
 
   it('step() calls agent.train() once per step', async () => {
@@ -93,16 +89,9 @@ describe('IgnitionEnv', () => {
     expect(agent.trainCallCount).toBe(2);
   });
 
-  it('step() calls onReset when terminated', async () => {
+  it('step() calls onReset when done', async () => {
     const onReset = vi.fn();
-    const env = makeEnv({ terminated: true, onReset });
-    await env.step();
-    expect(onReset).toHaveBeenCalledOnce();
-  });
-
-  it('step() calls onReset when truncated', async () => {
-    const onReset = vi.fn();
-    const env = makeEnv({ truncated: true, onReset });
+    const env = makeEnv({ done: true, onReset });
     await env.step();
     expect(onReset).toHaveBeenCalledOnce();
   });
@@ -114,7 +103,7 @@ describe('IgnitionEnv', () => {
       getObservation: () => [1],
       applyAction: () => {},
       computeReward: () => 2.5,
-      isTerminated: () => false,
+      isDone: () => false,
       callbacks: { onStep },
     });
     await env.step();
@@ -131,7 +120,7 @@ describe('IgnitionEnv', () => {
       getObservation: () => [0],
       applyAction: () => {},
       computeReward: () => 0,
-      isTerminated: () => true,
+      isDone: () => true,
       callbacks: { onEpisodeEnd },
     });
     await env.step();

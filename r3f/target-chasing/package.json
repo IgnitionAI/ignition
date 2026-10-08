@@ -10,11 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ignitionai/backend-tfjs": "workspace:*",
-    "@ignitionai/core": "workspace:*",
+    "@ignitionai/backend-tfjs": "^0.1.0",
+    "@ignitionai/core": "^0.1.0",
     "@react-three/drei": "^10.0.6",
     "@react-three/fiber": "^9.1.2",
     "@react-three/rapier": "^2.1.0",
+    "@tensorflow/tfjs": "^4.22.0",
     "@types/three": "^0.162.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

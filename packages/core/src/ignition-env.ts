@@ -31,26 +31,24 @@ export class IgnitionEnv {
 
     const observation = this.config.getObservation();
     const reward = this.config.computeReward();
-    const terminated = this.config.isTerminated();
-    const truncated = this.config.isTruncated?.() ?? false;
+    const done = this.config.isDone();
 
     const experience: Experience = {
       state: this.currentState,
       action,
       reward,
       nextState: observation,
-      terminated,
-      truncated,
+      done,
     };
 
     this.agent.remember(experience);
     await this.agent.train();
 
-    const result: StepResult = { observation, reward, terminated, truncated };
+    const result: StepResult = { observation, reward, done };
 
     await this.config.callbacks?.onStep?.(result, this.stepCount);
 
-    if (terminated || truncated) {
+    if (done) {
       await this.config.callbacks?.onEpisodeEnd?.(this.stepCount);
       this.config.onReset?.();
       this.currentState = this.config.getObservation();

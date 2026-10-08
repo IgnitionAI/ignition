@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { StepResult } from './types';
 
 // ─── Experience ──────────────────────────────────────────────────────────────
 
@@ -65,6 +66,15 @@ export const IgnitionEnvConfigSchema = z.object({
     .optional(),
   hfRepoId: z.string().optional(),
   hfToken: z.string().optional(),
+  callbacks: z
+    .custom<{
+      onStep?: (result: StepResult, stepCount: number) => void | Promise<void>;
+      onEpisodeEnd?: (stepCount: number) => void | Promise<void>;
+    }>(
+      (val) => val === undefined || typeof val === 'object',
+      { message: 'callbacks must be an object with optional onStep/onEpisodeEnd' }
+    )
+    .optional(),
 });
 
 export type IgnitionEnvConfig = z.infer<typeof IgnitionEnvConfigSchema>;
