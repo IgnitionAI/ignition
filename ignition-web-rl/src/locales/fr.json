@@ -1,0 +1,21 @@
+{
+  "page": {
+    "title": "IgnitionAI — Démo d'entraînement RL"
+  },
+  "hud": {
+    "header": "IgnitionAI - Entraînement",
+    "episodes": "Épisodes :",
+    "reward": "Récompense :",
+    "timeElapsed": "Temps écoulé :",
+    "seconds": "{{count}} / 60 sec"
+  },
+  "actions": {
+    "start": "Démarrer",
+    "stop": "Arrêter",
+    "reset": "Réinitialiser"
+  },
+  "language": {
+    "fr": "FR",
+    "en": "EN"
+  }
+}
