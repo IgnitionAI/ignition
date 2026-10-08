@@ -26,7 +26,6 @@
   "dependencies": {
     "@ignitionai/core": "workspace:*",
     "@huggingface/hub": "^1.1.2",
-    "@ignitionai/core": "workspace:*",
     "onnxruntime-node": "^1.17.0",
     "zod": "^3.22.0"
   },
