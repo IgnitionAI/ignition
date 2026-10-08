@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote-client/rsc'
 import rehypePrettyCode from 'rehype-pretty-code'
-import { blogArticles, findBlogArticle, readBlogArticle } from '@/lib/blog'
+import { blogArticles, findBlogArticle, localizeArticle, readBlogArticle } from '@/lib/blog'
 import { getDictionary } from '@/lib/i18n'
 import { isLocale, type Locale } from '@/lib/locales'
 
@@ -15,12 +15,14 @@ export function generateStaticParams() {
 export const dynamicParams = false
 
 export async function generateMetadata({ params }: ArticleParams) {
-  const article = findBlogArticle((await params).slug)
+  const { slug, locale } = await params
+  const article = findBlogArticle(slug)
   if (!article) notFound()
+  const localized = localizeArticle(article, locale)
   return {
-    title: article.title,
-    description: article.description,
-    openGraph: { type: 'article', title: article.title, description: article.description, publishedTime: article.date, images: [article.image] },
+    title: localized.title,
+    description: localized.description,
+    openGraph: { type: 'article', title: localized.title, description: localized.description, publishedTime: localized.date, images: [localized.image] },
   }
 }
 
@@ -28,8 +30,9 @@ export default async function EnvironmentArticlePage({ params }: ArticleParams) 
   const { slug, locale: raw } = await params
   const locale: Locale = isLocale(raw) ? raw : 'en'
   const t = getDictionary(locale)
-  const article = findBlogArticle(slug)
-  if (!article) notFound()
+  const found = findBlogArticle(slug)
+  if (!found) notFound()
+  const article = localizeArticle(found, locale)
   const date = new Date(`${article.date}T12:00:00Z`).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' })
   return (
     <article lang={locale} className="max-w-4xl mx-auto px-4 sm:px-6 pt-32 md:pt-40 pb-24">
@@ -40,7 +43,7 @@ export default async function EnvironmentArticlePage({ params }: ArticleParams) 
         <p className="text-xl text-slate-300">{article.description}</p>
       </header>
       <div className="prose prose-invert prose-lg max-w-none prose-headings:text-slate-100 prose-a:text-indigo-300 prose-pre:overflow-x-auto prose-pre:bg-slate-950 prose-img:rounded-xl prose-img:border prose-img:border-slate-700">
-        <MDXRemote source={readBlogArticle(article)} options={{ mdxOptions: { rehypePlugins: [[rehypePrettyCode, { theme: 'one-dark-pro' }]] } }} />
+        <MDXRemote source={readBlogArticle(article, locale)} options={{ mdxOptions: { rehypePlugins: [[rehypePrettyCode, { theme: 'one-dark-pro' }]] } }} />
       </div>
     </article>
   )

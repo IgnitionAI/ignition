@@ -1,0 +1,50 @@
+[
+  {
+    "slug": "mountaincar-prendre-elan",
+    "title": "MountainCar: learning to build momentum",
+    "description": "Understand why backing up can help an agent reach the summit.",
+    "imageAlt": "The MountainCar demo during a real run"
+  },
+  {
+    "slug": "cartpole-3d-observations",
+    "title": "CartPole 3D: reading the observations",
+    "description": "From raw state vector to agent decision in the 3D scene.",
+    "imageAlt": "The CartPole 3D demo rendering the agent's observations"
+  },
+  {
+    "slug": "circuit-racing-pilotes",
+    "title": "Circuit racing: training a driver",
+    "description": "Teaching an agent to follow a track with dense rewards.",
+    "imageAlt": "The car-circuit demo during training"
+  },
+  {
+    "slug": "drone-navigation-controle",
+    "title": "Drone navigation: stable control",
+    "description": "How the drone demo keeps flight stable while reaching its target.",
+    "imageAlt": "The drone navigation demo in flight"
+  },
+  {
+    "slug": "gridworld-valeurs-actions",
+    "title": "GridWorld: values and actions",
+    "description": "Visualising Q-values on a grid to understand what the agent learned.",
+    "imageAlt": "The GridWorld demo showing action values"
+  },
+  {
+    "slug": "maze-3d-cles-portes",
+    "title": "Maze 3D: keys and doors",
+    "description": "Exploration, keys and doors in a 3D maze.",
+    "imageAlt": "The 3D maze demo with keys and doors"
+  },
+  {
+    "slug": "maze-capteurs-recompenses",
+    "title": "Maze: sensors and rewards",
+    "description": "Dense rewards and sensors guiding the agent out of the maze.",
+    "imageAlt": "The maze demo showing sensor readings"
+  },
+  {
+    "slug": "premier-agent-cartpole",
+    "title": "Train your first agent with Ignition on CartPole",
+    "description": "Run your first DQN training in the browser and watch its decisions on CartPole. Executable code and real screenshots included.",
+    "imageAlt": "The CartPole demo during DQN training"
+  }
+]
