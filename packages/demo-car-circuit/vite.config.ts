@@ -1,5 +1,5 @@
 import path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
@@ -15,4 +15,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: { exclude: ['@tensorflow/tfjs-node'] },
+  // vitest hérite de root:'src' — les tests vivent dans test/.
+  test: { root: '.' },
 });

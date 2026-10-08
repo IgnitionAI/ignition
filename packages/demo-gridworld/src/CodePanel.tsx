@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { useDemoStore } from './store';
 
 export function CodePanel() {

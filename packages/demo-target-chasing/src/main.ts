@@ -9,19 +9,6 @@ dotenv.config();
 console.log('Starting training...');
 console.log('HF_TOKEN:', process.env.HF_TOKEN ? '✅ Found' : '❌ Not found');
 
-const agent = new DQNAgent({
-  inputSize: 2,
-  actionSize: 3,
-  hiddenLayers: [32, 32],
-  gamma: 0.99,
-  epsilon: 1.0,
-  epsilonDecay: 0.995,
-  minEpsilon: 0.01,
-  lr: 0.001,
-  batchSize: 32,
-  memorySize: 1000,
-  targetUpdateFrequency: 10,
-});
 
 let position = 0;
 let target = (Math.random() - 0.5) * 4;
@@ -34,9 +21,9 @@ const isTerminated = (): boolean => {
 };
 
 const env: IgnitionEnv = new IgnitionEnv({
-  agent,
-  getObservation: () => [position, target],
-  applyAction: (action: number | number[]) => {
+  actions: 3,
+  observe: () => [position, target],
+  step: (action: number | number[]) => {
     // Handle array actions by taking the first number
     const a = Array.isArray(action) ? action[0] : action;
     const dx = a - 1;
@@ -46,7 +33,7 @@ const env: IgnitionEnv = new IgnitionEnv({
       console.log(`Step ${env.stepCount}: pos=${position.toFixed(2)}, target=${target.toFixed(2)}`);
     }
   },  
-  computeReward: () => {
+  reward: () => {
     const d = Math.abs(position - target);
     const reward = 1.0 / (1.0 + d);
     if (env.stepCount % 10 === 0) {
@@ -54,16 +41,28 @@ const env: IgnitionEnv = new IgnitionEnv({
     }
     return reward;
   },
-  isTerminated,
-  onReset: () => {
+  done: isTerminated,
+  reset: () => {
     position = 0;
     target = (Math.random() - 0.5) * 4;
     console.log(`[RESET] New target: ${target.toFixed(2)}`);
   },
-  stepIntervalMs: 100,
-  hfRepoId: 'salim4n/dqn-checkpoint-demo',
-  hfToken: process.env.HF_TOKEN!,
 });
+env.stepIntervalMs = 100;
+env.train('dqn', {
+  inputSize: 2,
+  actionSize: 3,
+  hiddenLayers: [32, 32],
+  gamma: 0.99,
+  epsilon: 1.0,
+  epsilonDecay: 0.995,
+  minEpsilon: 0.01,
+  lr: 0.001,
+  batchSize: 32,
+  memorySize: 1000,
+  targetUpdateFrequency: 10,
+});
+const agent = env.agent as DQNAgent;
 
 // Étendre la méthode step pour gérer les checkpoints
 const originalStep = env.step.bind(env);

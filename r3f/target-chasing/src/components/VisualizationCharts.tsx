@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   CartesianGrid,
@@ -29,6 +30,7 @@ interface VisualizationChartsProps {
 }
 
 export function VisualizationCharts({ maxDataPoints = 100 }: VisualizationChartsProps) {
+  const { t } = useTranslation();
   // State to store historical data
   const [rewardHistory, setRewardHistory] = useState<DataPoint[]>([]);
   const [lossHistory, setLossHistory] = useState<DataPoint[]>([]);
@@ -109,19 +111,19 @@ export function VisualizationCharts({ maxDataPoints = 100 }: VisualizationCharts
 
   return (
     <div className="visualization-charts">
-      <h3>Training Visualization</h3>
+      <h3>{t('charts.title')}</h3>
       
       {/* Reward Chart */}
       <div className="chart-container">
-        <h4>Reward Over Time</h4>
+        <h4>{t('charts.reward')}</h4>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart
             data={rewardHistory}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="step" label={{ value: 'Steps', position: 'insideBottomRight', offset: -5 }} />
-            <YAxis label={{ value: 'Reward', angle: -90, position: 'insideLeft' }} />
+            <XAxis dataKey="step" label={{ value: t('charts.steps'), position: 'insideBottomRight', offset: -5 }} />
+            <YAxis label={{ value: t('charts.rewardAxis'), angle: -90, position: 'insideLeft' }} />
             <Tooltip />
             <Legend />
             <Line 
@@ -137,15 +139,15 @@ export function VisualizationCharts({ maxDataPoints = 100 }: VisualizationCharts
       
       {/* Loss Chart */}
       <div className="chart-container">
-        <h4>Loss Over Time</h4>
+        <h4>{t('charts.loss')}</h4>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart
             data={lossHistory}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="step" label={{ value: 'Steps', position: 'insideBottomRight', offset: -5 }} />
-            <YAxis label={{ value: 'Loss', angle: -90, position: 'insideLeft' }} />
+            <XAxis dataKey="step" label={{ value: t('charts.steps'), position: 'insideBottomRight', offset: -5 }} />
+            <YAxis label={{ value: t('charts.lossAxis'), angle: -90, position: 'insideLeft' }} />
             <Tooltip />
             <Legend />
             <Line 
@@ -160,16 +162,16 @@ export function VisualizationCharts({ maxDataPoints = 100 }: VisualizationCharts
       
       {/* Epsilon Chart */}
       <div className="chart-container">
-        <h4>Epsilon Decay</h4>
+        <h4>{t('charts.epsilon')}</h4>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart
             data={epsilonHistory}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="step" label={{ value: 'Steps', position: 'insideBottomRight', offset: -5 }} />
+            <XAxis dataKey="step" label={{ value: t('charts.steps'), position: 'insideBottomRight', offset: -5 }} />
             <YAxis 
-              label={{ value: 'Epsilon', angle: -90, position: 'insideLeft' }}
+              label={{ value: t('charts.epsilonAxis'), angle: -90, position: 'insideLeft' }}
               domain={[0, 1]} 
             />
             <Tooltip />
