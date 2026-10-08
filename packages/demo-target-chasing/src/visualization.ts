@@ -4,6 +4,20 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { DQNAgent } from '@ignitionai/backend-tfjs';
 import { IgnitionEnv } from '@ignitionai/core';
 
+import { setLanguage, t } from './i18n';
+
+// Sélecteur de langue FR/EN minimal (DOM natif, pas de React dans cette page)
+const switcher = document.createElement('div');
+switcher.style.cssText = 'position:fixed;top:8px;right:8px;z-index:10;display:flex;gap:4px;';
+for (const code of ['fr', 'en'] as const) {
+  const button = document.createElement('button');
+  button.textContent = t(`language.${code}`);
+  button.setAttribute('aria-label', `${t('language.label')} — ${code.toUpperCase()}`);
+  button.addEventListener('click', () => setLanguage(code));
+  switcher.appendChild(button);
+}
+document.body.appendChild(switcher);
+
 // Configuration de la scène Three.js
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -129,7 +143,7 @@ const env: IgnitionEnv = new IgnitionEnv({
 
 // Étendre la méthode step pour gérer les checkpoints
 const originalStep = env.step.bind(env);
-env.step = async (action?: number) => {
+env.step = async () => {
   // Attendre que l'étape précédente soit terminée
   const result = await originalStep();
   stepCount++;

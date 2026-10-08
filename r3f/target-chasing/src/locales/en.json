@@ -1,0 +1,64 @@
+{
+  "page": {
+    "title": "Target Chasing — IgnitionAI"
+  },
+  "language": {
+    "fr": "FR",
+    "en": "EN"
+  },
+  "training": {
+    "title": "Training Control",
+    "episodes": "Episodes:",
+    "success": "Success: {{success}} / {{total}}",
+    "difficulty": "Difficulty: {{level}}/3",
+    "time": "Time: {{seconds}}s",
+    "lastAction": "Last action: {{action}}",
+    "actions": {
+      "left": "Left",
+      "right": "Right",
+      "forward": "Forward",
+      "backward": "Backward",
+      "none": "None"
+    },
+    "reward": "Reward:",
+    "start": "Start Training",
+    "stop": "Stop Training",
+    "reset": "Reset"
+  },
+  "config": {
+    "title": "Agent Configuration",
+    "architecture": "Network Architecture",
+    "inputSize": "Input Size:",
+    "actionSize": "Action Size:",
+    "hiddenLayers": "Hidden Layers",
+    "layer": "Layer {{index}}:",
+    "remove": "Remove",
+    "addLayer": "Add Layer",
+    "parameters": "Training Parameters",
+    "epsilon": "Epsilon (exploration rate):",
+    "epsilonDecay": "Epsilon Decay:",
+    "minEpsilon": "Min Epsilon:",
+    "gamma": "Gamma (discount factor):",
+    "learningRate": "Learning Rate:",
+    "batchSize": "Batch Size:",
+    "memorySize": "Memory Size:",
+    "apply": "Apply Configuration"
+  },
+  "network": {
+    "title": "Network Designer (Drag & Drop - Basic)",
+    "nodeInput": "Input (Size: {{size}})",
+    "nodeDense": "Dense (Neurons: {{neurons}})",
+    "nodeOutput": "Output (Actions: {{actions}})",
+    "note": "Note: this is a basic visual representation. Add/remove/connect nodes to define layers. Neuron counts need manual adjustment via the config panel for now."
+  },
+  "charts": {
+    "title": "Training Visualization",
+    "reward": "Reward Over Time",
+    "loss": "Loss Over Time",
+    "epsilon": "Epsilon Decay",
+    "steps": "Steps",
+    "rewardAxis": "Reward",
+    "lossAxis": "Loss",
+    "epsilonAxis": "Epsilon"
+  }
+}

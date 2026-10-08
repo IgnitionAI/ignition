@@ -2,7 +2,8 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { KeyboardControls, OrbitControls } from "@react-three/drei";
 import Experience from "./Experience";
-import { useMemo, useRef, useState, useCallback } from "react"; // Added useCallback
+import { useMemo, useRef, useState, useCallback, useEffect } from "react"; // Added useCallback
+import { useTranslation } from "react-i18next";
 import { TrainingControls } from "./TrainingControls";
 import { VisualizationCharts } from "./components/VisualizationCharts";
 import { AgentConfigPanel } from "./components/AgentConfigPanel";
@@ -33,6 +34,7 @@ interface AgentConfig {
 }
 
 function App() {
+  const { t, i18n } = useTranslation();
   const map = useMemo(
     () => [
       { name: Controls.forward, keys: ["ArrowUp", "KeyW"] },
@@ -93,6 +95,12 @@ function App() {
   const resetEnvironment = () => {
     experienceRef.current?.resetEnvironment(agentConfig); // Pass config on reset
   };
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.language;
+    document.title = t('page.title');
+    localStorage.setItem('lang', i18n.language);
+  }, [i18n.language, t]);
   
   return (
     <>

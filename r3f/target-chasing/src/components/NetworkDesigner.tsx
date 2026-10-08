@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import ReactFlow, {
   addEdge,
@@ -46,6 +47,7 @@ const initialEdges: Edge[] = [
 ];
 
 export function NetworkDesigner({ onNetworkChange }: NetworkDesignerProps) {
+  const { t, i18n } = useTranslation();
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
 
@@ -64,11 +66,24 @@ export function NetworkDesigner({ onNetworkChange }: NetworkDesignerProps) {
     []
   );
 
+  const relabel = useCallback((node: Node, currentLabel: string): string => {
+    // ponytail: le chiffre est extrait du label courant pour survivre au changement de langue
+    const n = currentLabel.match(/\d+/)?.[0] ?? '0';
+    if (node.type === 'input') return t('network.nodeInput', { size: n });
+    if (node.type === 'output') return t('network.nodeOutput', { actions: n });
+    return t('network.nodeDense', { neurons: n });
+  }, [t]);
+
+  // Re-traduire les labels des nœuds quand la langue change
+  useEffect(() => {
+    setNodes(nds => nds.map(node => ({ ...node, data: { ...node.data, label: relabel(node, node.data.label as string) } })));
+  }, [i18n.language, relabel]);
+
   const extractNetworkStructure = (currentNodes: Node[]) => {
     const hiddenLayers: number[] = [];
     currentNodes.forEach((node) => {
       if (node.type === 'default' && node.data?.label?.includes('Dense')) {
-        const match = node.data.label.match(/Neurons: (\d+)/);
+        const match = node.data.label.match(/(\d+)/);
         if (match && match[1]) {
           hiddenLayers.push(parseInt(match[1], 10));
         }
@@ -83,7 +98,7 @@ export function NetworkDesigner({ onNetworkChange }: NetworkDesignerProps) {
 
   return (
     <div className="network-designer-panel">
-      <h3>Network Designer (Drag & Drop - Basic)</h3>
+      <h3>{t('network.title')}</h3>
       <div style={{ height: 300, border: '1px solid #555', borderRadius: '4px' }}>
         <ReactFlowProvider>
           <ReactFlow
@@ -101,8 +116,7 @@ export function NetworkDesigner({ onNetworkChange }: NetworkDesignerProps) {
         </ReactFlowProvider>
       </div>
       <p style={{ fontSize: '0.8em', color: '#ccc', marginTop: '5px' }}>
-        Note: This is a basic visual representation. Add/remove/connect nodes to define layers.
-        Neuron counts need manual adjustment via the config panel for now.
+        {t('network.note')}
       </p>
     </div>
   );
