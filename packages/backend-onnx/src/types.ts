@@ -14,4 +14,8 @@ export const OnnxAgentConfigSchema = z.object({
 });
 
 export type OnnxAgentConfig = z.infer<typeof OnnxAgentConfigSchema>;
+<<<<<<< HEAD
+=======
+/** Shape acceptée au constructeur (champs à défaut optionnels avant parse) */
+>>>>>>> feat/53-build-runtime-fix
 export type OnnxAgentConfigInput = z.input<typeof OnnxAgentConfigSchema>;

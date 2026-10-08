@@ -333,6 +333,8 @@ export class PPOAgent implements AgentInterface {
     const returnsTensor = tf.tensor1d(returns);
 
     // Variables entraînables — passées explicitement pour cibler le bon réseau
+    // ponytail: `val` est protégé dans les types tfjs actuels — cast structurel,
+    // l'accès runtime reste valide (rétrocompat API interne tfjs)
     const actorVars = this.actorNet.trainableWeights.map(
       w => (w as unknown as { val: tf.Variable }).val,
     );

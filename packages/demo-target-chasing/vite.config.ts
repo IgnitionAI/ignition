@@ -22,6 +22,7 @@ export default defineConfig({
     'process.env.VITE_HF_TOKEN': JSON.stringify(process.env.VITE_HF_TOKEN ?? ''),
   },
   plugins: [react()],
+<<<<<<< HEAD
   resolve: {
     alias: {
       '@ignitionai/backend-tfjs': path.resolve(__dirname, '../backend-tfjs/src'),
@@ -34,3 +35,15 @@ export default defineConfig({
     exclude: ['@tensorflow/tfjs-node'],
   },
 });
+=======
+    resolve: {
+      alias: {
+        // tfjs-node est node-only (fs/binding natif) : jamais exécuté en navigateur,
+        // mais le scanner Vite suit le require() littéral de backend-selector.
+        '@tensorflow/tfjs-node': path.resolve(__dirname, './src/shims/tfjs-node.ts'),
+        '@ignitionai/backend-tfjs': path.resolve(__dirname, '../backend-tfjs/src'),
+        '@ignitionai/core': path.resolve(__dirname, '../core/src')
+      }
+    }
+}); 
+>>>>>>> feat/53-build-runtime-fix

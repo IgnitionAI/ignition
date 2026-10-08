@@ -2,7 +2,9 @@ import * as tf from '@tensorflow/tfjs';
 import { AgentInterface, Experience } from '@ignitionai/core';
 
 import { loadModelFromHub } from '../io/loadModel';
-import { saveModelToHub } from '../io/saveModelToHub';
+// ponytail: import dynamique — saveModelToHub charge fs/path/tfjs-node (node-only),
+// un import statique casserait le graphe navigateur des démos
+const loadSaveModelToHub = () => import('../io/saveModelToHub');
 import { ReplayBuffer } from '../memory/ReplayBuffer';
 import { buildQNetwork } from '../model/BuildMLP';
 import { DQNConfig } from '../types';
@@ -103,8 +105,7 @@ export class DQNAgent implements AgentInterface {
     const nextQArray = nextQValues.arraySync() as number[][];
 
     const updatedQ = qArray.map((q, i) => {
-      const { action, reward, terminated, truncated } = batch[i];
-      const done = terminated || truncated;
+      const { action, reward, done } = batch[i];
       const a = action as number;
       q[a] = done ? reward : reward + this.gamma * Math.max(...nextQArray[i]);
       return q;
@@ -133,6 +134,7 @@ export class DQNAgent implements AgentInterface {
 
   async saveToHub(repoId: string, token: string, modelName = 'model', checkpointName = 'last'): Promise<void> {
     console.log(`[DQN] Saving model to HF Hub: ${repoId}`);
+    const { saveModelToHub } = await loadSaveModelToHub();
     await saveModelToHub(this.model, repoId, token, `${modelName}_${checkpointName}`);
   }
 
@@ -146,6 +148,7 @@ export class DQNAgent implements AgentInterface {
   async saveCheckpoint(repoId: string, token: string, checkpointName: string): Promise<void> {
     const folder = `model_${checkpointName}`;
     console.log(`[DQN] Saving checkpoint "${checkpointName}" to HF Hub...`);
+    const { saveModelToHub } = await loadSaveModelToHub();
     await saveModelToHub(this.model, repoId, token, folder);
     console.log(`[DQN] ✅ Checkpoint "${checkpointName}" saved`);
   }

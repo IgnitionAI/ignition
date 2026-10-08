@@ -74,27 +74,48 @@ export class IgnitionEnv {
     const action = await this._agent.getAction(this.currentState);
     this.env.step(action);
 
+<<<<<<< HEAD
     const observation = this.env.observe();
     const reward = this.env.reward();
     const terminated = this.env.done();
+=======
+    const observation = this.config.getObservation();
+    const reward = this.config.computeReward();
+    const done = this.config.isDone();
+>>>>>>> feat/53-build-runtime-fix
 
     const experience: Experience = {
       state: this.currentState,
       action,
       reward,
       nextState: observation,
+<<<<<<< HEAD
       terminated,
       truncated: false,
+=======
+      done,
+>>>>>>> feat/53-build-runtime-fix
     };
 
     this._agent.remember(experience);
     await this._agent.train();
 
+<<<<<<< HEAD
     const result: StepResult = { observation, reward, terminated, truncated: false };
 
     if (terminated) {
       this.env.reset();
       this.currentState = this.env.observe();
+=======
+    const result: StepResult = { observation, reward, done };
+
+    await this.config.callbacks?.onStep?.(result, this.stepCount);
+
+    if (done) {
+      await this.config.callbacks?.onEpisodeEnd?.(this.stepCount);
+      this.config.onReset?.();
+      this.currentState = this.config.getObservation();
+>>>>>>> feat/53-build-runtime-fix
     } else {
       this.currentState = observation;
     }
