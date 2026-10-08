@@ -57,20 +57,6 @@ let bestDistance = Infinity;
 let stepCount = 0;
 let previousDistance = Infinity;
 
-// Créer l'agent DQN
-const dqnAgent = new DQNAgent({
-  inputSize: 2,
-  actionSize: 3,
-  hiddenLayers: [32, 32],
-  gamma: 0.99,
-  epsilon: 1.0,
-  epsilonDecay: 0.995,
-  minEpsilon: 0.01,
-  lr: 0.001,
-  batchSize: 32,
-  memorySize: 1000,
-  targetUpdateFrequency: 10,
-});
 
 // Vérifier si le token est disponible
 const hfToken = import.meta.env?.VITE_HF_TOKEN;
@@ -80,9 +66,9 @@ if (!hfToken) {
 
 // Créer l'environnement
 const env: IgnitionEnv = new IgnitionEnv({
-  agent: dqnAgent,
-  getObservation: () => [position, targetPosition],
-  applyAction: (action: number | number[]) => {
+  actions: 3,
+  observe: () => [position, targetPosition],
+  step: (action: number | number[]) => {
     const a = Array.isArray(action) ? action[0] : action;
     const dx = a - 1;
     position += dx * 0.2;
@@ -92,7 +78,7 @@ const env: IgnitionEnv = new IgnitionEnv({
     console.log(`[ACTION] ${a} (dx: ${dx.toFixed(2)})`);
   },
   
-  computeReward: () => {
+  reward: () => {
     const d = Math.abs(position - targetPosition);
     
     // Vérifier si l'agent s'éloigne
@@ -114,7 +100,7 @@ const env: IgnitionEnv = new IgnitionEnv({
     
     return reward;
   },
-  isTerminated: (): boolean => {
+  done: (): boolean => {
     const d = Math.abs(position - targetPosition);
     const done = d < 0.1 || stepCount > 1000;
     
@@ -124,7 +110,7 @@ const env: IgnitionEnv = new IgnitionEnv({
     
     return done;
   },
-  onReset: () => {
+  reset: () => {
     position = 0;
     targetPosition = (Math.random() - 0.5) * 4;
     agent.position.x = position;
@@ -136,10 +122,22 @@ const env: IgnitionEnv = new IgnitionEnv({
     // Log du reset
     console.log(`[RESET] Nouvelle cible: ${targetPosition.toFixed(2)}`);
   },
-  stepIntervalMs: 100,
-  hfRepoId: 'salim4n/dqn-checkpoint-threejs',
-  hfToken: hfToken || '',
 });
+env.stepIntervalMs = 100;
+env.train('dqn', {
+  inputSize: 2,
+  actionSize: 3,
+  hiddenLayers: [32, 32],
+  gamma: 0.99,
+  epsilon: 1.0,
+  epsilonDecay: 0.995,
+  minEpsilon: 0.01,
+  lr: 0.001,
+  batchSize: 32,
+  memorySize: 1000,
+  targetUpdateFrequency: 10,
+});
+const dqnAgent = env.agent as DQNAgent;
 
 // Étendre la méthode step pour gérer les checkpoints
 const originalStep = env.step.bind(env);

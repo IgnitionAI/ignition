@@ -123,26 +123,11 @@ const Agent = forwardRef(function Agent({ targetPosition, agentConfig }: AgentPr
     console.log("🔄 Initializing/Re-initializing environment with config:", config);
 
     // Dispose previous agent model if exists to free up GPU memory
-    agentRefInternal.current?.dispose();
-
-    const dqnAgent = new DQNAgent({
-      actionSize: config.actionSize,
-      inputSize: config.inputSize,
-      hiddenLayers: config.hiddenLayers,
-      epsilon: config.epsilon,
-      epsilonDecay: config.epsilonDecay,
-      minEpsilon: config.minEpsilon,
-      gamma: config.gamma,
-      lr: config.lr,
-      batchSize: config.batchSize,
-      memorySize: config.memorySize,
-      targetUpdateFrequency: 200, // Keep this or make it configurable
-    });
-    agentRefInternal.current = dqnAgent; // Store the new agent instance
+    envRef.current?.agent?.dispose?.();
 
     envRef.current = new IgnitionEnv({
-      agent: dqnAgent,
-      getObservation: () => {
+      actions: config.actionSize,
+      observe: () => {
         const pos = bodyRef.current?.translation() || { x: 0, y: 0, z: 0 };
         const dirX = targetPosition[0] - pos.x;
         const dirY = targetPosition[1] - pos.y;
@@ -162,7 +147,7 @@ const Agent = forwardRef(function Agent({ targetPosition, agentConfig }: AgentPr
           distToMinX, distToMaxX, distToGround, distToMinZ, distToMaxZ,
         ];
       },
-      applyAction: (action: number | number[]) => {
+      step: (action: number | number[]) => {
         setEpisodeSteps(prev => prev + 1);
         if (!bodyRef.current) return;
 
@@ -187,7 +172,7 @@ const Agent = forwardRef(function Agent({ targetPosition, agentConfig }: AgentPr
         }
         // console.log(`Action: ${finalAction}, Position: [${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)}]`);
       },
-      computeReward: () => {
+      reward: () => {
         const pos = bodyRef.current?.translation() || { x: 0, y: 0, z: 0 };
         const distance = Math.sqrt(Math.pow(pos.x - targetPosition[0], 2) + Math.pow(pos.y - targetPosition[1], 2) + Math.pow(pos.z - targetPosition[2], 2));
         let calculatedReward = 0;
@@ -217,7 +202,7 @@ const Agent = forwardRef(function Agent({ targetPosition, agentConfig }: AgentPr
         if (calculatedReward > bestReward) setBestReward(calculatedReward);
         return calculatedReward;
       },
-      isTerminated: () => {
+      done: () => {
         const pos = bodyRef.current?.translation() || { x: 0, y: 0, z: 0 };
         if (pos.x < PLATEAU_LIMITS.minX || pos.x > PLATEAU_LIMITS.maxX || pos.y < PLATEAU_LIMITS.minY || pos.z < PLATEAU_LIMITS.minZ || pos.z > PLATEAU_LIMITS.maxZ) {
           return true; // Out of bounds
@@ -227,7 +212,7 @@ const Agent = forwardRef(function Agent({ targetPosition, agentConfig }: AgentPr
         if (episodeTime >= 20) return true; // Time limit
         return false;
       },
-      onReset: () => {
+      reset: () => {
         const startPos = getStartingPosition();
         bodyRef.current?.setLinvel(new Vector3(0, 0, 0), true);
         bodyRef.current?.setTranslation(new Vector3(startPos[0], startPos[1], startPos[2]), true);
@@ -241,8 +226,24 @@ const Agent = forwardRef(function Agent({ targetPosition, agentConfig }: AgentPr
         setTargetPosition(getRandomTargetPosition());
         console.log(`Episode ${episodeCount + 1} started.`);
       },
-      stepIntervalMs: 1000 / 60, // 60fps
     });
+    envRef.current.stepIntervalMs = 1000 / 60; // 60fps
+    // L'agent DQN est créé par la factory interne (auto-config) à partir des
+    // mêmes réglages que l'ancienne construction manuelle.
+    envRef.current.train('dqn', {
+      actionSize: config.actionSize,
+      inputSize: config.inputSize,
+      hiddenLayers: config.hiddenLayers,
+      epsilon: config.epsilon,
+      epsilonDecay: config.epsilonDecay,
+      minEpsilon: config.minEpsilon,
+      gamma: config.gamma,
+      lr: config.lr,
+      batchSize: config.batchSize,
+      memorySize: config.memorySize,
+      targetUpdateFrequency: 200,
+    } satisfies Record<string, unknown>);
+    agentRefInternal.current = envRef.current.agent as DQNAgent | null;
   };
 
   // Initialize environment when component mounts or config changes
