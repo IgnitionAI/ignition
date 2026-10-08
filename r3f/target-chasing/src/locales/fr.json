@@ -1,0 +1,64 @@
+{
+  "page": {
+    "title": "Chasse de cible — IgnitionAI"
+  },
+  "language": {
+    "fr": "FR",
+    "en": "EN"
+  },
+  "training": {
+    "title": "Contrôle d'entraînement",
+    "episodes": "Épisodes :",
+    "success": "Succès : {{success}} / {{total}}",
+    "difficulty": "Difficulté : {{level}}/3",
+    "time": "Temps : {{seconds}}s",
+    "lastAction": "Dernière action : {{action}}",
+    "actions": {
+      "left": "Gauche",
+      "right": "Droite",
+      "forward": "Avant",
+      "backward": "Arrière",
+      "none": "Aucune"
+    },
+    "reward": "Récompense :",
+    "start": "Démarrer l'entraînement",
+    "stop": "Arrêter l'entraînement",
+    "reset": "Réinitialiser"
+  },
+  "config": {
+    "title": "Configuration de l'agent",
+    "architecture": "Architecture du réseau",
+    "inputSize": "Taille d'entrée :",
+    "actionSize": "Taille des actions :",
+    "hiddenLayers": "Couches cachées",
+    "layer": "Couche {{index}} :",
+    "remove": "Supprimer",
+    "addLayer": "Ajouter une couche",
+    "parameters": "Paramètres d'entraînement",
+    "epsilon": "Epsilon (taux d'exploration) :",
+    "epsilonDecay": "Décroissance d'epsilon :",
+    "minEpsilon": "Epsilon minimal :",
+    "gamma": "Gamma (facteur de discount) :",
+    "learningRate": "Taux d'apprentissage :",
+    "batchSize": "Taille du batch :",
+    "memorySize": "Taille de la mémoire :",
+    "apply": "Appliquer la configuration"
+  },
+  "network": {
+    "title": "Concepteur de réseau (Glisser-déposer - Basique)",
+    "nodeInput": "Entrée (Taille : {{size}})",
+    "nodeDense": "Dense (Neurones : {{neurons}})",
+    "nodeOutput": "Sortie (Actions : {{actions}})",
+    "note": "Note : ceci est une représentation visuelle basique. Ajoutez, supprimez ou connectez des nœuds pour définir les couches. Les nombres de neurones doivent pour l'instant être ajustés manuellement via le panneau de configuration."
+  },
+  "charts": {
+    "title": "Visualisation de l'entraînement",
+    "reward": "Récompense au fil du temps",
+    "loss": "Perte au fil du temps",
+    "epsilon": "Décroissance d'epsilon",
+    "steps": "Pas",
+    "rewardAxis": "Récompense",
+    "lossAxis": "Perte",
+    "epsilonAxis": "Epsilon"
+  }
+}

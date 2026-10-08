@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTrainingStore } from '../store/trainingStore';
 
 interface LayerConfig {
@@ -22,6 +23,7 @@ interface AgentConfigPanelProps {
 }
 
 export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
+  const { t } = useTranslation();
   // Default configuration
   const [inputSize, setInputSize] = useState(9);
   const [actionSize, setActionSize] = useState(4);
@@ -75,13 +77,13 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
   
   return (
     <div className="agent-config-panel">
-      <h3>Agent Configuration</h3>
+      <h3>{t('config.title')}</h3>
       
       <div className="config-section">
-        <h4>Network Architecture</h4>
+        <h4>{t('config.architecture')}</h4>
         
         <div className="config-row">
-          <label>Input Size:</label>
+          <label>{t('config.inputSize')}</label>
           <input 
             type="number" 
             value={inputSize} 
@@ -91,7 +93,7 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
         </div>
         
         <div className="config-row">
-          <label>Action Size:</label>
+          <label>{t('config.actionSize')}</label>
           <input 
             type="number" 
             value={actionSize} 
@@ -101,28 +103,28 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
         </div>
         
         <div className="layers-container">
-          <h5>Hidden Layers</h5>
+          <h5>{t('config.hiddenLayers')}</h5>
           {layers.map((layer, index) => (
             <div key={layer.id} className="layer-row">
-              <label>Layer {index + 1}:</label>
+              <label>{t('config.layer', { index: index + 1 })}</label>
               <input 
                 type="number" 
                 value={layer.neurons} 
                 onChange={(e) => updateLayer(layer.id, parseInt(e.target.value))} 
                 min="1"
               />
-              <button onClick={() => removeLayer(layer.id)}>Remove</button>
+              <button onClick={() => removeLayer(layer.id)}>{t('config.remove')}</button>
             </div>
           ))}
-          <button onClick={addLayer}>Add Layer</button>
+          <button onClick={addLayer}>{t('config.addLayer')}</button>
         </div>
       </div>
       
       <div className="config-section">
-        <h4>Training Parameters</h4>
+        <h4>{t('config.parameters')}</h4>
         
         <div className="config-row">
-          <label>Epsilon (exploration rate):</label>
+          <label>{t('config.epsilon')}</label>
           <input 
             type="number" 
             value={epsilon} 
@@ -134,7 +136,7 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
         </div>
         
         <div className="config-row">
-          <label>Epsilon Decay:</label>
+          <label>{t('config.epsilonDecay')}</label>
           <input 
             type="number" 
             value={epsilonDecay} 
@@ -146,7 +148,7 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
         </div>
         
         <div className="config-row">
-          <label>Min Epsilon:</label>
+          <label>{t('config.minEpsilon')}</label>
           <input 
             type="number" 
             value={minEpsilon} 
@@ -158,7 +160,7 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
         </div>
         
         <div className="config-row">
-          <label>Gamma (discount factor):</label>
+          <label>{t('config.gamma')}</label>
           <input 
             type="number" 
             value={gamma} 
@@ -170,7 +172,7 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
         </div>
         
         <div className="config-row">
-          <label>Learning Rate:</label>
+          <label>{t('config.learningRate')}</label>
           <input 
             type="number" 
             value={learningRate} 
@@ -182,7 +184,7 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
         </div>
         
         <div className="config-row">
-          <label>Batch Size:</label>
+          <label>{t('config.batchSize')}</label>
           <input 
             type="number" 
             value={batchSize} 
@@ -192,7 +194,7 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
         </div>
         
         <div className="config-row">
-          <label>Memory Size:</label>
+          <label>{t('config.memorySize')}</label>
           <input 
             type="number" 
             value={memorySize} 
@@ -202,7 +204,7 @@ export function AgentConfigPanel({ onApplyConfig }: AgentConfigPanelProps) {
         </div>
       </div>
       
-      <button className="apply-button" onClick={applyConfig}>Apply Configuration</button>
+      <button className="apply-button" onClick={applyConfig}>{t('config.apply')}</button>
     </div>
   );
 }

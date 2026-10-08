@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test": "node scripts/check-locales.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -16,8 +17,10 @@
     "@react-three/fiber": "^9.1.2",
     "@react-three/rapier": "^2.1.0",
     "@types/three": "^0.162.0",
+    "i18next": "^26.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-i18next": "^17.0.16",
     "reactflow": "^11.11.4",
     "recharts": "^2.15.3",
     "three": "^0.162.0",
