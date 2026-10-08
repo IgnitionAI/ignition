@@ -1,6 +1,8 @@
 import Logo from './logo'
+import type { footer as FooterMessages } from '@/messages/en/footer'
+import type { Locale } from '@/lib/locales'
 
-export default function Footer() {
+export default function Footer({ t, locale }: { t: typeof FooterMessages; locale: Locale }) {
   return (
     <footer>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -16,10 +18,10 @@ export default function Footer() {
                   <Logo />
                 </div>
                 <div className="text-sm text-slate-300 max-w-xs">
-                  The ML-Agents of the JavaScript creative ecosystem. MIT licensed — use it for anything.
+                  {t.tagline}
                 </div>
                 <div className="text-sm text-slate-500 mt-3">
-                  © {new Date().getFullYear()} — A project by{' '}
+                  © {new Date().getFullYear()} — {t.copyright}{' '}
                   <a
                     href="https://www.ignitionai.fr"
                     target="_blank"
@@ -52,7 +54,7 @@ export default function Footer() {
 
           {/* Project */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-sm text-slate-50 font-medium mb-2">Project</h6>
+            <h6 className="text-sm text-slate-50 font-medium mb-2">{t.sections.project}</h6>
             <ul className="text-sm space-y-2">
               <li>
                 <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -64,48 +66,48 @@ export default function Footer() {
                 <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://www.npmjs.com/package/@ignitionai/backend-tfjs" target="_blank" rel="noopener noreferrer">@ignitionai/backend-tfjs</a>
               </li>
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="/changelog">Changelog</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href={`/${locale}/changelog`}>{t.links.changelog}</a>
               </li>
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/blob/main/roadmap.md" target="_blank" rel="noopener noreferrer">Roadmap</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/blob/main/roadmap.md" target="_blank" rel="noopener noreferrer">{t.links.roadmap}</a>
               </li>
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">License (MIT)</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">{t.links.license}</a>
               </li>
             </ul>
           </div>
 
           {/* Docs */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-sm text-slate-50 font-medium mb-2">Docs</h6>
+            <h6 className="text-sm text-slate-50 font-medium mb-2">{t.sections.docs}</h6>
             <ul className="text-sm space-y-2">
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="#quickstart">Quick Start</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="#quickstart">{t.links.quickstart}</a>
               </li>
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition#readme" target="_blank" rel="noopener noreferrer">API Reference</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition#readme" target="_blank" rel="noopener noreferrer">{t.links.apiReference}</a>
               </li>
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition#algorithms" target="_blank" rel="noopener noreferrer">Algorithms</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition#algorithms" target="_blank" rel="noopener noreferrer">{t.links.algorithms}</a>
               </li>
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition#train-in-the-browser-deploy-everywhere" target="_blank" rel="noopener noreferrer">ONNX Export</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition#train-in-the-browser-deploy-everywhere" target="_blank" rel="noopener noreferrer">{t.links.onnxExport}</a>
               </li>
             </ul>
           </div>
 
           {/* Community */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-3">
-            <h6 className="text-sm text-slate-50 font-medium mb-2">Community</h6>
+            <h6 className="text-sm text-slate-50 font-medium mb-2">{t.sections.community}</h6>
             <ul className="text-sm space-y-2">
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/issues" target="_blank" rel="noopener noreferrer">Issues</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/issues" target="_blank" rel="noopener noreferrer">{t.links.issues}</a>
               </li>
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/discussions" target="_blank" rel="noopener noreferrer">Discussions</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/discussions" target="_blank" rel="noopener noreferrer">{t.links.discussions}</a>
               </li>
               <li>
-                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing</a>
+                <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">{t.links.contributing}</a>
               </li>
             </ul>
           </div>

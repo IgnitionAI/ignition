@@ -3,7 +3,10 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 
-export default function MobileMenu() {
+import type { nav as NavMessages } from '@/messages/en/nav'
+import type { Locale } from '@/lib/locales'
+
+export default function MobileMenu({ t, locale }: { t: typeof NavMessages; locale: Locale }) {
   const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false)
 
   const trigger = useRef<HTMLButtonElement>(null)
@@ -75,19 +78,19 @@ export default function MobileMenu() {
       >
         <ul className="border border-transparent [background:linear-gradient(var(--color-slate-900),var(--color-slate-900))_padding-box,conic-gradient(var(--color-slate-400),var(--color-slate-700)_25%,var(--color-slate-700)_75%,var(--color-slate-400)_100%)_border-box] rounded-lg px-4 py-1.5">
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="#quickstart">Quick Start</Link>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="#quickstart">{t.quickstart}</Link>
           </li>
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="#features">Features</Link>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="#features">{t.features}</Link>
           </li>
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="#demos">Demos</Link>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="#demos">{t.demos}</Link>
           </li>
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/docs">Docs</Link>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/docs">{t.docs}</Link>
           </li>
           <li>
-            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="/blog">Blog</Link>
+            <Link className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href={`/${locale}/blog`}>{t.blog}</Link>
           </li>
           <li>
             <a className="flex font-medium text-sm text-slate-300 hover:text-white py-1.5" href="https://github.com/IgnitionAI/ignition" target="_blank" rel="noopener noreferrer">GitHub</a>

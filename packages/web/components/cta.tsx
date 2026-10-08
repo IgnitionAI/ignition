@@ -1,4 +1,6 @@
-export default function Cta() {
+import type { cta as CtaMessages } from '@/messages/en/cta'
+
+export default function Cta({ t }: { t: typeof CtaMessages }) {
   return (
     <section>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -24,21 +26,21 @@ export default function Cta() {
           <div className="max-w-3xl mx-auto text-center">
             <div>
               <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-3">
-                Open source · MIT licensed
+                {t.kicker}
               </div>
             </div>
             <h2 className="h2 bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-4">
-              Ready to train your first agent?
+              {t.title}
             </h2>
             <p className="text-lg text-slate-400 mb-8">
-              One install command, one TrainingEnv class, one call to <code className="text-indigo-400 font-mono">env.train()</code>. Your agent learns in your browser, then deploys anywhere via ONNX.
+              {t.descriptionBefore}<code className="text-indigo-400 font-mono">{t.trainCode}</code>{t.descriptionAfter}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a className="btn text-slate-900 bg-linear-to-r from-white/80 via-white to-white/80 hover:bg-white transition duration-150 ease-in-out group" href="https://github.com/IgnitionAI/ignition">
-                Star on GitHub <span className="tracking-normal text-indigo-500 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
+                {t.starGithub} <span className="tracking-normal text-indigo-500 group-hover:translate-x-0.5 transition-transform duration-150 ease-in-out ml-1">-&gt;</span>
               </a>
               <a className="btn text-slate-200 hover:text-white bg-slate-900/40 hover:bg-slate-900/60 border border-slate-800 transition duration-150 ease-in-out" href="/docs">
-                Read the docs
+                {t.readDocs}
               </a>
             </div>
           </div>

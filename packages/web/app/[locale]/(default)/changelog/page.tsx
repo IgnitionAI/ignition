@@ -1,12 +1,16 @@
 import Link from 'next/link'
 import { getChangelog } from '@/lib/changelog'
+import { getDictionary } from '@/lib/i18n'
+import { isLocale } from '@/lib/locales'
 
 export const metadata = {
   title: 'Changelog',
   description: 'Release notes and shipped features for IgnitionAI.',
 }
 
-export default function ChangelogPage() {
+export default async function ChangelogPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const t = getDictionary(isLocale(locale) ? locale : 'en').changelog.page
   const releases = getChangelog()
 
   return (
@@ -16,29 +20,29 @@ export default function ChangelogPage() {
         {/* Header */}
         <div className="pb-10 md:pb-14 text-center">
           <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-3">
-            Changelog
+            {t.eyebrow}
           </div>
           <h1 className="h1 bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-4">
-            What we've shipped
+            {t.title}
           </h1>
           <p className="text-lg text-slate-400">
-            Every release, with its full list of changes. Source of truth is{' '}
+            {t.descriptionBefore}
             <a
               href="https://github.com/IgnitionAI/ignition/blob/main/CHANGELOG.md"
               target="_blank"
               rel="noopener noreferrer"
               className="text-indigo-400 hover:text-indigo-300 underline"
             >
-              CHANGELOG.md on GitHub
+              {t.sourceLink}
             </a>
-            .
+            {t.descriptionAfter}
           </p>
         </div>
 
         {/* Releases */}
         <div className="space-y-12 pb-24">
           {releases.map((release) => {
-            const prettyDate = new Date(release.date).toLocaleDateString('en-US', {
+            const prettyDate = new Date(release.date).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
@@ -81,7 +85,7 @@ export default function ChangelogPage() {
         {/* Back to landing */}
         <div className="text-center pb-16">
           <Link href="/" className="text-indigo-400 hover:text-indigo-300 text-sm">
-            ← Back to IgnitionAI
+            {t.backLink}
           </Link>
         </div>
 

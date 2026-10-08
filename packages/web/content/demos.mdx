@@ -4,12 +4,13 @@ description: The same demo routes, methods and package names used by the gallery
 ---
 
 import DemoCatalog from '../components/demo-catalog'
+import { demoCatalog as demoCatalogMessages } from '../messages/en/demo-catalog'
 
 # Demo catalogue
 
 Circuit Racing is the featured desktop keyboard experience: import real 3D vehicles, train and save neural drivers, race frozen checkpoints and drive against them. Supplied imitation drivers include their evaluation failures; their competence is measured rather than assumed.
 
-<DemoCatalog />
+<DemoCatalog t={demoCatalogMessages} />
 
 The catalogue is maintained in `packages/web/data/demos.json`. The build consumes it directly. Target Chasing is not included: its build compatibility has not been validated for this catalogue.
 

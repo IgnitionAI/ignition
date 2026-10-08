@@ -1,4 +1,6 @@
-export default function QuickStart() {
+import type { quickstart as QuickstartMessages } from '@/messages/en/quickstart'
+
+export default function QuickStart({ t }: { t: typeof QuickstartMessages }) {
   const code = `import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
 import { CartPoleEnv } from '@ignitionai/environments';
 
@@ -17,13 +19,13 @@ env.train('dqn');      // Zero config. It just works.
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-16">
             <div className="inline-flex font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-indigo-200 pb-3">
-              Quick Start
+              {t.eyebrow}
             </div>
             <h2 className="h2 bg-clip-text text-transparent bg-linear-to-r from-slate-200/60 via-slate-200 to-slate-200/60 pb-4">
-              Train your first agent in 7 lines
+              {t.title}
             </h2>
             <p className="text-lg text-slate-400">
-              No neural network code. No hyperparameter tuning. No config files. Describe your world, call <code className="text-indigo-400 font-mono">train()</code>, and the framework does the rest.
+              {t.description.before}<code className="text-indigo-400 font-mono">{t.description.code}</code>{t.description.after}
             </p>
           </div>
 
@@ -43,7 +45,7 @@ env.train('dqn');      // Zero config. It just works.
               </pre>
             </div>
             <p className="text-center text-sm text-slate-500 mt-4">
-              That's it. The agent learns. The pole stays up.
+              {t.caption}
             </p>
           </div>
 

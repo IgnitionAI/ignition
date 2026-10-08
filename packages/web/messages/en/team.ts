@@ -1,0 +1,21 @@
+export const team = {
+  title: 'We are a happy, small team',
+  subtitle: 'Various versions of Lorem Ipsum have evolved over the years, sometimes by accident, sometimes on purpose, and by injecting humour and the like.',
+  roles: {
+    ceoCoFounder: 'CEO & Co-founder',
+    techLead: 'Tech Lead',
+    softwareEngineer: 'Software Engineer',
+    customerExperience: 'Customer Experience',
+    marketingManager: 'Marketing Manager',
+    productDesign: 'Product Design',
+    customerSuccess: 'Customer Success',
+    headOfTalent: 'Head of Talent',
+    enterpriseArchitect: 'Enterprise Architect',
+    videoProducer: 'Video Producer',
+    operationsManager: 'Operations Manager',
+    financialAnalyst: 'Financial Analyst',
+    dataEngineer: 'Data Engineer',
+    headOfDesign: 'Head of Design',
+  },
+  twitterLabel: '’s Twitter',
+}
