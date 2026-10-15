@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ComponentRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, RoundedBox } from '@react-three/drei';
+import { QuadraticBezierCurve3, Vector3 } from 'three';
 import { L1, L2, PIVOT_Y, SUCCESS_DISTANCE } from './robot-arm-env';
 import { useDemoStore } from './store';
 import { makeT } from './i18n';
@@ -26,14 +27,13 @@ function ServoJoint({ radius = 0.105, length = 0.15 }: { radius?: number; length
   );
 }
 
-/** Rectangular link with a lighter top spine and end collars. */
+/** Rectangular link (rounded edges) with a lighter top spine and end collars. */
 function Link({ length, width, color }: { length: number; width: number; color: string }) {
   return (
     <group>
-      <mesh position={[0, 0, length / 2]} castShadow>
-        <boxGeometry args={[width, width, length]} />
+      <RoundedBox args={[width, width, length]} radius={0.018} smoothness={4} position={[0, 0, length / 2]} castShadow>
         <meshStandardMaterial color={color} metalness={0.45} roughness={0.5} />
-      </mesh>
+      </RoundedBox>
       <mesh position={[0, width / 2 + 0.012, length / 2]} castShadow>
         <boxGeometry args={[width * 0.4, 0.024, length * 0.84]} />
         <meshStandardMaterial {...LIGHT_METAL} />
@@ -45,6 +45,29 @@ function Link({ length, width, color }: { length: number; width: number; color: 
         </mesh>
       ))}
     </group>
+  );
+}
+
+/**
+ * Flexible cable running from segment 1 to segment 2; the sag follows the
+ * elbow angle so it visibly flexes when the joint moves.
+ */
+function ElbowCable({ q2, side }: { q2: number; side: 1 | -1 }) {
+  const a = -q2;
+  const start = new Vector3(side * 0.052, 0.11, 0.22);
+  const end = new Vector3(
+    side * 0.052,
+    0.11 * Math.cos(a) - 0.3 * Math.sin(a),
+    L1 + 0.11 * Math.sin(a) + 0.3 * Math.cos(a),
+  );
+  const mid = start.clone().add(end).multiplyScalar(0.5);
+  mid.y += 0.05 + 0.1 * (1 - Math.cos(q2)); // sag grows as the elbow folds
+  const curve = new QuadraticBezierCurve3(start, mid, end);
+  return (
+    <mesh castShadow>
+      <tubeGeometry args={[curve, 16, 0.016, 8]} />
+      <meshStandardMaterial color="#7d8aa0" metalness={0.3} roughness={0.6} />
+    </mesh>
   );
 }
 
@@ -79,6 +102,20 @@ function Arm() {
         <cylinderGeometry args={[0.145, 0.145, 0.05, 24]} />
         <meshStandardMaterial {...LIGHT_METAL} />
       </mesh>
+      {/* amber safety stripe + control box with status LED */}
+      <mesh position={[0, 0.24, 0]}>
+        <torusGeometry args={[0.155, 0.012, 10, 32]} />
+        <meshStandardMaterial color="#f59e0b" emissive="#b45309" emissiveIntensity={0.55} />
+      </mesh>
+      <group position={[0, 0.34, 0.16]} rotation={[0.12, 0, 0]}>
+        <RoundedBox args={[0.13, 0.17, 0.07]} radius={0.012} smoothness={4} castShadow>
+          <meshStandardMaterial {...DARK_METAL} />
+        </RoundedBox>
+        <mesh position={[0, 0.02, 0.037]}>
+          <circleGeometry args={[0.014, 12]} />
+          <meshStandardMaterial color={reached ? '#4ade80' : '#22d3ee'} emissive={reached ? '#16a34a' : '#0e7490'} emissiveIntensity={1.2} />
+        </mesh>
+      </group>
 
       {/* Arm: yaw (base) → pitch (shoulder) → relative pitch (elbow) */}
       <group position={[0, PIVOT_Y, 0]} rotation={[0, q0, 0]}>
@@ -94,6 +131,8 @@ function Arm() {
         <ServoJoint />
         <group rotation={[-q1, 0, 0]}>
           <Link length={L1} width={0.09} color="#93c5fd" />
+          <ElbowCable q2={q2} side={1} />
+          <ElbowCable q2={q2} side={-1} />
           <group position={[0, 0, L1]}>
             <ServoJoint radius={0.085} length={0.13} />
           </group>
@@ -154,10 +193,10 @@ function SceneContent() {
   return (
     <>
       <color attach="background" args={['#0d1024']} />
-      <ambientLight intensity={0.6} />
+      <hemisphereLight args={['#5b6b9e', '#141824', 0.55]} />
       <directionalLight
         position={[4, 6, 3]}
-        intensity={1.5}
+        intensity={1.4}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-far={20}
@@ -167,6 +206,7 @@ function SceneContent() {
         shadow-camera-bottom={-4}
       />
       <pointLight position={[-3, 3, -2]} intensity={0.25} color="#6366f1" />
+      <pointLight position={[-2, 1.2, 2.5]} intensity={0.35} color="#93c5fd" />
 
       {/* Ground + XYZ frame */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.001, 0]} receiveShadow>
