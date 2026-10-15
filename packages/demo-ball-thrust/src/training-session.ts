@@ -60,6 +60,7 @@ export class TrainingSession {
   private lastEmission = 0;
   // A checkpoint cannot roll back transitions already spent by this session.
   private spent = 0;
+  private experimentDeadline = Infinity;
 
   constructor(public readonly env: BallThrustEnv, private readonly storage: ModelStorageProvider = new IndexedDBProvider(),
     private readonly budget: number = TRAINING_PROTOCOL.budget) {
@@ -79,14 +80,14 @@ export class TrainingSession {
       epsilon: state.epsilon as number, updates: state.trainStepCounter as number, fingerprint: fingerprint(weights),
       changedWeights: weights.some((w, i) => w !== this.initialWeights[i]), parameterCount: weights.length,
       recentEpisodes: this.recentEpisodes.map(e => ({ ...e })), evaluation: this.evaluation,
-      budgetReached: this.spent >= this.budget };
+      budgetReached: this.budgetExhausted() };
   }
 
   async start(mode: Exclude<Mode, 'paused'>): Promise<void> {
     return this.command(async token => {
       if (!['manual', 'training', 'inference'].includes(mode)) throw new Error('Invalid session mode.');
       this.prepare();
-      if (mode === 'training' && this.spent >= this.budget) { this.notice = 'Training budget reached.'; return; }
+      if (mode === 'training' && this.budgetExhausted()) { this.stopAtBudget(); return; }
       if (token !== this.generation) return;
       this.mode = mode;
       this.schedule(token);
@@ -102,7 +103,7 @@ export class TrainingSession {
       this.agent.dispose(); this.agent = replacement;
       this.initialWeights = weightValues(this.agent);
       this.trainingSteps = this.inferenceSteps = this.trainingEpisodes = this.trainingSuccesses = this.spent = 0;
-      this.recentEpisodes = []; this.evaluation = null; this.notice = '';
+      this.recentEpisodes = []; this.evaluation = null; this.notice = ''; this.experimentDeadline = Infinity;
       this.env.reset(TRAINING_PROTOCOL.environmentSeed); this.runner = this.createRunner();
     });
   }
@@ -112,7 +113,7 @@ export class TrainingSession {
       if (mode !== 'training' && mode !== 'inference') throw new Error('Invalid step mode.');
       this.prepare();
       for (let i = 0; i < count && token === this.generation; i++) {
-        if (mode === 'training' && this.spent >= this.budget) break;
+        if (mode === 'training' && this.budgetExhausted()) { this.stopAtBudget(); break; }
         await this.transition(mode);
         if (i % 4 === 3) await new Promise(resolve => setTimeout(resolve, 0));
       }
@@ -185,7 +186,10 @@ export class TrainingSession {
   }
   async evaluate(): Promise<EvaluationReport> {
     let report: EvaluationReport | undefined;
-    await this.command(async () => { report = await evaluatePolicies(this.agent); this.evaluation = report; }, true);
+    await this.command(async () => {
+      const deadline = Math.min(this.experimentDeadline, Date.now() + TRAINING_PROTOCOL.wallLimitMs);
+      report = await evaluatePolicies(this.agent, deadline); this.evaluation = report;
+    }, true);
     return report!;
   }
   async dispose(): Promise<void> {
@@ -194,6 +198,12 @@ export class TrainingSession {
     });
   }
 
+  private budgetExhausted(): boolean { return this.spent >= this.budget || Date.now() >= this.experimentDeadline; }
+  private stopAtBudget(): void {
+    this.halt();
+    this.notice = Date.now() >= this.experimentDeadline ? 'Five-minute experiment wall-time budget reached.' : 'Training transition budget reached.';
+    this.emit(true);
+  }
   private createAgent(storage = this.storage): DQNAgent { return new DQNAgent({ ...DQN_CONFIG, storageProvider: storage }); }
   private createRunner(): IgnitionEnvTFJS {
     const runner = new IgnitionEnvTFJS(this.env); runner.agent = this.agent; return runner;
@@ -233,7 +243,7 @@ export class TrainingSession {
           const mode = this.mode;
           for (let i = 0; i < (mode === 'training' ? 4 : 1) && token === this.generation; i++) {
             if (mode === 'paused') break;
-            if (mode === 'training' && this.spent >= this.budget) { this.halt(); this.notice = 'Training budget reached.'; this.emit(true); break; }
+            if (mode === 'training' && this.budgetExhausted()) { this.stopAtBudget(); break; }
             await this.transition(mode);
           }
           if (token === this.generation) this.schedule(token);
@@ -247,7 +257,10 @@ export class TrainingSession {
       if (!this.env.done()) this.env.step(this.manualAction());
     } else {
       // Reserve budget before awaiting fit: a rejected fit has already advanced physics.
-      if (mode === 'training') this.spent++;
+      if (mode === 'training') {
+        if (this.experimentDeadline === Infinity) this.experimentDeadline = Date.now() + TRAINING_PROTOCOL.wallLimitMs;
+        this.spent++;
+      }
       const previousSteps = this.env.steps;
       const previousEpisode = this.env.lastEpisode;
       let result;

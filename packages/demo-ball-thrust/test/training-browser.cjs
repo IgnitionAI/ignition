@@ -40,8 +40,9 @@ fs.mkdirSync(output, { recursive: true });
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
       });
-      if (!model?.weightData) throw new Error('Checkpoint has no real TensorFlow weights');
-      return { modelId, metadata: JSON.parse(localStorage.getItem(keys[0])), weightSpecs: model.weightSpecs, bytes: Array.from(new Uint8Array(model.weightData)) };
+      const artifacts = model?.modelArtifacts;
+      if (!artifacts?.weightData) throw new Error('Checkpoint has no real TensorFlow weights');
+      return { modelId, metadata: JSON.parse(localStorage.getItem(keys[0])), weightSpecs: artifacts.weightSpecs, bytes: Array.from(new Uint8Array(artifacts.weightData)) };
     } finally { db.close(); }
   });
   const save = async name => {
@@ -74,6 +75,7 @@ fs.mkdirSync(output, { recursive: true });
 
     // One measured run, no tuning/retry: only pause/resume on the same trajectory.
     const startedAt = Date.now();
+    const experimentDeadline = startedAt + 300000;
     await click('train');
     await page.waitForFunction(() => parseFloat(document.querySelector('[data-testid="train-steps"]').textContent) >= 64);
     await click('pause'); await paused();
@@ -84,7 +86,7 @@ fs.mkdirSync(output, { recursive: true });
     metrics.checks.push({ name: 'real updates and awaited pause', initial, warm });
     await page.screenshot({ path: path.join(output, '03-real-training.png'), fullPage: true });
     await click('train');
-    await page.waitForFunction(() => parseFloat(document.querySelector('[data-testid="train-steps"]').textContent) >= 4096, undefined, { timeout: Math.max(1, 300000 - (Date.now() - startedAt)) });
+    await page.waitForFunction(() => parseFloat(document.querySelector('[data-testid="train-steps"]').textContent) >= 4096, undefined, { timeout: Math.max(1, experimentDeadline - Date.now()) });
     await paused();
     const trained = await snapshot();
     metrics.training = { ...trained, wallMs: Date.now() - startedAt, seed: 70, agentSeed: 68, maximumTransitions: 4096 };
@@ -109,9 +111,11 @@ fs.mkdirSync(output, { recursive: true });
     persist();
 
     await click('evaluate');
-    await page.getByTestId('evaluation-table').waitFor({ timeout: 60000 });
+    await page.getByTestId('evaluation-table').waitFor({ timeout: Math.max(1, experimentDeadline - Date.now()) });
     await paused();
     metrics.evaluation = JSON.parse(await page.getByTestId('evaluation-json').textContent());
+    metrics.experimentWallMs = Date.now() - startedAt;
+    assert(metrics.experimentWallMs <= 300000, 'common training/evaluation wall budget exceeded');
     for (const policy of ['initial', 'trained', 'random']) {
       assert.deepEqual(metrics.evaluation[policy].episodes.map(episode => episode.seed), [1000,1001,1002,1003,1004,1005,1006,1007]);
       assert(metrics.evaluation[policy].episodes.every(episode => episode.steps <= 300 && Number.isFinite(episode.return)));

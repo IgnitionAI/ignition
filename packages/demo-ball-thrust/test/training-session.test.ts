@@ -1,6 +1,6 @@
 import RAPIER from '@dimforge/rapier3d-compat';
 import * as tf from '@tensorflow/tfjs';
-import { beforeAll, expect, it } from 'vitest';
+import { beforeAll, expect, it, vi } from 'vitest';
 import { BallThrustEnv } from '../src/ball-thrust-env';
 import { TrainingSession, weightValues, MODEL_ID } from '../src/training-session';
 import type { ModelInfo, ModelStorageProvider } from '@ignitionai/storage';
@@ -97,6 +97,25 @@ it('enforces the per-network cap through pause/resume/reset and clears it only w
     await session.runSteps(1, 'training');
     expect(session.snapshot().trainingSteps).toBe(1);
   } finally { await session.dispose(); }
+});
+
+it('stops training and evaluation at the common five-minute experiment deadline without changing weights', async () => {
+  const clock = vi.spyOn(Date, 'now').mockReturnValue(1000);
+  const session = new TrainingSession(new BallThrustEnv());
+  try {
+    await session.runSteps(32, 'training');
+    const weights = weightValues(session.agent);
+    clock.mockReturnValue(301001);
+    await session.runSteps(20, 'training');
+    await session.start('training');
+    expect(session.snapshot()).toMatchObject({ trainingSteps: 32, updates: 1, budgetReached: true, mode: 'paused' });
+    await expect(session.evaluate()).rejects.toThrow(/wall-time/);
+    expect(weightValues(session.agent)).toEqual(weights);
+    await session.runSteps(2, 'inference');
+    expect(session.snapshot().inferenceSteps).toBe(2);
+    await session.newNetwork();
+    expect(session.snapshot().budgetReached).toBe(false);
+  } finally { clock.mockRestore(); await session.dispose(); }
 });
 
 it('round-trips real TF artifacts/state, rejects malformed metadata/artifacts and keeps the active network', async () => {

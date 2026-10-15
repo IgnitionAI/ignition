@@ -5,7 +5,7 @@ import { BallThrustEnv, type EpisodeSummary } from './ball-thrust-env';
 /** Frozen before execution at c95c98f. No automatic experiment is started. */
 export const TRAINING_PROTOCOL = Object.freeze({
   version: 1, seeds: Object.freeze([1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007]),
-  budget: 4096, environmentSeed: 70, agentSeed: 68, randomSeed: 2026, horizon: 300,
+  budget: 4096, environmentSeed: 70, agentSeed: 68, randomSeed: 2026, horizon: 300, wallLimitMs: 300000,
 });
 export const DQN_CONFIG: DQNConfig = {
   inputSize: 21, actionSize: 9, hiddenLayers: [32, 32], batchSize: 32, memorySize: 8192,
@@ -24,7 +24,11 @@ export interface EvaluationReport {
   random: PolicyEvaluation;
 }
 
-async function evaluatePolicy(agent: AgentInterface): Promise<PolicyEvaluation> {
+function checkDeadline(deadline: number): void {
+  if (Date.now() >= deadline) throw new Error('Experiment wall-time budget exceeded; evaluation incomplete.');
+}
+
+async function evaluatePolicy(agent: AgentInterface, deadline: number): Promise<PolicyEvaluation> {
   const episodes: EvaluationEpisode[] = [];
   for (const seed of TRAINING_PROTOCOL.seeds) {
     const env = new BallThrustEnv(seed);
@@ -32,7 +36,10 @@ async function evaluatePolicy(agent: AgentInterface): Promise<PolicyEvaluation> 
       const runner = new IgnitionEnvTFJS(env);
       runner.agent = agent;
       for (let step = 0; step < TRAINING_PROTOCOL.horizon; step++) {
+        checkDeadline(deadline);
         const result = await runner.inferStep();
+        checkDeadline(deadline);
+        if (step % 32 === 31) await new Promise(resolve => setTimeout(resolve, 0));
         if (result.terminated || result.truncated) {
           if (!env.lastEpisode) throw new Error('Evaluation episode summary missing.');
           episodes.push({ ...env.lastEpisode });
@@ -46,7 +53,9 @@ async function evaluatePolicy(agent: AgentInterface): Promise<PolicyEvaluation> 
 }
 
 /** Independent worlds, greedy network actions, no fit/replay or visible-world mutation. */
-export async function evaluatePolicies(trained: DQNAgent): Promise<EvaluationReport> {
+export async function evaluatePolicies(trained: DQNAgent, deadline = Date.now() + TRAINING_PROTOCOL.wallLimitMs): Promise<EvaluationReport> {
+  if (!Number.isFinite(deadline)) throw new RangeError('Evaluation deadline must be finite.');
+  checkDeadline(deadline);
   const initial = new DQNAgent({ ...DQN_CONFIG });
   let randomState = TRAINING_PROTOCOL.randomSeed;
   const random: AgentInterface = {
@@ -56,6 +65,6 @@ export async function evaluatePolicies(trained: DQNAgent): Promise<EvaluationRep
     }, remember: () => {}, train: async () => {}, reset: () => {},
   };
   try {
-    return { initial: await evaluatePolicy(initial), trained: await evaluatePolicy(trained), random: await evaluatePolicy(random) };
+    return { initial: await evaluatePolicy(initial, deadline), trained: await evaluatePolicy(trained, deadline), random: await evaluatePolicy(random, deadline) };
   } finally { initial.dispose(); }
 }

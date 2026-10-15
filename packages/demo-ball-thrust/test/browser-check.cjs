@@ -22,7 +22,7 @@ fs.mkdirSync(output, { recursive: true });
   const metrics = { sha: execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim(), browser: await browser.version(), viewport: { width: 1440, height: 1100 }, deviceScaleFactor: 1, headless: false, checks: [] };
   const read = () => page.evaluate(() => {
     const text = (id) => document.querySelector(`[data-testid="${id}"]`).textContent;
-    return { position: text('position').split(',').map(Number), velocity: text('velocity').split(',').map(Number), elapsed: parseFloat(text('time')), speed: parseFloat(text('speed')), distance: parseFloat(text('distance')) };
+    return { position: text('position').split(',').map(Number), velocity: text('velocity').split(',').map(Number), elapsed: parseFloat(text('time')), speed: parseFloat(text('speed')), distance: parseFloat(text('distance')), reached: document.querySelector('aside h2[role="status"]').textContent.includes('Cible atteinte') };
   });
   const focus = () => page.getByRole('region', { name: /Arène/ }).focus();
   const reset = async (seed = 70) => {
@@ -43,7 +43,7 @@ fs.mkdirSync(output, { recursive: true });
     const deadline = Date.now() + 14000;
     while (Date.now() < deadline) {
       const state = await read();
-      if (Math.hypot(x - state.position[0], z - state.position[2]) < tolerance && state.speed < 0.45) { await control([]); return state; }
+      if (state.reached || (Math.hypot(x - state.position[0], z - state.position[2]) < tolerance && state.speed < 0.45)) { await control([]); return state; }
       const wanted = [];
       for (const [axis, target, negative, positive] of [[0, x, 'ArrowLeft', 'ArrowRight'], [2, z, 'ArrowUp', 'ArrowDown']]) {
         const signal = 2.8 * (target - state.position[axis]) - 1.9 * state.velocity[axis];

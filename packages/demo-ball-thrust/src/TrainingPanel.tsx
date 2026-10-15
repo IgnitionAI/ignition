@@ -4,6 +4,7 @@ import type { TrainingSession, SessionSnapshot } from './training-session';
 
 const MODE_LABELS = { manual: 'Manuel', training: 'Entraînement', inference: 'Inférence — poids figés', paused: 'En pause' };
 
+/** Renders real session counters and serialized training, checkpoint and inference controls. */
 export function TrainingPanel({ session, snapshot: state }: { session: TrainingSession; snapshot: SessionSnapshot }) {
   const [commandError, setCommandError] = useState('');
   const invoke = (operation: () => Promise<unknown>) => {
