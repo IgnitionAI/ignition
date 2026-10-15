@@ -1,0 +1,100 @@
+Release the right arrow: the sphere keeps rolling. Push toward an obstacle: it gets blocked or bounces. In Ball Thrust, these reactions are not animations written to convince the viewer. They come from the Rapier physics world.
+
+Before asking an agent to reach a target, we need to check that the world responds correctly to its future actions. **This first slice is a manually controlled physics game, with no neural network, training loop or RL reward.** We start by making the task playable and measurable.
+
+[**Try Ball Thrust 3D →**](/demos/ball-thrust/)
+
+## An arena for understanding inertia
+
+A cyan, 1 kg sphere moves inside a 12 × 12 m arena surrounded by four walls. Three fixed obstacles separate the start from the green beacon. The floor, walls and obstacles have real colliders; only the sphere is a dynamic body.
+
+![Ball Thrust before any impulse: cyan sphere, three obstacles and green target.](/images/blog/ball-thrust/initial.png)
+
+*Actual demo capture with seed 70. The camera observes the simulation; it does not move any physics body. The demo interface is currently in French.*
+
+Click inside the arena or select it with Tab, then use:
+
+| Control | Effect |
+| --- | --- |
+| Arrow keys, WASD or ZQSD | Horizontal impulses |
+| Two combined directions | Diagonal movement, without extra thrust magnitude |
+| Space, even while a direction remains held | No-op: no new impulse |
+| Releasing the keys | Also a no-op, not a brake |
+| Opposite direction to motion | Counter-thrust to brake |
+| Drag / scroll | Orbit / zoom without changing the control axes |
+
+Up always means −z and right means +x, even after rotating the camera. Keyboard play is the supported control mode; a narrow layout is not a touch controller.
+
+## An impulse is not a displacement
+
+The world advances in fixed 1/60 s steps. While a direction is held, the controller delivers a 0.65 N·s impulse every six steps: 10 impulses per second, independent of keyboard repeat or rendering frequency.
+
+An impulse changes momentum. For a mass of 1 kg, a horizontal 0.65 N·s impulse produces an immediate 0.65 m/s change in velocity along that axis, before contacts and damping take effect. It does not choose the next position. Rapier then resolves gravity, collisions, friction and restitution.
+
+Diagonals are normalized: pressing two arrows does not double the energy of each push. With a zero direction, `thrust()` does nothing: it does not set velocity to zero. Contact friction and damping gradually dissipate motion. To stop near the target, you need to anticipate and apply the opposite direction.
+
+Friction and restitution coefficients are 0.65 and 0.55 respectively; the sphere also uses linear damping of 0.25 and angular damping of 0.4. Continuous collision detection (CCD) and predictive contacts help limit tunneling at speed. These settings are not a substitute for contact tests.
+
+## Rapier decides, R3F displays
+
+`populateWorld()` creates bodies and colliders in the world provided by R3F's `Physics` component. That provider alone advances the browser simulation. The sphere mesh then copies the Rapier body's position and quaternion; no competing movement calculation runs in the renderer.
+
+The HUD reads that same body at 10 Hz: three-dimensional position and velocity, speed, horizontal target distance and simulated time. A rendering cadence of 120 frames per second therefore does not imply 120 physics steps per second.
+
+The target is reached when the sphere's center enters a horizontal radius of 0.7 m near floor height. The success message stays visible, but physics continues: reaching the target does not artificially freeze the sphere.
+
+## Recreate the same starting state
+
+The **Graine du monde** field accepts an integer from 0 to 4294967295. The seed determines the starting and target positions in two obstacle-free corners. With seed 70, the resting HUD position is approximately `(-4.32, 0.35, 4.44)` m.
+
+Pressing **Réinitialiser** does not simply move the mesh back. Reset recreates the physics world: bodies, linear and angular velocities, orientation, solver contacts and step count all return to their initial state. The canvas and camera stay alive.
+
+Two worlds with the same seed, Rapier version and actions at the same simulation steps follow the same trajectory in the tests. This is not a promise of identical trajectories across engine versions, or between two sessions where a human presses keys at roughly the same time.
+
+## The physics code that actually runs
+
+The following block is loaded directly from `packages/demo-ball-thrust/src/physics.ts`. This is the code shared by the scene and WASM tests, not a fictional agent example. It defines the world, impulses, telemetry and keyboard mapping. The R3F provider owns the world and its loop; this module does not create a second simulation.
+
+<!-- FIRST_AGENT_CODE -->
+
+To run the project locally, from a checkout containing this demo, use Node.js 20 or 22 and pnpm 10.8.0:
+
+```bash
+pnpm install --frozen-lockfile
+pnpm --filter demo-ball-thrust dev --host 127.0.0.1 --port 5173
+```
+
+Open [localhost:5173](http://localhost:5173). The package reuses React, Three, React Three Fiber and Rapier already present in the monorepo; no server backend or model download is needed.
+
+## Verify before training
+
+![The sphere on the green beacon, with the HUD reporting Cible atteinte.](/images/blog/ball-thrust/goal.png)
+
+*The target was reached through keyboard input in a real browser. This shows that the task is playable; it does not measure a learned policy's performance.*
+
+The 41 dedicated tests use the real Rapier/WASM engine and the same factory as the scene. They check, among other things:
+
+- zero initial velocities and trajectory reproducibility after reset;
+- impulses, diagonals and no-op without teleportation;
+- floor support, dissipation and rebounds against each of the three obstacles;
+- containment during 30 seconds of continuous thrust in each of the eight directions, using seeds 0, 70, 71 and 4294967295. A transient 3 cm tolerance is allowed for the contact solver, without position clamping.
+
+To run them again:
+
+```bash
+pnpm --filter demo-ball-thrust test
+pnpm --filter demo-ball-thrust typecheck
+pnpm test
+```
+
+Validation of source commit `d79341e1665c6413992378ce775941d909b45d32` also checked controls, resets, the target, orbiting and a text error when WebGL is unavailable. On Apple M4, headed Chrome 155 with ANGLE Metal, a moving walkthrough measured an average RAF cadence of 120.01 FPS over 30 seconds, with a 9.2 ms inter-frame p95 and no console errors. This is a local RAF measurement, not GPU timing or a mobile performance promise.
+
+Screenshots, metrics and commands are preserved in `evidence/d79341e1665c6413992378ce775941d909b45d32/`. The distinction matters: a green build alone proves neither a collision nor a correct reset.
+
+## Next: an RL contract, not a more convincing animation
+
+This slice does not yet provide a `TrainingEnv`, policy or reward. The next step needs bounded observations, explicit actions, a dense reward, distinct episode endings (`terminated` and `truncated`) and a seeded reset. The agent must control this same physics world, without letting the renderer take over the simulation.
+
+For now, try reaching the target and then stopping there. If doing that at the keyboard already requires anticipating inertia, the future agent will have a genuine control problem to learn.
+
+[**Play Ball Thrust 3D →**](/demos/ball-thrust/)

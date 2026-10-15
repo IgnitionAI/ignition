@@ -1,5 +1,11 @@
 [
   {
+    "slug": "ball-thrust-physique-rapier",
+    "title": "Ball Thrust 3D: physics before learning",
+    "description": "Steer a sphere with impulses and verify collisions, inertia and reproducible resets before adding an RL agent.",
+    "imageAlt": "The Ball Thrust sphere on the green target, with the HUD reporting success"
+  },
+  {
     "slug": "mountaincar-prendre-elan",
     "title": "MountainCar: learning to build momentum",
     "description": "Understand why backing up can help an agent reach the summit.",

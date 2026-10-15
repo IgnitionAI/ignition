@@ -87,5 +87,17 @@
     "algos": "Q-Table \u00b7 DQN \u00b7 PPO",
     "accent": "#06b6d4",
     "featured": false
+  },
+  {
+    "slug": "ball-thrust",
+    "title": "Ball Thrust 3D",
+    "description": "Steer a dynamic sphere through a bounded Rapier arena. Real impulses, collisions and seeded resets; manual physics playground, no trained agent yet.",
+    "tech": "R3F · Rapier",
+    "algos": "Manual control · No training",
+    "accent": "#64d9eb",
+    "pkg": "demo-ball-thrust",
+    "dir": "packages/demo-ball-thrust",
+    "featured": false,
+    "platform": "Desktop keyboard"
   }
 ]
