@@ -260,14 +260,17 @@ export class RobotArmEnv implements TrainingEnv {
     this.lastReward = (2 * (d - dNext)) / 1.6 - (0.02 * dNext) / 1.6 - 0.01 - 0.02 * blocked + success;
     this.lastBlocked = blocked;
 
-    this.stats.commands += 1;
-    this.stats.blocked += blocked;
-    this.stats.return += this.lastReward;
-    this.stats.finalDistance = dNext;
     if (success === 1) {
       this.successFlag = true;
       if (this.stats.commandsToSuccess === null) this.stats.commandsToSuccess = this.stats.commands;
     }
+
+    this.stats.commands += 1;
+    this.stats.blocked += blocked;
+    this.stats.return += this.lastReward;
+    this.stats.finalDistance = dNext;
+    this.stats.success = this.successFlag;
+    this.stats.truncated = this.stats.commands >= MAX_COMMANDS && !this.successFlag;
   }
 
   /**

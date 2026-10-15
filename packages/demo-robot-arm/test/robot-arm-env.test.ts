@@ -230,6 +230,22 @@ describe('RobotArmEnv episodes and seeded reset', () => {
     expect(env.terminated()).toBe(false);
     expect(env.done()).toBe(true);
     expect(env.currentStats.commands).toBe(MAX_COMMANDS);
+    // the stats snapshot mirrors the terminal semantics (used by measurement)
+    expect(env.currentStats.truncated).toBe(true);
+    expect(env.currentStats.success).toBe(false);
+  });
+
+  it('stats snapshot mirrors success semantics at every step', () => {
+    const env = new RobotArmEnv(11);
+    const target = { q0: 6, q1: 2, q2: 2 };
+    env.reset(target);
+    env.setConfig(target);
+    env.step(1); // move away
+    expect(env.currentStats.success).toBe(false);
+    env.step(0); // back on target
+    expect(env.currentStats.success).toBe(true);
+    expect(env.currentStats.commandsToSuccess).toBe(2);
+    expect(env.currentStats.truncated).toBe(false);
   });
 
   it('success at command 80 terminates without truncation', () => {

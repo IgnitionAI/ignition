@@ -7,7 +7,13 @@
  * Budget per seed: 5000 transitions OR 3 minutes (first limit reached).
  * Outputs raw JSON to evidence/<SHA>/raw/ for the article and the report.
  */
-import '@tensorflow/tfjs-node';
+// ponytail: tfjs-node 4.22 calls util.isNullOrUndefined, removed in Node 26 —
+// shim it before loading the native backend (genuine tensorflow backend).
+import nodeUtil from 'node:util';
+if (typeof (nodeUtil as { isNullOrUndefined?: unknown }).isNullOrUndefined !== 'function') {
+  Object.assign(nodeUtil, { isNullOrUndefined: (v: unknown) => v === null || v === undefined });
+}
+await import('@tensorflow/tfjs-node');
 import * as tf from '@tensorflow/tfjs';
 import { execSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
