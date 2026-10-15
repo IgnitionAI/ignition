@@ -5,6 +5,49 @@ import { L1, L2, PIVOT_Y, SUCCESS_DISTANCE } from './robot-arm-env';
 import { useDemoStore } from './store';
 import { makeT } from './i18n';
 
+const DARK_METAL = { color: '#3f4b5f', metalness: 0.75, roughness: 0.35 };
+const LIGHT_METAL = { color: '#8b98ac', metalness: 0.8, roughness: 0.3 };
+
+/** Servo-style joint: housing cylinder along the pitch axis (X) + end caps. */
+function ServoJoint({ radius = 0.105, length = 0.15 }: { radius?: number; length?: number }) {
+  return (
+    <group>
+      <mesh castShadow rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[radius, radius, length, 24]} />
+        <meshStandardMaterial {...DARK_METAL} />
+      </mesh>
+      {[-1, 1].map((side) => (
+        <mesh key={side} castShadow position={[side * (length / 2 + 0.012), 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[radius * 0.68, radius * 0.68, 0.024, 20]} />
+          <meshStandardMaterial {...LIGHT_METAL} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+/** Rectangular link with a lighter top spine and end collars. */
+function Link({ length, width, color }: { length: number; width: number; color: string }) {
+  return (
+    <group>
+      <mesh position={[0, 0, length / 2]} castShadow>
+        <boxGeometry args={[width, width, length]} />
+        <meshStandardMaterial color={color} metalness={0.45} roughness={0.5} />
+      </mesh>
+      <mesh position={[0, width / 2 + 0.012, length / 2]} castShadow>
+        <boxGeometry args={[width * 0.4, 0.024, length * 0.84]} />
+        <meshStandardMaterial {...LIGHT_METAL} />
+      </mesh>
+      {[0.06, length - 0.06].map((z) => (
+        <mesh key={z} castShadow position={[0, 0, z]}>
+          <boxGeometry args={[width + 0.018, width + 0.018, 0.045]} />
+          <meshStandardMaterial {...DARK_METAL} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 function Arm() {
   const hud = useDemoStore((s) => s.hud);
   const reached = hud !== null && hud.distance <= (hud.successDistance ?? SUCCESS_DISTANCE);
@@ -17,33 +60,50 @@ function Arm() {
 
   return (
     <>
-      {/* Pedestal up to the pivot */}
-      <mesh position={[0, PIVOT_Y / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.14, 0.2, PIVOT_Y, 24]} />
-        <meshStandardMaterial color="#475569" metalness={0.6} roughness={0.4} />
+      {/* Base: mounting plate, bolts, stepped pedestal, yaw hub and accent ring */}
+      <mesh position={[0, 0.02, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.3, 0.34, 0.04, 32]} />
+        <meshStandardMaterial {...DARK_METAL} />
+      </mesh>
+      {[[0.22, 0.22], [-0.22, 0.22], [0.22, -0.22], [-0.22, -0.22]].map(([x, z]) => (
+        <mesh key={`${x}:${z}`} castShadow position={[x, 0.05, z]}>
+          <cylinderGeometry args={[0.022, 0.022, 0.03, 12]} />
+          <meshStandardMaterial {...LIGHT_METAL} />
+        </mesh>
+      ))}
+      <mesh position={[0, PIVOT_Y / 2 - 0.02, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.12, 0.17, PIVOT_Y - 0.04, 24]} />
+        <meshStandardMaterial {...DARK_METAL} />
+      </mesh>
+      <mesh position={[0, PIVOT_Y - 0.075, 0]} castShadow>
+        <cylinderGeometry args={[0.145, 0.145, 0.05, 24]} />
+        <meshStandardMaterial {...LIGHT_METAL} />
       </mesh>
 
       {/* Arm: yaw (base) → pitch (shoulder) → relative pitch (elbow) */}
       <group position={[0, PIVOT_Y, 0]} rotation={[0, q0, 0]}>
-        <mesh castShadow>
-          <sphereGeometry args={[0.09, 24, 16]} />
-          <meshStandardMaterial color="#94a3b8" metalness={0.7} roughness={0.3} />
+        {/* yaw hub + emissive ring showing the base joint */}
+        <mesh castShadow position={[0, -0.02, 0]}>
+          <cylinderGeometry args={[0.1, 0.115, 0.12, 24]} />
+          <meshStandardMaterial {...DARK_METAL} />
         </mesh>
+        <mesh position={[0, -0.085, 0]}>
+          <torusGeometry args={[0.125, 0.014, 12, 32]} />
+          <meshStandardMaterial color="#6366f1" emissive="#4338ca" emissiveIntensity={0.6} />
+        </mesh>
+        <ServoJoint />
         <group rotation={[-q1, 0, 0]}>
-          <mesh position={[0, 0, L1 / 2]} castShadow>
-            <boxGeometry args={[0.09, 0.09, L1]} />
-            <meshStandardMaterial color="#93c5fd" metalness={0.4} roughness={0.5} />
-          </mesh>
-          <mesh position={[0, 0, L1]} castShadow>
-            <sphereGeometry args={[0.075, 24, 16]} />
-            <meshStandardMaterial color="#94a3b8" metalness={0.7} roughness={0.3} />
-          </mesh>
-          <group rotation={[-q2, 0, 0]}>
-            <mesh position={[0, 0, L2 / 2]} castShadow>
-              <boxGeometry args={[0.07, 0.07, L2]} />
-              <meshStandardMaterial color="#c7d2fe" metalness={0.4} roughness={0.5} />
+          <Link length={L1} width={0.09} color="#93c5fd" />
+          <group position={[0, 0, L1]}>
+            <ServoJoint radius={0.085} length={0.13} />
+          </group>
+          <group rotation={[-q2, 0, 0]} position={[0, 0, L1]}>
+            <Link length={L2} width={0.07} color="#c7d2fe" />
+            {/* wrist collar + tip: solid sphere, distinct from the octahedral target */}
+            <mesh castShadow position={[0, 0, L2 - 0.035]}>
+              <cylinderGeometry args={[0.05, 0.056, 0.06, 18]} />
+              <meshStandardMaterial {...LIGHT_METAL} />
             </mesh>
-            {/* Tip: solid sphere, distinct from the octahedral target */}
             <mesh position={[0, 0, L2]} castShadow>
               <sphereGeometry args={[0.06, 24, 16]} />
               <meshStandardMaterial
