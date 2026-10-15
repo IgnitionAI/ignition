@@ -91,9 +91,9 @@
   {
     "slug": "ball-thrust",
     "title": "Ball Thrust 3D",
-    "description": "Steer a dynamic sphere through a bounded Rapier arena. Real impulses, collisions and seeded resets; manual physics playground, no trained agent yet.",
-    "tech": "R3F · Rapier",
-    "algos": "Manual control · No training",
+    "description": "Play a real Rapier arena, train a TensorFlow.js DQN, save locally and run the same network in inference. Seeded physics and measured evaluation; convergence is not guaranteed.",
+    "tech": "R3F · Rapier · TF.js",
+    "algos": "DQN · Manual control · Inference",
     "accent": "#64d9eb",
     "pkg": "demo-ball-thrust",
     "dir": "packages/demo-ball-thrust",

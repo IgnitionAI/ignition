@@ -1,18 +1,24 @@
-Relâchez la flèche droite : la sphère continue de rouler. Poussez vers un obstacle : elle se bloque ou rebondit. Dans Ball Thrust, ces réactions ne sont pas une animation écrite pour convaincre le spectateur. Elles viennent du monde physique Rapier.
+Relâchez la flèche droite : la sphère continue de rouler. Poussez vers un obstacle : elle se bloque ou rebondit. Dans Ball Thrust, ces réactions viennent du monde physique Rapier, pas d’une animation choisie par le réseau.
 
-Avant de demander à un agent d’atteindre une cible, il faut vérifier que le monde réagit correctement à ses futures actions. **Ce premier lot est un jeu physique manuel, sans réseau de neurones, sans entraînement et sans récompense RL.** On commence par rendre le problème jouable et mesurable.
+**La démo relie maintenant le jeu manuel, un vrai environnement `TrainingEnv`, un DQN TensorFlow.js entraînable et l’inférence sur ce même réseau.** On peut interrompre l’entraînement, conserver les poids dans le navigateur, recharger la page et observer la politique sans nouvelle mise à jour. Cela prouve un apprentissage effectif, pas une convergence automatique.
 
-[**Essayer Ball Thrust 3D →**](/demos/ball-thrust/)
+[**Jouer, entraîner et tester Ball Thrust 3D →**](/demos/ball-thrust/)
 
-## Une arène pour comprendre l’inertie
+## Le réseau commande une vraie physique
 
-Une sphère cyan de 1 kg évolue dans une arène de 12 × 12 m, entourée de quatre murs. Trois obstacles fixes séparent le départ de la balise verte. Le sol, les murs et les obstacles ont de vrais colliders ; seule la sphère est un corps dynamique.
+Une sphère cyan de 1 kg évolue dans une arène de 12 × 12 m, avec quatre murs et trois obstacles fixes. Tous ont de vrais colliders. Seule la sphère est dynamique ; ses mouvements proviennent d’impulsions, de la gravité et des contacts.
 
-![Ball Thrust avant toute impulsion : sphère cyan, trois obstacles et cible verte.](/images/blog/ball-thrust/initial.png)
+![L’arène Ball Thrust et le panneau DQN : architecture, transitions, mises à jour, exploration et empreinte des poids.](/images/blog/ball-thrust/training.png)
 
-*Capture réelle de la démo avec la graine 70. La caméra observe la simulation ; elle ne déplace aucun corps physique.*
+*Capture réelle d’un essai court de développement : 108 transitions, 77 mises à jour et des poids modifiés. Ce n’est ni le protocole de 4096 transitions ni une preuve de navigation réussie.*
 
-Cliquez dans l’arène ou sélectionnez-la avec Tab, puis utilisez :
+Le monde avance à pas fixes de 1/60 s. Une décision applique une impulsion normalisée de 0,65 N·s puis six pas Rapier : une action représente donc 0,1 s simulée. Le frottement vaut 0,65, la restitution 0,55 ; CCD et contacts prédictifs limitent les traversées à grande vitesse. Aucun clamp de position ni contrôleur caché n’aide l’agent.
+
+`BallThrustEnv` possède l’unique horloge physique. Le renderer R3F recopie la position et le quaternion Rapier, sans faire avancer une seconde simulation. L’entraînement accéléré change le temps mural, jamais le pas du solveur. Le HUD lit le même corps : position, vitesse, distance et temps simulé.
+
+## Commencer par jouer
+
+La démo s’ouvre en mode manuel. Cliquez dans l’arène ou sélectionnez-la avec Tab :
 
 | Commande | Effet |
 | --- | --- |
@@ -23,78 +29,80 @@ Cliquez dans l’arène ou sélectionnez-la avec Tab, puis utilisez :
 | Direction opposée au mouvement | Contre-poussée pour freiner |
 | Glisser / molette | Orbiter / zoomer sans changer les axes des commandes |
 
-Haut signifie toujours −z et droite +x, même après avoir tourné la caméra. Le jeu se pilote au clavier ; une mise en page étroite n’est pas un contrôleur tactile.
+Haut signifie −z et droite +x, quelle que soit la caméra. La perte de focus libère les touches ; le clavier n’intervient pas pendant l’entraînement ou l’inférence. Une mise en page étroite n’est pas un contrôleur tactile.
 
-## Une impulsion n’est pas un déplacement
+La graine uint32, par défaut 70, détermine le départ et la cible. **Réinitialiser** recrée le monde, stabilise la sphère pendant 120 pas hors compteur, puis laisse l’épisode en pause sans changer le réseau. Choisissez ensuite **Manuel**, **Entraîner / reprendre** ou **Inférence**. Même graine, moteur et séquence d’actions donnent la même trajectoire dans les tests ; ce n’est pas une garantie entre versions de Rapier.
 
-Le monde avance à pas fixes de 1/60 s. Tant qu’une direction est maintenue, le contrôleur délivre une impulsion de 0,65 N·s tous les six pas : 10 impulsions par seconde, indépendamment de la fréquence du clavier ou du rendu.
+## Un contrat RL explicite
 
-Une impulsion modifie la quantité de mouvement. Pour une masse de 1 kg, une impulsion horizontale de 0,65 N·s produit une variation immédiate de vitesse de 0,65 m/s sur cet axe, avant l’effet des contacts et de l’amortissement. Elle ne choisit pas la position suivante. C’est ensuite Rapier qui résout gravité, collisions, frottement et restitution.
+L’environnement accepte neuf indices : **0 no-op, 1 N, 2 NE, 3 E, 4 SE, 5 S, 6 SW, 7 W, 8 NW**. Les tableaux et indices invalides sont refusés.
 
-Les diagonales sont normalisées : appuyer sur deux flèches ne double pas l’énergie de chaque poussée. Avec une direction nulle, `thrust()` ne fait rien : elle ne remet pas la vitesse à zéro. Le frottement de contact et l’amortissement dissipent progressivement le mouvement. Pour s’arrêter près de la cible, il faut anticiper et utiliser la direction opposée.
+Les 21 observations, toutes finies et bornées dans `[-1,1]`, contiennent :
 
-Les coefficients de frottement et de restitution valent respectivement 0,65 et 0,55 ; la sphère utilise aussi un amortissement linéaire de 0,25 et angulaire de 0,4. La détection continue des collisions (CCD) et les contacts prédictifs limitent les traversées à grande vitesse. Ces réglages ne remplacent pas les tests de contact.
+- la position x/z divisée par 6 et la vitesse x/z divisée par 10 ;
+- le delta vers la cible x/z divisé par 12 ;
+- la hauteur au-dessus du rayon divisée par 2, puis la vitesse verticale divisée par 10 ;
+- les trois vitesses angulaires divisées par 25 ;
+- huit rayons horizontaux N, NE, E, SE, S, SW, W, NW, de portée 4 m, normalisés dans `[0,1]` en excluant la sphère ;
+- la position x/z de la cible divisée par 6.
 
-## Rapier décide, R3F affiche
+L’écrêtage normalise seulement les observations, pas le monde physique. La récompense dense est `5 × (distance précédente − distance actuelle) − 0,01`, moins `0,001` pour une poussée, plus 15 pour la cible ou moins 15 en cas de sortie physique anormale.
 
-`populateWorld()` crée les corps et colliders dans le monde fourni par le composant R3F `Physics`. Ce provider est le seul à faire avancer la simulation dans le navigateur. Le maillage de la sphère recopie ensuite la position et le quaternion du corps Rapier ; aucun calcul de mouvement concurrent ne tourne dans le rendu.
+La cible doit être à moins de 0,7 m près du sol. Succès ou défaillance physique donnent `terminated`. La limite de 300 actions, soit 30 s simulées, donne `truncated`, jamais les deux. L’épisode manuel se termine ; le runner remet automatiquement le monde à zéro en entraînement et en inférence.
 
-Le HUD lit le même corps à 10 Hz : position et vitesse en trois dimensions, norme de la vitesse, distance horizontale à la cible et temps simulé. Une cadence de rendu de 120 images par seconde ne signifie donc pas 120 pas physiques par seconde.
+## Le code d’environnement réellement exécuté
 
-La cible est atteinte quand le centre de la sphère entre dans un rayon horizontal de 0,7 m, près du sol. Le message de succès reste affiché, mais la physique continue : atteindre la cible n’immobilise pas artificiellement la sphère.
-
-## Refaire exactement le même départ
-
-Le champ **Graine du monde** accepte un entier de 0 à 4294967295. La graine détermine la position initiale et celle de la cible dans deux coins sans obstacle. Avec la graine 70, le HUD affiche au repos un départ à environ `(-4.32, 0.35, 4.44)` m.
-
-Appuyer sur **Réinitialiser** ne replace pas simplement le maillage. Le reset recrée le monde physique : corps, vitesses linéaire et angulaire, orientation, contacts du solveur et compteur de pas repartent à zéro. Le canvas et la caméra restent en place.
-
-Deux mondes avec la même graine, la même version de Rapier et les mêmes actions aux mêmes pas suivent la même trajectoire dans les tests. Ce n’est pas une garantie de trajectoires identiques entre versions du moteur, ni entre deux sessions où un humain appuie approximativement au même moment.
-
-## Le code physique réellement exécuté
-
-Le bloc suivant est chargé directement depuis `packages/demo-ball-thrust/src/physics.ts`. C’est le code commun à la scène et aux tests WASM, pas un exemple d’agent fictif. Il définit le monde, les impulsions, la télémétrie et la lecture des commandes. Le provider R3F possède le monde et sa boucle ; ce module ne crée pas une seconde simulation.
+Ce bloc est injecté depuis `packages/demo-ball-thrust/src/ball-thrust-env.ts`. Le même contrat est utilisé par la scène, le runner et les tests WASM. `populateWorld()` réutilise la factory physique du premier lot ; aucune physique simplifiée n’est réservée au réseau.
 
 <!-- FIRST_AGENT_CODE -->
 
-Pour lancer le projet localement, depuis un checkout contenant cette démo, utilisez Node.js 20 ou 22 et pnpm 10.8.0 :
+## Entraîner, mettre en pause et faire de l’inférence
+
+Le DQN existant possède **2057 paramètres**, avec l’architecture **21 → 32 → 32 → 9**. Il utilise TF.js sur CPU, Adam à 0,001, des batches de 32, un replay de 8192 transitions, γ = 0,99 et une cible mise à jour tous les 100 updates. La graine du réseau est 68. L’exploration part de 1 et décroît vers 0,05.
+
+`IgnitionEnvTFJS.step()` fournit les transitions d’entraînement ; `inferStep()` choisit les actions greedy sans mémorisation ni `fit`. Le code de la démo ne réimplémente ni le replay ni les cibles de Bellman.
+
+Dans le navigateur, **Entraîner / reprendre** fait évoluer le réseau. **Pause** attend aussi le `fit` déjà engagé avant de rendre la main. **Inférence** reprend exactement ce réseau, sans changer ses poids. Le panneau expose les compteurs d’updates, epsilon et une empreinte des poids ; la courbe montre les retours d’épisodes, pas une loss inventée.
+
+Pour reproduire ces opérations dans le package :
+
+```ts
+import RAPIER from '@dimforge/rapier3d-compat';
+import * as tf from '@tensorflow/tfjs';
+import { BallThrustEnv } from './src/ball-thrust-env';
+import { TrainingSession } from './src/training-session';
+
+await RAPIER.init();
+await tf.setBackend('cpu');
+await tf.ready();
+const session = new TrainingSession(new BallThrustEnv(70));
+await session.runSteps(4096, 'training');
+await session.save();
+const evaluation = await session.evaluate();
+await session.start('inference');
+// À la fermeture : await session.dispose();
+```
+
+**Sauvegarder localement** écrit le modèle dans IndexedDB, avec version, configuration, epsilon et compteurs. **Charger** permet de retrouver les poids après rechargement de la page. Les métadonnées et les vrais tenseurs sont validés avant remplacement de l’agent actif. Une erreur de quota, un checkpoint absent ou incompatible reste visible.
+
+Ce n’est pas une reprise bit à bit du processus d’entraînement : **replay, état de l’optimiseur et position du générateur aléatoire ne sont pas restaurés**. Le replay doit se remplir à nouveau. **Nouveau réseau** est l’action explicite qui repart des poids initiaux.
+
+## Mesurer plutôt que promettre une convergence
+
+Le protocole versionné a été figé avant exécution : entraînement sur la graine 70, réseau semé 68, plafond de **4096 transitions et cinq minutes**. Pause et nouvel épisode ne rendent pas du budget à un réseau déjà entraîné.
+
+**Évaluer les 3 politiques** compare le réseau initial, le réseau actuel en greedy et une baseline uniforme semée 2026 sur les mêmes graines inédites **1000 à 1007**, avec au plus 300 actions par épisode. L’évaluation utilise des mondes séparés, ne touche pas à l’arène visible et n’entraîne rien. Les résultats bruts dépliables donnent retour, succès, durée et distance finale pour chaque graine. Un meilleur retour avec zéro cible atteinte reste un échec de navigation, pas une réussite à rebaptiser.
+
+Les tests réels vérifient les collisions et resets, le contrat borné, les fins d’épisode, la modification des poids après entraînement, leur égalité exacte en inférence, la sauvegarde/recharge et le plateau de tenseurs. Les harness navigateur pilotent les vrais boutons et lisent les artefacts IndexedDB. Les preuves datées et liées à leur SHA sont conservées dans `evidence/` ; la cadence RAF et son p95 ne sont pas un chronométrage GPU ni une promesse mobile.
 
 ```bash
 pnpm install --frozen-lockfile
 pnpm --filter demo-ball-thrust dev --host 127.0.0.1 --port 5173
-```
-
-Ouvrez [localhost:5173](http://localhost:5173). Le package réutilise React, Three, React Three Fiber et Rapier déjà présents dans le monorepo ; aucun backend serveur ni modèle à télécharger n’est nécessaire.
-
-## Vérifier avant d’entraîner
-
-![La sphère sur la balise verte ; le HUD annonce Cible atteinte.](/images/blog/ball-thrust/goal.png)
-
-*La cible a été atteinte au clavier dans un navigateur réel. Ce résultat montre que la tâche est jouable ; il ne mesure pas les performances d’une politique apprise.*
-
-Les 41 tests dédiés utilisent le vrai moteur Rapier/WASM et la même factory que la scène. Ils vérifient notamment :
-
-- les vitesses initiales nulles et la reproductibilité d’une trajectoire après reset ;
-- les impulsions, les diagonales et le no-op sans téléportation ;
-- le support du sol, la dissipation et les rebonds contre chacun des trois obstacles ;
-- le maintien dans l’arène pendant 30 s de poussée continue pour chacune des huit directions, sur les graines 0, 70, 71 et 4294967295. Une tolérance transitoire de 3 cm est accordée au solveur de contact, sans clamp de position.
-
-Pour les relancer :
-
-```bash
 pnpm --filter demo-ball-thrust test
 pnpm --filter demo-ball-thrust typecheck
 pnpm test
 ```
 
-La recette du commit source `d79341e1665c6413992378ce775941d909b45d32` a aussi vérifié les commandes, les resets, la cible, l’orbite et une erreur textuelle en cas de WebGL indisponible. Sur Apple M4, Chrome 155 avec fenêtre et ANGLE Metal, un parcours en mouvement a mesuré 120,01 FPS RAF moyens sur 30 s, avec un p95 inter-frame de 9,2 ms et aucune erreur console. Il s’agit d’une mesure locale de cadence RAF, pas d’un chronométrage GPU ni d’une promesse mobile.
+Ouvrez [localhost:5173](http://localhost:5173), ou utilisez directement la démo embarquée. Aucun token, service distant ou modèle préentraîné n’est nécessaire.
 
-Les captures, métriques et commandes sont conservées dans `evidence/d79341e1665c6413992378ce775941d909b45d32/`. Le détail compte : un build vert seul ne démontre ni une collision ni un reset correct.
-
-## La suite : un contrat RL, pas une animation plus convaincante
-
-Ce lot ne fournit pas encore de `TrainingEnv`, de politique ou de récompense. L’étape suivante devra définir des observations bornées, des actions explicites, une récompense dense, des fins d’épisode distinctes (`terminated` et `truncated`) et un reset semé. L’agent devra commander ce même monde physique, sans que le rendu prenne le contrôle de la simulation.
-
-En attendant, essayez de rejoindre la cible puis de vous y arrêter. Si ce geste demande déjà d’anticiper l’inertie au clavier, le futur agent aura un vrai problème de contrôle à apprendre.
-
-[**Jouer à Ball Thrust 3D →**](/demos/ball-thrust/)
+[**Entraîner puis tester le réseau dans Ball Thrust 3D →**](/demos/ball-thrust/)

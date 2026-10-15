@@ -2,12 +2,12 @@
   {
     "environment": "ball-thrust",
     "slug": "ball-thrust-physique-rapier",
-    "title": "Ball Thrust 3D : la physique avant l’apprentissage",
-    "description": "Pilotez une sphère par impulsions et vérifiez collisions, inertie et reset reproductible avant d’ajouter un agent RL.",
+    "title": "Ball Thrust 3D : de Rapier au DQN entraînable",
+    "description": "Un vrai monde physique, 21 observations, un DQN qui apprend et une inférence vérifiable après sauvegarde locale.",
     "date": "2026-10-15",
-    "image": "/images/blog/ball-thrust/goal.png",
-    "imageAlt": "La sphère Ball Thrust sur la cible verte, avec le HUD indiquant Cible atteinte",
-    "example": "demo-ball-thrust/src/physics.ts"
+    "image": "/images/blog/ball-thrust/training.png",
+    "imageAlt": "L’arène Ball Thrust et son panneau DQN affichant des mises à jour réelles du réseau",
+    "example": "demo-ball-thrust/src/ball-thrust-env.ts"
   },
   {
     "environment": "mountaincar",

@@ -24,6 +24,10 @@ it('loads both Ball Thrust articles with real source, images and a buildable dem
       expect(content).toContain(source);
       expect(content).not.toContain('<!-- FIRST_AGENT_CODE -->');
       expect(content).toContain('](/demos/ball-thrust/)');
+      expect(content).toContain('await session.runSteps(4096, \'training\')');
+      expect(content).toContain('await session.start(\'inference\')');
+      expect(content).toContain('terminated');
+      expect(content).toContain('truncated');
       for (const image of Array.from(content.matchAll(/!\[[^\]]*\]\((\/images\/[^)]+)\)/g))) {
         expect(existsSync(resolve(webRoot, 'public', image[1].slice(1)))).toBe(true);
       }
@@ -32,7 +36,8 @@ it('loads both Ball Thrust articles with real source, images and a buildable dem
     expect(titles.size).toBe(2);
     const demo = demos.find((entry) => entry.slug === article.environment);
     expect(demo?.pkg).toBe('demo-ball-thrust');
-    expect(demo?.algos).toContain('No training');
+    expect(demo?.algos).toContain('DQN');
+    expect(demo?.algos).toContain('Inference');
     expect(existsSync(resolve(webRoot, '../..', demo!.dir, 'package.json'))).toBe(true);
   } finally {
     cwd.mockRestore();
