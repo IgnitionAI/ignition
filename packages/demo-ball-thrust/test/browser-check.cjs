@@ -138,7 +138,8 @@ fs.mkdirSync(output, { recursive: true });
     }));
     const samples = [];
     for (let index = 0; index < 10; index++) {
-      await control([['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft'][index % 4]]);
+      // Stay in the unobstructed west lane: reaching the goal ends a manual episode.
+      await control([['ArrowUp', 'ArrowDown'][index % 2]]);
       await page.waitForTimeout(3000); const state = await read(); samples.push(state);
       assert(Math.abs(state.position[0]) <= 5.68 && Math.abs(state.position[2]) <= 5.68);
     }
