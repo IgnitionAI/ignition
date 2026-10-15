@@ -22,7 +22,7 @@ it('renders both Ball Thrust articles with real source, images and a buildable d
       expect(content).toContain(source);
       expect(content).not.toContain('<!-- FIRST_AGENT_CODE -->');
       expect(content).toContain('](/demos/ball-thrust/)');
-      for (const image of content.matchAll(/!\[[^\]]*\]\((\/images\/[^)]+)\)/g)) {
+      for (const image of Array.from(content.matchAll(/!\[[^\]]*\]\((\/images\/[^)]+)\)/g))) {
         expect(existsSync(resolve(webRoot, 'public', image[1].slice(1)))).toBe(true);
       }
       expect(existsSync(resolve(webRoot, 'public', article.image.slice(1)))).toBe(true);
