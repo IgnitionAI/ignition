@@ -1,0 +1,21 @@
+$ pnpm --filter demo-ball-thrust build
+
+> demo-ball-thrust@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-ball-thrust
+> tsc --noEmit && vite build
+
+vite v6.3.3 building for production...
+transforming...
+✓ 605 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.62 kB │ gzip:     0.38 kB
+dist/assets/index-DnC9UWqq.css      3.50 kB │ gzip:     1.29 kB
+dist/assets/index-qnB3B3fY.js   3,183.48 kB │ gzip: 1,080.40 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.70s
+
+EXIT_CODE=0

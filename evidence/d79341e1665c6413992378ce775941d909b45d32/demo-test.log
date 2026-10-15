@@ -1,0 +1,20 @@
+$ pnpm --filter demo-ball-thrust test
+
+> demo-ball-thrust@0.0.0 test /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-ball-thrust
+> vitest run --root ../.. packages/demo-ball-thrust/test
+
+
+ RUN  v3.1.1 /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+
+stderr | packages/demo-ball-thrust/test/physics.test.ts
+using deprecated parameters for the initialization function; pass a single object instead
+
+ ✓ packages/demo-ball-thrust/test/physics.test.ts (41 tests) 1102ms
+
+ Test Files  1 passed (1)
+      Tests  41 passed (41)
+   Start at  19:54:16
+   Duration  1.31s (transform 18ms, setup 0ms, collect 32ms, tests 1.10s, environment 0ms, prepare 31ms)
+
+
+EXIT_CODE=0
