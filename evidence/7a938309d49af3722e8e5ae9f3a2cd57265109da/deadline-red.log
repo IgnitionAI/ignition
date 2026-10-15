@@ -1,0 +1,64 @@
+
+ RUN  v3.1.1 /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+
+stderr | packages/demo-ball-thrust/test/training-session.test.ts
+using deprecated parameters for the initialization function; pass a single object instead
+
+stderr | packages/demo-ball-thrust/test/training-session.test.ts > stops training and evaluation at the common five-minute experiment deadline without changing weights
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > stops training and evaluation at the common five-minute experiment deadline without changing weights
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ❯ packages/demo-ball-thrust/test/training-session.test.ts (8 tests | 1 failed | 7 skipped) 117ms
+   ↓ learns for 64 transitions, then freezes exact weights and updates for 32 inference transitions
+   ↓ awaits a real deferred fit before pause/reset/save and synchronizes after manual mode
+   ↓ enforces the per-network cap through pause/resume/reset and clears it only with a new network
+   × stops training and evaluation at the common five-minute experiment deadline without changing weights 101ms
+     → expected { Object (mode, busy, ...) } to match object { trainingSteps: 32, updates: 1, …(2) }
+(20 matching properties omitted from actual)
+   ↓ round-trips real TF artifacts/state, rejects malformed metadata/artifacts and keeps the active network
+   ↓ keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+   ↓ evaluates held-out worlds without changing the visible world, weights, counters or tensor count
+   ↓ recompiles an artifact without trainingConfig and performs real updates after loading
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/demo-ball-thrust/test/training-session.test.ts > stops training and evaluation at the common five-minute experiment deadline without changing weights
+AssertionError: expected { Object (mode, busy, ...) } to match object { trainingSteps: 32, updates: 1, …(2) }
+(20 matching properties omitted from actual)
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "budgetReached": true,[39m
+[32m-   "mode": "paused",[39m
+[32m-   "trainingSteps": 32,[39m
+[32m-   "updates": 1,[39m
+[31m+   "budgetReached": false,[39m
+[31m+   "mode": "training",[39m
+[31m+   "trainingSteps": 52,[39m
+[31m+   "updates": 21,[39m
+[2m  }[22m
+
+ ❯ packages/demo-ball-thrust/test/training-session.test.ts:111:32
+    109|     await session.runSteps(20, 'training');
+    110|     await session.start('training');
+    111|     expect(session.snapshot()).toMatchObject({ trainingSteps: 32, upda…
+       |                                ^
+    112|     await expect(session.evaluate()).rejects.toThrow(/wall-time/);
+    113|     expect(weightValues(session.agent)).toEqual(weights);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 skipped (8)
+   Start at  21:23:50
+   Duration  455ms (transform 61ms, setup 0ms, collect 153ms, tests 117ms, environment 0ms, prepare 26ms)
+

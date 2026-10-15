@@ -1,0 +1,28 @@
+
+> web@0.1.0 start /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/web
+> next start --hostname 127.0.0.1 --port 3071
+
+   ▲ Next.js 16.0.10
+   - Local:         http://127.0.0.1:3071
+   - Network:       http://127.0.0.1:3071
+
+ ✓ Starting...
+- [36minfo[0m [nextra] You have Next.js i18n enabled, read here https://nextjs.org/docs/app/building-your-application/routing/internationalization for the docs.
+ ✓ Ready in 135ms
+TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+    at Module.h (.next/server/chunks/ssr/[root-of-the-server]__1e1b7a89._.js:2:365)
+ ⨯ unhandledRejection:  TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+    at Module.h (.next/server/chunks/ssr/[root-of-the-server]__1e1b7a89._.js:2:365)
+TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+    at Module.h (.next/server/chunks/ssr/[root-of-the-server]__8a80a603._.js:2:365)
+ ⨯ unhandledRejection:  TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+    at Module.h (.next/server/chunks/ssr/[root-of-the-server]__8a80a603._.js:2:365)
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3071". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+    at Module.h (.next/server/chunks/ssr/[root-of-the-server]__1e1b7a89._.js:2:365)
+ ⨯ unhandledRejection:  TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+    at Module.h (.next/server/chunks/ssr/[root-of-the-server]__1e1b7a89._.js:2:365)
+TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+    at Module.h (.next/server/chunks/ssr/[root-of-the-server]__8a80a603._.js:2:365)
+ ⨯ unhandledRejection:  TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+    at Module.h (.next/server/chunks/ssr/[root-of-the-server]__8a80a603._.js:2:365)

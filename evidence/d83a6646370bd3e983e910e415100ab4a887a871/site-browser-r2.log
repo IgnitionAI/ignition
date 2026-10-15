@@ -1,0 +1,137 @@
+{
+  "sha": "d83a6646370bd3e983e910e415100ab4a887a871",
+  "browser": "155.0.8059.41",
+  "headless": false,
+  "locales": [
+    {
+      "locale": "fr",
+      "catalogue": 9,
+      "route": "/demos/ball-thrust/",
+      "manual": {
+        "origin": "-4.32, 0.35, 4.44",
+        "moved": "-3.64, 0.35, 4.44"
+      },
+      "trained": {
+        "training": 104,
+        "updates": 73,
+        "inference": 0,
+        "fingerprint": "0719b675"
+      },
+      "loaded": {
+        "training": 104,
+        "updates": 73,
+        "inference": 0,
+        "fingerprint": "0719b675"
+      },
+      "inferred": {
+        "training": 104,
+        "updates": 73,
+        "inference": 5,
+        "fingerprint": "0719b675"
+      },
+      "title": "Ball Thrust 3D : de Rapier au DQN entraînable",
+      "semanticTable": {
+        "rows": 6,
+        "cells": 12
+      },
+      "returnNavigation": true
+    },
+    {
+      "locale": "en",
+      "catalogue": 9,
+      "route": "/demos/ball-thrust/",
+      "manual": {
+        "origin": "-4.32, 0.35, 4.44",
+        "moved": "-3.64, 0.35, 4.44"
+      },
+      "trained": {
+        "training": 112,
+        "updates": 81,
+        "inference": 0,
+        "fingerprint": "cb0a670f"
+      },
+      "loaded": {
+        "training": 112,
+        "updates": 81,
+        "inference": 0,
+        "fingerprint": "cb0a670f"
+      },
+      "inferred": {
+        "training": 112,
+        "updates": 81,
+        "inference": 5,
+        "fingerprint": "cb0a670f"
+      },
+      "title": "Ball Thrust 3D: from Rapier to a trainable DQN",
+      "semanticTable": {
+        "rows": 6,
+        "cells": 12
+      },
+      "returnNavigation": true
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    "using deprecated parameters for the initialization function; pass a single object instead",
+    "using deprecated parameters for the initialization function; pass a single object instead",
+    "using deprecated parameters for the initialization function; pass a single object instead",
+    "using deprecated parameters for the initialization function; pass a single object instead",
+    "using deprecated parameters for the initialization function; pass a single object instead",
+    "using deprecated parameters for the initialization function; pass a single object instead"
+  ],
+  "cancelledRequests": [
+    "http://localhost:3071/fr?_rsc=eqsir",
+    "http://localhost:3071/fr/docs",
+    "http://localhost:3071/fr",
+    "http://localhost:3071/en?_rsc=1a28h",
+    "http://localhost:3071/fr?_rsc=1a28h",
+    "http://localhost:3071/fr/blog?_rsc=1a28h",
+    "http://localhost:3071/fr/docs?_rsc=1a28h",
+    "http://localhost:3071/fr/changelog?_rsc=1a28h",
+    "http://localhost:3071/fr/blog/mountaincar-prendre-elan?_rsc=ikl1s",
+    "http://localhost:3071/fr/blog/ball-thrust-physique-rapier?_rsc=ikl1s",
+    "http://localhost:3071/fr/blog?_rsc=ikl1s",
+    "http://localhost:3071/en/blog?_rsc=ikl1s",
+    "http://localhost:3071/fr/docs",
+    "http://localhost:3071/fr",
+    "http://localhost:3071/fr/blog/cartpole-3d-observations?_rsc=aocta",
+    "http://localhost:3071/fr/blog/gridworld-valeurs-actions?_rsc=aocta",
+    "http://localhost:3071/fr/blog/ball-thrust-physique-rapier?_rsc=aocta",
+    "http://localhost:3071/fr/blog/mountaincar-prendre-elan?_rsc=aocta",
+    "http://localhost:3071/fr/blog?_rsc=aocta",
+    "http://localhost:3071/fr/docs?_rsc=aocta",
+    "http://localhost:3071/en/blog?_rsc=aocta",
+    "http://localhost:3071/fr?_rsc=aocta",
+    "http://localhost:3071/fr/blog/ball-thrust-physique-rapier?_rsc=1m3we",
+    "http://localhost:3071/fr/docs",
+    "http://localhost:3071/fr",
+    "http://localhost:3071/fr?_rsc=eqsiq",
+    "http://localhost:3071/fr/docs",
+    "http://localhost:3071/fr",
+    "http://localhost:3071/fr?_rsc=1a28h",
+    "http://localhost:3071/en?_rsc=1a28h",
+    "http://localhost:3071/en/blog?_rsc=1a28h",
+    "http://localhost:3071/fr/docs?_rsc=1a28h",
+    "http://localhost:3071/fr/changelog?_rsc=1a28h",
+    "http://localhost:3071/en/blog/cartpole-3d-observations?_rsc=1tnl8",
+    "http://localhost:3071/en/blog/gridworld-valeurs-actions?_rsc=1tnl8",
+    "http://localhost:3071/en/blog/mountaincar-prendre-elan?_rsc=1tnl8",
+    "http://localhost:3071/en/blog/ball-thrust-physique-rapier?_rsc=1tnl8",
+    "http://localhost:3071/fr/blog?_rsc=1tnl8",
+    "http://localhost:3071/en/blog?_rsc=1tnl8",
+    "http://localhost:3071/en/docs",
+    "http://localhost:3071/en",
+    "http://localhost:3071/en/blog/cartpole-3d-observations?_rsc=1lrcz",
+    "http://localhost:3071/en/blog/gridworld-valeurs-actions?_rsc=1lrcz",
+    "http://localhost:3071/en/blog/mountaincar-prendre-elan?_rsc=1lrcz",
+    "http://localhost:3071/en/blog/ball-thrust-physique-rapier?_rsc=1lrcz",
+    "http://localhost:3071/fr/blog?_rsc=1lrcz",
+    "http://localhost:3071/en/docs?_rsc=1lrcz",
+    "http://localhost:3071/en?_rsc=1lrcz",
+    "http://localhost:3071/en/blog?_rsc=1lrcz",
+    "http://localhost:3071/en/blog/ball-thrust-physique-rapier?_rsc=19lpi",
+    "http://localhost:3071/fr/blog/ball-thrust-physique-rapier?_rsc=1iqrp",
+    "http://localhost:3071/fr/blog/ball-thrust-physique-rapier?_rsc=wrajq"
+  ],
+  "passed": true
+}

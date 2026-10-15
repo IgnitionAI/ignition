@@ -1,0 +1,12 @@
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert(metrics.performance.simulatedSeconds > 28)
+
+    at /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-ball-thrust/test/browser-check.cjs:146:5 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
