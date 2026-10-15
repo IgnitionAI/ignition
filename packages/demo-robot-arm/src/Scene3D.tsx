@@ -32,7 +32,7 @@ function Arm() {
         <group rotation={[-q1, 0, 0]}>
           <mesh position={[0, 0, L1 / 2]} castShadow>
             <boxGeometry args={[0.09, 0.09, L1]} />
-            <meshStandardMaterial color="#818cf8" metalness={0.5} roughness={0.45} />
+            <meshStandardMaterial color="#93c5fd" metalness={0.4} roughness={0.5} />
           </mesh>
           <mesh position={[0, 0, L1]} castShadow>
             <sphereGeometry args={[0.075, 24, 16]} />
@@ -41,7 +41,7 @@ function Arm() {
           <group rotation={[-q2, 0, 0]}>
             <mesh position={[0, 0, L2 / 2]} castShadow>
               <boxGeometry args={[0.07, 0.07, L2]} />
-              <meshStandardMaterial color="#a5b4fc" metalness={0.5} roughness={0.45} />
+              <meshStandardMaterial color="#c7d2fe" metalness={0.4} roughness={0.5} />
             </mesh>
             {/* Tip: solid sphere, distinct from the octahedral target */}
             <mesh position={[0, 0, L2]} castShadow>
@@ -93,11 +93,11 @@ function SceneContent() {
 
   return (
     <>
-      <color attach="background" args={['#0a0a1a']} />
-      <ambientLight intensity={0.45} />
+      <color attach="background" args={['#0d1024']} />
+      <ambientLight intensity={0.6} />
       <directionalLight
         position={[4, 6, 3]}
-        intensity={1.1}
+        intensity={1.5}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-far={20}
@@ -141,7 +141,7 @@ export function Scene3D() {
       <Canvas
         shadows
         dpr={[1, 1.75]}
-        camera={{ position: [2.8, 2.4, 3.0], fov: 42 }}
+        camera={{ position: [2.3, 2.1, 2.6], fov: 42 }}
         role="img"
         aria-label={t.canvasAlt}
       >

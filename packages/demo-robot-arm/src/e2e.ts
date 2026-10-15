@@ -20,7 +20,10 @@ interface E2EStatus {
  * greedy inference, exercise an episode reset, and report console errors + FPS.
  */
 export function maybeRunE2E(controller: RobotArmController): void {
-  if (new URLSearchParams(window.location.search).get('e2e') !== '1') return;
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('e2e') !== '1') return;
+  // evidence captures: freeze the page after a given phase for screenshots
+  const stopAfter = params.get('stopafter'); // 'train' | 'inference' | null
 
   const errors: string[] = [];
   const originalError = console.error.bind(console);
@@ -98,6 +101,14 @@ export function maybeRunE2E(controller: RobotArmController): void {
       const trainedDelta = model && before ? weightsDelta(before, snapshotWeights(model)) : 0;
 
       status.fpsTrain = await measureFps(4000);
+      if (stopAfter === 'train') {
+        controller.pause();
+        status.phase = 'frozen-train';
+        status.ok = errors.length === 0 && trainedDelta > 0;
+        publish();
+        window.clearInterval(timer);
+        return;
+      }
 
       status.phase = 'inference';
       publish();
@@ -110,6 +121,14 @@ export function maybeRunE2E(controller: RobotArmController): void {
         model && inferA ? weightsDelta(inferA, snapshotWeights(model)) : Number.POSITIVE_INFINITY;
       status.fpsInfer = await measureFps(4000);
       status.weightCheck = { trained: trainedDelta > 0, inferenceInvariant: inferDrift === 0 };
+      if (stopAfter === 'inference') {
+        controller.pause();
+        status.phase = 'frozen-inference';
+        status.ok = errors.length === 0 && trainedDelta > 0 && inferDrift === 0;
+        publish();
+        window.clearInterval(timer);
+        return;
+      }
 
       status.phase = 'episode';
       publish();
