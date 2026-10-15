@@ -1,10 +1,12 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { expect, it, vi } from 'vitest';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { BlogContent } from '../components/blog-content';
 import { findBlogArticle, getBlogArticles, readBlogArticle } from '../lib/blog';
 import demos from '../data/demos.json';
 
-it('renders both Ball Thrust articles with real source, images and a buildable demo route', () => {
+it('loads both Ball Thrust articles with real source, images and a buildable demo route', () => {
   const webRoot = resolve(import.meta.dirname, '..');
   const cwd = vi.spyOn(process, 'cwd').mockReturnValue(webRoot);
   try {
@@ -32,6 +34,24 @@ it('renders both Ball Thrust articles with real source, images and a buildable d
     expect(demo?.pkg).toBe('demo-ball-thrust');
     expect(demo?.algos).toContain('No training');
     expect(existsSync(resolve(webRoot, '../..', demo!.dir, 'package.json'))).toBe(true);
+  } finally {
+    cwd.mockRestore();
+  }
+});
+
+it('compiles the six controls into a semantic table in French and English', async () => {
+  const cwd = vi.spyOn(process, 'cwd').mockReturnValue(resolve(import.meta.dirname, '..'));
+  try {
+    const article = findBlogArticle('ball-thrust-physique-rapier');
+    if (!article) throw new Error('Missing Ball Thrust article');
+    for (const locale of ['fr', 'en']) {
+      const html = renderToStaticMarkup(await BlogContent({ source: readBlogArticle(article, locale) }));
+      expect(html.match(/<table(?:\s|>)/g) ?? []).toHaveLength(1);
+      expect(html.match(/<th(?:\s|>)/g) ?? []).toHaveLength(2);
+      expect(html.match(/<td(?:\s|>)/g) ?? []).toHaveLength(12);
+      expect(html).toContain(`<th>${locale === 'fr' ? 'Commande' : 'Control'}</th>`);
+      expect(html).toContain('data-rehype-pretty-code-figure');
+    }
   } finally {
     cwd.mockRestore();
   }

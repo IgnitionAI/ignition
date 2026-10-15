@@ -764,6 +764,9 @@ importers:
       rehype-pretty-code:
         specifier: ^0.14.0
         version: 0.14.3(shiki@3.23.0)
+      remark-gfm:
+        specifier: 4.0.1
+        version: 4.0.1
       swiper:
         specifier: ^8.4.7
         version: 8.4.7
