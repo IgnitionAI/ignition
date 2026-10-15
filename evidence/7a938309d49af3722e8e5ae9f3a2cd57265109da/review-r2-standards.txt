@@ -1,0 +1,29 @@
+## Standards — PASS
+
+Seconde revue statique, en lecture seule, du diff canonique complet `.scratch/ball-thrust-rl/review-r2.diff` et des fichiers source modifiés complets. L’ancien diff et le commit supersédé n’ont pas servi de référence. Aucune commande ni modification.
+
+### (a) Règles documentées
+
+**Aucune violation matérielle retenue** au regard de `.github/CONTRIBUTING.md`, des consignes injectées et de `packages/demo-ball-thrust/PLAN.md`.
+
+**Constat précédent clos :** `packages/demo-ball-thrust/src/TrainingPanel.tsx:7` possède désormais un commentaire TSDoc décrivant le composant et ses contrôles, conformément à « Write TSDoc for exported functions and classes ».
+
+L’absence sur disque d’`AGENTS.md` n’est pas considérée comme un défaut.
+
+### (b) Odeurs heuristiques
+
+Aucune odeur significative retenue après réexamen du référentiel complet. La séparation environnement physique, rendu, orchestration et évaluation reste cohérente. Les répétitions limitées ne justifient pas d’abstraction supplémentaire à elles seules.
+
+### (c) Défauts établis
+
+Aucun défaut matériel de correction, de sécurité ou de ressources établi par cette lecture.
+
+Les correctifs annoncés sont présents :
+- échéance commune transmise de `training-session.ts` à `evaluation.ts`, également utilisée par le harness navigateur ;
+- lecture des poids via la structure IndexedDB `model.modelArtifacts` dans `test/training-browser.cjs` ;
+- prise en compte du succès terminal dans `test/browser-check.cjs` ;
+- test de régression de l’échéance commune dans `test/training-session.test.ts`.
+
+Les 87 tests et le typecheck annoncés ne sont pas revérifiés ici ; cette conclusion ne constitue pas une validation d’exécution.
+
+**Bilan Standards : 0 violation documentaire retenue, 0 odeur significative, 0 défaut matériel établi. Pire constat restant : aucun. PASS.**

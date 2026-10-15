@@ -1,0 +1,418 @@
+{
+  "sha": "7a938309d49af3722e8e5ae9f3a2cd57265109da",
+  "status": "passed",
+  "browser": "155.0.8059.41",
+  "headless": false,
+  "checks": [
+    {
+      "name": "missing checkpoint is visible and recoverable",
+      "error": "Invalid checkpoint metadata."
+    },
+    {
+      "name": "real updates and awaited pause",
+      "initial": {
+        "trainingSteps": 0,
+        "updates": 0,
+        "inferenceSteps": 0,
+        "fingerprint": "381ea596",
+        "tensors": 16,
+        "epsilon": 1
+      },
+      "warm": {
+        "trainingSteps": 112,
+        "updates": 81,
+        "inferenceSteps": 0,
+        "fingerprint": "cb0a670f",
+        "tensors": 28,
+        "epsilon": 0.9222
+      }
+    },
+    {
+      "name": "reload checkpoint and 32+ inference transitions preserve all weight bytes and update counters",
+      "loaded": {
+        "trainingSteps": 4096,
+        "updates": 4065,
+        "inferenceSteps": 0,
+        "fingerprint": "194fc4c5",
+        "tensors": 16,
+        "epsilon": 0.05
+      },
+      "inferred": {
+        "trainingSteps": 4096,
+        "updates": 4065,
+        "inferenceSteps": 32,
+        "fingerprint": "194fc4c5",
+        "tensors": 16,
+        "epsilon": 0.05
+      }
+    },
+    {
+      "name": "new episode preserves learned network",
+      "passed": true
+    },
+    {
+      "name": "three fresh-network/load/infer cycles keep tensor count flat",
+      "tensorCounts": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4, Unspecified Version)",
+  "training": {
+    "trainingSteps": 4096,
+    "updates": 4065,
+    "inferenceSteps": 0,
+    "fingerprint": "194fc4c5",
+    "tensors": 28,
+    "epsilon": 0.05,
+    "wallMs": 11665,
+    "seed": 70,
+    "agentSeed": 68,
+    "maximumTransitions": 4096
+  },
+  "weightProof": {
+    "parameterCount": 2057,
+    "changedParameters": 1806,
+    "l1Difference": 407.029336712083
+  },
+  "evaluation": {
+    "initial": {
+      "episodes": [
+        {
+          "return": 13.842250435691442,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1000,
+          "distance": 8.699059233527162
+        },
+        {
+          "return": 10.270994558659304,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1001,
+          "distance": 8.790285152021747
+        },
+        {
+          "return": 9.932450076993439,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1002,
+          "distance": 9.227059231532946
+        },
+        {
+          "return": 7.9742794667992465,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1003,
+          "distance": 9.485836050550885
+        },
+        {
+          "return": 9.598442034395395,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1004,
+          "distance": 9.031510115603696
+        },
+        {
+          "return": 13.414382227335043,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1005,
+          "distance": 8.635942136580413
+        },
+        {
+          "return": 13.058229239649831,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1006,
+          "distance": 8.57496710945622
+        },
+        {
+          "return": 7.97433979382935,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1007,
+          "distance": 9.463096842008493
+        }
+      ],
+      "meanReturn": 10.758170979169131,
+      "successRate": 0
+    },
+    "trained": {
+      "episodes": [
+        {
+          "return": 47.13871176373641,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1000,
+          "distance": 2.03956696791813
+        },
+        {
+          "return": 43.099383143912654,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1001,
+          "distance": 2.2196074349710564
+        },
+        {
+          "return": 46.41335989067204,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1002,
+          "distance": 1.9312772687972015
+        },
+        {
+          "return": 70.4330648910345,
+          "steps": 44,
+          "outcome": "success",
+          "seed": 1003,
+          "distance": 0.551078965703801
+        },
+        {
+          "return": 44.19441290422043,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1004,
+          "distance": 2.106515941638663
+        },
+        {
+          "return": 70.64024196628935,
+          "steps": 67,
+          "outcome": "success",
+          "seed": 1005,
+          "distance": 0.6985701887895124
+        },
+        {
+          "return": 47.42462854199115,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1006,
+          "distance": 1.696487248987922
+        },
+        {
+          "return": 50.21909437603523,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1007,
+          "distance": 1.0065459255672935
+        }
+      ],
+      "meanReturn": 52.44536218473647,
+      "successRate": 0.25
+    },
+    "random": {
+      "episodes": [
+        {
+          "return": 13.332948693580947,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1000,
+          "distance": 8.801719581949229
+        },
+        {
+          "return": 66.97508688543422,
+          "steps": 294,
+          "outcome": "success",
+          "seed": 1001,
+          "distance": 0.46266668666674887
+        },
+        {
+          "return": 9.537258850074272,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1002,
+          "distance": 9.308297476916758
+        },
+        {
+          "return": 15.978841009871935,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1003,
+          "distance": 7.884323741936341
+        },
+        {
+          "return": -7.544312187774515,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1004,
+          "distance": 12.458860960037654
+        },
+        {
+          "return": 27.130082590926367,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1005,
+          "distance": 5.896602063862127
+        },
+        {
+          "return": 24.36026735078564,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1006,
+          "distance": 6.31415948722903
+        },
+        {
+          "return": -9.259973032260074,
+          "steps": 300,
+          "outcome": "timeout",
+          "seed": 1007,
+          "distance": 12.907959407226356
+        }
+      ],
+      "meanReturn": 17.563775020079852,
+      "successRate": 0.125
+    }
+  },
+  "experimentWallMs": 13778,
+  "performance": {
+    "durationMs": 30023.10000000894,
+    "frames": 901,
+    "fps": 30.010225459720406,
+    "p95Ms": 34.70000000000073,
+    "maxMs": 35.29999999999927,
+    "metric": "headed desktop RAF cadence, not GPU timing",
+    "inferenceTransitions": 292,
+    "simulatedSeconds": 29.2
+  },
+  "errors": [],
+  "console": [
+    {
+      "type": "warning",
+      "text": "using deprecated parameters for the initialization function; pass a single object instead"
+    },
+    {
+      "type": "log",
+      "text": "[DQN] Disposing model..."
+    },
+    {
+      "type": "log",
+      "text": "[DQN] ✅ DQNAgent disposed"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Saved to indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Saved to indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[DQN] Disposing model..."
+    },
+    {
+      "type": "log",
+      "text": "[DQN] ✅ DQNAgent disposed"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Saved to indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "warning",
+      "text": "using deprecated parameters for the initialization function; pass a single object instead"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] Loading from indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Loaded ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[DQN] Disposing model..."
+    },
+    {
+      "type": "log",
+      "text": "[DQN] ✅ DQNAgent disposed"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Saved to indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Saved to indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Saved to indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[DQN] Disposing model..."
+    },
+    {
+      "type": "log",
+      "text": "[DQN] ✅ DQNAgent disposed"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] Loading from indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Loaded ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[DQN] Disposing model..."
+    },
+    {
+      "type": "log",
+      "text": "[DQN] ✅ DQNAgent disposed"
+    },
+    {
+      "type": "log",
+      "text": "[DQN] Disposing model..."
+    },
+    {
+      "type": "log",
+      "text": "[DQN] ✅ DQNAgent disposed"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] Loading from indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Loaded ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[DQN] Disposing model..."
+    },
+    {
+      "type": "log",
+      "text": "[DQN] ✅ DQNAgent disposed"
+    },
+    {
+      "type": "log",
+      "text": "[DQN] Disposing model..."
+    },
+    {
+      "type": "log",
+      "text": "[DQN] ✅ DQNAgent disposed"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] Loading from indexeddb://ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[IndexedDBProvider] ✅ Loaded ball-thrust-dqn-v1"
+    },
+    {
+      "type": "log",
+      "text": "[DQN] Disposing model..."
+    },
+    {
+      "type": "log",
+      "text": "[DQN] ✅ DQNAgent disposed"
+    }
+  ]
+}

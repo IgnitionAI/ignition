@@ -1,0 +1,18 @@
+Executed source: 7a938309d49af3722e8e5ae9f3a2cd57265109da
+Branch: feat/69-ball-thrust-integration
+Worktree at evidence initialization (only the newly created evidence directory is untracked; source was clean immediately beforehand):
+?? evidence/7a938309d49af3722e8e5ae9f3a2cd57265109da/
+
+Node/pnpm:
+v26.10.0
+10.8.0
+
+OS/CPU:
+ProductName:		macOS
+ProductVersion:		26.6.2
+BuildVersion:		25G83
+Apple M4
+
+Verification commands:
+pnpm test
+pnpm run typecheck
