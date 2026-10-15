@@ -132,6 +132,18 @@ importers:
       '@dimforge/rapier3d-compat':
         specifier: 0.15.0
         version: 0.15.0
+      '@ignitionai/backend-tfjs':
+        specifier: workspace:*
+        version: link:../backend-tfjs
+      '@ignitionai/core':
+        specifier: workspace:*
+        version: link:../core
+      '@ignitionai/storage':
+        specifier: workspace:*
+        version: link:../storage
+      '@tensorflow/tfjs':
+        specifier: ^4.22.0
+        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
       '@react-three/drei':
         specifier: ^10.0.6
         version: 10.0.7(@react-three/fiber@9.1.2(@types/react@19.1.2)(immer@11.1.4)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(three@0.162.0))(@types/react@19.1.2)(@types/three@0.162.0)(immer@11.1.4)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(three@0.162.0)

@@ -1,8 +1,13 @@
 import { Component, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import RAPIER from '@dimforge/rapier3d-compat';
+import * as tf from '@tensorflow/tfjs';
 import { Scene } from './Scene';
-import type { Telemetry } from './Scene';
-import { CONTROL_KEYS } from './physics';
+import { ACTION_DIRECTIONS, BallThrustEnv } from './ball-thrust-env';
+import { TrainingSession } from './training-session';
+import type { SessionSnapshot } from './training-session';
+import { TrainingPanel } from './TrainingPanel';
+import { CONTROL_KEYS, keyboardDirection } from './physics';
 import './styles.css';
 
 class SceneErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
@@ -16,22 +21,48 @@ class SceneErrorBoundary extends Component<{ children: ReactNode }, { failed: bo
   }
 }
 
-function vector(value: Telemetry['position']) {
+function vector(value: { x: number; y: number; z: number }) {
   return `${value.x.toFixed(2)}, ${value.y.toFixed(2)}, ${value.z.toFixed(2)}`;
 }
 
 export function App() {
   const keys = useRef(new Set<string>());
-  const [seed, setSeed] = useState(70);
-  const [generation, setGeneration] = useState(0);
-  const [telemetry, setTelemetry] = useState<Telemetry | null>(null);
-  const [seedError, setSeedError] = useState('');
   const arena = useRef<HTMLDivElement>(null);
+  const [session, setSession] = useState<TrainingSession | null>(null);
+  const [snapshot, setSnapshot] = useState<SessionSnapshot | null>(null);
+  const [error, setError] = useState('');
+  const isManual = snapshot?.mode === 'manual';
+
+  useEffect(() => {
+    let cancelled = false;
+    let active: TrainingSession | undefined;
+    void (async () => {
+      await RAPIER.init();
+      await tf.setBackend('cpu');
+      await tf.ready();
+      if (cancelled) return;
+      active = new TrainingSession(new BallThrustEnv(70));
+      active.manualAction = () => {
+        const [x, z] = keyboardDirection(keys.current);
+        return ACTION_DIRECTIONS.findIndex(([dx, dz]) => x === dx && z === dz);
+      };
+      const current = active;
+      current.onChange = () => { if (!cancelled) setSnapshot(current.snapshot()); };
+      setSession(current);
+      setSnapshot(current.snapshot());
+      await current.start('manual');
+    })().catch((reason: unknown) => { if (!cancelled) setError(reason instanceof Error ? reason.message : String(reason)); });
+    return () => {
+      cancelled = true;
+      if (active) void active.dispose();
+    };
+  }, []);
 
   useEffect(() => {
     const release = () => keys.current.clear();
+    release();
     const keyDown = (event: KeyboardEvent) => {
-      if (!CONTROL_KEYS.has(event.code)) return;
+      if (!isManual || !CONTROL_KEYS.has(event.code)) return;
       event.preventDefault();
       keys.current.add(event.code);
     };
@@ -47,26 +78,29 @@ export function App() {
       window.removeEventListener('blur', release);
       document.removeEventListener('visibilitychange', release);
     };
-  }, []);
+  }, [isManual]);
 
+  const telemetry = snapshot?.telemetry;
   return <main>
     <header>
       <a className="brand" href="https://github.com/IgnitionAI/ignition">IGNITION<span>AI</span></a>
-      <span className="eyebrow">PHYSICS LAB / 01</span>
+      <span className="eyebrow">PHYSICS × DEEP RL</span>
     </header>
     <section className="heading">
-      <div><p className="eyebrow">IMPULSION · INERTIE · COLLISION</p><h1>Ball Thrust <span>3D</span></h1>
-        <p>Pilotez la sphère cyan jusqu’à la balise verte. Anticipez l’inertie.</p></div>
-      <div className="badge">RAPIER<span>Simulation réelle · 60 Hz</span></div>
+      <div><p className="eyebrow">IMPULSION · OBSERVATION · APPRENTISSAGE</p><h1>Ball Thrust <span>3D</span></h1>
+        <p>Pilotez la sphère, entraînez un vrai DQN, puis observez sa politique sans apprentissage.</p></div>
+      <div className="badge">RAPIER + TF.js<span>Physique 60 Hz · Actions 10 Hz · Réseau CPU</span></div>
     </section>
+    {error && <p role="alert">{error}</p>}
     <div className="layout">
-      <div className="viewport" ref={arena} tabIndex={0} role="region" aria-label="Arène Ball Thrust, contrôles clavier" aria-describedby="controls"
-        onPointerDown={() => arena.current?.focus()} onBlur={() => keys.current.clear()}>
-        <div className="scene-label">ARÈNE 12 × 12 m <span>VUE ORBITALE</span></div>
-        <SceneErrorBoundary>
-          <Scene generation={generation} seed={seed} keys={keys.current} onUpdate={setTelemetry} />
-        </SceneErrorBoundary>
-        <div className="legend"><span>● Sphère</span><span>◆ Cible</span><span>■ Obstacles</span></div>
+      <div className="stage">
+        <div className="viewport" ref={arena} tabIndex={0} role="region" aria-label="Arène Ball Thrust, contrôles clavier" aria-describedby="controls"
+          onPointerDown={() => arena.current?.focus()} onBlur={() => keys.current.clear()}>
+          <div className="scene-label">ARÈNE 12 × 12 m <span>VUE ORBITALE</span></div>
+          <SceneErrorBoundary>{session ? <Scene env={session.env} /> : <p className="scene-message" role="status">Initialisation Rapier et TensorFlow.js…</p>}</SceneErrorBoundary>
+          <div className="legend"><span>● Sphère</span><span>◆ Cible</span><span>■ Obstacles</span></div>
+        </div>
+        {session && snapshot && <TrainingPanel session={session} snapshot={snapshot} />}
       </div>
       <aside>
         <section className="panel">
@@ -81,34 +115,26 @@ export function App() {
           </dl>
         </section>
         <section className="panel" id="controls">
-          <p className="eyebrow">COMMANDES</p>
+          <p className="eyebrow">MODE MANUEL</p>
           <p><kbd>↑</kbd> <kbd>←</kbd> <kbd>↓</kbd> <kbd>→</kbd> ou <b>ZQSD / WASD</b></p>
-          <p>Combinez deux axes pour les diagonales. Haut = −z, droite = +x, quelle que soit la caméra.</p>
-          <p><kbd>Espace</kbd> ou relâcher = no-op. L’inertie continue ; la direction opposée freine.</p>
-          <p>Sélectionnez l’arène avec un clic ou Tab. Glissez pour orbiter, molette pour zoomer.</p>
+          <p>Huit directions. Haut = −z, droite = +x, quelle que soit la caméra.</p>
+          <p><kbd>Espace</kbd> ou relâcher = no-op ; la direction opposée freine.</p>
+          <p>Cliquez l’arène pour jouer. Glissez pour orbiter, molette pour zoomer. Le clavier n’intervient jamais dans la politique du réseau.</p>
         </section>
-        <form className="panel" onSubmit={(event) => {
+        {session && snapshot && <form className="panel" onSubmit={(event) => {
           event.preventDefault();
           const value = Number(new FormData(event.currentTarget).get('seed'));
-          if (!Number.isInteger(value) || value < 0 || value > 0xffffffff) {
-            setSeedError('Entrez un entier entre 0 et 4294967295.');
-            return;
-          }
           keys.current.clear();
-          setSeedError('');
-          setTelemetry(null);
-          setSeed(value);
-          setGeneration((current) => current + 1);
-          arena.current?.focus();
+          setError('');
+          void session.newEpisode(value).catch((reason: unknown) => setError(reason instanceof Error ? reason.message : String(reason)));
         }}>
           <label htmlFor="seed">Graine du monde</label>
           <div className="reset"><input id="seed" name="seed" type="number" min="0" max="4294967295" step="1" required defaultValue="70" />
-            <button type="submit">Réinitialiser ↺</button></div>
-          {seedError && <p role="alert">{seedError}</p>}
-          <p>Même graine, même départ. Le reset recrée le monde physique et remet le chrono à zéro.</p>
-        </form>
+            <button type="submit" data-testid="new-episode" disabled={snapshot.busy}>Réinitialiser ↺</button></div>
+          <p>Nouvel épisode en pause ; le réseau est conservé. Le monde physique est recréé à graine identique. Limite : 30 s simulées.</p>
+        </form>}
       </aside>
     </div>
-    <footer><span>01 / JEU PHYSIQUE</span><span>Sans IA · Impulsions 10 Hz · Masse 1 kg · Aucun déplacement cinématique</span></footer>
+    <footer><span>PHYSIQUE → DQN → INFÉRENCE</span><span>60 Hz fixes · 9 actions · 21 observations · Aucun déplacement cinématique</span></footer>
   </main>;
 }

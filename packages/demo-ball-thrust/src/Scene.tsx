@@ -1,57 +1,20 @@
-import { Suspense, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import { Physics, useAfterPhysicsStep, useBeforePhysicsStep, useRapier } from '@react-three/rapier';
 import { PerspectiveCamera } from 'three';
 import type { Mesh } from 'three';
-import { BALL_RADIUS, GOAL_RADIUS, GRAVITY, SOLIDS, SOLVER, TIME_STEP, initialState, keyboardDirection, populateWorld, readState, thrust } from './physics';
+import type { BallThrustEnv } from './ball-thrust-env';
+import { BALL_RADIUS, GOAL_RADIUS, SOLIDS } from './physics';
 
-export type Telemetry = ReturnType<typeof readState>;
-
-interface SceneProps {
-  seed: number;
-  keys: Set<string>;
-  onUpdate: (state: Telemetry) => void;
-}
-
-function Simulation({ seed, keys, onUpdate }: SceneProps) {
-  const { world, rapier } = useRapier();
-  const arena = useRef<ReturnType<typeof populateWorld> | null>(null);
+function Arena({ env }: { env: BallThrustEnv }) {
   const mesh = useRef<Mesh>(null);
-  const tick = useRef(0);
-  const reached = useRef(false);
-
-  useLayoutEffect(() => {
-    const simulation = populateWorld(world, rapier, seed);
-    arena.current = simulation;
-    onUpdate(readState(simulation.ball, simulation.goal, 0));
-    return () => {
-      arena.current = null;
-      // This Physics provider is dedicated to this arena, including StrictMode replay.
-      const bodies: Parameters<typeof world.removeRigidBody>[0][] = [];
-      world.forEachRigidBody((body) => bodies.push(body));
-      bodies.forEach((body) => world.removeRigidBody(body));
-    };
-  }, [world, rapier, seed, onUpdate]);
-
-  useBeforePhysicsStep(() => {
-    if (arena.current) thrust(arena.current.ball, keyboardDirection(keys), tick.current);
-  });
-  useAfterPhysicsStep(() => {
-    if (!arena.current) return;
-    tick.current += 1;
-    const state = readState(arena.current.ball, arena.current.goal, tick.current);
-    reached.current ||= state.reached;
-    if (tick.current % 6 === 0) onUpdate({ ...state, reached: reached.current });
-  });
+  // The environment is the only simulation owner. Rendering never steps Rapier.
   useFrame(() => {
-    if (!arena.current || !mesh.current) return;
-    const ball = arena.current.ball;
-    mesh.current.position.copy(ball.translation());
-    mesh.current.quaternion.copy(ball.rotation());
+    if (!mesh.current) return;
+    mesh.current.position.copy(env.ball.translation());
+    mesh.current.quaternion.copy(env.ball.rotation());
   });
-
-  const { goal } = initialState(seed);
+  const { goal } = env;
   return <>
     {SOLIDS.map((solid) => <mesh key={solid.id} position={[...solid.position]} castShadow receiveShadow>
       <boxGeometry args={[...solid.size]} />
@@ -101,7 +64,7 @@ function supportsWebGL() {
   }
 }
 
-export function Scene({ generation, ...props }: SceneProps & { generation: number }) {
+export function Scene({ env }: { env: BallThrustEnv }) {
   const [supported] = useState(supportsWebGL);
   if (!supported) return <p className="scene-message" role="alert">
     WebGL indisponible. Activez l’accélération graphique ou utilisez un navigateur compatible.
@@ -113,11 +76,7 @@ export function Scene({ generation, ...props }: SceneProps & { generation: numbe
     <directionalLight position={[-4, 12, 5]} intensity={2.5} castShadow
       shadow-mapSize={[1024, 1024]} shadow-camera-left={-8} shadow-camera-right={8}
       shadow-camera-top={8} shadow-camera-bottom={-8} shadow-normalBias={0.03} />
-    <Suspense fallback={null}>
-      <Physics key={generation} gravity={[GRAVITY.x, GRAVITY.y, GRAVITY.z]} timeStep={TIME_STEP} interpolate={false} {...SOLVER}>
-        <Simulation {...props} />
-      </Physics>
-    </Suspense>
+    <Arena env={env} />
     <CameraFraming />
     <OrbitControls makeDefault target={[0, 0, 0]} minDistance={11} maxDistance={25}
       minPolarAngle={0.15} maxPolarAngle={Math.PI / 2.3} enablePan={false} />

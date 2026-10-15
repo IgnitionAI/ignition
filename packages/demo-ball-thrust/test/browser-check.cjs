@@ -29,6 +29,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.getByLabel('Graine du monde').fill(String(seed));
     await page.getByRole('button', { name: /Réinitialiser/ }).click();
     await page.waitForFunction(() => parseFloat(document.querySelector('[data-testid="time"]').textContent) < 0.4);
+    await page.getByTestId('manual').click();
     await page.waitForTimeout(400);
     await focus();
   };
@@ -68,7 +69,8 @@ fs.mkdirSync(output, { recursive: true });
     const moving = await read();
     await control(['ArrowRight', 'Space']); await page.waitForTimeout(1000);
     const noop = await read(); await control([]);
-    metrics.checks.push({ name: 'impulse and space no-op preserve inertia', initial, moving, noop });
+    assert.equal(await page.getByTestId('train-steps').textContent(), '0 / 4096');
+    metrics.checks.push({ name: 'impulse and space no-op preserve inertia without training', initial, moving, noop });
     assert(moving.position[0] > initial.position[0] + 0.3);
     assert(noop.position[0] > moving.position[0] && noop.speed < moving.speed);
 
