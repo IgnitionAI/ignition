@@ -1,0 +1,16 @@
+$ node /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/evidence/67b37dfe945b2af9554c9c7e83d227f35b0d4ceb/blog-browser-check.cjs
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert((await page.title()).includes(title))
+
+    at /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/evidence/67b37dfe945b2af9554c9c7e83d227f35b0d4ceb/blog-browser-check.cjs:36:7 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+EXIT_CODE=1

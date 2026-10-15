@@ -1,0 +1,8 @@
+$ GITHUB_SHA=67b37dfe945b2af9554c9c7e83d227f35b0d4ceb pnpm --filter demo-ball-thrust typecheck
+
+> demo-ball-thrust@0.0.0 typecheck /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-ball-thrust
+> tsc --noEmit
+
+
+
+EXIT_CODE=0
