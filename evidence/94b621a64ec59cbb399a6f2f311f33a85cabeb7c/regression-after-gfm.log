@@ -1,0 +1,14 @@
+$ pnpm exec vitest run packages/web/test/ball-thrust-blog.test.ts
+
+ RUN  v3.1.1 /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+
+ ✓ packages/web/test/ball-thrust-blog.test.ts (2 tests) 258ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  20:43:44
+   Duration  646ms (transform 21ms, setup 0ms, collect 188ms, tests 258ms, environment 0ms, prepare 41ms)
+
+
+
+EXIT_CODE=0
