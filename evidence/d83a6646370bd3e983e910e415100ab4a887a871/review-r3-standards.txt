@@ -1,0 +1,13 @@
+**Standards — PASS**
+
+Le correctif dans `packages/demo-ball-thrust/test/browser-check.cjs:138–143` corrige le scénario de mesure sans affaiblir ses assertions : durée de 30 secondes, progression simulée `> 28`, confinement et absence d’erreurs restent exigés.
+
+Les preuves précédentes confirment la cause : l’ancien parcours atteignait réellement la cible à 6,6 secondes, puis conservait un état terminal pendant les échantillons suivants. Alterner nord/sud dans le couloir ouest évite cette terminaison attendue sans modifier la physique ni l’agent.
+
+La couverture indépendante des huit directions, des collisions et de l’atteinte de cible reste intacte. Le commentaire ajouté explique clairement la contrainte du scénario ; aucune abstraction supplémentaire n’est justifiée.
+
+Aucune violation applicable de `.github/CONTRIBUTING.md`, aucun smell matériel ni défaut établi de correction, sécurité ou ressources dans ce delta. `AGENTS.md` est absent du worktree.
+
+Revue statique uniquement : la réussite des nouvelles vérifications runtime reste à établir.
+
+**Bilan : 0 violation, 0 smell matériel, 0 défaut établi. Pire constat : aucun.**

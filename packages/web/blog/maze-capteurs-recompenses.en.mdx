@@ -1,0 +1,75 @@
+The path looks clear, then a moving danger cuts it off. A door changes the possible passage. In Maze, the useful decision depends on what the agent perceives right now.
+
+The maze connects a sensor to a behavior: going around a wall, opening a door, or avoiding a dangerous area. The reward guides exploration, but it can also favor an unexpected trade-off.
+
+**You will run the experiment and understand the link between its observations, its decisions, and its outcome.**
+
+[**Try Maze in the browser →**](/demos/maze/)
+
+## Start with the demo
+
+Pick an algorithm and click **Train**. Follow the rays, the door, and the collisions, then use **Inference**. The scene displays a 3D arena, while MazeEnv handles the logical movements and collisions in the plane.
+
+![The Maze demo before interaction.](/images/blog/maze/initial.png)
+
+*Initial state captured in Chromium. The screenshots show the journey, not a guaranteed score.*
+
+## What the agent receives
+
+MazeEnv provides 16 values: normalized position, orientation as sine/cosine, goal information, six sensors, danger proximity, door state, and recent progress. Its six actions are move forward, turn left/right, strafe left/right, or wait.
+
+## What the reward encourages
+
+The goal gives a base reward of 1.4. Otherwise, the base combines −0.012 and progress toward the goal multiplied by 0.15. A blocked action removes 0.09, a touched danger 0.18, and waiting 0.025. A discovered checkpoint adds 0.08. The episode ends at the goal or after 260 transitions.
+
+The full contract lives in [maze-env.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-maze/src/maze-env.ts). Read `observe()`, `step()`, and `reward()` together: a benchmark's name is not enough to define its implementation.
+
+## Reproducing the experiment with code
+
+Use Node.js 20 or 22 and pnpm 10.8.0. From the repository:
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter demo-maze dev --host 127.0.0.1 --port 5173
+```
+
+Open [localhost:5173](http://localhost:5173). On a VPS, use an SSH tunnel to that port to access it from your computer.
+
+The example is loaded directly from [blog-experiment.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-maze/src/examples/blog-experiment.ts): the article's code and the repository's code stay in sync.
+
+<!-- FIRST_AGENT_CODE -->
+
+While Vite is running, you can import this module in the browser console:
+
+```js
+const { createExperiment } = await import('/examples/blog-experiment.ts');
+const session = createExperiment();
+// After a few attempts:
+session.infer();
+session.stop();
+```
+
+The module creates an independent session. It does not attach it to the already-open scene: use the demo's buttons for the visual journey. `infer()` applies the current policy without training; `resume()` keeps the agent, and `stop()` cancels the upcoming ticks. A transition already in progress can still finish.
+
+## Observe, then evaluate
+
+![The Maze demo after its main interaction.](/images/blog/maze/active.png)
+
+*Screenshot of the same session after interaction. The presence of a scene and an active indicator confirms the journey, not a converged policy.*
+
+The six sensors do not describe the entire future of moving dangers. A good average reward is therefore not enough: also record arrivals, collisions, and blockages. Then try removing an observation to understand its role, without mixing the results of the two contracts.
+
+## Verifying this edition
+
+The demo was opened in Chromium and its training launched before the screenshot. The standalone example ran one training transition and one inference transition with 16 observations, then the mode-switching commands. No page or runner error was recorded during this verification. This journey verifies the integration; it does not prove convergence.
+
+## Your turn to run the experiment
+
+Reproduce the journey, then change a single element of the contract and compare your observations. You will have a concrete case to discuss what the agent knows, what it chooses, and what the reward values.
+
+[**Open Maze →**](/demos/maze/)
+
+To go further, see [the Ignition runner](/docs/how-it-works/core) and [the available algorithms](/docs/algorithms).

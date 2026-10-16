@@ -2,20 +2,11 @@ import { useDemoStore } from './store';
 
 export function CodePanel() {
   const { algorithm } = useDemoStore();
-  const code = `import { IgnitionEnv } from '@ignitionai/backend-tfjs';
+  const code = `import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
 import { MountainCarEnv } from './mountaincar-env';
 
 const car = new MountainCarEnv();
-
-const env = new IgnitionEnv({
-  getObservation: () => car.observe(),
-  actions: ['push_left', 'none', 'push_right'],
-  applyAction: (a) => car.step(a),
-  computeReward: () => car.reward(),
-  isTerminated: () => car.done(),
-  onReset: () => car.reset(),
-});
-
+const env = new IgnitionEnvTFJS(car);
 env.train('${algorithm}');`;
 
   return (

@@ -1,0 +1,1790 @@
+{
+  "seed": 11,
+  "stoppedBy": "transitions",
+  "budget": {
+    "maxTransitions": 5000,
+    "maxMinutes": 3
+  },
+  "transitions": 5000,
+  "updates": 4969,
+  "epsilon": 0.083315445059295,
+  "durationMs": 5692,
+  "transitionsPerSecond": 878.43,
+  "trainEpisodes": [
+    {
+      "episode": 1,
+      "commands": 80,
+      "blocked": 5,
+      "return": -1.737621922257351,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.9597199007767516,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 2,
+      "commands": 71,
+      "blocked": 13,
+      "return": 0.8732526446129845,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 71
+    },
+    {
+      "episode": 3,
+      "commands": 80,
+      "blocked": 12,
+      "return": -2.584026650826428,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.7806757459384022,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 4,
+      "commands": 80,
+      "blocked": 16,
+      "return": -3.0089056011742215,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.539169137875645,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 5,
+      "commands": 68,
+      "blocked": 7,
+      "return": 0.9083262033110643,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 68
+    },
+    {
+      "episode": 6,
+      "commands": 80,
+      "blocked": 10,
+      "return": -3.427182149871073,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.854184782170143,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 7,
+      "commands": 80,
+      "blocked": 9,
+      "return": -1.2809587070476611,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.1130681822261814,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 8,
+      "commands": 50,
+      "blocked": 6,
+      "return": 1.7064727156421817,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137373,
+      "commandsToSuccess": 50
+    },
+    {
+      "episode": 9,
+      "commands": 8,
+      "blocked": 1,
+      "return": 1.6345178066547752,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 8
+    },
+    {
+      "episode": 10,
+      "commands": 80,
+      "blocked": 2,
+      "return": -1.0233487905787133,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.39106300069254063,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 11,
+      "commands": 80,
+      "blocked": 37,
+      "return": -1.1244333771660158,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.56492181071557,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 12,
+      "commands": 80,
+      "blocked": 19,
+      "return": -1.8811235865245144,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.8670447712091093,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 13,
+      "commands": 46,
+      "blocked": 13,
+      "return": 1.834097382497692,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 46
+    },
+    {
+      "episode": 14,
+      "commands": 80,
+      "blocked": 28,
+      "return": -1.5193917828982217,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.3169464337321203,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 15,
+      "commands": 24,
+      "blocked": 2,
+      "return": 1.9430574950957356,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 24
+    },
+    {
+      "episode": 16,
+      "commands": 80,
+      "blocked": 13,
+      "return": -1.4869039559690458,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.4305782843121179,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 17,
+      "commands": 77,
+      "blocked": 12,
+      "return": 1.6032743892071053,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 77
+    },
+    {
+      "episode": 18,
+      "commands": 68,
+      "blocked": 10,
+      "return": 2.0512399276358226,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 68
+    },
+    {
+      "episode": 19,
+      "commands": 36,
+      "blocked": 5,
+      "return": 2.5722770772565178,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 36
+    },
+    {
+      "episode": 20,
+      "commands": 14,
+      "blocked": 0,
+      "return": 1.666336027551011,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 14
+    },
+    {
+      "episode": 21,
+      "commands": 14,
+      "blocked": 7,
+      "return": 1.2011968756087807,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 14
+    },
+    {
+      "episode": 22,
+      "commands": 80,
+      "blocked": 8,
+      "return": -1.3790643694738374,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.6208957626245644,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 23,
+      "commands": 44,
+      "blocked": 2,
+      "return": 1.6366180270976312,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 44
+    },
+    {
+      "episode": 24,
+      "commands": 27,
+      "blocked": 0,
+      "return": 1.4373765113762438,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 27
+    },
+    {
+      "episode": 25,
+      "commands": 45,
+      "blocked": 2,
+      "return": 3.220504485260763,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 45
+    },
+    {
+      "episode": 26,
+      "commands": 2,
+      "blocked": 0,
+      "return": 1.466544542501825,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 2
+    },
+    {
+      "episode": 27,
+      "commands": 68,
+      "blocked": 14,
+      "return": 0.5049397645416918,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 68
+    },
+    {
+      "episode": 28,
+      "commands": 25,
+      "blocked": 1,
+      "return": 2.515140479606408,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 25
+    },
+    {
+      "episode": 29,
+      "commands": 80,
+      "blocked": 4,
+      "return": 0.3406806525209533,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.16696038999330173,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 30,
+      "commands": 19,
+      "blocked": 3,
+      "return": 3.1463836618188212,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 19
+    },
+    {
+      "episode": 31,
+      "commands": 17,
+      "blocked": 0,
+      "return": 2.8663016989230323,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 17
+    },
+    {
+      "episode": 32,
+      "commands": 4,
+      "blocked": 0,
+      "return": 1.196523408822116,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137373,
+      "commandsToSuccess": 4
+    },
+    {
+      "episode": 33,
+      "commands": 4,
+      "blocked": 0,
+      "return": 1.625850270039354,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 4
+    },
+    {
+      "episode": 34,
+      "commands": 20,
+      "blocked": 3,
+      "return": 1.5719762145340672,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137348,
+      "commandsToSuccess": 20
+    },
+    {
+      "episode": 35,
+      "commands": 13,
+      "blocked": 0,
+      "return": 2.3157681806782078,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137372,
+      "commandsToSuccess": 13
+    },
+    {
+      "episode": 36,
+      "commands": 80,
+      "blocked": 2,
+      "return": -1.3002578267108236,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.5340022808047374,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 37,
+      "commands": 6,
+      "blocked": 0,
+      "return": 1.5011127946175784,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137361,
+      "commandsToSuccess": 6
+    },
+    {
+      "episode": 38,
+      "commands": 46,
+      "blocked": 2,
+      "return": 2.865420308941971,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 46
+    },
+    {
+      "episode": 39,
+      "commands": 31,
+      "blocked": 1,
+      "return": 2.3710504514342343,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 31
+    },
+    {
+      "episode": 40,
+      "commands": 14,
+      "blocked": 0,
+      "return": 1.902228360441491,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 14
+    },
+    {
+      "episode": 41,
+      "commands": 80,
+      "blocked": 0,
+      "return": -0.7321771056664392,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.11928922638240645,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 42,
+      "commands": 80,
+      "blocked": 8,
+      "return": -1.537582104284123,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.6129459492202813,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 43,
+      "commands": 80,
+      "blocked": 3,
+      "return": 0.831310146043954,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.3831362715032214,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 44,
+      "commands": 80,
+      "blocked": 57,
+      "return": -2.365130059459366,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.5041889656041056,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 45,
+      "commands": 8,
+      "blocked": 0,
+      "return": 1.1756171248726115,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 8
+    },
+    {
+      "episode": 46,
+      "commands": 17,
+      "blocked": 5,
+      "return": 2.387372669907215,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 17
+    },
+    {
+      "episode": 47,
+      "commands": 3,
+      "blocked": 0,
+      "return": 2.212946460593875,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 3
+    },
+    {
+      "episode": 48,
+      "commands": 6,
+      "blocked": 0,
+      "return": 2.753135032257645,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 6
+    },
+    {
+      "episode": 49,
+      "commands": 41,
+      "blocked": 2,
+      "return": 3.6950815122688243,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137368,
+      "commandsToSuccess": 41
+    },
+    {
+      "episode": 50,
+      "commands": 15,
+      "blocked": 0,
+      "return": 3.01752910882377,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 15
+    },
+    {
+      "episode": 51,
+      "commands": 17,
+      "blocked": 0,
+      "return": 3.987201546128028,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 17
+    },
+    {
+      "episode": 52,
+      "commands": 17,
+      "blocked": 0,
+      "return": 3.869446075857791,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 17
+    },
+    {
+      "episode": 53,
+      "commands": 15,
+      "blocked": 0,
+      "return": 1.2677004857021201,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 15
+    },
+    {
+      "episode": 54,
+      "commands": 26,
+      "blocked": 0,
+      "return": 2.505133578986194,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 26
+    },
+    {
+      "episode": 55,
+      "commands": 10,
+      "blocked": 0,
+      "return": 3.1565662717366485,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 10
+    },
+    {
+      "episode": 56,
+      "commands": 64,
+      "blocked": 4,
+      "return": 2.974749997493886,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 64
+    },
+    {
+      "episode": 57,
+      "commands": 14,
+      "blocked": 0,
+      "return": 4.054815334234534,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137355,
+      "commandsToSuccess": 14
+    },
+    {
+      "episode": 58,
+      "commands": 14,
+      "blocked": 0,
+      "return": 3.084306575227693,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 14
+    },
+    {
+      "episode": 59,
+      "commands": 46,
+      "blocked": 9,
+      "return": 1.9098767647666204,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137373,
+      "commandsToSuccess": 46
+    },
+    {
+      "episode": 60,
+      "commands": 21,
+      "blocked": 0,
+      "return": 1.765072879231605,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137373,
+      "commandsToSuccess": 21
+    },
+    {
+      "episode": 61,
+      "commands": 45,
+      "blocked": 15,
+      "return": 1.3812444904522603,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 45
+    },
+    {
+      "episode": 62,
+      "commands": 80,
+      "blocked": 4,
+      "return": -0.7482722774878645,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.17085449981019063,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 63,
+      "commands": 80,
+      "blocked": 38,
+      "return": 0.4774153212597806,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.36234666314352904,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 64,
+      "commands": 69,
+      "blocked": 2,
+      "return": 1.9884941162813734,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 69
+    },
+    {
+      "episode": 65,
+      "commands": 25,
+      "blocked": 0,
+      "return": 3.585913132481452,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 25
+    },
+    {
+      "episode": 66,
+      "commands": 80,
+      "blocked": 31,
+      "return": -1.2841478320123147,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.4169103180255067,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 67,
+      "commands": 24,
+      "blocked": 1,
+      "return": 3.1623418205618403,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 24
+    },
+    {
+      "episode": 68,
+      "commands": 6,
+      "blocked": 0,
+      "return": 2.599243211522486,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 6
+    },
+    {
+      "episode": 69,
+      "commands": 4,
+      "blocked": 0,
+      "return": 1.302484664367956,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137365,
+      "commandsToSuccess": 4
+    },
+    {
+      "episode": 70,
+      "commands": 63,
+      "blocked": 3,
+      "return": 1.0030241642268858,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 63
+    },
+    {
+      "episode": 71,
+      "commands": 18,
+      "blocked": 0,
+      "return": 2.606570273801491,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 18
+    },
+    {
+      "episode": 72,
+      "commands": 3,
+      "blocked": 0,
+      "return": 2.456119269916498,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 3
+    },
+    {
+      "episode": 73,
+      "commands": 80,
+      "blocked": 42,
+      "return": -2.1835561132325596,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.8211353993362259,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 74,
+      "commands": 31,
+      "blocked": 21,
+      "return": 1.3590824762395102,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 31
+    },
+    {
+      "episode": 75,
+      "commands": 31,
+      "blocked": 0,
+      "return": 1.63512932809893,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 31
+    },
+    {
+      "episode": 76,
+      "commands": 14,
+      "blocked": 0,
+      "return": 2.8617666588314474,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 14
+    },
+    {
+      "episode": 77,
+      "commands": 80,
+      "blocked": 9,
+      "return": 0.3261405600581411,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.36234666314352904,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 78,
+      "commands": 19,
+      "blocked": 0,
+      "return": 3.8345097700962674,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 19
+    },
+    {
+      "episode": 79,
+      "commands": 20,
+      "blocked": 1,
+      "return": 2.8876803236596706,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 20
+    },
+    {
+      "episode": 80,
+      "commands": 80,
+      "blocked": 2,
+      "return": 1.161644331911405,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.23494714599609254,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 81,
+      "commands": 68,
+      "blocked": 46,
+      "return": 0.39948775221889066,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 68
+    },
+    {
+      "episode": 82,
+      "commands": 80,
+      "blocked": 2,
+      "return": -0.8035907547142853,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.36234666314352904,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 83,
+      "commands": 7,
+      "blocked": 0,
+      "return": 3.895293265757941,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 7
+    },
+    {
+      "episode": 84,
+      "commands": 39,
+      "blocked": 17,
+      "return": 1.1014303094074083,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 39
+    },
+    {
+      "episode": 85,
+      "commands": 80,
+      "blocked": 36,
+      "return": 0.010486911649437755,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.1081045261800378,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 86,
+      "commands": 4,
+      "blocked": 0,
+      "return": 1.3122253150501266,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 4
+    },
+    {
+      "episode": 87,
+      "commands": 26,
+      "blocked": 2,
+      "return": 2.6640526568185314,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 26
+    },
+    {
+      "episode": 88,
+      "commands": 59,
+      "blocked": 24,
+      "return": 2.7882174948082357,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137366,
+      "commandsToSuccess": 59
+    },
+    {
+      "episode": 89,
+      "commands": 80,
+      "blocked": 1,
+      "return": 1.3041944218186552,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.1192892263824062,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 90,
+      "commands": 80,
+      "blocked": 38,
+      "return": -0.3527391505080273,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.6165618056447181,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 91,
+      "commands": 80,
+      "blocked": 0,
+      "return": -1.4909432636727507,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.5357568053111255,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 92,
+      "commands": 30,
+      "blocked": 0,
+      "return": 3.2429658935087957,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 30
+    },
+    {
+      "episode": 93,
+      "commands": 16,
+      "blocked": 0,
+      "return": 3.982342574750938,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137348,
+      "commandsToSuccess": 16
+    },
+    {
+      "episode": 94,
+      "commands": 2,
+      "blocked": 0,
+      "return": 1.5082574923837837,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 2
+    },
+    {
+      "episode": 95,
+      "commands": 7,
+      "blocked": 0,
+      "return": 2.124179664627364,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137333,
+      "commandsToSuccess": 7
+    },
+    {
+      "episode": 96,
+      "commands": 3,
+      "blocked": 0,
+      "return": 1.6593143231818555,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 3
+    },
+    {
+      "episode": 97,
+      "commands": 24,
+      "blocked": 0,
+      "return": 1.8468366033949228,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137366,
+      "commandsToSuccess": 24
+    },
+    {
+      "episode": 98,
+      "commands": 80,
+      "blocked": 11,
+      "return": -1.132893922718526,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.1669603899933015,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 99,
+      "commands": 52,
+      "blocked": 32,
+      "return": 2.448676555928555,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 52
+    },
+    {
+      "episode": 100,
+      "commands": 80,
+      "blocked": 0,
+      "return": 0.7312232373998175,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.16696038999330173,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 101,
+      "commands": 80,
+      "blocked": 15,
+      "return": 1.8991330886225481,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.18273666910807218,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 102,
+      "commands": 80,
+      "blocked": 60,
+      "return": 0.2429225777014099,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.2737533143274191,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 103,
+      "commands": 17,
+      "blocked": 0,
+      "return": 3.2563200558663743,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 17
+    },
+    {
+      "episode": 104,
+      "commands": 80,
+      "blocked": 11,
+      "return": 0.31919115166046746,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.22674931921340574,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 105,
+      "commands": 47,
+      "blocked": 2,
+      "return": 1.8092434859319537,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 47
+    },
+    {
+      "episode": 106,
+      "commands": 80,
+      "blocked": 0,
+      "return": 0.016751365771585147,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.4986974880976963,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 107,
+      "commands": 4,
+      "blocked": 0,
+      "return": 2.2134262262539908,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137339,
+      "commandsToSuccess": 4
+    },
+    {
+      "episode": 108,
+      "commands": 69,
+      "blocked": 0,
+      "return": 1.5402209575043726,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137339,
+      "commandsToSuccess": 69
+    },
+    {
+      "episode": 109,
+      "commands": 7,
+      "blocked": 0,
+      "return": 2.4705640887133544,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 7
+    },
+    {
+      "episode": 110,
+      "commands": 80,
+      "blocked": 16,
+      "return": -0.431067637302777,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.23653738102818783,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 111,
+      "commands": 4,
+      "blocked": 0,
+      "return": 1.6662601199412241,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137373,
+      "commandsToSuccess": 4
+    },
+    {
+      "episode": 112,
+      "commands": 7,
+      "blocked": 0,
+      "return": 2.274902618561602,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 7
+    },
+    {
+      "episode": 113,
+      "commands": 80,
+      "blocked": 12,
+      "return": -1.2870070416064667,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.40025837813394005,
+      "commandsToSuccess": null
+    },
+    {
+      "episode": 114,
+      "commands": 61,
+      "blocked": 0,
+      "return": 1.3406908556310437,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 61
+    }
+  ],
+  "trainSuccesses": 78,
+  "trainTruncations": 36,
+  "weightDeltaTotal": 449.384436578403,
+  "evalInitial": {
+    "label": "greedy",
+    "episodes": [
+      {
+        "commands": 80,
+        "blocked": 65,
+        "return": -1.9933656725144746,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.0901566276203123,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 79,
+        "return": -3.0953377132223343,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.5309968157129704,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -1.1289402669628434,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.402034711338991,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 76,
+        "return": -3.3261701222474644,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.0105991758201454,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -2.249308296782786,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.4952502890880628,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 74,
+        "return": -3.1018016940678175,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.7150141566185946,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 79,
+        "return": -4.495025428178502,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 2.1991839762770593,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -0.6341541177150654,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.40183025039511405,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 78,
+        "return": -4.679525504625735,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 2.517601866262122,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 79,
+        "return": -4.660554676819808,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 2.1910908912405964,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 79,
+        "return": -5.045907396646987,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 2.7723076271075757,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 3,
+        "blocked": 0,
+        "return": 1.8648674136119334,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0,
+        "commandsToSuccess": 3
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -1.1198474908683596,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.1260411051729484,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -0.859078106326837,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.7812783130061377,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 80,
+        "return": -3.905222962885696,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.5052229628856995,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -2.004894691210315,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.1022088446057647,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 79,
+        "return": -4.983193296227094,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 2.642295380739314,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 73,
+        "return": -5.6552107403718965,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 3.041935827024748,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 71,
+        "return": -4.801298204368563,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.9341864475226338,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -1.1967914532148218,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.35502304284271435,
+        "commandsToSuccess": null
+      }
+    ],
+    "successes": 1,
+    "truncations": 19,
+    "finalDistanceMean": 1.4407129155640752,
+    "finalDistanceMedian": 1.402034711338991,
+    "commandsToSuccessMean": 3,
+    "commandsToSuccessN": 1,
+    "blockedTotal": 912,
+    "returnMean": -2.853538021082273,
+    "commandsTotal": 1523
+  },
+  "evalFinal": {
+    "label": "greedy",
+    "episodes": [
+      {
+        "commands": 80,
+        "blocked": 79,
+        "return": -3.9819787013228725,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.897831807392519,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 3,
+        "blocked": 0,
+        "return": 1.4440006707515258,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0,
+        "commandsToSuccess": 3
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": 1.0104627327894211,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.3910630006925409,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 76,
+        "return": -2.2759741401814964,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.5383851960216129,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": 0.06009101737362095,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.41301639326882933,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -0.8034655601604199,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.386406433008212,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": 0.9611306406166509,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.46267864134530773,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 6,
+        "blocked": 0,
+        "return": 2.0091217302958864,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0,
+        "commandsToSuccess": 6
+      },
+      {
+        "commands": 13,
+        "blocked": 0,
+        "return": 3.8868185265392325,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0.07517830916137333,
+        "commandsToSuccess": 13
+      },
+      {
+        "commands": 80,
+        "blocked": 76,
+        "return": -4.76897508144612,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 2.266510814755908,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": 0.7066938305338314,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.8513536006551288,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 76,
+        "return": -2.347191641023063,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.4141665427439572,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 72,
+        "return": -0.43365994157273213,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.18273666910807207,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": 0.04905827826296627,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.4305782843121178,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": 0.5870792530076512,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.16696038999330148,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 5,
+        "blocked": 0,
+        "return": 2.0753375749175667,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0.07517830916137366,
+        "commandsToSuccess": 5
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": 1.8891075784916231,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.23494714599609298,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 66,
+        "return": 0.6830301734563975,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.18273666910807215,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 6,
+        "blocked": 0,
+        "return": 2.6542822784735756,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0,
+        "commandsToSuccess": 6
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -1.185944097271268,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.35502304284271435,
+        "commandsToSuccess": null
+      }
+    ],
+    "successes": 5,
+    "truncations": 15,
+    "finalDistanceMean": 0.4662375624783567,
+    "finalDistanceMedian": 0.386406433008212,
+    "commandsToSuccessMean": 6.6,
+    "commandsToSuccessN": 5,
+    "blockedTotal": 445,
+    "returnMean": 0.11095125612659891,
+    "commandsTotal": 1233
+  },
+  "validationInitial": {
+    "label": "validation-greedy",
+    "episodes": [
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -1.0218468746854041,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.9684871353777542,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 79,
+        "return": -3.696695896640391,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.1605664266503743,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -1.5091095474379077,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.787937070488486,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 76,
+        "return": -5.01417954507433,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 2.1249206464708386,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 80,
+        "return": -4.027031002992875,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.6270310029928705,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -0.7427627688777859,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.6515240884164716,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 79,
+        "return": -3.922956384947102,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.715883130748755,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 73,
+        "return": -4.823769972851246,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.9434308636900335,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 77,
+        "return": -4.985710157871968,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 2.559519769883871,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 78,
+        "return": -3.530566847823275,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.4232187942448797,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -2.141489678456452,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.2691406031270807,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 77,
+        "return": -4.227366144659568,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 1.0933785252936226,
+        "commandsToSuccess": null
+      }
+    ],
+    "successes": 0,
+    "truncations": 12,
+    "finalDistanceMean": 1.4437531714487533,
+    "finalDistanceMedian": 1.4232187942448797,
+    "commandsToSuccessMean": null,
+    "commandsToSuccessN": 0,
+    "blockedTotal": 619,
+    "returnMean": -3.303623735193192,
+    "commandsTotal": 960
+  },
+  "validationFinal": {
+    "label": "validation-greedy",
+    "episodes": [
+      {
+        "commands": 8,
+        "blocked": 0,
+        "return": 2.775501870475357,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0,
+        "commandsToSuccess": 8
+      },
+      {
+        "commands": 8,
+        "blocked": 0,
+        "return": 2.1662614704703413,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0,
+        "commandsToSuccess": 8
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -0.29959034462931705,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.16696038999330173,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 8,
+        "blocked": 0,
+        "return": 2.8195819806551263,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0.07517830916137368,
+        "commandsToSuccess": 8
+      },
+      {
+        "commands": 9,
+        "blocked": 0,
+        "return": 2.879308599465915,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0,
+        "commandsToSuccess": 9
+      },
+      {
+        "commands": 80,
+        "blocked": 78,
+        "return": -3.0452421692483305,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.9537662826604154,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": 1.030753667096858,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.18273666910807215,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 10,
+        "blocked": 0,
+        "return": 2.6354678036860317,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0,
+        "commandsToSuccess": 10
+      },
+      {
+        "commands": 80,
+        "blocked": 78,
+        "return": -5.205667235696192,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 2.6474556108123872,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": 0.7108635903086757,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.16696038999330168,
+        "commandsToSuccess": null
+      },
+      {
+        "commands": 5,
+        "blocked": 0,
+        "return": 2.50855085632735,
+        "success": true,
+        "truncated": false,
+        "finalDistance": 0,
+        "commandsToSuccess": 5
+      },
+      {
+        "commands": 80,
+        "blocked": 0,
+        "return": -0.6256028400683011,
+        "success": false,
+        "truncated": true,
+        "finalDistance": 0.11928922638240612,
+        "commandsToSuccess": null
+      }
+    ],
+    "successes": 6,
+    "truncations": 6,
+    "finalDistanceMean": 0.35936223984260485,
+    "finalDistanceMedian": 0.11928922638240612,
+    "commandsToSuccessMean": 8,
+    "commandsToSuccessN": 6,
+    "blockedTotal": 156,
+    "returnMean": 0.6958489374036261,
+    "commandsTotal": 528
+  }
+}

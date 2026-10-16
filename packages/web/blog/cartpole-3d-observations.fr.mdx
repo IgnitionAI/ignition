@@ -1,0 +1,75 @@
+La caméra tourne autour du chariot. Le mât brille, les ombres bougent. L’agent, lui, continue à recevoir quatre nombres. CartPole 3D montre comment séparer une scène spectaculaire du problème appris.
+
+Le rendu aide à comprendre le mouvement, mais ne définit pas nécessairement les observations du réseau. Cette séparation permet de travailler sur l’interface sans changer silencieusement la tâche d’apprentissage.
+
+**Vous allez lancer l’expérience et comprendre le lien entre ses observations, ses décisions et son résultat.**
+
+[**Essayer CartPole 3D dans le navigateur →**](/demos/cartpole-3d/)
+
+## Commencer par la démo
+
+Gardez **DQN** sélectionné et cliquez sur **Train**. Observez le mât dans la scène, puis passez en **Inference**. Le changement de caméra ne constitue pas un nouvel apprentissage ; pour changer la tâche, il faut modifier ce que l’environnement fournit ou calcule.
+
+![La démo CartPole 3D avant l’interaction.](/images/blog/cartpole-3d/initial.png)
+
+*État initial capturé dans Chromium. Les captures servent à montrer le parcours, pas à garantir un score.*
+
+## Ce que reçoit l’agent
+
+La démo importe CartPoleEnv depuis le package environments. Le réseau reçoit la position du chariot, sa vitesse, l’angle du mât et sa vitesse angulaire. Il choisit entre une poussée à gauche et une poussée à droite. La caméra n’entre pas dans cette observation.
+
+## Ce que la récompense encourage
+
+Comme dans la version 2D, la limite d’angle est de 12 degrés, celle de position de 2,4 mètres et l’horizon de 500 transitions. Une transition non terminale vaut +1 ; la dernière vaut 0. Le graphique compte les transitions équilibrées, y compris la dernière.
+
+Le contrat complet se trouve dans [App.tsx](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-cartpole-3d/src/App.tsx). Lisez ensemble `observe()`, `step()` et `reward()` : le nom du benchmark ne suffit pas à définir son implémentation.
+
+## Reproduire l’expérience avec du code
+
+Utilisez Node.js 20 ou 22 et pnpm 10.8.0. Depuis le dépôt :
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter demo-cartpole-3d dev --host 127.0.0.1 --port 5173
+```
+
+Ouvrez [localhost:5173](http://localhost:5173). Sur un VPS, utilisez un tunnel SSH vers ce port pour y accéder depuis votre ordinateur.
+
+L’exemple est chargé directement depuis [blog-experiment.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-cartpole-3d/src/examples/blog-experiment.ts) : le code de l’article et celui du dépôt restent synchronisés.
+
+<!-- FIRST_AGENT_CODE -->
+
+Pendant que Vite tourne, vous pouvez importer ce module dans la console du navigateur :
+
+```js
+const { createExperiment } = await import('/examples/blog-experiment.ts');
+const session = createExperiment();
+// Après quelques tentatives :
+session.infer();
+session.stop();
+```
+
+Le module crée une session indépendante. Il ne la branche pas à la scène déjà ouverte : utilisez les boutons de la démo pour le parcours visuel. infer() applique la politique courante sans entraînement ; resume() conserve l’agent et stop() annule les prochains ticks. Une transition déjà commencée peut encore finir.
+
+## Observer, puis évaluer
+
+![La démo CartPole 3D après son interaction principale.](/images/blog/cartpole-3d/active.png)
+
+*Capture de la même session après interaction. La présence d’une scène et d’un indicateur actif confirme le parcours, pas une politique convergée.*
+
+Comparez les versions 2D et 3D à paramètres et protocole identiques. Mesurez des épisodes, pas la fluidité des images : le coût du rendu et le temps de calcul peuvent varier. Une représentation 3D ne prouve pas une meilleure politique.
+
+## Vérification de cette édition
+
+La démo a été ouverte dans Chromium et son entraînement lancé avant la capture. L’exemple indépendant a exécuté une transition d’entraînement et une transition d’inférence avec 4 observations, puis les commandes de changement de mode. Aucune erreur de page ou de runner n’a été relevée pendant cette vérification. Ce parcours vérifie l’intégration, sans prouver une convergence.
+
+## À vous de lancer l’expérience
+
+Reproduisez le parcours, puis modifiez un seul élément du contrat et comparez vos observations. Vous disposerez d’un cas concret pour discuter de ce que l’agent sait, de ce qu’il choisit et de ce que la récompense valorise.
+
+[**Ouvrir CartPole 3D →**](/demos/cartpole-3d/)
+
+Pour approfondir, consultez [le runner Ignition](/docs/how-it-works/core) et [les algorithmes disponibles](/docs/algorithms).

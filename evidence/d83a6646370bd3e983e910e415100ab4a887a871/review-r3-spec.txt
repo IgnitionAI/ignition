@@ -1,0 +1,9 @@
+**Spec axis: PASS.**
+
+The correction in `packages/demo-ball-thrust/test/browser-check.cjs` fixes the performance route without weakening its assertions.
+
+Prior raw evidence confirms the old route reached the goal at elapsed **6.6 s**, then remained terminal for the rest of the 30-second measurement, producing only **6.2 simulated seconds**. Alternating north/south from the seeded west-lane position avoids that unrelated success condition and allows the sustained-physics check to exercise its intended workload.
+
+The 30-second sampling window, arena-bound assertions, `simulatedSeconds > 28`, frame metrics, and console-error checks remain unchanged. Separate checks still cover all eight keyboard directions, obstacle rebound, wall containment, and keyboard-only goal completion. No physics, learning behavior, frozen experiment protocol, or issue #68/#69 acceptance requirement is changed.
+
+This is a read-only review of the supplied authoritative delta against `PLAN.md` and issues #68/#69—not a claim that final-SHA runtime verification has passed. Root/runtime rechecks remain pending.

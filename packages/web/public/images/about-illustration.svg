@@ -14,13 +14,13 @@
     </filter>
     <linearGradient id="a" x1="50%" x2="50%" y1="7.644%" y2="100%">
       <stop offset="0%" stop-color="#E9D5FF"/>
-      <stop offset="31.441%" stop-color="#A855F7"/>
-      <stop offset="100%" stop-color="#A855F7"/>
+      <stop offset="31.441%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#6366F1"/>
     </linearGradient>
     <linearGradient id="d" x1="50%" x2="50%" y1="7.644%" y2="97.631%">
       <stop offset="0%" stop-color="#E9D5FF"/>
-      <stop offset="31.441%" stop-color="#A855F7"/>
-      <stop offset="100%" stop-color="#A855F7"/>
+      <stop offset="31.441%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#6366F1"/>
     </linearGradient>
   </defs>
   <g fill="none" fill-rule="nonzero">

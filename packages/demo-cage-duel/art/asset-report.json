@@ -1,0 +1,14 @@
+[
+  {
+    "file": "cage-blender.glb",
+    "triangles": 53556,
+    "meshObjects": 1,
+    "bytes": 3610068
+  },
+  {
+    "file": "marine-base-blender.glb",
+    "triangles": 54544,
+    "meshObjects": 19,
+    "bytes": 2645660
+  }
+]

@@ -6,6 +6,7 @@ import { ALGORITHM_DEFAULTS } from './defaults';
 import type { DQNConfig, PPOConfig, QTableConfig } from './types';
 
 const FACTORIES: Record<string, AgentFactory> = {
+  'double-dqn': (config) => new DQNAgent({ ...(config as unknown as DQNConfig), doubleQ: true }),
   dqn: (config) => new DQNAgent(config as unknown as DQNConfig),
   ppo: (config) => new PPOAgent(config as unknown as PPOConfig),
   qtable: (config) => new QTableAgent(config as unknown as QTableConfig),

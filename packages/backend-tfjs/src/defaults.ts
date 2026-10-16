@@ -35,6 +35,7 @@ export const QTABLE_DEFAULTS: Record<string, unknown> = {
 
 export const ALGORITHM_DEFAULTS: Record<string, Record<string, unknown>> = {
   dqn: DQN_DEFAULTS,
+  'double-dqn': { ...DQN_DEFAULTS, doubleQ: true },
   ppo: PPO_DEFAULTS,
   qtable: QTABLE_DEFAULTS,
 };

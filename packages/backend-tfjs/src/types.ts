@@ -5,6 +5,10 @@ import type { ModelStorageProvider } from '@ignitionai/storage';
 export type { AgentInterface, Experience } from '@ignitionai/core';
 
 export interface DQNConfig {
+  /** Online action selection with target-network evaluation (default: false). */
+  doubleQ?: boolean;
+  /** Reproducible initialization, exploration and replay sampling when supplied. */
+  seed?: number;
   backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;              // Dimension du vecteur d'état
   actionSize: number;             // Nombre d'actions discrètes
@@ -21,6 +25,8 @@ export interface DQNConfig {
 }
 
 export interface PPOConfig {
+  /** Transitions collected before automatic training (default: 128). */
+  rolloutSize?: number;
   backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;        // Dimension du vecteur d'état
   actionSize: number;       // Nombre d'actions discrètes
@@ -33,6 +39,7 @@ export interface PPOConfig {
   batchSize?: number;       // Taille des mini-batchs (défaut : 64)
   entropyCoef?: number;     // Coefficient du bonus d'entropie (défaut : 0.01)
   valueLossCoef?: number;   // Coefficient de la loss du critic (défaut : 0.5)
+  storageProvider?: ModelStorageProvider; // Optional storage provider for save/load
 }
 
 export interface QTableConfig {
@@ -47,4 +54,5 @@ export interface QTableConfig {
   epsilon?: number;         // Taux d'exploration initial (défaut : 1.0)
   epsilonDecay?: number;    // Décroissance d'epsilon par step (défaut : 0.995)
   minEpsilon?: number;      // Epsilon minimum (défaut : 0.01)
+  storageProvider?: ModelStorageProvider; // Optional storage provider for save/load
 }

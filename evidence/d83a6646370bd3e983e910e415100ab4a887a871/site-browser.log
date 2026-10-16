@@ -1,0 +1,12 @@
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert(page.url().includes('/demos/ball-thrust/'))
+
+    at /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/ball-thrust-rl/site-browser.cjs:30:4 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}

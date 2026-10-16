@@ -1,0 +1,1942 @@
+
+> ignition-monorepo@ test /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+> pnpm build && vitest run
+
+
+> ignition-monorepo@ build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+> pnpm -r build
+
+Scope: 18 of 19 workspace projects
+packages/core build$ tsc
+packages/storage build$ tsc
+packages/web prebuild$ node scripts/build-demos.mjs
+packages/web prebuild: [build-demos] script started
+packages/web prebuild: [build-demos] repoRoot: /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+packages/web prebuild: [build-demos] webPublicDemos: /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/web/public/demos
+packages/web prebuild: [build-demos] cwd: /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/web
+packages/web prebuild: === Building library packages (topo order) ===
+packages/web prebuild: $ pnpm --filter @ignitionai/core --filter @ignitionai/backend-tfjs --filter @ignitionai/backend-onnx --filter @ignitionai/storage --filter @ignitionai/environments build
+packages/web prebuild: Scope: 5 of 19 workspace projects
+packages/web prebuild: packages/core build$ tsc
+packages/web prebuild: packages/storage build$ tsc
+packages/core build: Done
+packages/storage build: Done
+packages/web prebuild: packages/core build: Done
+packages/web prebuild: packages/storage build: Done
+packages/web prebuild: packages/backend-tfjs build$ tsc
+packages/web prebuild: packages/environments build$ tsc
+packages/web prebuild: packages/environments build: Done
+packages/web prebuild: packages/backend-tfjs build: Done
+packages/web prebuild: packages/backend-onnx build$ tsc
+packages/web prebuild: packages/backend-onnx build: Done
+packages/web prebuild: === Building car-circuit (base=/demos/car-circuit/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-car-circuit" build
+packages/web prebuild: > demo-car-circuit@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-car-circuit
+packages/web prebuild: > vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1902 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.48 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-C28lmmCF.css                      10.12 kB │ gzip:   2.60 kB
+packages/web prebuild: ../dist/assets/RaceGarage-OLIfOEXI.js                   6.80 kB │ gzip:   3.05 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/TrainingPanel-xJvCqIX4.js              319.54 kB │ gzip:  63.08 kB
+packages/web prebuild: ../dist/assets/index-BsmlUm5U.js                    1,118.83 kB │ gzip: 314.11 kB
+packages/web prebuild: ../dist/assets/training-1PEWEWSC.js                 1,629.48 kB │ gzip: 257.69 kB
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: ✓ built in 2.88s
+packages/web prebuild: Copying /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-car-circuit/dist → /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/demos-stage-WLqurR/car-circuit
+packages/web prebuild: === Building maze (base=/demos/maze/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-maze" build
+packages/web prebuild: > demo-maze@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-maze
+packages/web prebuild: > vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 2512 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.50 kB │ gzip:     0.33 kB
+packages/web prebuild: ../dist/assets/index-BE9D5215.css                       0.10 kB │ gzip:     0.11 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:     6.19 kB
+packages/web prebuild: ../dist/assets/index-DW4Hqosn.js                    5,599.27 kB │ gzip: 1,527.07 kB
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: ✓ built in 3.93s
+packages/web prebuild: Copying /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-maze/dist → /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/demos-stage-WLqurR/maze
+packages/web prebuild: === Building cartpole (base=/demos/cartpole/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-cartpole" build
+packages/web prebuild: > demo-cartpole@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-cartpole
+packages/web prebuild: > tsc -b && vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1942 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.51 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-u51LC_nq.js                    2,538.43 kB │ gzip: 485.52 kB
+packages/web prebuild: ✓ built in 2.46s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-cartpole/dist → /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/demos-stage-WLqurR/cartpole
+packages/web prebuild: === Building mountaincar (base=/demos/mountaincar/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-mountaincar" build
+packages/web prebuild: > demo-mountaincar@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-mountaincar
+packages/web prebuild: > tsc -b && vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1942 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.48 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-ByTusLKY.js                    2,538.11 kB │ gzip: 485.23 kB
+packages/web prebuild: ✓ built in 2.41s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-mountaincar/dist → /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/demos-stage-WLqurR/mountaincar
+packages/web prebuild: === Building cartpole-3d (base=/demos/cartpole-3d/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-cartpole-3d" build
+packages/web prebuild: > demo-cartpole-3d@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-cartpole-3d
+packages/web prebuild: > vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 2515 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.48 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-bOspBYTK.css                       0.19 kB │ gzip:   0.17 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-C25QN8XG.js                    3,453.43 kB │ gzip: 734.89 kB
+packages/web prebuild: ✓ built in 3.63s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-cartpole-3d/dist → /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/demos-stage-WLqurR/cartpole-3d
+packages/web prebuild: === Building drone-navigation (base=/demos/drone-navigation/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-drone-navigation" build
+packages/web prebuild: > demo-drone-navigation@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-drone-navigation
+packages/web prebuild: > vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1889 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.43 kB │ gzip:   0.30 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-Dwz5vvmv.js                    3,050.13 kB │ gzip: 625.11 kB
+packages/web prebuild: ✓ built in 3.04s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-drone-navigation/dist → /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/demos-stage-WLqurR/drone-navigation
+packages/web prebuild: === Building maze-3d (base=/demos/maze-3d/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-maze-3d" build
+packages/web prebuild: > demo-maze-3d@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-maze-3d
+packages/web prebuild: > tsc -b && vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1890 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.59 kB │ gzip:   0.38 kB
+packages/web prebuild: ../dist/assets/index-DykIzJ98.css                       1.65 kB │ gzip:   0.68 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-Cxv08JZc.js                    3,006.33 kB │ gzip: 608.19 kB
+packages/web prebuild: ✓ built in 3.05s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-maze-3d/dist → /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/demos-stage-WLqurR/maze-3d
+packages/web prebuild: === Building gridworld (base=/demos/gridworld/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-gridworld" build
+packages/web prebuild: > demo-gridworld@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-gridworld
+packages/web prebuild: > tsc -b && vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1942 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: ../dist/index.html                                      0.51 kB │ gzip:   0.33 kB
+packages/web prebuild: ../dist/assets/index-CXXDzAFT.css                       0.19 kB │ gzip:   0.16 kB
+packages/web prebuild: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/web prebuild: ../dist/assets/index-DvjKf5PJ.js                    2,538.78 kB │ gzip: 485.49 kB
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: ✓ built in 2.45s
+packages/web prebuild: Copying /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-gridworld/dist → /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/demos-stage-WLqurR/gridworld
+packages/web prebuild: === Building ball-thrust (base=/demos/ball-thrust/) ===
+packages/web prebuild: $ pnpm --filter "./packages/demo-ball-thrust" build
+packages/web prebuild: > demo-ball-thrust@0.0.0 build /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-ball-thrust
+packages/web prebuild: > tsc --noEmit && vite build
+packages/web prebuild: vite v6.3.3 building for production...
+packages/web prebuild: transforming...
+packages/web prebuild: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/web prebuild: ✓ 1898 modules transformed.
+packages/web prebuild: rendering chunks...
+packages/web prebuild: computing gzip size...
+packages/web prebuild: dist/index.html                                      0.65 kB │ gzip:     0.40 kB
+packages/web prebuild: dist/assets/index-D0te4xXb.css                       4.80 kB │ gzip:     1.65 kB
+packages/web prebuild: dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:     6.19 kB
+packages/web prebuild: dist/assets/index-C0yRb3cM.js                    5,122.03 kB │ gzip: 1,392.99 kB
+packages/web prebuild: ✓ built in 3.38s
+packages/web prebuild: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/web prebuild: - Using dynamic import() to code-split the application
+packages/web prebuild: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/web prebuild: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/web prebuild: Copying /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-ball-thrust/dist → /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/demos-stage-WLqurR/ball-thrust
+packages/web prebuild: ✓ All demos built and copied to packages/web/public/demos/
+packages/web prebuild: [build-demos] final listing: [
+packages/web prebuild:   'ball-thrust',
+packages/web prebuild:   'car-circuit',
+packages/web prebuild:   'cartpole',
+packages/web prebuild:   'cartpole-3d',
+packages/web prebuild:   'drone-navigation',
+packages/web prebuild:   'gridworld',
+packages/web prebuild:   'manifest.json',
+packages/web prebuild:   'maze',
+packages/web prebuild:   'maze-3d',
+packages/web prebuild:   'mountaincar'
+packages/web prebuild: ]
+packages/web prebuild: Done
+packages/web build$ next build
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: - [36minfo[0m [nextra] You have Next.js i18n enabled, read here https://nextjs.org/docs/app/building-your-application/routing/internationalization for the docs.
+packages/web build:    ▲ Next.js 16.0.10 (Turbopack)
+packages/web build:    - Experiments (use with caution):
+packages/web build:      · optimizePackageImports
+packages/web build:    Creating an optimized production build ...
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: - [36minfo[0m [nextra] You have Next.js i18n enabled, read here https://nextjs.org/docs/app/building-your-application/routing/internationalization for the docs.
+packages/web build: (node:83539) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+packages/web build: (Use `node --trace-deprecation ...` to show where the warning was created)
+packages/web build: (node:83526) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/variables/QTableConfigSchema.md
+packages/web build: (node:83530) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/classes/QTableAgent.md
+packages/web build: (node:83548) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+packages/web build: (Use `node --trace-deprecation ...` to show where the warning was created)
+packages/web build: (node:83532) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/interfaces/AgentInterface.md
+packages/web build: (node:83534) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/interfaces/DQNConfig.md
+packages/web build: (node:83540) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/type-aliases/AlgorithmType.md
+packages/web build: (node:83541) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/environments/src/interfaces/CartPoleState.md
+packages/web build: (node:83547) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: (node:83545) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/functions/validateInferenceEnv.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/interfaces/BoxSpace.md
+packages/web build: (node:83546) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: (node:83544) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+packages/web build: (Use `node --trace-warnings ...` to show where the warning was created)
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/interfaces/MultiDiscreteSpace.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/interfaces/AgentInterface.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/classes/LocalStorageProvider.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/functions/mergeDefaults.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/variables/ExperienceSchema.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/variables/version.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/environments/src/classes/MountainCarEnv.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/classes/ReplayBuffer.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/functions/validateTrainingEnv.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/classes/DownloadProvider.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/type-aliases/ObservationSpace.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/variables/ALGORITHM_DEFAULTS.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/classes/IgnitionEnv.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/environments/src/classes/CartPoleEnv.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/variables/QTABLE_DEFAULTS.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/interfaces/DiscreteSpace.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/how-it-works/index.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/functions/buildQNetwork.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/algorithms/index.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/variables/DQN_DEFAULTS.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/interfaces/PPOConfig.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/quickstart.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/algorithms/ppo.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/type-aliases/TFBackend.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/variables/DQNConfigSchema.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/interfaces/CheckpointableAgent.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/interfaces/TrainingEnv.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/environments/src/README.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/interfaces/InferenceEnv.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/tutorials/index.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/type-aliases/TFBackend.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/tutorials/onnx-unity.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/demos.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/tutorials/cartpole-observations.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/algorithms/q-table.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/how-it-works/backend-onnx.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/tutorials/grid-world.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/interfaces/Experience.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/functions/loadOnnxModelFromHub.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/functions/runInference.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/functions/runInferenceNode.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/functions/saveForOnnxExport.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/tutorials/drone-navigation.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/functions/createOnnxSession.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/functions/generateConversionScript.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/type-aliases/OnnxAgentConfig.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/type-aliases/ActionSpace.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/README.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/README.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/classes/IndexedDBProvider.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/environments/src/classes/GridWorldEnv.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/tutorials/cartpole-3d.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/type-aliases/AgentFactory.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/classes/HuggingFaceProvider.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/how-it-works/backend-tfjs.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/interfaces/StepResult.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/functions/setBackend.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/functions/getAvailableBackends.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/core/src/interfaces/Experience.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/interfaces/QTableConfig.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/variables/PPO_DEFAULTS.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/troubleshooting.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/README.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/variables/PPOConfigSchema.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/algorithms/dqn.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/classes/OnnxAgent.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/algorithms/q-table.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/index.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/functions/inspectSession.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/how-it-works/storage.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/how-it-works/core.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/tutorials/mountaincar-shaping.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/README.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/functions/inspectSessionNode.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/tutorials/grid-world.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/tutorials/car-circuit.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/tutorials/cartpole-3d.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/functions/createOnnxSessionNode.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/r3f.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/tutorials/car-circuit.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/classes/DQNAgent.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/interfaces/ExportResult.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/classes/PPOAgent.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/classes/IgnitionEnvTFJS.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/tutorials/cartpole-observations.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/tutorials/onnx-unity.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-onnx/src/variables/OnnxAgentConfigSchema.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/r3f.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/tutorials/index.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/tutorials/mountaincar-shaping.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/index.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/interfaces/ModelStorageProvider.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/type-aliases/HFStorageConfig.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/algorithms/ppo.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/backend-tfjs/src/README.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/functions/parseHFConfig.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/variables/hfStorageConfigSchema.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/api/storage/src/interfaces/ModelInfo.md
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/troubleshooting.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/how-it-works/core.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/how-it-works/storage.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/demos.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/how-it-works/backend-onnx.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/how-it-works/backend-tfjs.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/quickstart.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/tutorials/drone-navigation.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/en/how-it-works/index.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/algorithms/dqn.mdx
+packages/web build: - [33mwarn[0m [nextra] Failed to get the last modified timestamp from Git for the file ../../../ignition-demo-70-ball-thrust/packages/web/content/fr/algorithms/index.mdx
+packages/web build:  ✓ Compiled successfully in 8.5s
+packages/web build:    Running TypeScript ...
+packages/web build:    Collecting page data using 9 workers ...
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+packages/web build:     at Module.h (.next/server/chunks/ssr/_5a920c1e._.js:3:1134)
+packages/web build: TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+packages/web build:     at Module.h (.next/server/chunks/ssr/_5a920c1e._.js:1:162)
+packages/web build: TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+packages/web build:     at Module.h (.next/server/chunks/ssr/_5a920c1e._.js:3:1134)
+packages/web build: TypeError: Cannot destructure property 'locale' of '(intermediate value)' as it is undefined.
+packages/web build:     at Module.h (.next/server/chunks/ssr/_5a920c1e._.js:1:162)
+packages/web build:    Generating static pages using 9 workers (0/145) ...
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build: [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+packages/web build:    Generating static pages using 9 workers (36/145) 
+packages/web build:    Generating static pages using 9 workers (72/145) 
+packages/web build:    Generating static pages using 9 workers (108/145) 
+packages/web build:  ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+packages/web build:  ✓ Generating static pages using 9 workers (145/145) in 879.5ms
+packages/web build:    Finalizing page optimization ...
+packages/web build: Route (app)
+packages/web build: ┌ ƒ /_not-found
+packages/web build: ├ ƒ /[locale]
+packages/web build: ├ ƒ /[locale]/blog
+packages/web build: ├ ƒ /[locale]/blog/[slug]
+packages/web build: ├ ƒ /[locale]/blog/premier-agent-cartpole
+packages/web build: ├ ƒ /[locale]/changelog
+packages/web build: ├ ƒ /[locale]/docs/[[...mdxPath]]
+packages/web build: ├ ƒ /api/hello
+packages/web build: └ ○ /icon.svg
+packages/web build: ƒ Proxy (Middleware)
+packages/web build: ○  (Static)   prerendered as static content
+packages/web build: ƒ  (Dynamic)  server-rendered on demand
+packages/web build: Done
+packages/environments build$ tsc
+packages/backend-tfjs build$ tsc
+packages/environments build: Done
+packages/backend-tfjs build: Done
+packages/backend-onnx build$ tsc
+packages/demo-cage-duel build$ vite build
+packages/demo-ball-thrust build$ tsc --noEmit && vite build
+packages/demo-car-circuit build$ vite build
+packages/demo-cage-duel build: vite v6.3.3 building for production...
+packages/demo-car-circuit build: vite v6.3.3 building for production...
+packages/demo-cage-duel build: transforming...
+packages/demo-car-circuit build: transforming...
+packages/backend-onnx build: Done
+packages/demo-cartpole-3d build$ vite build
+packages/demo-cage-duel build: ✓ 38 modules transformed.
+packages/demo-cage-duel build: rendering chunks...
+packages/demo-cage-duel build: computing gzip size...
+packages/demo-cartpole-3d build: vite v6.3.3 building for production...
+packages/demo-cage-duel build: dist/index.html                            0.58 kB │ gzip:   0.35 kB
+packages/demo-cage-duel build: dist/atelier.html                          1.62 kB │ gzip:   0.92 kB
+packages/demo-cage-duel build: dist/credits.html                          1.68 kB │ gzip:   1.03 kB
+packages/demo-cage-duel build: dist/animations.html                       2.81 kB │ gzip:   1.40 kB
+packages/demo-cage-duel build: dist/combat.html                           3.36 kB │ gzip:   1.55 kB
+packages/demo-cage-duel build: dist/assets/atelier-D1Aa6XMF.css           1.35 kB │ gzip:   0.70 kB
+packages/demo-cage-duel build: dist/assets/combat-DAyH7BV7.css            3.29 kB │ gzip:   1.30 kB
+packages/demo-cage-duel build: dist/assets/animations-DtB_DIh8.css        3.55 kB │ gzip:   1.43 kB
+packages/demo-cage-duel build: dist/assets/main-BHNtUQVg.css              7.75 kB │ gzip:   2.83 kB
+packages/demo-cage-duel build: dist/assets/atelier-BwJrIMXW.js            3.55 kB │ gzip:   1.76 kB
+packages/demo-cage-duel build: dist/assets/animations-DktM8ok5.js         6.40 kB │ gzip:   3.03 kB
+packages/demo-cage-duel build: dist/assets/OrbitControls-CWNZohEv.js     13.43 kB │ gzip:   3.85 kB
+packages/demo-cage-duel build: dist/assets/mixamo-catalog-DQ0SwWLv.js    13.51 kB │ gzip:   3.33 kB
+packages/demo-cage-duel build: dist/assets/combat-CsgzIcfg.js            24.13 kB │ gzip:   9.47 kB
+packages/demo-cage-duel build: dist/assets/main-BXSA60G4.js              94.07 kB │ gzip:  26.78 kB
+packages/demo-cage-duel build: dist/assets/RoomEnvironment-DnBG-FH6.js  577.58 kB │ gzip: 148.25 kB
+packages/demo-cage-duel build: ✓ built in 948ms
+packages/demo-cage-duel build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-cage-duel build: - Using dynamic import() to code-split the application
+packages/demo-cage-duel build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-cage-duel build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-cartpole-3d build: transforming...
+packages/demo-cage-duel build: Done
+packages/demo-drone-navigation build$ vite build
+packages/demo-drone-navigation build: vite v6.3.3 building for production...
+packages/demo-drone-navigation build: transforming...
+packages/demo-ball-thrust build: vite v6.3.3 building for production...
+packages/demo-ball-thrust build: transforming...
+packages/demo-drone-navigation build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-drone-navigation build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cartpole-3d build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cartpole-3d build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-car-circuit build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-car-circuit build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-ball-thrust build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-car-circuit build: ✓ 1902 modules transformed.
+packages/demo-car-circuit build: rendering chunks...
+packages/demo-car-circuit build: computing gzip size...
+packages/demo-car-circuit build: ../dist/index.html                                      0.44 kB │ gzip:   0.32 kB
+packages/demo-car-circuit build: ../dist/assets/index-C28lmmCF.css                      10.12 kB │ gzip:   2.60 kB
+packages/demo-car-circuit build: ../dist/assets/RaceGarage-zK0yg0NZ.js                   6.78 kB │ gzip:   3.04 kB
+packages/demo-car-circuit build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-car-circuit build: ../dist/assets/TrainingPanel-uz9xhHZW.js              319.53 kB │ gzip:  63.08 kB
+packages/demo-car-circuit build: ../dist/assets/index-BsRUMqVl.js                    1,118.79 kB │ gzip: 314.08 kB
+packages/demo-car-circuit build: ../dist/assets/training-CrryzdAX.js                 1,629.48 kB │ gzip: 257.69 kB
+packages/demo-car-circuit build: ✓ built in 5.34s
+packages/demo-car-circuit build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-car-circuit build: - Using dynamic import() to code-split the application
+packages/demo-car-circuit build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-car-circuit build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-car-circuit build: Done
+packages/demo-gridworld build$ tsc -b && vite build
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-ball-thrust build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-drone-navigation build: ✓ 1889 modules transformed.
+packages/demo-drone-navigation build: rendering chunks...
+packages/demo-gridworld build: vite v6.3.3 building for production...
+packages/demo-gridworld build: transforming...
+packages/demo-cartpole-3d build: ✓ 2515 modules transformed.
+packages/demo-drone-navigation build: computing gzip size...
+packages/demo-ball-thrust build: ✓ 1898 modules transformed.
+packages/demo-drone-navigation build: ../dist/index.html                                      0.41 kB │ gzip:   0.29 kB
+packages/demo-drone-navigation build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-drone-navigation build: ../dist/assets/index-BkhueAAY.js                    3,050.10 kB │ gzip: 625.09 kB
+packages/demo-drone-navigation build: ✓ built in 5.49s
+packages/demo-drone-navigation build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-drone-navigation build: - Using dynamic import() to code-split the application
+packages/demo-drone-navigation build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-drone-navigation build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-drone-navigation build: Done
+packages/demo-maze build$ vite build
+packages/demo-gridworld build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-gridworld build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cartpole-3d build: rendering chunks...
+packages/demo-ball-thrust build: rendering chunks...
+packages/demo-maze build: vite v6.3.3 building for production...
+packages/demo-maze build: transforming...
+packages/demo-cartpole-3d build: computing gzip size...
+packages/demo-ball-thrust build: computing gzip size...
+packages/demo-cartpole-3d build: ../dist/index.html                                      0.44 kB │ gzip:   0.32 kB
+packages/demo-cartpole-3d build: ../dist/assets/index-bOspBYTK.css                       0.19 kB │ gzip:   0.17 kB
+packages/demo-cartpole-3d build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-cartpole-3d build: ../dist/assets/index-CZPTn_86.js                    3,453.41 kB │ gzip: 734.87 kB
+packages/demo-cartpole-3d build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-cartpole-3d build: - Using dynamic import() to code-split the application
+packages/demo-cartpole-3d build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-cartpole-3d build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-cartpole-3d build: ✓ built in 6.37s
+packages/demo-cartpole-3d build: Done
+packages/demo-maze-3d build$ tsc -b && vite build
+packages/demo-ball-thrust build: dist/index.html                                      0.62 kB │ gzip:     0.38 kB
+packages/demo-ball-thrust build: dist/assets/index-D0te4xXb.css                       4.80 kB │ gzip:     1.65 kB
+packages/demo-ball-thrust build: dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:     6.19 kB
+packages/demo-ball-thrust build: dist/assets/index-2gSmHY6c.js                    5,122.01 kB │ gzip: 1,392.98 kB
+packages/demo-ball-thrust build: ✓ built in 5.82s
+packages/demo-ball-thrust build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-ball-thrust build: - Using dynamic import() to code-split the application
+packages/demo-ball-thrust build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-ball-thrust build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-ball-thrust build: Done
+packages/demo-mountaincar build$ tsc -b && vite build
+packages/demo-maze build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-maze build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-mountaincar build: vite v6.3.3 building for production...
+packages/demo-mountaincar build: transforming...
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-mountaincar build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-maze-3d build: vite v6.3.3 building for production...
+packages/demo-maze-3d build: transforming...
+packages/demo-maze-3d build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-maze-3d build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-gridworld build: ✓ 1942 modules transformed.
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-gridworld build: rendering chunks...
+packages/demo-gridworld build: computing gzip size...
+packages/demo-gridworld build: ../dist/index.html                                      0.48 kB │ gzip:   0.32 kB
+packages/demo-gridworld build: ../dist/assets/index-CXXDzAFT.css                       0.19 kB │ gzip:   0.16 kB
+packages/demo-gridworld build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-gridworld build: ../dist/assets/index-R9dt3HgE.js                    2,538.76 kB │ gzip: 485.47 kB
+packages/demo-gridworld build: ✓ built in 3.90s
+packages/demo-gridworld build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-gridworld build: - Using dynamic import() to code-split the application
+packages/demo-gridworld build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-gridworld build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-gridworld build: Done
+packages/demo-target-chasing build$ tsc -b && vite build
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-mountaincar build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze-3d build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-maze build: ✓ 2512 modules transformed.
+packages/demo-mountaincar build: ✓ 1942 modules transformed.
+packages/demo-mountaincar build: rendering chunks...
+packages/demo-target-chasing build: vite v6.3.3 building for production...
+packages/demo-target-chasing build: (!) outDir /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-target-chasing/dist is not inside project root and will not be emptied.
+packages/demo-target-chasing build: Use --emptyOutDir to override.
+packages/demo-maze build: rendering chunks...
+packages/demo-target-chasing build: transforming...
+packages/demo-mountaincar build: computing gzip size...
+packages/demo-mountaincar build: ../dist/index.html                                      0.45 kB │ gzip:   0.32 kB
+packages/demo-mountaincar build: ../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+packages/demo-mountaincar build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-mountaincar build: ../dist/assets/index-CQ3NNGUM.js                    2,538.09 kB │ gzip: 485.21 kB
+packages/demo-mountaincar build: ✓ built in 3.49s
+packages/demo-mountaincar build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-mountaincar build: - Using dynamic import() to code-split the application
+packages/demo-mountaincar build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-mountaincar build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-mountaincar build: Done
+packages/demo-maze build: computing gzip size...
+packages/demo-maze build: ../dist/index.html                                      0.48 kB │ gzip:     0.32 kB
+packages/demo-maze build: ../dist/assets/index-BE9D5215.css                       0.10 kB │ gzip:     0.11 kB
+packages/demo-maze build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:     6.19 kB
+packages/demo-maze build: ../dist/assets/index-D-3bCR86.js                    5,599.26 kB │ gzip: 1,527.07 kB
+packages/demo-maze build: ✓ built in 5.50s
+packages/demo-maze build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-maze build: - Using dynamic import() to code-split the application
+packages/demo-maze build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-maze build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-maze-3d build: ✓ 1890 modules transformed.
+packages/demo-maze build: Done
+packages/demo-maze-3d build: rendering chunks...
+packages/demo-maze-3d build: computing gzip size...
+packages/demo-maze-3d build: ../dist/index.html                                      0.56 kB │ gzip:   0.37 kB
+packages/demo-maze-3d build: ../dist/assets/index-DykIzJ98.css                       1.65 kB │ gzip:   0.68 kB
+packages/demo-maze-3d build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-maze-3d build: ../dist/assets/index-wv9x3U6I.js                    3,006.32 kB │ gzip: 608.18 kB
+packages/demo-maze-3d build: ✓ built in 3.90s
+packages/demo-maze-3d build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-maze-3d build: - Using dynamic import() to code-split the application
+packages/demo-maze-3d build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-maze-3d build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-maze-3d build: Done
+packages/demo-target-chasing build: ✓ 2421 modules transformed.
+packages/demo-target-chasing build: rendering chunks...
+packages/demo-target-chasing build: computing gzip size...
+packages/demo-target-chasing build: ../dist/index.html                                      0.53 kB │ gzip:     0.36 kB
+packages/demo-target-chasing build: ../dist/assets/index-B5DZHykP.css                       7.32 kB │ gzip:     1.61 kB
+packages/demo-target-chasing build: ../dist/assets/FileBlob-7MRLQ6TG-DixbCowo.js            0.22 kB │ gzip:     0.14 kB
+packages/demo-target-chasing build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:     6.19 kB
+packages/demo-target-chasing build: ../dist/assets/index-D4K5p0bi.js                    5,623.79 kB │ gzip: 1,545.02 kB
+packages/demo-target-chasing build: ✓ built in 3.96s
+packages/demo-target-chasing build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-target-chasing build: - Using dynamic import() to code-split the application
+packages/demo-target-chasing build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-target-chasing build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-target-chasing build: Done
+packages/demo-cartpole build$ tsc -b && vite build
+packages/ignitionai build$ tsc
+packages/ignitionai build: Done
+packages/demo-cartpole build: vite v6.3.3 building for production...
+packages/demo-cartpole build: transforming...
+packages/demo-cartpole build: [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cartpole build: [plugin vite:resolve] Module "path" has been externalized for browser compatibility, imported by "/Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/backend-tfjs/src/io/saveModelToHub.ts". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (39:22): "resolve" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (40:5): "mkdirSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (47:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (48:9): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (60:5): "writeFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (60:24): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (66:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (66:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (70:28): "readFileSync" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ../backend-tfjs/src/io/saveModelToHub.ts (70:46): "join" is not exported by "__vite-browser-external", imported by "../backend-tfjs/src/io/saveModelToHub.ts".
+packages/demo-cartpole build: ✓ 1942 modules transformed.
+packages/demo-cartpole build: rendering chunks...
+packages/demo-cartpole build: computing gzip size...
+packages/demo-cartpole build: ../dist/index.html                                      0.48 kB │ gzip:   0.32 kB
+packages/demo-cartpole build: ../dist/assets/index-M-IzO8ow.css                       0.17 kB │ gzip:   0.15 kB
+packages/demo-cartpole build: ../dist/assets/sha256-wrapper-GDBS2T5O-Bwno1Yvm.js     13.10 kB │ gzip:   6.19 kB
+packages/demo-cartpole build: ../dist/assets/index-CO_HYCbV.js                    2,538.41 kB │ gzip: 485.51 kB
+packages/demo-cartpole build: (!) Some chunks are larger than 500 kB after minification. Consider:
+packages/demo-cartpole build: - Using dynamic import() to code-split the application
+packages/demo-cartpole build: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+packages/demo-cartpole build: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+packages/demo-cartpole build: ✓ built in 2.56s
+packages/demo-cartpole build: Done
+
+ RUN  v3.1.1 /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+
+(node:84247) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ packages/demo-cage-duel/test/combat.test.ts (15 tests) 7ms
+stderr | packages/demo-target-chasing/test/runStore.test.ts > runStore > startRun > auto-prunes oldest runs beyond 100
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+[IgnitionAI] localStorage full — run persistence disabled
+
+stdout | packages/backend-tfjs/test/qtable.test.ts > QTableAgent — convergence GridWorld 5×5 > la récompense moyenne augmente sur 300 épisodes
+[QTable convergence] premiers 50 épisodes: -0.542, derniers 50 épisodes: 0.260, états visités: 25, epsilon final: 0.050
+
+ ✓ packages/demo-target-chasing/test/runStore.test.ts (14 tests) 7ms
+ ✓ packages/backend-tfjs/test/qtable.test.ts (5 tests) 5ms
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > save() > creates repo and uploads model + weights files
+[HFProvider] ✅ Saved to hf://testuser/test-repo/my-model
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > save() > returns the correct hf:// URI
+[HFProvider] ✅ Saved to hf://testuser/test-repo/checkpoint-1
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > save() > includes metadata.json when metadata is provided
+[HFProvider] ✅ Saved to hf://testuser/test-repo/checkpoint-2
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > save() > does not include metadata.json when metadata is omitted
+[HFProvider] ✅ Saved to hf://testuser/test-repo/checkpoint-3
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > save() > silently ignores createRepo errors (repo already exists)
+[HFProvider] ✅ Saved to hf://testuser/test-repo/model
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > load() > calls tf.loadLayersModel with the correct URL
+[HFProvider] Loading model from: https://huggingface.co/testuser/test-repo/resolve/main/best-model/model.json
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > load() > calls tf.loadLayersModel with the correct URL
+[HFProvider] ✅ Model loaded (best-model)
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > load() > retries on failure and eventually throws
+[HFProvider] Loading model from: https://huggingface.co/testuser/test-repo/resolve/main/failing-model/model.json
+
+stderr | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > load() > retries on failure and eventually throws
+[HFProvider] ⚠️ Attempt 1/3 failed. Retrying in 0ms…
+
+stderr | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > load() > retries on failure and eventually throws
+[HFProvider] ⚠️ Attempt 2/3 failed. Retrying in 0ms…
+
+stderr | packages/demo-ball-thrust/test/physics.test.ts
+using deprecated parameters for the initialization function; pass a single object instead
+
+stderr | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > load() > retries on failure and eventually throws
+[HFProvider] ⚠️ Attempt 3/3 failed. Retrying in 0ms…
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > load() > succeeds on second attempt after initial failure
+[HFProvider] Loading model from: https://huggingface.co/testuser/test-repo/resolve/main/flaky-model/model.json
+
+stderr | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > load() > succeeds on second attempt after initial failure
+[HFProvider] ⚠️ Attempt 1/3 failed. Retrying in 0ms…
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > load() > succeeds on second attempt after initial failure
+[HFProvider] ✅ Model loaded (flaky-model)
+
+stderr | packages/demo-ball-thrust/test/ball-thrust-env.test.ts
+using deprecated parameters for the initialization function; pass a single object instead
+
+stdout | packages/storage/test/huggingface.test.ts > HuggingFaceProvider > delete() > commits delete operations for model.json and weights.bin
+[HFProvider] ✅ Deleted model "old-model"
+
+ ✓ packages/storage/test/huggingface.test.ts (19 tests) 16ms
+stderr | packages/backend-tfjs/test/schemas.test.ts > DQNAgent constructor validation > constructs successfully with valid config
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/schemas.test.ts (30 tests) 28ms
+stderr | packages/demo-ball-thrust/test/training-session.test.ts
+using deprecated parameters for the initialization function; pass a single object instead
+
+stderr | packages/demo-ball-thrust/test/training-session.test.ts > learns for 64 transitions, then freezes exact weights and updates for 32 inference transitions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/core/test/lifecycle.test.ts (10 tests) 17ms
+stderr | packages/backend-onnx/src/tests/train-to-inference.test.ts > Train → Export → Inference pipeline > Train: creates DQN agent with TrainingEnv, agent produces actions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-onnx/src/tests/train-to-inference.test.ts > Train → Export → Inference pipeline > Train: creates DQN agent with TrainingEnv, agent produces actions
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-onnx/src/tests/train-to-inference.test.ts > Train → Export → Inference pipeline > Full pipeline: TrainingEnv → train → verify model topology
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-onnx/src/tests/train-to-inference.test.ts > Train → Export → Inference pipeline > Algorithm switch: DQN → PPO on same env
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stderr | packages/demo-car-circuit/test/racing-learning.test.ts > learns, serializes actual weights, and reloads identical frozen decisions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — interface > getAction retourne un indice d'action valide
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-onnx/src/tests/train-to-inference.test.ts (5 tests) 34ms
+stderr | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":true,"expected":0}
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":true,"truncated":false,"expected":1}
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] ✅ Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] ✅ Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] ✅ Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] ✅ Saved actor: memory, critic: memory
+
+ ✓ packages/backend-tfjs/test/ppo-bootstrap.test.ts (6 tests) 38ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > learns for 64 transitions, then freezes exact weights and updates for 32 inference transitions
+learning-proof {
+  trainingSteps: [33m64[39m,
+  inferenceSteps: [33m32[39m,
+  updates: [33m33[39m,
+  parameters: [33m2057[39m,
+  changedValues: [33m1216[39m,
+  maxWeightDelta: [33m0.03263171762228012[39m
+}
+
+ ✓ packages/demo-ball-thrust/test/ball-thrust-env.test.ts (38 tests) 553ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > learns for 64 transitions, then freezes exact weights and updates for 32 inference transitions
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() creates a DQN agent with deduced inputSize=4, actionSize=4
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stderr | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() creates a DQN agent with deduced inputSize=4, actionSize=4
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > agent can produce actions after train()
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() defaults to DQN
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > train() is idempotent when already training same algo
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 1: Zero-config DQN > stop() then train() resumes with same agent
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 2: Algorithm selection > switching algorithm disposes the old agent
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 3: Overrides > overrides lr and hiddenLayers
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/auto-config.test.ts > IgnitionEnvTFJS — auto-config > User Story 3: Overrides > actions as number works
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/auto-config.test.ts (10 tests) 30ms
+ ✓ packages/demo-maze/test/maze-env.test.ts (7 tests) 10ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > awaits a real deferred fit before pause/reset/save and synchronizes after manual mode
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > enforces the per-network cap through pause/resume/reset and clears it only with a new network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > enforces the per-network cap through pause/resume/reset and clears it only with a new network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > stops training and evaluation at the common five-minute experiment deadline without changing weights
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > stops training and evaluation at the common five-minute experiment deadline without changing weights
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+========== DQN AGENT TEST ==========
+[TFJS] Current backend: [90mundefined[39m
+[TFJS Memory - START] { numTensors: [33m0[39m, numBytes: [33m0[39m, numDataBuffers: [33m0[39m, unreliable: [33mtrue[39m }
+Config: {
+  "inputSize": 1,
+  "actionSize": 2,
+  "hiddenLayers": [
+    16
+  ],
+  "epsilon": 0.5,
+  "epsilonDecay": 0.99,
+  "minEpsilon": 0.01,
+  "lr": 0.001,
+  "gamma": 0.9,
+  "batchSize": 4,
+  "memorySize": 100,
+  "targetUpdateFrequency": 10
+}
+Agent initialized
+[TFJS Memory - AFTER AGENT INIT] { numTensors: [33m12[39m, numBytes: [33m544[39m, numDataBuffers: [33m8[39m, unreliable: [33mtrue[39m }
+[TFJS Memory - STEP 0] { numTensors: [33m12[39m, numBytes: [33m544[39m, numDataBuffers: [33m8[39m, unreliable: [33mtrue[39m }
+
+Step 1/50: State=0.158, Correct action=0
+
+stderr | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 1/1 (100.0%)
+Memory size: 1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.500
+
+Step 2/50: State=0.849, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 1/2 (50.0%)
+Memory size: 2
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.500
+
+Step 3/50: State=0.368, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 1/3 (33.3%)
+Memory size: 3
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.500
+
+Step 4/50: State=0.873, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 1/4 (25.0%)
+Memory size: 4
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.495
+
+Step 5/50: State=0.747, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 1/5 (20.0%)
+Memory size: 5
+
+ ✓ packages/demo-target-chasing/test/graphToConfig.test.ts (8 tests) 5ms
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.490
+
+Step 6/50: State=0.950, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 1/6 (16.7%)
+Memory size: 6
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.485
+
+Step 7/50: State=0.791, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 2/7 (28.6%)
+Memory size: 7
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.480
+
+Step 8/50: State=0.123, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 3/8 (37.5%)
+Memory size: 8
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.475
+
+Step 9/50: State=0.943, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 3/9 (33.3%)
+Memory size: 9
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.471
+
+Step 10/50: State=0.910, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 3/10 (30.0%)
+Memory size: 10
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.466
+[TFJS Memory - STEP 10] {
+  numTensors: [33m20[39m,
+  numBytes: [33m1072[39m,
+  numDataBuffers: [33m20[39m,
+  unreliable: [33mtrue[39m
+}
+
+Step 11/50: State=0.341, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 3/11 (27.3%)
+Memory size: 11
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.461
+
+Step 12/50: State=0.725, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 4/12 (33.3%)
+Memory size: 12
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.457
+
+Step 13/50: State=0.350, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 5/13 (38.5%)
+Memory size: 13
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"inputSize":2}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"actionSize":3}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.452
+
+Step 14/50: State=0.563, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 5/14 (35.7%)
+Memory size: 14
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"stateBins":6}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"stateLow":[-1]}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > rejects an incompatible checkpoint without changing the agent: {"stateHigh":[2]}
+[QTable] ✅ Saved to localStorage (ignition:qtable:source)
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.448
+
+Step 15/50: State=0.889, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 5/15 (33.3%)
+Memory size: 15
+
+stdout | packages/backend-tfjs/test/qtable-contract.test.ts > Q-table config and checkpoint contract > restores greedy actions and epsilon, keeps current lr and discards pending experience
+[QTable] ✅ Saved to localStorage (ignition:qtable:good)
+
+ ✓ packages/backend-tfjs/test/qtable-contract.test.ts (22 tests) 14ms
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.443
+
+Step 16/50: State=0.097, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 6/16 (37.5%)
+Memory size: 16
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.439
+
+Step 17/50: State=0.069, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 7/17 (41.2%)
+Memory size: 17
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.434
+
+Step 18/50: State=0.479, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 8/18 (44.4%)
+Memory size: 18
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.430
+
+Step 19/50: State=0.653, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 9/19 (47.4%)
+Memory size: 19
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.426
+
+Step 20/50: State=0.618, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 9/20 (45.0%)
+Memory size: 20
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.421
+[TFJS Memory - STEP 20] {
+  numTensors: [33m20[39m,
+  numBytes: [33m1072[39m,
+  numDataBuffers: [33m20[39m,
+  unreliable: [33mtrue[39m
+}
+
+Step 21/50: State=0.768, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 9/21 (42.9%)
+Memory size: 21
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.417
+
+Step 22/50: State=0.906, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 9/22 (40.9%)
+Memory size: 22
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.413
+
+Step 23/50: State=0.505, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 9/23 (39.1%)
+Memory size: 23
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.409
+
+Step 24/50: State=0.635, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 9/24 (37.5%)
+Memory size: 24
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.405
+
+Step 25/50: State=0.108, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 9/25 (36.0%)
+Memory size: 25
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.401
+
+Step 26/50: State=0.844, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 9/26 (34.6%)
+Memory size: 26
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.397
+
+Step 27/50: State=0.892, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 10/27 (37.0%)
+Memory size: 27
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.393
+
+Step 28/50: State=0.488, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 11/28 (39.3%)
+Memory size: 28
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.389
+
+Step 29/50: State=0.604, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 11/29 (37.9%)
+Memory size: 29
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.385
+
+Step 30/50: State=0.545, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 11/30 (36.7%)
+Memory size: 30
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.381
+[TFJS Memory - STEP 30] {
+  numTensors: [33m20[39m,
+  numBytes: [33m1072[39m,
+  numDataBuffers: [33m20[39m,
+  unreliable: [33mtrue[39m
+}
+
+Step 31/50: State=0.680, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 11/31 (35.5%)
+Memory size: 31
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.377
+
+Step 32/50: State=0.251, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 12/32 (37.5%)
+Memory size: 32
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.374
+
+Step 33/50: State=0.379, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 12/33 (36.4%)
+Memory size: 33
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.370
+
+Step 34/50: State=0.698, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 12/34 (35.3%)
+Memory size: 34
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.366
+
+Step 35/50: State=0.020, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: -1, Running score: 12/35 (34.3%)
+Memory size: 35
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.362
+
+Step 36/50: State=0.767, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 12/36 (33.3%)
+Memory size: 36
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.359
+
+Step 37/50: State=0.875, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 12/37 (32.4%)
+Memory size: 37
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.355
+
+Step 38/50: State=0.380, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 13/38 (34.2%)
+Memory size: 38
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.352
+
+Step 39/50: State=0.781, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 13/39 (33.3%)
+Memory size: 39
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.348
+
+Step 40/50: State=0.829, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 13/40 (32.5%)
+Memory size: 40
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.345
+[TFJS Memory - STEP 40] {
+  numTensors: [33m20[39m,
+  numBytes: [33m1072[39m,
+  numDataBuffers: [33m20[39m,
+  unreliable: [33mtrue[39m
+}
+
+Step 41/50: State=0.574, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 13/41 (31.7%)
+Memory size: 41
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.341
+
+Step 42/50: State=0.502, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 13/42 (31.0%)
+Memory size: 42
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.338
+
+Step 43/50: State=0.679, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 13/43 (30.2%)
+Memory size: 43
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.334
+
+Step 44/50: State=0.915, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 13/44 (29.5%)
+Memory size: 44
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.331
+
+Step 45/50: State=0.848, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 1
+Reward: 1, Running score: 14/45 (31.1%)
+Memory size: 45
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.328
+
+Step 46/50: State=0.312, Correct action=0
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: 1, Running score: 15/46 (32.6%)
+Memory size: 46
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.325
+
+Step 47/50: State=0.728, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 15/47 (31.9%)
+Memory size: 47
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.321
+
+Step 48/50: State=0.921, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 15/48 (31.3%)
+Memory size: 48
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.318
+
+Step 49/50: State=0.932, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 15/49 (30.6%)
+Memory size: 49
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.315
+
+Step 50/50: State=0.771, Correct action=1
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Action chosen: 0
+Reward: -1, Running score: 15/50 (30.0%)
+Memory size: 50
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Epsilon: 0.312
+
+========== TRAINING SUMMARY ==========
+Final score: 15/50 (30.0%)
+Total reward: -20
+Final epsilon: 0.312
+[TFJS] Current backend: cpu
+[TFJS Memory - END OF TRAINING] {
+  numTensors: [33m20[39m,
+  numBytes: [33m1072[39m,
+  numDataBuffers: [33m20[39m,
+  unreliable: [33mtrue[39m
+}
+
+Test prediction for state [0.9]
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+Agent chose: 0 (Expected: 1)
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+[TFJS Memory - END OF TEST] { numTensors: [33m0[39m, numBytes: [33m0[39m, numDataBuffers: [33m0[39m, unreliable: [33mtrue[39m }
+
+stdout | packages/backend-tfjs/test/dqn.test.ts > DQNAgent > should train on a fake environment
+[TFJS] After cleanup: {
+  unreliable: [33mtrue[39m,
+  reasons: [
+    [32m'The reported memory is an upper bound. Due to automatic garbage collection, the true allocated memory may be less.'[39m
+  ],
+  numTensors: [33m0[39m,
+  numDataBuffers: [33m0[39m,
+  numBytes: [33m0[39m
+}
+
+ ✓ packages/backend-tfjs/test/dqn.test.ts (1 test) 103ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > round-trips real TF artifacts/state, rejects malformed metadata/artifacts and keeps the active network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > round-trips real TF artifacts/state, rejects malformed metadata/artifacts and keeps the active network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > round-trips real TF artifacts/state, rejects malformed metadata/artifacts and keeps the active network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-cage-duel/test/blender-assets.test.ts (3 tests) 6ms
+ ✓ packages/core/test/env-validation.test.ts (15 tests) 5ms
+stdout | packages/demo-target-chasing/test/networkDesigner.integration.test.ts > Network Designer → Agent integration > graph change → hiddenLayers → can create a DQNAgent with correct config
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stderr | packages/demo-target-chasing/test/networkDesigner.integration.test.ts > Network Designer → Agent integration > graph change → hiddenLayers → can create a DQNAgent with correct config
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/demo-target-chasing/test/networkDesigner.integration.test.ts > Network Designer → Agent integration > agent can be disposed and recreated with different architecture
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-target-chasing/test/networkDesigner.integration.test.ts (4 tests) 12ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-car-circuit/test/circuit-env.test.ts (12 tests) 3ms
+ ✓ packages/demo-car-circuit/test/racing-learning.test.ts (9 tests) 1008ms
+   ✓ completes a race using persisted learned weights without changing them  565ms
+   ✓ does not publish an obsolete training world when cancelled during the update  340ms
+(node:84295) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ packages/demo-target-chasing/test/dashboard.integration.test.ts (3 tests) 5ms
+ ✓ packages/core/test/persistence.test.ts (5 tests) 3ms
+stderr | packages/backend-tfjs/test/dqn.convergence.test.ts > DQN — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+memory-plateau { warm: [33m28[39m, loadedWarm: [33m28[39m, afterFurtherUpdates: [33m28[39m }
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-gridworld/test/gridworld-env.test.ts (12 tests) 2ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-car-circuit/test/racing-race.test.ts (15 tests) 1623ms
+   ✓ runs four reference drivers on one common clock to completion  1149ms
+ ✓ packages/web/test/ball-thrust-blog.test.ts (2 tests) 493ms
+   ✓ compiles the six controls into a semantic table in French and English  489ms
+ ✓ packages/environments/test/gridworld.test.ts (12 tests) 9ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+memory-proof { baseline: [33m0[39m, afterDispose: [33m0[39m }
+
+stdout | packages/backend-tfjs/test/qtable-persistence.test.ts > QTableAgent persistence > save() serializes qTable and config to localStorage
+[QTable] ✅ Saved to localStorage (ignition:qtable:test-model)
+
+stdout | packages/backend-tfjs/test/qtable-persistence.test.ts > QTableAgent persistence > load() restores qTable and state from localStorage
+[QTable] ✅ Saved to localStorage (ignition:qtable:test-model)
+
+ ✓ packages/backend-tfjs/test/qtable-persistence.test.ts (3 tests) 7ms
+ ✓ packages/demo-target-chasing/test/networkStore.test.ts (5 tests) 4ms
+ ✓ packages/demo-cage-duel/test/duel.test.ts (6 tests) 2ms
+ ✓ packages/demo-car-circuit/test/racing-driving.test.ts (8 tests) 20ms
+ ✓ packages/demo-ball-thrust/test/physics.test.ts (41 tests) 2111ms
+ ✓ packages/demo-car-circuit/test/evaluation.test.ts (5 tests) 235ms
+stderr | packages/backend-tfjs/test/hubIntegration.test.ts
+⚠️ Missing HF_TOKEN in .env — skipping Hugging Face test
+
+ ↓ packages/backend-tfjs/test/hubIntegration.test.ts (1 test | 1 skipped)
+ ✓ packages/backend-tfjs/test/setBackend.test.ts (7 tests) 5ms
+stderr | packages/demo-car-circuit/test/q-training.test.ts > trains dqn and reloads its actual weights into frozen racing opponents
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/demo-mountaincar/test/mountaincar-env.test.ts (13 tests) 5ms
+stdout | packages/demo-car-circuit/test/q-training.test.ts > trains dqn and reloads its actual weights into frozen racing opponents
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/environments/test/mountaincar.test.ts (13 tests) 5ms
+ ✓ packages/core/test/ignition-env.test.ts (9 tests) 2ms
+ ✓ packages/demo-car-circuit/test/track.test.ts (9 tests) 4ms
+stdout | packages/demo-car-circuit/test/q-training.test.ts > trains double-dqn and reloads its actual weights into frozen racing opponents
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+[PPO convergence] premiers 40 épisodes: 0.610, derniers 40 épisodes: 0.854
+
+ ✓ packages/backend-tfjs/test/ppo.test.ts (4 tests) 2051ms
+   ✓ PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)  1987ms
+ ✓ packages/demo-car-circuit/test/q-training.test.ts (5 tests) 291ms
+ ✓ packages/demo-cartpole/test/cartpole-env.test.ts (10 tests) 2ms
+ ✓ packages/backend-onnx/src/tests/onnx-agent.test.ts (7 tests) 11ms
+ ✓ packages/environments/test/cartpole.test.ts (10 tests) 5ms
+stdout | packages/backend-tfjs/test/dqn.convergence.test.ts > DQN — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+[DQN convergence] premiers 50 épisodes: 0.758, derniers 50 épisodes: 0.841
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn.convergence.test.ts (1 test) 1073ms
+   ✓ DQN — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)  1072ms
+ ✓ packages/backend-onnx/src/tests/runtime.test.ts (4 tests) 16ms
+ ✓ packages/core/test/episode-end.test.ts (7 tests) 7ms
+ ✓ packages/demo-cage-duel/test/learning.test.ts (3 tests) 10ms
+stderr | packages/backend-tfjs/test/checkpoint.test.ts
+⚠️ HF_TOKEN missing, skipping checkpoint test
+
+ ↓ packages/backend-tfjs/test/checkpoint.test.ts (1 test | 1 skipped)
+stderr | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=false
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=false
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/double-dqn.test.ts > separates online selection from target evaluation: doubleQ=true
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/double-dqn.test.ts (2 tests) 23ms
+stderr | packages/backend-tfjs/test/double-dqn-api.test.ts > creates, trains, saves and greedily infers Double DQN through IgnitionEnv
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/double-dqn-api.test.ts > creates, trains, saves and greedily infers Double DQN through IgnitionEnv
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/double-dqn-api.test.ts (1 test) 24ms
+stderr | packages/backend-tfjs/test/ppo-public.test.ts > PPO learns rewarded actions through the public loop (seed 11)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/trainer.test.ts
+⚠️ HF_TOKEN is missing — skipping trainAgent test
+
+ ↓ packages/backend-tfjs/test/trainer.test.ts (1 test | 1 skipped)
+ ✓ packages/core/test/defaults.test.ts (6 tests) 3ms
+stderr | packages/backend-tfjs/test/dqn-truncation.test.ts > DQN bootstraps unless terminated=false
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/dqn-seed.test.ts > repeats initialization, exploration and replay updates with a supplied seed
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/dqn-truncation.test.ts > DQN bootstraps unless terminated=false
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/backend-tfjs/test/dqn-truncation.test.ts > DQN bootstraps unless terminated=true
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn-truncation.test.ts (2 tests) 33ms
+ ✓ packages/demo-car-circuit/test/racing-camera.test.ts (3 tests) 1ms
+stdout | packages/backend-tfjs/test/dqn-seed.test.ts > repeats initialization, exploration and replay updates with a supplied seed
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn-seed.test.ts (1 test) 99ms
+ ✓ packages/core/test/schemas.test.ts (4 tests) 3ms
+stderr | packages/backend-tfjs/test/dqn-export.test.ts > exports the current public DQN model with its trained predictions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-onnx/src/tests/exporter.test.ts (6 tests) 621ms
+   ✓ generated ONNX conversion script > delivers literal paths and formats to the converter without shell expansion  618ms
+stdout | packages/backend-tfjs/test/dqn-export.test.ts > exports the current public DQN model with its trained predictions
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn-export.test.ts (1 test) 50ms
+ ✓ packages/demo-cage-duel/test/blender-warrior.test.ts (1 test) 2ms
+ ✓ packages/backend-tfjs/test/backend-selector.test.ts (4 tests) 6ms
+stderr | packages/demo-car-circuit/test/learned-race.test.ts > runs separately loaded learned policies to a result without changing their weights
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/web/test/catalogue.test.ts (1 test) 3ms
+stderr | packages/demo-car-circuit/test/racing-garage.test.ts > keeps a saved local driver available when bundled assets fail
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/demo-car-circuit/test/learned-race.test.ts (5 tests) 1110ms
+   ✓ runs separately loaded learned policies to a result without changing their weights  1077ms
+ ✓ packages/demo-car-circuit/test/racing-garage.test.ts (1 test) 12ms
+ ✓ packages/backend-tfjs/test/qtable-truncation.test.ts (1 test) 2ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > evaluates held-out worlds without changing the visible world, weights, counters or tensor count
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > evaluates held-out worlds without changing the visible world, weights, counters or tensor count
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/ppo-public.test.ts (5 tests) 662ms
+   ✓ PPO learns rewarded actions through the public loop (seed 11)  336ms
+stderr | packages/backend-tfjs/test/dqn-load-memory.test.ts > releases replaced networks and owned optimizers after repeated loads
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/dqn-load-memory.test.ts > releases replaced networks and owned optimizers after repeated loads
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/backend-tfjs/test/dqn-load-memory.test.ts (1 test) 7ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > recompiles an artifact without trainingConfig and performs real updates after loading
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > recompiles an artifact without trainingConfig and performs real updates after loading
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-ball-thrust/test/training-session.test.ts (8 tests) 3505ms
+   ✓ learns for 64 transitions, then freezes exact weights and updates for 32 inference transitions  307ms
+   ✓ keeps tensor memory flat after optimizer initialization and disposes all owned tensors  739ms
+   ✓ evaluates held-out worlds without changing the visible world, weights, counters or tensor count  1862ms
+
+ Test Files  63 passed | 3 skipped (66)
+      Tests  505 passed | 3 skipped (508)
+   Start at  21:38:45
+   Duration  4.03s (transform 917ms, setup 0ms, collect 6.10s, tests 16.07s, environment 5ms, prepare 2.67s)
+

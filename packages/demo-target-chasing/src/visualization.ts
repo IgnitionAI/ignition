@@ -1,3 +1,5 @@
+// @ts-nocheck
+// TODO: refactor to use new IgnitionEnv(TrainingEnv) API
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 

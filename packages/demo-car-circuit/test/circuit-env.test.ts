@@ -73,3 +73,23 @@ describe('CircuitEnv', () => {
     expect(env.done()).toBe(true);
   });
 });
+
+it('records a time limit separately from failure and preserves its transition count on reset', () => {
+  const env = new CircuitEnv(10, 4, 2, { maxSteps: 2 });
+  env.step(1);
+  env.step(1);
+  expect(env.terminated()).toBe(false);
+  expect(env.truncated()).toBe(true);
+  env.reset();
+  expect(env.lastEpisode).toEqual({ transitions: 2, completedLaps: 0, lapTimesSeconds: [],
+    simulationSeconds: 0.1, endReason: 'time-limit' });
+  expect(env.stepCount).toBe(0);
+});
+
+it('returns to the configured starting position and direction', () => {
+  const env = new CircuitEnv(6, 6, 2, { startWaypoint: 32 });
+  const initial = env.observe();
+  env.step(0);
+  env.reset();
+  expect(env.observe()).toEqual(initial);
+});

@@ -1,0 +1,215 @@
+---
+title: '@ignitionai/core'
+description: La boucle d'entraînement, l'interface TrainingEnv et l'auto-configuration. C'est le package dont tout le reste dépend.
+---
+
+# @ignitionai/core
+
+**Responsabilité unique** : définir le contrat entre *ton monde* et *la boucle d'entraînement*. Tout le reste d'IgnitionAI est un plugin par-dessus ce package.
+
+**Source** : [`packages/core/src/`](https://github.com/IgnitionAI/ignition/tree/main/packages/core/src) sur GitHub.
+
+## Installation
+
+```bash
+npm install @ignitionai/core
+```
+
+Tu n'installes presque jamais `core` seul — tu l'installes généralement avec un backend comme `@ignitionai/backend-tfjs`. Mais les types et l'interface `TrainingEnv` viennent d'ici, c'est donc quand même le premier package à comprendre.
+
+## Surface de l'API publique
+
+| Export | Nature | Rôle |
+|---|---|---|
+| `IgnitionEnv` | classe | Environnement d'entraînement de base. Orchestre agent + env + boucle. Étendu par les backends. |
+| `TrainingEnv` | type | Interface que tu implémentes pour décrire ton monde. |
+| `InferenceEnv` | type | Même idée, pour le déploiement en inférence uniquement. |
+| `AgentInterface` | type | Contrat que chaque agent (DQN, PPO, Q-Table, OnnxAgent, …) doit satisfaire. |
+| `AgentFactory` | type | Une fonction `(config) => AgentInterface`. Les backends en enregistrent une par algorithme. |
+| `AlgorithmType` | type | Union de littéraux : `'dqn' | 'ppo' | 'qtable'`. |
+| `CheckpointableAgent` | type | Extension de `AgentInterface` pour les agents capables de sauvegarder/charger leurs poids. |
+| `Experience` | type | Un tuple de transition `(state, action, reward, nextState, terminated, truncated)`. |
+| `StepResult` | type | Type de retour d'un pas de l'env. |
+| `ActionSpace` / `ObservationSpace` | types | Descriptions typées des formes d'action/observation. |
+| `DiscreteSpace` / `BoxSpace` / `MultiDiscreteSpace` | types | Les trois sortes d'espaces. |
+| `mergeDefaults` | fonction | Utilitaire utilisé par les backends pour fusionner la config utilisateur avec les défauts de l'algorithme. |
+| `validateTrainingEnv` / `validateInferenceEnv` | fonctions | Vérifications à l'exécution qu'un env fourni par l'utilisateur satisfait l'interface. |
+| `ExperienceSchema` | schéma Zod | Schéma de validation des objets `Experience`. |
+
+## L'interface `TrainingEnv` — le contrat que tu implémentes
+
+Voilà tout le contrat entre ton monde de jeu et le framework :
+
+```ts
+export interface TrainingEnv {
+  /** Available actions: named list or count */
+  actions: string[] | number
+
+  /** Return the current observation as a number array */
+  observe(): number[]
+
+  /** Apply an action to the environment */
+  step(action: number | number[]): void
+
+  /** Return the reward for the current state */
+  reward(): number
+
+  /** Return true if the episode is over */
+  done(): boolean
+
+  /** Reset the environment for a new episode */
+  reset(): void
+}
+```
+
+Cinq méthodes et une propriété. C'est tout.
+
+- **`actions`** — soit une liste de chaînes (ex. `['left', 'right']`), soit un entier. Le framework utilise `actions.length` (ou l'entier) pour déduire la taille de sortie de l'agent.
+- **`observe()`** — retourne un `number[]` plat décrivant l'état courant. Normalise les valeurs autour de `[-1, 1]` pour de meilleurs résultats. La longueur de ce tableau est la taille d'entrée de l'agent.
+- **`step(action)`** — applique l'action à ton monde. Déplace le chariot, fait apparaître l'ennemi, avance la physique. Aucune valeur de retour.
+- **`reward()`** — note l'état courant. Peut être négatif (pénalité), positif (récompense) ou nul.
+- **`done()`** — true si l'épisode doit se terminer. Le framework appellera `reset()` automatiquement au pas suivant.
+- **`reset()`** — restaure ton monde dans un état de départ frais. Doit être appelé depuis `done() === true`.
+
+Il n'y a aucun état global implicite. Il n'y a aucun contexte caché qui circule. Si le framework a besoin de savoir quelque chose sur ton monde, il appelle l'une de ces méthodes pour le découvrir.
+
+## Auto-configuration — comment la forme du réseau est déduite
+
+Voici la partie qui rend IgnitionAI « zéro config ». Quand tu fais :
+
+```ts
+const cartpole = new CartPoleEnv()
+const env = new IgnitionEnvTFJS(cartpole)
+env.train('dqn')
+```
+
+Le framework doit construire un réseau de neurones qui mappe `observation → Q-values` avec la bonne taille d'entrée et la bonne taille de sortie. Tu ne tapes jamais ces nombres. Voici comment il les devine.
+
+Dans le constructeur de `IgnitionEnv` :
+
+```ts filename="packages/core/src/ignition-env.ts (excerpt)"
+constructor(env: TrainingEnv) {
+  validateTrainingEnv(env)
+  this.env = env
+  this.currentState = env.observe()   // ← First call. Stores initial observation.
+}
+```
+
+Et dans `train()` :
+
+```ts filename="packages/core/src/ignition-env.ts (excerpt)"
+const inputSize = this.currentState.length         // ← Deduced from observe() length
+const actionSize = typeof this.env.actions === 'number'
+  ? this.env.actions
+  : this.env.actions.length                        // ← Deduced from actions property
+
+const factory = this.factories[algo]
+const merged = mergeDefaults(defaults, { ...overrides, inputSize, actionSize })
+this._agent = factory(merged)
+```
+
+Le flux est donc :
+
+1. Tu passes ton `TrainingEnv` à `IgnitionEnvTFJS`.
+2. Le constructeur de base `IgnitionEnv` appelle `observe()` une fois et stocke le résultat.
+3. Quand tu appelles `train('dqn')`, le framework lit `this.currentState.length` (taille d'entrée) et ta propriété `actions` (taille de sortie), les fusionne avec les défauts de DQN et appelle la factory DQN.
+4. L'agent est construit avec la bonne forme. Tu n'as jamais spécifié `inputSize` ni `actionSize`.
+
+Si tu enfreins le contrat — par ex. en retournant des tableaux de longueurs différentes depuis `observe()` selon les appels — le framework lèvera une erreur à l'entraînement, pas à la construction. `validateTrainingEnv` attrape les erreurs les plus courantes (mauvais types, méthodes manquantes) mais ne peut pas attraper chaque bug logique.
+
+## La boucle d'entraînement — pas à pas
+
+La boucle réelle vit dans `IgnitionEnv.step()` :
+
+```ts filename="packages/core/src/ignition-env.ts (excerpt)"
+public async step(): Promise<StepResult> {
+  if (!this._agent) throw new Error('[IgnitionEnv] No agent. Call train() first.')
+
+  this.stepCount++
+
+  // 1. Ask the agent what to do given the current state
+  const action = await this._agent.getAction(this.currentState)
+
+  // 2. Apply it to the world
+  this.env.step(action)
+
+  // 3. Observe the result
+  const observation = this.env.observe()
+  const reward = this.env.reward()
+  const terminated = this.env.done()
+
+  // 4. Package the transition
+  const experience: Experience = {
+    state: this.currentState,
+    action,
+    reward,
+    nextState: observation,
+    terminated,
+    truncated: false,
+  }
+
+  // 5. Hand it to the agent for learning
+  this._agent.remember(experience)
+  await this._agent.train()
+
+  // 6. Advance state — or reset if the episode ended
+  if (terminated) {
+    this.env.reset()
+    this.currentState = this.env.observe()
+  } else {
+    this.currentState = observation
+  }
+
+  return { observation, reward, terminated, truncated: false }
+}
+```
+
+Six étapes. Aucune ne sait quoi que ce soit sur les réseaux de neurones. C'est tout l'intérêt — n'importe quel agent implémentant `AgentInterface` se branche sans aucune modification de cette boucle. DQN, PPO, Q-Table, `OnnxAgent` pour l'inférence — ils utilisent tous les mêmes six étapes.
+
+La méthode externe `start()` enrobe cela dans une boucle qui rend la main via `setTimeout` :
+
+```ts filename="packages/core/src/ignition-env.ts (excerpt)"
+public start(): void {
+  this.isRunning = true
+  const loop = async (): Promise<void> => {
+    if (!this.isRunning) return
+    for (let i = 0; i < this.stepsPerTick; i++) {
+      if (!this.isRunning) return
+      await this.step()
+    }
+    setTimeout(loop, this.stepIntervalMs)
+  }
+  setTimeout(loop, this.stepIntervalMs)
+}
+```
+
+Le `setTimeout` est important — il rend la main au thread principal du navigateur entre les lots de pas, pour que ton canvas React Three Fiber ou ton jeu `<canvas>` puisse s'afficher à 60 fps pendant que l'agent apprend. Voir [backend-tfjs](/docs/how-it-works/backend-tfjs) pour savoir comment `setSpeed()` manipule `stepIntervalMs` et `stepsPerTick` pour arbitrer entre réactivité et débit d'entraînement.
+
+## Mode inférence
+
+`train()` exécute `step()` en boucle, ce qui appelle la méthode `train()` de l'agent à chaque pas. Le **mode inférence** suit un chemin différent — `inferStep()` appelle `getAction(state, greedy = true)` et saute complètement le hook d'apprentissage :
+
+```ts filename="packages/core/src/ignition-env.ts (excerpt)"
+public async inferStep(): Promise<StepResult> {
+  this.stepCount++
+  const action = await this._agent.getAction(this.currentState, true)  // greedy!
+  this.env.step(action)
+  // ... same observe/reward/done/reset dance, but no remember() or train()
+}
+```
+
+Passer `greedy = true` dit à DQN de sauter l'exploration epsilon-greedy, dit à PPO de choisir le mode de la distribution d'actions au lieu d'échantillonner, et dit à Q-Table de toujours prendre l'argmax. Tu obtiens une relecture propre et déterministe de ce que l'agent a appris.
+
+## Où ajouter un nouvel algorithme
+
+Si tu veux ajouter, disons, SAC ou DDPG à IgnitionAI, les points d'extension sont :
+
+1. **Implémenter `AgentInterface`** — `getAction`, `remember`, `train`, `dispose` et `reset` optionnels.
+2. **Exporter une `AgentFactory`** — `(config) => new MySacAgent(config)`.
+3. **L'enregistrer sur un backend** — typiquement en sous-classant `IgnitionEnv` et en remplissant `this.factories['sac'] = mySacFactory` dans le constructeur.
+
+C'est tout. Le package core n'a pas besoin de changer.
+
+---
+
+Précédent : **[← Comment ça marche](/docs/how-it-works)** · Suivant : **[@ignitionai/backend-tfjs →](/docs/how-it-works/backend-tfjs)**

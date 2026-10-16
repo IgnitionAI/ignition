@@ -1,0 +1,315 @@
+{
+  "sha": "d83a6646370bd3e983e910e415100ab4a887a871",
+  "browser": "155.0.8059.41",
+  "viewport": {
+    "width": 1440,
+    "height": 1100
+  },
+  "deviceScaleFactor": 1,
+  "headless": false,
+  "checks": [
+    {
+      "name": "impulse and space no-op preserve inertia without training",
+      "initial": {
+        "position": [
+          -4.32,
+          0.35,
+          4.44
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "elapsed": 0.4,
+        "speed": 0,
+        "distance": 12.44,
+        "reached": false
+      },
+      "moving": {
+        "position": [
+          -3.38,
+          0.35,
+          4.44
+        ],
+        "velocity": [
+          2.52,
+          -0.02,
+          0
+        ],
+        "elapsed": 1.1,
+        "speed": 2.52,
+        "distance": 11.8,
+        "reached": false
+      },
+      "noop": {
+        "position": [
+          -1.2,
+          0.35,
+          4.44
+        ],
+        "velocity": [
+          1.88,
+          0,
+          0
+        ],
+        "elapsed": 2.1,
+        "speed": 1.88,
+        "distance": 10.46,
+        "reached": false
+      }
+    },
+    {
+      "name": "three same-seed resets and different-seed reset",
+      "passed": true
+    },
+    {
+      "name": "all eight keyboard directions",
+      "passed": true
+    },
+    {
+      "name": "obstacle-a blocks and rebounds",
+      "maxX": -2.65,
+      "rebounded": true
+    },
+    {
+      "name": "west wall contains sphere",
+      "state": {
+        "position": [
+          -5.65,
+          0.35,
+          4.44
+        ],
+        "velocity": [
+          0.05,
+          0,
+          0
+        ],
+        "elapsed": 2.8,
+        "speed": 0.05,
+        "distance": 13.42,
+        "reached": false
+      }
+    },
+    {
+      "name": "goal reached by keyboard only",
+      "state": {
+        "position": [
+          3.94,
+          0.35,
+          -4.03
+        ],
+        "velocity": [
+          0.9,
+          0,
+          0.02
+        ],
+        "elapsed": 6.7,
+        "speed": 0.9,
+        "distance": 0.65,
+        "reached": true
+      }
+    },
+    {
+      "name": "orbit drag",
+      "passed": true
+    },
+    {
+      "name": "blur releases thrust, seed input retains arrow keys",
+      "passed": true
+    },
+    {
+      "name": "390 × 844 responsive layout without horizontal overflow (not a mobile device)",
+      "passed": true
+    },
+    {
+      "name": "text fallback with WebGL context denied",
+      "passed": true,
+      "errors": []
+    }
+  ],
+  "renderer": {
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4, Unspecified Version)"
+  },
+  "performance": {
+    "durationMs": 30017.300000000003,
+    "frames": 901,
+    "fps": 30.016024092773165,
+    "p50Ms": 33.30000000000291,
+    "p95Ms": 34.80000000000291,
+    "p99Ms": 35,
+    "maxMs": 35.30000000000291,
+    "simulatedSeconds": 29.1,
+    "samples": [
+      {
+        "position": [
+          -4.32,
+          0.35,
+          -4.54
+        ],
+        "velocity": [
+          0,
+          0,
+          -0.39
+        ],
+        "elapsed": 3.3,
+        "speed": 0.39,
+        "distance": 8.84,
+        "reached": false
+      },
+      {
+        "position": [
+          -4.32,
+          0.36,
+          5.65
+        ],
+        "velocity": [
+          0,
+          -0.48,
+          0
+        ],
+        "elapsed": 6.2,
+        "speed": 0.48,
+        "distance": 13.32,
+        "reached": false
+      },
+      {
+        "position": [
+          -4.32,
+          0.35,
+          -5.65
+        ],
+        "velocity": [
+          0,
+          0.31,
+          -1.3
+        ],
+        "elapsed": 9.1,
+        "speed": 1.34,
+        "distance": 8.94,
+        "reached": false
+      },
+      {
+        "position": [
+          -4.32,
+          0.52,
+          4.43
+        ],
+        "velocity": [
+          0,
+          -1.31,
+          -2.36
+        ],
+        "elapsed": 12,
+        "speed": 2.7,
+        "distance": 12.43,
+        "reached": false
+      },
+      {
+        "position": [
+          -4.32,
+          0.35,
+          -5.65
+        ],
+        "velocity": [
+          0,
+          0,
+          0.04
+        ],
+        "elapsed": 14.9,
+        "speed": 0.04,
+        "distance": 8.94,
+        "reached": false
+      },
+      {
+        "position": [
+          -4.32,
+          0.36,
+          5.59
+        ],
+        "velocity": [
+          0,
+          -0.04,
+          1.27
+        ],
+        "elapsed": 17.8,
+        "speed": 1.27,
+        "distance": 13.28,
+        "reached": false
+      },
+      {
+        "position": [
+          -4.32,
+          0.35,
+          -5.41
+        ],
+        "velocity": [
+          0,
+          0,
+          -0.96
+        ],
+        "elapsed": 20.8,
+        "speed": 0.96,
+        "distance": 8.91,
+        "reached": false
+      },
+      {
+        "position": [
+          -4.32,
+          0.57,
+          5.65
+        ],
+        "velocity": [
+          0,
+          -0.43,
+          -0.01
+        ],
+        "elapsed": 23.7,
+        "speed": 0.43,
+        "distance": 13.32,
+        "reached": false
+      },
+      {
+        "position": [
+          -4.32,
+          0.35,
+          -5.57
+        ],
+        "velocity": [
+          0,
+          0.27,
+          -1.21
+        ],
+        "elapsed": 26.6,
+        "speed": 1.24,
+        "distance": 8.93,
+        "reached": false
+      },
+      {
+        "position": [
+          -4.32,
+          0.56,
+          5.29
+        ],
+        "velocity": [
+          0,
+          -0.69,
+          -0.62
+        ],
+        "elapsed": 29.5,
+        "speed": 0.93,
+        "distance": 13.06,
+        "reached": false
+      }
+    ]
+  },
+  "passed": true,
+  "consoleMessages": [
+    {
+      "type": "warning",
+      "text": "using deprecated parameters for the initialization function; pass a single object instead"
+    }
+  ],
+  "errors": []
+}

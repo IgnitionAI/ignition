@@ -1,0 +1,38 @@
+
+ RUN  v3.1.1 /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+
+ ❯ packages/web/test/ball-thrust-blog.test.ts (2 tests | 1 failed) 206ms
+   ✓ loads both Ball Thrust articles with real source, images and a buildable demo route 1ms
+   × compiles the six controls into a semantic table in French and English 204ms
+     → expected [] to have a length of 1 but got +0
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  20:42:44
+   Duration  620ms (transform 22ms, setup 0ms, collect 217ms, tests 206ms, environment 0ms, prepare 32ms)
+
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/web/test/ball-thrust-blog.test.ts > compiles the six controls into a semantic table in French and English
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ packages/web/test/ball-thrust-blog.test.ts:49:51
+     47|     for (const locale of ['fr', 'en']) {
+     48|       const html = renderToStaticMarkup(await BlogContent({ source: re…
+     49|       expect(html.match(/<table(?:\s|>)/g) ?? []).toHaveLength(1);
+       |                                                   ^
+     50|       expect(html.match(/<th(?:\s|>)/g) ?? []).toHaveLength(2);
+     51|       expect(html.match(/<td(?:\s|>)/g) ?? []).toHaveLength(12);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+EXIT_CODE=1

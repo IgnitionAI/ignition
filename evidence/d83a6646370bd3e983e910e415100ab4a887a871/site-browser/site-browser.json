@@ -1,0 +1,23 @@
+{
+  "sha": "d83a6646370bd3e983e910e415100ab4a887a871",
+  "browser": "155.0.8059.41",
+  "headless": false,
+  "locales": [],
+  "errors": [],
+  "warnings": [
+    "using deprecated parameters for the initialization function; pass a single object instead"
+  ],
+  "cancelledRequests": [
+    "http://localhost:3071/en?_rsc=eqsir",
+    "http://localhost:3071/fr/blog?_rsc=eqsir",
+    "http://localhost:3071/fr?_rsc=eqsir",
+    "http://localhost:3071/fr/docs",
+    "http://localhost:3071/fr",
+    "http://localhost:3071/en?_rsc=1a28h",
+    "http://localhost:3071/fr?_rsc=1a28h",
+    "http://localhost:3071/fr/blog?_rsc=1a28h",
+    "http://localhost:3071/fr/docs?_rsc=1a28h",
+    "http://localhost:3071/fr/changelog?_rsc=1a28h"
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(page.url().includes('/demos/ball-thrust/'))\n\n    at /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/.scratch/ball-thrust-rl/site-browser.cjs:30:4"
+}

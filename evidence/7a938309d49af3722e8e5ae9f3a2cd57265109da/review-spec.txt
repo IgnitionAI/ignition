@@ -1,0 +1,27 @@
+## Spec — corrections nécessaires
+
+Lecture seule du diff complet, des issues #68/#69, du plan et des sources/tests pertinents. Aucune commande exécutée, aucun fichier modifié.
+
+### (a) Exigence partiellement couverte
+
+**1. [P2] Plafond mural non appliqué à l’expérience complète.**  
+Exigence, `PLAN.md` : « **Budget ceiling 5 minutes wall time for the experiment; if reached, stop and retain the actual transition count and incomplete status.** »  
+Dans `packages/demo-ball-thrust/test/training-browser.cjs:76–91`, l’échéance concerne seulement l’attente des 4096 transitions. L’évaluation commence ensuite avec un délai supplémentaire indépendant (`:111–114`). Une formation terminant juste avant cinq minutes autorise donc une expérience dépassant le plafond. Par ailleurs, les boucles de `packages/demo-ball-thrust/src/training-session.ts:109–118,228–243` ne contrôlent que le nombre de transitions. Il manque une échéance expérimentale commune et un arrêt incomplet explicite.
+
+### (b) Comportements non demandés
+
+Aucune dérive de périmètre matérielle relevée ; persistance, évaluation et mises à jour éditoriales sont prévues au plan.
+
+### (c) Exigences apparemment réalisées, mais incorrectes
+
+**2. [P1] Le harness d’entraînement lit mal les artefacts IndexedDB.**  
+Exigence, `PLAN.md` : « **checkpoint round-trip predictions/weights equal** » ; issue #68 : « **variation poids/compteurs mesurée** ».  
+`packages/demo-ball-thrust/test/training-browser.cjs:38–44` lit `record.weightData` et `record.weightSpecs`. Or TF.js 4.22 stocke ces champs sous `record.modelArtifacts` — confirmé dans son implémentation IndexedDB installée. Le premier `save('weights-initial')` échouera donc sur un checkpoint valide, avant l’expérience et ses preuves. C’est un défaut statique du harness, pas simplement une preuve navigateur absente.
+
+**3. [P2] Le parcours clavier attend un freinage devenu impossible après succès.**  
+Exigence, `PLAN.md` : « **Headed browser walkthrough […] manual […]** », avec conservation des régressions physiques.  
+`packages/demo-ball-thrust/test/browser-check.cjs:46,106` exige une distance < 0,4 m **et** une vitesse < 0,45 m/s. Mais `packages/demo-ball-thrust/src/training-session.ts:245–247` cesse toute simulation dès la réussite, déclenchée à 0,7 m. Une entrée dans la cible encore en mouvement fige définitivement position et vitesse : `driveTo` continue alors jusqu’au timeout malgré un succès réel.
+
+**Preuves runtime :** navigateur, builds et suite racine restent volontairement à vérifier ; aucune convergence n’est exigée.
+
+**Bilan Spec : 3 constats — (a) 1, (b) 0, (c) 2 ; pire : P1, harness IndexedDB bloqué avant entraînement.**

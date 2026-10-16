@@ -1,0 +1,17 @@
+---
+title: Catalogue de démos
+description: Les mêmes routes de démos, méthodes et noms de paquets utilisés par la galerie et le build statique.
+---
+
+import DemoCatalog from '../../components/demo-catalog'
+import { demoCatalog as demoCatalogMessages } from '../../messages/en/demo-catalog'
+
+# Catalogue de démos
+
+Circuit Racing est l'expérience clavier desktop à la une : importe de vrais véhicules 3D, entraîne et sauvegarde des pilotes neuronaux, fais des courses contre des checkpoints figés et roule contre eux. Les pilotes par imitation fournis incluent leurs échecs d'évaluation ; leur compétence est mesurée plutôt qu'assumée.
+
+<DemoCatalog t={demoCatalogMessages} />
+
+Le catalogue est maintenu dans `packages/web/data/demos.json`. Le build le consomme directement. Target Chasing n'y figure pas : sa compatibilité avec le build n'a pas été validée pour ce catalogue.
+
+Le [tutoriel Circuit ovale](/docs/tutorials/car-circuit) décrit l'ancien environnement d'enseignement à vitesse constante. Ses checkpoints et ses sept observations sont incompatibles avec les vingt observations versionnées et les neuf actions de conduite de la démo de course.

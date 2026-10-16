@@ -1,0 +1,14 @@
+Executed source SHA: d79341e1665c6413992378ce775941d909b45d32
+Working directory: /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+
+Production server (already running; dist rebuilt from the executed SHA before the browser run):
+pnpm --filter demo-ball-thrust preview --host 127.0.0.1 --port 4170
+
+Browser command (exit 0):
+PLAYWRIGHT_PATH=/Users/salimlaimeche/.npm/_npx/9833c18b2d85bc59/node_modules/playwright \
+CHROMIUM_PATH='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' \
+node packages/demo-ball-thrust/test/browser-check.cjs evidence/d79341e1665c6413992378ce775941d909b45d32
+
+BALL_THRUST_URL was unset; default http://127.0.0.1:4170/ used.
+Playwright used from its existing local install; no package or browser installed for this task.
+Chrome launched headed with Playwright defaults and no additional flags.

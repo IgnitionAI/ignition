@@ -1,0 +1,35 @@
+{
+  "environment": "cartpole-3d",
+  "url": "http://127.0.0.1:5202/",
+  "title": "IgnitionAI — CartPole 3D",
+  "initialText": "← IgnitionAI\nIgnitionAICartPole 3D\n\nTrain RL agents in the browser. Deploy anywhere.\n\nTrain\nReset\nDQN\nPPO\nEp: 0 | Steps: 0\n// That's it. 7 lines.\nimport { IgnitionEnvTFJS } from 'ignitionai';\nimport { CartPoleEnv } from 'ignitionai';\n\nconst pole = new CartPoleEnv();\n\nconst env = new IgnitionEnvTFJS(pole);\nenv.train('dqn');\n\n// Switch to inference after training:\n// env.infer();\nPress Train to begin",
+  "activeText": "← IgnitionAI\nIgnitionAICartPole 3D\n\nTrain RL agents in the browser. Deploy anywhere.\n\nStop\nInference\nReset\nDQN\nPPO\nEp: 1 | Steps: 14\nTRAINING\n// That's it. 7 lines.\nimport { IgnitionEnvTFJS } from 'ignitionai';\nimport { CartPoleEnv } from 'ignitionai';\n\nconst pole = new CartPoleEnv();\n\nconst env = new IgnitionEnvTFJS(pole);\nenv.train('dqn');\n\n// Switch to inference after training:\n// env.infer();\n-298\n0\n5\n10\n15\n20\n0",
+  "example": {
+    "observationSize": 4,
+    "training": {
+      "observation": [
+        0.017111631989013405,
+        -0.20256286601329357,
+        0.02007691189515679,
+        0.34333229637413565
+      ],
+      "reward": 1,
+      "terminated": false,
+      "truncated": false
+    },
+    "inference": {
+      "observation": [
+        0.013060374668747533,
+        -0.3979646010606782,
+        0.0269435578226395,
+        0.6422780442458069
+      ],
+      "reward": 1,
+      "terminated": false,
+      "truncated": false
+    },
+    "lastError": null
+  },
+  "errors": [],
+  "failures": []
+}

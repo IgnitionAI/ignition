@@ -1,0 +1,137 @@
+---
+title: 'CartPole : observations personnalisées'
+description: Ce que l'agent voit est ce que l'agent peut apprendre. Construis trois variantes de l'espace d'observation de CartPole et observe l'effet sur l'entraînement.
+---
+
+# CartPole — Observations personnalisées
+
+Tu as terminé le [tutoriel GridWorld](/docs/tutorials/grid-world) et tu sais écrire un `TrainingEnv` de zéro. Ce tutoriel enseigne une compétence plus subtile : **comment les observations façonnent l'apprentissage**. Un `observe()` mal choisi peut faire ramper l'algorithme le plus rapide. Un bien choisi peut faire passer un algorithme jouet pour un génie. À la fin, tu auras une intuition concrète pour choisir des espaces d'observation sur tes propres envs.
+
+Durée estimée : **20–25 minutes**.
+
+## Prérequis
+
+- Tu as terminé le [tutoriel GridWorld](/docs/tutorials/grid-world) ou tu as une expérience équivalente en écriture d'un `TrainingEnv` personnalisé.
+- Tu as un projet Vite + TypeScript avec `@ignitionai/core` et `@ignitionai/backend-tfjs` installés.
+- Tu as le `CartPoleEnv` du Quickstart (ou l'équivalent avec la physique cart-pole en ligne) dans ton projet.
+
+## Étape 1 — Commencer avec le CartPole à observation complète
+
+D'abord, assure-toi que le baseline du Quickstart fonctionne. Ton `src/cartpole-env.ts` doit renvoyer les quatre variables d'état depuis `observe()` :
+
+```ts filename="src/cartpole-env.ts (extrait)"
+observe(): number[] {
+  return [this.x, this.xDot, this.theta, this.thetaDot]
+}
+```
+
+Et ton `src/main.ts` l'entraîne avec `env.train('dqn')`. Lance-le et note combien de temps prend l'entraînement pour atteindre le plafond de survie de 500 étapes (généralement 30–60 secondes sur du matériel récent à `setSpeed(10)`).
+
+**Pourquoi cette étape existe** : on a besoin d'un témoin. Chaque expérience des étapes suivantes est comparée à ce baseline. Note ton temps de référence — tu y reviendras.
+
+## Étape 2 — Retirer les observations liées au chariot
+
+Crée un nouveau fichier `src/partial-env.ts` :
+
+```ts filename="src/partial-env.ts"
+import { CartPoleEnv } from './cartpole-env'
+
+export class PartialCartPoleEnv extends CartPoleEnv {
+  // Only show the agent the pole angle and angular velocity.
+  // Hide cart position and cart velocity completely.
+  observe(): number[] {
+    const [x, xDot, theta, thetaDot] = super.observe()
+    return [theta, thetaDot]
+  }
+}
+```
+
+Mets à jour `src/main.ts` pour l'utiliser :
+
+```ts filename="src/main.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { PartialCartPoleEnv } from './partial-env'
+
+const env = new IgnitionEnvTFJS(new PartialCartPoleEnv())
+env.train('dqn')
+env.setSpeed(10)
+```
+
+Lance-le. **Qu'observer** : l'entraînement fonctionne — la perche peut toujours être équilibrée à partir de l'angle et de la vitesse angulaire seuls, car les équations de la physique ne dépendent pas réellement de la position du chariot. Mais l'agent doit apprendre une politique plus dure : il ne peut pas savoir quand il est sur le point de toucher la limite de `x` (à ±2,4 unités). Tu devrais voir plus d'épisodes se terminer par une fuite du chariot plutôt que par une chute de la perche, et une convergence légèrement plus lente.
+
+**Pourquoi cette étape existe** : c'est la leçon la plus précieuse du tutoriel. La perche est *solvable* avec moins d'observations, mais l'agent apprend une politique qui marche au labo et échoue aux frontières. **Des observations manquantes limitent silencieusement la politique**. Les envs réels connaissent ce mode d'échec constamment — l'agent marche très bien à l'entraînement et se dégrade en production parce que l'entraînement ne l'a jamais exposé aux cas limites.
+
+## Étape 3 — Ajouter du bruit aux observations
+
+Restaure les quatre observations complètes mais ajoute du bruit gaussien :
+
+```ts filename="src/noisy-env.ts"
+import { CartPoleEnv } from './cartpole-env'
+
+function gaussian(): number {
+  // Box–Muller
+  const u1 = Math.random()
+  const u2 = Math.random()
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2)
+}
+
+export class NoisyCartPoleEnv extends CartPoleEnv {
+  observe(): number[] {
+    const [x, xDot, theta, thetaDot] = super.observe()
+    const noise = 0.05   // 5% observation noise
+    return [
+      x + noise * gaussian(),
+      xDot + noise * gaussian(),
+      theta + noise * gaussian(),
+      thetaDot + noise * gaussian(),
+    ]
+  }
+}
+```
+
+Pointe `main.ts` vers `NoisyCartPoleEnv` et entraîne. **Qu'observer** : l'entraînement converge toujours, mais la politique finale est visiblement saccadée — l'agent sur-corrige parce qu'il ne peut pas pleinement faire confiance à une seule observation. Le temps de convergence est plus long que le baseline, plus court que `PartialCartPoleEnv`.
+
+**Pourquoi cette étape existe** : les capteurs du monde réel sont bruyants. Une estimation de pose par caméra, un IMU, une distance LIDAR — tout a du bruit. Entraîner avec des observations bruitées est une forme de **régularisation** : la politique apprend à être robuste face à l'incertitude. Si tu prévois de déployer sur un vrai robot, ajouter du bruit pendant l'entraînement est souvent le plus gros gain de robustesse de la politique.
+
+## Étape 4 — Ajouter une observation redondante
+
+Donne à l'agent une observation « utile » supplémentaire qu'il peut calculer à partir des existantes :
+
+```ts filename="src/redundant-env.ts"
+import { CartPoleEnv } from './cartpole-env'
+
+export class RedundantCartPoleEnv extends CartPoleEnv {
+  observe(): number[] {
+    const [x, xDot, theta, thetaDot] = super.observe()
+    // Extra obs: how far the pole's tip has moved from the balanced position
+    const tipOffset = Math.sin(theta) * 0.5 + x
+    return [x, xDot, theta, thetaDot, tipOffset]
+  }
+}
+```
+
+Entraîne-le. **Qu'observer** : l'entraînement converge à peu près à la même vitesse que le baseline. L'observation supplémentaire n'aide ni ne nuit significativement. Tu pourrais même voir une petite amélioration si tu as de la chance.
+
+**Pourquoi cette étape existe** : une erreur courante est de penser « plus de features = meilleur agent ». En pratique, **ajouter des features redondantes qu'un réseau de neurones pourrait facilement dériver lui-même a un effet neutre à légèrement positif**. Ce n'est jamais une balle d'argent. L'exception, c'est quand la feature dérivée est vraiment dure à calculer pour le réseau — par exemple un résumé de l'historique récent à longue portée, ou une feature qui demande des connaissances externes. Celles-là aident. Répéter une information que l'env fournit déjà, non.
+
+## Ce que tu viens d'apprendre
+
+Trois leçons concrètes, dans l'ordre où tu devrais les intégrer :
+
+1. **Des observations manquantes limitent silencieusement la politique.** `PartialCartPoleEnv` semblait marcher, mais l'agent ne pouvait pas apprendre à éviter les limites du chariot parce qu'il ne voyait littéralement pas le chariot. Ton env doit exposer chaque dimension dont l'agent a besoin pour agir.
+
+2. **Les observations bruitées sont une forme de régularisation.** `NoisyCartPoleEnv` a convergé plus lentement mais a produit une politique plus robuste. Si tu prévois de déployer sur du matériel, ajoute du bruit pendant l'entraînement.
+
+3. **Les features redondantes sont généralement sans effet.** `RedundantCartPoleEnv` n'a pas aidé de manière significative. Le feature engineering en RL est rarement le goulot — le goulot, c'est presque toujours le signal de récompense et la couverture des observations.
+
+**La méta-leçon** : avant d'ajuster des hyperparamètres, **audite tes observations**. Neuf fois sur dix, un agent DQN qui n'apprend pas manque quelque chose qu'il aurait dû voir.
+
+## Prochaines étapes
+
+- **[MountainCar : reward shaping](/docs/tutorials/mountaincar-shaping)** — l'équivalent de ce tutoriel pour le signal de récompense. Les observations contrôlent *ce que* l'agent peut apprendre ; les récompenses contrôlent *pourquoi* il apprend.
+- **[Algorithmes → DQN](/docs/algorithms/dqn)** — la section « Échec 1 — Les récompenses ne montent jamais » est l'endroit où les mauvaises observations apparaissent habituellement.
+- **[Index des tutoriels](/docs/tutorials)** — choisis ton prochain tutoriel.
+
+---
+
+Précédent : **[← GridWorld](/docs/tutorials/grid-world)** · Suivant : **[MountainCar : reward shaping →](/docs/tutorials/mountaincar-shaping)**

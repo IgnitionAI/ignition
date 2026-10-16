@@ -1,0 +1,52 @@
+---
+title: Tutoriels
+description: Des guides pas à pas. Commence par GridWorld — l'exemple complet le plus simple — puis explore les autres.
+---
+
+# Tutoriels
+
+C'est par les tutoriels que la plupart des gens apprennent réellement IgnitionAI. Ils diffèrent des pages [Comment ça marche](/docs/how-it-works) sur un point important : un tutoriel construit un truc qui fonctionne, de zéro, étape par étape, avec chaque fichier montré et chaque décision expliquée. Tu n'as pas besoin de sauter d'une page à l'autre — tu commences en haut, tu suis les étapes, et en bas tu as un agent entraîné.
+
+## Tutoriels disponibles
+
+| Tutoriel | Difficulté | Durée | Sujet |
+|---|---|---|---|
+| **[GridWorld · Commence ici](/docs/tutorials/grid-world)** | Débutant | ~30 min | Construis un `TrainingEnv` personnalisé, entraîne un agent DQN, regarde-le trouver le chemin le plus court dans une grille 7×7. |
+| **[CartPole : observations personnalisées](/docs/tutorials/cartpole-observations)** | Débutant+ | ~25 min | Ce que l'agent voit est ce que l'agent peut apprendre. Trois variantes d'observations, une seule leçon. |
+| **[MountainCar : reward shaping](/docs/tutorials/mountaincar-shaping)** | Intermédiaire | ~30 min | Le piège classique de la récompense sparse — regarde DQN échouer, puis corrige-le avec un shaping dense. |
+| **[CartPole 3D (R3F)](/docs/tutorials/cartpole-3d)** | Intermédiaire | ~40 min | Branche le CartPole du Quickstart dans une scène React Three Fiber avec ombres et contrôles orbitaux. |
+| **[Circuit de voiture](/docs/tutorials/car-circuit)** | Avancé | ~60 min | La démo phare : piste ovale, récompense non triviale, caméra de poursuite, le bug du bonus de tour que tu écriras sans le vouloir. |
+| **[Export vers Unity (ONNX)](/docs/tutorials/onnx-unity)** | Avancé | ~60 min | Le pipeline complet Entraîner → Exporter → Convertir → Déployer avec Unity Sentis. |
+| **[Navigation de drone (physique)](/docs/tutorials/drone-navigation)** | Avancé | ~40 min + entraînement | Le fleuron. Quadcopter avec physique rigide écrite à la main, contrôle 6-DOF, attentes honnêtes sur la convergence, et la section philosophie d'IgnitionAI. |
+
+## Ordre suggéré
+
+Les tutoriels sont indépendants, mais il existe une progression naturelle :
+
+1. **GridWorld** → les bases d'un env personnalisé, entraînement sans config
+2. **CartPole observations** → comment la conception des observations façonne l'apprentissage
+3. **MountainCar reward shaping** → comment la conception de la récompense façonne l'apprentissage
+4. **CartPole 3D** → ta première intégration R3F
+5. **Circuit de voiture** → la vitrine 3D avancée
+6. **Navigation de drone** → vraie physique, contrôle 6-DOF, friction vs difficulté
+6. **Export vers Unity** → l'histoire du déploiement, de bout en bout
+
+Si tu es pressé, fais **GridWorld → CartPole 3D → Export vers Unity**. C'est le chemin minimum viable entre « jamais entendu parler d'IgnitionAI » et « j'ai livré une politique entraînée dans un moteur de jeu ».
+
+## Prérequis pour chaque tutoriel
+
+Avant de commencer n'importe quel tutoriel, vérifie que tu as :
+
+- **Node.js 20 ou plus récent.**
+- **Un gestionnaire de paquets** — `npm`, `pnpm` ou `yarn` marchent tous ; les tutoriels utilisent `npm` pour les commandes d'installation.
+- **Un bundler qui gère les modules ES** — Vite (recommandé), Next.js ou Webpack 5. Les tutoriels utilisent Vite.
+- **Un confort de base avec TypeScript.** Tu n'as pas besoin d'être expert, mais si `class Foo implements Bar` te fait paniquer, lis d'abord un cours accéléré de TypeScript.
+
+Tu n'as **pas** besoin de :
+- Connaissances préalables en RL. Les pages [Algorithmes](/docs/algorithms) couvrent la théorie ; les tutoriels couvrent la pratique.
+- Un GPU. Tout tourne dans le navigateur avec le WebGPU/WebGL que ta machine possède déjà.
+- Python. Du tout. Pour rien. Sauf pour l'étape de conversion ONNX unique si tu déploies en dehors du navigateur.
+
+---
+
+Précédent : **[← React Three Fiber](/docs/r3f)** · Suivant : **[GridWorld · Commence ici →](/docs/tutorials/grid-world)**

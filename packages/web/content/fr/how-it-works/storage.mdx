@@ -1,0 +1,210 @@
+---
+title: '@ignitionai/storage'
+description: Stockage persistant des modèles pour les agents IgnitionAI — sauvegarde et charge les poids entraînés depuis HuggingFace Hub en une ligne.
+---
+
+# @ignitionai/storage
+
+**Responsabilité unique** : persister et récupérer les poids des agents entraînés. La première implémentation cible HuggingFace Hub ; l'interface `ModelStorageProvider` est le point d'extension pour d'autres backends (S3, IPFS, système de fichiers local, ce dont tu as besoin).
+
+**Source** : [`packages/storage/src/`](https://github.com/IgnitionAI/ignition/tree/main/packages/storage/src) sur GitHub.
+
+## Surface de l'API publique
+
+| Export | Nature | Rôle |
+|---|---|---|
+| `ModelStorageProvider` | interface | Le contrat que tout backend de stockage doit implémenter. |
+| `ModelInfo` | type | Métadonnées d'un modèle stocké (`modelId`, `uri`, `createdAt`, `metadata`). |
+| `HuggingFaceProvider` | classe | Persistance cloud via HuggingFace Hub. |
+| `IndexedDBProvider` | classe | Persistance navigateur pour les gros modèles (recommandé). |
+| `LocalStorageProvider` | classe | Persistance navigateur pour les petits modèles et métadonnées. |
+| `DownloadProvider` | classe | Exporter le modèle en fichier téléchargeable (écriture seule). |
+| `HFStorageConfig` | type | Config pour `HuggingFaceProvider` (`token`, `repoId`). |
+| `hfStorageConfigSchema` | schéma Zod | Validation de `HFStorageConfig`. |
+| `parseHFConfig` | fonction | Analyse et valide la config HF depuis les variables d'environnement. |
+
+## L'interface `ModelStorageProvider`
+
+C'est le contrat. Tout ce qui l'implémente est un backend de stockage valide :
+
+```ts
+export interface ModelStorageProvider {
+  save(modelId: string, model: tf.LayersModel, metadata?: Record<string, unknown>): Promise<void>
+  load(modelId: string): Promise<tf.LayersModel>
+  list(): Promise<ModelInfo[]>
+  delete(modelId: string): Promise<void>
+  exists(modelId: string): Promise<boolean>
+}
+```
+
+Cinq méthodes. C'est toute la surface. Si tu voulais ajouter, disons, un backend S3, tu implémenterais ces cinq méthodes et le publierais comme `@ignitionai/storage-s3`. Le reste du framework n'a pas besoin de changer.
+
+## Providers locaux au navigateur
+
+Pour le développement et les petits modèles, tu n'as pas besoin de compte cloud. Trois providers natifs du navigateur sont fournis d'office :
+
+| Provider | Idéal pour | Limite de taille | Support du chargement |
+|---|---|---|---|
+| `IndexedDBProvider` | Gros modèles TF.js | ~50-100 Mo (quota du navigateur) | ✅ Oui |
+| `LocalStorageProvider` | Petits modèles, configs, métadonnées | ~5 Mo | ✅ Oui |
+| `DownloadProvider` | Export pour usage externe | Aucune limite (disque de l'utilisateur) | ❌ Non |
+
+### IndexedDB — le défaut recommandé
+
+```ts filename="browser-save.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from '@ignitionai/environments'
+import { IndexedDBProvider } from '@ignitionai/storage'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('dqn', { storageProvider: new IndexedDBProvider() })
+
+// Later — save the current checkpoint
+await env.save('cartpole-dqn-v1', { reward: 195.4 })
+
+// Even later — load it back
+await env.load('cartpole-dqn-v1')
+```
+
+`env.save()` sérialise les poids du modèle **et** l'état interne de l'agent (`epsilon`, `trainStepCounter`, `bestReward`). `env.load()` restaure les deux. Aucune tenue de registre manuelle.
+
+### LocalStorage — pour les configs et les Q-Tables
+
+```ts filename="localstorage-save.ts"
+import { LocalStorageProvider } from '@ignitionai/storage'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('qtable', { storageProvider: new LocalStorageProvider() })
+
+await env.save('cartpole-qtable-v1')
+```
+
+Les agents Q-Table sérialisent leur table entière en JSON, donc `LocalStorageProvider` est un ajustement parfait. Pour les agents à réseau de neurones, préfère `IndexedDBProvider` — les poids TF.js peuvent facilement dépasser la limite de 5 Mo du localStorage.
+
+### Download — exporter pour usage externe
+
+```ts filename="download.ts"
+import { DownloadProvider } from '@ignitionai/storage'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('dqn')
+
+// Triggers a browser download of model.json + weights.bin
+await env.save('my-model', { download: true })
+```
+
+`DownloadProvider` est en écriture seule. Utilise-le quand tu veux remettre un modèle entraîné à quelqu'un d'autre ou l'archiver hors du navigateur.
+
+## HuggingFace Hub — persistance cloud
+
+`HuggingFaceProvider` enrobe le client `huggingface.js` et sauvegarde / charge des modèles TF.js directement depuis un repo HF. HF Hub se marie naturellement avec les poids RL car il gère déjà le versionnage, la visibilité publique/privée et une interface web de navigation.
+
+### Configuration
+
+1. Crée un compte HuggingFace et un nouveau dépôt de modèle (ex. `ton-user/mon-agent-rl`).
+2. Génère un access token sur [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) avec accès **Write** au repo.
+3. Définis le token et le repo comme variables d'environnement (ou passe-les en ligne) :
+
+```bash
+export HF_TOKEN=hf_...
+export HF_REPO_ID=ton-user/mon-agent-rl
+```
+
+### Un aller-retour sauvegarde / chargement complet
+
+```ts filename="save-and-load.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from '@ignitionai/environments'
+import { HuggingFaceProvider, parseHFConfig } from '@ignitionai/storage'
+
+// 1. Train an agent
+const cartpole = new CartPoleEnv()
+const env = new IgnitionEnvTFJS(cartpole)
+env.train('dqn', {
+  storageProvider: new HuggingFaceProvider(parseHFConfig(process.env))
+})
+// ... wait for convergence ...
+env.stop()
+
+// 2. Save the trained model (weights + agent state + metadata)
+await env.save('cartpole-dqn-v1', {
+  episodesTrained: 500,
+  meanReward: 195.4,
+})
+
+// 3. Later — load the same model into a fresh agent
+await env.load('cartpole-dqn-v1')
+console.log('Model loaded, epsilon:', (env.agent as any).epsilon)
+```
+
+Quatre lignes pour sauvegarder. Deux lignes pour charger. L'objet de métadonnées est stocké à côté des poids et est retourné par `list()`.
+
+### Lister et supprimer
+
+```ts filename="manage.ts"
+import { HuggingFaceProvider, parseHFConfig } from '@ignitionai/storage'
+
+const storage = new HuggingFaceProvider(parseHFConfig(process.env))
+
+// See what's in the repo
+const models = await storage.list()
+for (const model of models) {
+  console.log(`${model.modelId} — created ${model.createdAt}`)
+  console.log(`  metadata: ${JSON.stringify(model.metadata)}`)
+}
+
+// Check if a specific model exists
+if (await storage.exists('cartpole-dqn-v1')) {
+  // Delete it
+  await storage.delete('cartpole-dqn-v1')
+}
+```
+
+## Note de sécurité — les tokens
+
+Le token HF a accès en **écriture** au repo, donc traite-le comme un mot de passe :
+
+- Ne le code jamais en dur dans les fichiers source.
+- Sous Node, lis-le depuis `process.env.HF_TOKEN`.
+- Dans le navigateur, n'utilise **pas** du tout un token avec écriture — utilise un token en lecture seule (ou aucun token pour les repos publics) pour le chemin de chargement, et fais tes écritures depuis un backend.
+- `parseHFConfig` lèvera une erreur si le token est manquant ou mal formé, donc tu remarqueras la mauvaise configuration immédiatement.
+
+## L'utiliser aux côtés du chemin ONNX
+
+Le flux HF Hub est pour les poids natifs TF.js (entraînement + checkpointing). Si tu veux *déployer* un modèle entraîné, tu peux soit :
+
+- **Sauvegarder les poids TF.js via `@ignitionai/storage`** — le plus rapide pour itérer entre les phases d'entraînement et de test en JS.
+- **Exporter vers ONNX via `@ignitionai/backend-onnx`** — nécessaire pour déployer vers Unity, Unreal, Python ou le mobile.
+
+Ces deux options ne s'excluent pas. Un workflow courant : sauvegarder les checkpoints TF.js sur HF pendant l'entraînement (itération rapide), et exporter la version finale vers ONNX une fois que tu en es satisfait (déploiement).
+
+## Ajouter ton propre backend de stockage
+
+Pour ajouter un backend S3 :
+
+```ts filename="s3-provider.ts"
+import type { ModelStorageProvider, ModelInfo } from '@ignitionai/storage'
+import * as tf from '@tensorflow/tfjs'
+
+export class S3Provider implements ModelStorageProvider {
+  constructor(private bucket: string, private region: string) {}
+
+  async save(modelId: string, model: tf.LayersModel, metadata?: Record<string, unknown>): Promise<void> {
+    // ... serialize model, upload to S3 ...
+  }
+
+  async load(modelId: string): Promise<tf.LayersModel> {
+    // ... download from S3, deserialize ...
+  }
+
+  async list(): Promise<ModelInfo[]> { /* ... */ return [] }
+  async delete(modelId: string): Promise<void> { /* ... */ }
+  async exists(modelId: string): Promise<boolean> { /* ... */ return false }
+}
+```
+
+Cinq méthodes, zéro modification d'aucun autre package. C'est la forme de chaque bon point d'extension dans IgnitionAI.
+
+---
+
+Précédent : **[← @ignitionai/backend-onnx](/docs/how-it-works/backend-onnx)** · Suivant : **[React Three Fiber →](/docs/r3f)**

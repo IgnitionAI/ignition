@@ -125,6 +125,9 @@ export class PPOAgent implements AgentInterface {
   private readonly entropyCoef: number;
   private readonly valueLossCoef: number;
   private readonly actionSize: number;
+  private config: PPOConfig;
+  private trainStepCounter = 0;
+  private bestReward = -Infinity;
 
   constructor(config: PPOConfig) {
     const result = PPOConfigSchema.safeParse(config);
@@ -160,6 +163,7 @@ export class PPOAgent implements AgentInterface {
 
     this.actorOptimizer = tf.train.adam(lr);
     this.criticOptimizer = tf.train.adam(lr);
+    this.config = config;
   }
 
   // -------------------------------------------------------------------------
@@ -210,12 +214,16 @@ export class PPOAgent implements AgentInterface {
     });
   }
 
-  /**
-   * Mettre à jour l'acteur et le critic sur les données collectées.
-   * Vide le buffer de rollout à la fin (algorithme on-policy).
-   *
-   * Appelé typiquement à la fin de chaque épisode ou après N steps.
-   */
+  /** Discard data when the training trajectory is interrupted. */
+  discardRollout(): void {
+    this.rollout = [];
+  }
+
+  shouldTrain(): boolean {
+    return this.rollout.length >= (this.config.rolloutSize ?? 128);
+  }
+
+  /** Explicitly update all collected transitions, including partial rollouts. */
   async train(): Promise<void> {
     const n = this.rollout.length;
     if (n === 0) return;
@@ -250,6 +258,7 @@ export class PPOAgent implements AgentInterface {
 
     // Vider le rollout — PPO est on-policy
     this.rollout = [];
+    this.trainStepCounter++;
   }
 
   // -------------------------------------------------------------------------
@@ -275,21 +284,26 @@ export class PPOAgent implements AgentInterface {
     const advantages = new Array<number>(n);
     const returns = new Array<number>(n);
 
-    let nextValue = 0; // V(s_{T+1}) = 0 pour l'état terminal
+    // Evaluate the actual successor before any update, including truncated
+    // episodes and the end of a nonterminal rollout.
+    const nextValues = tf.tidy(() => {
+      const states = tf.tensor2d(this.rollout.map(e => e.nextState));
+      return Array.from((this.criticNet.predict(states) as tf.Tensor).dataSync());
+    });
     let lastGAE = 0;
 
     for (let t = n - 1; t >= 0; t--) {
       const { reward, terminated, truncated, value } = this.rollout[t];
-      const mask = (terminated || truncated) ? 0 : 1;
+      const bootstrapMask = terminated ? 0 : 1;
+      const traceMask = (terminated || truncated) ? 0 : 1;
 
       // Erreur TD
-      const delta = reward + this.gamma * nextValue * mask - value;
+      const delta = reward + this.gamma * nextValues[t] * bootstrapMask - value;
       // Accumulation GAE
-      lastGAE = delta + this.gamma * this.gaeLambda * mask * lastGAE;
+      lastGAE = delta + this.gamma * this.gaeLambda * traceMask * lastGAE;
 
       advantages[t] = lastGAE;
       returns[t] = lastGAE + value;
-      nextValue = value;
     }
 
     // Normalisation des avantages
@@ -300,7 +314,9 @@ export class PPOAgent implements AgentInterface {
 
     return {
       returns,
-      advantages: advantages.map(a => (a - mean) / std),
+      advantages: n > 1 && std > 1e-8
+        ? advantages.map(a => (a - mean) / std)
+        : advantages,
     };
   }
 
@@ -420,9 +436,53 @@ export class PPOAgent implements AgentInterface {
   // Utilitaires
   // -------------------------------------------------------------------------
 
+  // ── Persistence ─────────────────────────────────────────────────────────
+
+  getState(): Record<string, unknown> {
+    return {
+      trainStepCounter: this.trainStepCounter,
+      bestReward: this.bestReward,
+    };
+  }
+
+  setState(state: Record<string, unknown>): void {
+    if (typeof state.trainStepCounter === 'number') this.trainStepCounter = state.trainStepCounter;
+    if (typeof state.bestReward === 'number') this.bestReward = state.bestReward;
+  }
+
+  async save(modelId: string, metadata?: Record<string, unknown>): Promise<string> {
+    const provider = this.config.storageProvider;
+    if (!provider) {
+      throw new Error('[PPO] No storageProvider configured. Pass one in PPOConfig.');
+    }
+    // Save actor
+    const actorUri = await provider.save(`${modelId}/actor`, this.actorNet, { ...metadata, network: 'actor' });
+    // Save critic
+    const criticUri = await provider.save(`${modelId}/critic`, this.criticNet, { ...metadata, network: 'critic' });
+    console.log(`[PPO] ✅ Saved actor: ${actorUri}, critic: ${criticUri}`);
+    return actorUri;
+  }
+
+  async load(modelId: string): Promise<void> {
+    const provider = this.config.storageProvider;
+    if (!provider) {
+      throw new Error('[PPO] No storageProvider configured. Pass one in PPOConfig.');
+    }
+    const actor = await provider.load(`${modelId}/actor`);
+    const critic = await provider.load(`${modelId}/critic`);
+    this.actorNet.dispose();
+    this.criticNet.dispose();
+    this.rollout = [];
+    this.actorNet = actor as tf.Sequential;
+    this.criticNet = critic as tf.Sequential;
+    console.log(`[PPO] ✅ Loaded model ${modelId}`);
+  }
+
   dispose(): void {
     this.actorNet?.dispose();
     this.criticNet?.dispose();
+    this.actorOptimizer.dispose();
+    this.criticOptimizer.dispose();
     this.rollout = [];
   }
 }

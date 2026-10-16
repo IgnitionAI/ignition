@@ -1,0 +1,56 @@
+---
+title: Comment ça marche — Carte du monorepo
+description: Le monorepo IgnitionAI contient quatre packages, chacun avec une responsabilité unique. Cette page est la carte.
+---
+
+# Comment ça marche — Carte du monorepo
+
+IgnitionAI est un monorepo pnpm. Son architecture est délibérément ennuyeuse : quatre packages, chacun avec un seul rôle, chacun ne dépendant que des packages situés « en dessous » dans la pile. Cette page est la carte — chaque page suivante de cette section plonge dans l'un des packages.
+
+## Les quatre packages
+
+| Package | Responsabilité unique | Dépend de |
+|---|---|---|
+| **[`@ignitionai/core`](/docs/how-it-works/core)** | La boucle d'entraînement, l'interface `TrainingEnv`, les types partagés et la classe de base agnostique en matière d'algorithme `IgnitionEnv`. Zéro dépendance lourde. | Rien |
+| **[`@ignitionai/backend-tfjs`](/docs/how-it-works/backend-tfjs)** | Implémentations TensorFlow.js de DQN, PPO et Q-Table. Expose `IgnitionEnvTFJS`, l'env d'entraînement concret que tu instancies réellement. | `core` |
+| **[`@ignitionai/backend-onnx`](/docs/how-it-works/backend-onnx)** | Backend d'inférence uniquement via ONNX Runtime Web. Transforme un modèle TF.js entraîné en fichier `.onnx` et exécute l'inférence dessus. | `core` |
+| **[`@ignitionai/storage`](/docs/how-it-works/storage)** | Stockage persistant des modèles. La première implémentation est HuggingFace Hub ; l'interface `ModelStorageProvider` est le point d'extension pour les futurs backends. | `core` |
+
+Les dépendances circulent dans un seul sens : `storage`, `backend-onnx` et `backend-tfjs` dépendent tous de `core`. Il n'y a aucune dépendance circulaire, et `core` est délibérément fin pour que les autres packages puissent l'importer sans traîner TF.js ou ONNX Runtime.
+
+## Comment les pièces s'assemblent à l'exécution
+
+Quand tu écris :
+
+```ts
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from '@ignitionai/environments'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('dqn')
+```
+
+Voici ce qui se passe à travers les packages :
+
+1. **`@ignitionai/environments`** fournit `CartPoleEnv` comme `TrainingEnv` intégré (aussi `GridWorldEnv` et `MountainCarEnv`).
+2. **`@ignitionai/core`** fournit le contrat de l'interface `TrainingEnv` et la classe de base `IgnitionEnv` avec la boucle d'entraînement générique.
+3. **`@ignitionai/backend-tfjs`** fournit `IgnitionEnvTFJS`, qui étend `IgnitionEnv` et enregistre les `DQNAgent`, `PPOAgent` et `QTableAgent` adossés à TF.js comme factories d'algorithmes disponibles.
+3. Quand tu appelles `env.train('dqn')`, la méthode `IgnitionEnv.train()` de `core` est invoquée. Elle cherche la factory `'dqn'` (enregistrée par le backend TFJS), déduit `inputSize` depuis `observe()` et `actionSize` depuis `actions`, appelle la factory et démarre la boucle d'entraînement.
+4. La boucle d'entraînement vit entièrement dans `core`. Elle ne sait rien de TensorFlow.js — elle appelle simplement les méthodes génériques de `AgentInterface` (`getAction`, `remember`, `train`) sur l'agent que le backend a enregistré.
+
+Cette séparation explique pourquoi tu pourrais, en principe, écrire un package `@ignitionai/backend-rust-wasm` avec la même interface et l'intervertir sans aucune modification de `core`. Le framework est conçu pour être extensible selon cet axe.
+
+## Lire le code source
+
+Chaque page suivante de cette section propose une revue annotée du fichier le plus important d'un package. Si tu veux contribuer ou simplement comprendre les rouages, l'ordre de lecture recommandé est :
+
+1. **[core](/docs/how-it-works/core)** — commence ici. L'interface `TrainingEnv` et la classe de base `IgnitionEnv` sont les points d'ancrage de tout le reste.
+2. **[backend-tfjs](/docs/how-it-works/backend-tfjs)** — comment un vrai algorithme est branché dans la boucle du core.
+3. **[backend-onnx](/docs/how-it-works/backend-onnx)** — le pipeline de déploiement.
+4. **[storage](/docs/how-it-works/storage)** — la persistance et l'intégration HF Hub.
+
+(Il existe un cinquième package, [`@ignitionai/environments`](https://www.npmjs.com/package/@ignitionai/environments), qui fournit les envs intégrés utilisés dans la doc. C'est un fin wrapper autour de l'interface `TrainingEnv` et n'a pas besoin de page dédiée — lis [le source d'un env quelconque](https://github.com/IgnitionAI/ignition/tree/main/packages/environments/src) pour voir comment l'interface est réellement implémentée.)
+
+---
+
+Précédent : **[← Q-Table](/docs/algorithms/q-table)** · Suivant : **[@ignitionai/core →](/docs/how-it-works/core)**
