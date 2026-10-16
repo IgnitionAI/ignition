@@ -1,0 +1,23 @@
+$ node /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/evidence/67b37dfe945b2af9554c9c7e83d227f35b0d4ceb/blog-browser-check.cjs
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'http://localhost:3071/fr/docs: net::ERR_ABORTED',
++   'http://localhost:3071/fr: net::ERR_ABORTED',
++   'http://localhost:3071/en/docs: net::ERR_ABORTED',
++   'http://localhost:3071/en: net::ERR_ABORTED'
++ ]
+- []
+
+    at /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/evidence/67b37dfe945b2af9554c9c7e83d227f35b0d4ceb/blog-browser-check.cjs:61:12 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [Array],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+EXIT_CODE=1

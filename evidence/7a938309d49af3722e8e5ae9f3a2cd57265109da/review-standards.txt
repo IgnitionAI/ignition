@@ -1,0 +1,17 @@
+## Standards — PASS sur les constats matériels
+
+Revue statique du diff complet et des fichiers pertinents, sans commande, modification ni exécution de tests. `AGENTS.md` est absent du chemin racine indiqué ; les règles consultables proviennent de `.github/CONTRIBUTING.md` et de `packages/demo-ball-thrust/PLAN.md`.
+
+### (a) Violations des règles documentées
+
+- **P3 — TSDoc manquante** — `packages/demo-ball-thrust/src/TrainingPanel.tsx:7` : la nouvelle fonction exportée `TrainingPanel` ne possède aucun commentaire TSDoc, contrairement à la règle **« Write TSDoc for exported functions and classes »** de `.github/CONTRIBUTING.md`. Ajouter une courte description du composant et du rôle de son instantané de session.
+
+### (b) Odeurs relevant du jugement
+
+Aucune odeur suffisamment significative pour demander un remaniement. La séparation environnement physique / rendu / orchestration / évaluation est cohérente. Les petites répétitions de présentation et de constantes ne justifient pas, seules, une abstraction supplémentaire.
+
+### (c) Défauts établis
+
+Aucun défaut matériel de correction, de sécurité ou de gestion des ressources établi par cette lecture. Cela ne constitue pas une garantie d’exécution : les résultats des tests ciblés, du typecheck et du build sont ceux annoncés, non revérifiés ici.
+
+**Bilan Standards : 1 violation documentaire mineure, 0 odeur retenue, 0 défaut matériel établi. Pire constat : P3, TSDoc absente sur `TrainingPanel`.**

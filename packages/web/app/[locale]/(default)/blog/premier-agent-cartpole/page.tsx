@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { MDXRemote } from 'next-mdx-remote-client/rsc'
-import rehypePrettyCode from 'rehype-pretty-code'
+import { BlogContent } from '@/components/blog-content'
 import { cartpoleArticle, localizeArticle, readCartpoleArticle } from '@/lib/blog'
 import { getDictionary } from '@/lib/i18n'
 import { isLocale, type Locale } from '@/lib/locales'
@@ -36,7 +35,7 @@ export default async function CartpoleArticlePage({ params }: { params: Promise<
         <p className="text-xl text-slate-300">{t.blog.cartpoleIntro}</p>
       </header>
       <div className="prose prose-invert prose-lg max-w-none prose-headings:text-slate-100 prose-a:text-indigo-300 prose-pre:overflow-x-auto prose-pre:bg-slate-950 prose-img:rounded-xl prose-img:border prose-img:border-slate-700">
-        <MDXRemote source={readCartpoleArticle(locale)} options={{ mdxOptions: { rehypePlugins: [[rehypePrettyCode, { theme: 'one-dark-pro' }]] } }} />
+        <BlogContent source={readCartpoleArticle(locale)} />
       </div>
     </article>
   )

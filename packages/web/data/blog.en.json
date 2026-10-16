@@ -1,5 +1,11 @@
 [
   {
+    "slug": "ball-thrust-physique-rapier",
+    "title": "Ball Thrust 3D: from Rapier to a trainable DQN",
+    "description": "Real physics, 21 observations, a DQN that learns and verifiable inference after a local checkpoint reload.",
+    "imageAlt": "The Ball Thrust arena and DQN panel showing actual neural-network updates"
+  },
+  {
     "slug": "robot-arm-atteindre-xyz",
     "title": "Robot Arm 3D: reaching an XYZ target with DQN",
     "description": "An ideal 3-joint arm, 325 configurations and 6 actions: follow how a dense reward brings the tip closer to the target, with real measurements and their limits.",

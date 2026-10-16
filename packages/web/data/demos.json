@@ -89,6 +89,18 @@
     "featured": false
   },
   {
+    "slug": "ball-thrust",
+    "title": "Ball Thrust 3D",
+    "description": "Play a real Rapier arena, train a TensorFlow.js DQN, save locally and run the same network in inference. Seeded physics and measured evaluation; convergence is not guaranteed.",
+    "tech": "R3F · Rapier · TF.js",
+    "algos": "DQN · Manual control · Inference",
+    "accent": "#64d9eb",
+    "pkg": "demo-ball-thrust",
+    "dir": "packages/demo-ball-thrust",
+    "featured": false,
+    "platform": "Desktop keyboard"
+  },
+  {
     "slug": "robot-arm",
     "title": "Robot Arm 3D",
     "description": "A 3-joint ideal kinematic arm learns to bring its tip onto an XYZ target. Grid actions, dense distance rewards, real DQN in the browser.",

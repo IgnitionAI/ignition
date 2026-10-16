@@ -1,5 +1,15 @@
 [
   {
+    "environment": "ball-thrust",
+    "slug": "ball-thrust-physique-rapier",
+    "title": "Ball Thrust 3D : de Rapier au DQN entraînable",
+    "description": "Un vrai monde physique, 21 observations, un DQN qui apprend et une inférence vérifiable après sauvegarde locale.",
+    "date": "2026-10-15",
+    "image": "/images/blog/ball-thrust/training.png",
+    "imageAlt": "L’arène Ball Thrust et son panneau DQN affichant des mises à jour réelles du réseau",
+    "example": "demo-ball-thrust/src/ball-thrust-env.ts"
+  },
+  {
     "environment": "robot-arm",
     "slug": "robot-arm-atteindre-xyz",
     "title": "Robot Arm 3D : atteindre une cible XYZ avec un DQN",

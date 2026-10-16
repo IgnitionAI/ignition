@@ -1,0 +1,300 @@
+{
+  "sha": "d79341e1665c6413992378ce775941d909b45d32",
+  "browser": "155.0.8059.41",
+  "viewport": {
+    "width": 1440,
+    "height": 1100
+  },
+  "deviceScaleFactor": 1,
+  "headless": false,
+  "checks": [
+    {
+      "name": "impulse and space no-op preserve inertia",
+      "initial": {
+        "position": [
+          -4.32,
+          0.35,
+          4.44
+        ],
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "elapsed": 0.4,
+        "speed": 0,
+        "distance": 12.44
+      },
+      "moving": {
+        "position": [
+          -3.38,
+          0.35,
+          4.44
+        ],
+        "velocity": [
+          2.52,
+          -0.02,
+          0
+        ],
+        "elapsed": 1.1,
+        "speed": 2.52,
+        "distance": 11.8
+      },
+      "noop": {
+        "position": [
+          -0.79,
+          0.35,
+          4.44
+        ],
+        "velocity": [
+          2.23,
+          0,
+          0
+        ],
+        "elapsed": 2.1,
+        "speed": 2.23,
+        "distance": 10.25
+      }
+    },
+    {
+      "name": "three same-seed resets and different-seed reset",
+      "passed": true
+    },
+    {
+      "name": "all eight keyboard directions",
+      "passed": true
+    },
+    {
+      "name": "obstacle-a blocks and rebounds",
+      "maxX": -2.65,
+      "rebounded": true
+    },
+    {
+      "name": "west wall contains sphere",
+      "state": {
+        "position": [
+          -5.65,
+          0.35,
+          4.44
+        ],
+        "velocity": [
+          0.04,
+          0,
+          0
+        ],
+        "elapsed": 2.9,
+        "speed": 0.04,
+        "distance": 13.42
+      }
+    },
+    {
+      "name": "goal reached by keyboard only",
+      "state": {
+        "position": [
+          4.68,
+          0.35,
+          -4.13
+        ],
+        "velocity": [
+          0.14,
+          0,
+          -0.15
+        ],
+        "elapsed": 6.6,
+        "speed": 0.2,
+        "distance": 0.25
+      }
+    },
+    {
+      "name": "orbit drag",
+      "passed": true
+    },
+    {
+      "name": "blur releases thrust, seed input retains arrow keys",
+      "passed": true
+    },
+    {
+      "name": "390 × 844 responsive layout without horizontal overflow (not a mobile device)",
+      "passed": true
+    },
+    {
+      "name": "text fallback with WebGL context denied",
+      "passed": true,
+      "errors": []
+    }
+  ],
+  "renderer": {
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M4, Unspecified Version)"
+  },
+  "performance": {
+    "durationMs": 30006.200000011922,
+    "frames": 3601,
+    "fps": 120.00853157009449,
+    "p50Ms": 8.30000000000291,
+    "p95Ms": 9.19999999999709,
+    "p99Ms": 9.30000000000291,
+    "maxMs": 9.400000000001455,
+    "simulatedSeconds": 30,
+    "samples": [
+      {
+        "position": [
+          -4.32,
+          0.35,
+          -4.63
+        ],
+        "velocity": [
+          0,
+          0,
+          -0.83
+        ],
+        "elapsed": 3.4,
+        "speed": 0.83,
+        "distance": 8.85
+      },
+      {
+        "position": [
+          5.64,
+          0.35,
+          -5.5
+        ],
+        "velocity": [
+          -0.07,
+          0,
+          0.15
+        ],
+        "elapsed": 6.4,
+        "speed": 0.17,
+        "distance": 1.63
+      },
+      {
+        "position": [
+          5.55,
+          0.35,
+          4.4
+        ],
+        "velocity": [
+          -0.03,
+          0,
+          -0.16
+        ],
+        "elapsed": 9.4,
+        "speed": 0.16,
+        "distance": 8.78
+      },
+      {
+        "position": [
+          -4.09,
+          0.35,
+          4.99
+        ],
+        "velocity": [
+          0.77,
+          -0.08,
+          0.1
+        ],
+        "elapsed": 12.4,
+        "speed": 0.78,
+        "distance": 12.69
+      },
+      {
+        "position": [
+          -3.51,
+          0.35,
+          -5.62
+        ],
+        "velocity": [
+          0.09,
+          0.05,
+          0.17
+        ],
+        "elapsed": 15.4,
+        "speed": 0.2,
+        "distance": 8.13
+      },
+      {
+        "position": [
+          5.09,
+          0.35,
+          -5.58
+        ],
+        "velocity": [
+          1.31,
+          0,
+          0.05
+        ],
+        "elapsed": 18.4,
+        "speed": 1.31,
+        "distance": 1.38
+      },
+      {
+        "position": [
+          5.52,
+          0.47,
+          5.64
+        ],
+        "velocity": [
+          -0.12,
+          -1.26,
+          -0.08
+        ],
+        "elapsed": 21.4,
+        "speed": 1.27,
+        "distance": 10.01
+      },
+      {
+        "position": [
+          -5.64,
+          0.35,
+          4.95
+        ],
+        "velocity": [
+          0.37,
+          0.15,
+          -0.13
+        ],
+        "elapsed": 24.4,
+        "speed": 0.43,
+        "distance": 13.76
+      },
+      {
+        "position": [
+          -5.64,
+          0.35,
+          -5.63
+        ],
+        "velocity": [
+          0.01,
+          -0.05,
+          0.07
+        ],
+        "elapsed": 27.4,
+        "speed": 0.08,
+        "distance": 10.25
+      },
+      {
+        "position": [
+          5.62,
+          0.39,
+          -5.64
+        ],
+        "velocity": [
+          -0.35,
+          -1.69,
+          0
+        ],
+        "elapsed": 30.4,
+        "speed": 1.72,
+        "distance": 1.72
+      }
+    ]
+  },
+  "passed": true,
+  "consoleMessages": [
+    {
+      "type": "warning",
+      "text": "using deprecated parameters for the initialization function; pass a single object instead"
+    }
+  ],
+  "errors": []
+}

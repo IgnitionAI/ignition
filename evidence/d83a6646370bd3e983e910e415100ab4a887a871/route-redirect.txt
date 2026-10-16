@@ -1,0 +1,19 @@
+HTTP/1.1 308 Permanent Redirect
+location: /demos/ball-thrust
+Refresh: 0;url=/demos/ball-thrust
+Date: Thu, 15 Oct 2026 19:41:46 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Cache-Control: public, max-age=0
+Last-Modified: Thu, 15 Oct 2026 19:38:12 GMT
+ETag: W/"28b-1a141127ba7"
+Content-Type: text/html; charset=UTF-8
+Content-Length: 651
+Vary: Accept-Encoding
+Date: Thu, 15 Oct 2026 19:41:46 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+

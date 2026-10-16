@@ -1,0 +1,121 @@
+
+> demo-ball-thrust@0.0.0 test /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/demo-ball-thrust
+> vitest run --root ../.. packages/demo-ball-thrust/test
+
+
+ RUN  v3.1.1 /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+
+stderr | packages/demo-ball-thrust/test/physics.test.ts
+using deprecated parameters for the initialization function; pass a single object instead
+
+stderr | packages/demo-ball-thrust/test/ball-thrust-env.test.ts
+using deprecated parameters for the initialization function; pass a single object instead
+
+stderr | packages/demo-ball-thrust/test/training-session.test.ts
+using deprecated parameters for the initialization function; pass a single object instead
+
+stderr | packages/demo-ball-thrust/test/training-session.test.ts > learns for 64 transitions, then freezes exact weights and updates for 32 inference transitions
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/demo-ball-thrust/test/ball-thrust-env.test.ts (38 tests) 287ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > learns for 64 transitions, then freezes exact weights and updates for 32 inference transitions
+learning-proof {
+  trainingSteps: [33m64[39m,
+  inferenceSteps: [33m32[39m,
+  updates: [33m33[39m,
+  parameters: [33m2057[39m,
+  changedValues: [33m1216[39m,
+  maxWeightDelta: [33m0.03263171762228012[39m
+}
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > learns for 64 transitions, then freezes exact weights and updates for 32 inference transitions
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > awaits a real deferred fit before pause/reset/save and synchronizes after manual mode
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > enforces the per-network cap through pause/resume/reset and clears it only with a new network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > enforces the per-network cap through pause/resume/reset and clears it only with a new network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > stops training and evaluation at the common five-minute experiment deadline without changing weights
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > stops training and evaluation at the common five-minute experiment deadline without changing weights
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > round-trips real TF artifacts/state, rejects malformed metadata/artifacts and keeps the active network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > round-trips real TF artifacts/state, rejects malformed metadata/artifacts and keeps the active network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > round-trips real TF artifacts/state, rejects malformed metadata/artifacts and keeps the active network
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+memory-plateau { warm: [33m28[39m, loadedWarm: [33m28[39m, afterFurtherUpdates: [33m28[39m }
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > keeps tensor memory flat after optimizer initialization and disposes all owned tensors
+memory-proof { baseline: [33m0[39m, afterDispose: [33m0[39m }
+
+ ✓ packages/demo-ball-thrust/test/physics.test.ts (41 tests) 1130ms
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > evaluates held-out worlds without changing the visible world, weights, counters or tensor count
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > evaluates held-out worlds without changing the visible world, weights, counters or tensor count
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > recompiles an artifact without trainingConfig and performs real updates after loading
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+stdout | packages/demo-ball-thrust/test/training-session.test.ts > recompiles an artifact without trainingConfig and performs real updates after loading
+[DQN] Disposing model...
+[DQN] ✅ DQNAgent disposed
+
+ ✓ packages/demo-ball-thrust/test/training-session.test.ts (8 tests) 1701ms
+   ✓ keeps tensor memory flat after optimizer initialization and disposes all owned tensors  320ms
+   ✓ evaluates held-out worlds without changing the visible world, weights, counters or tensor count  847ms
+
+ Test Files  3 passed (3)
+      Tests  87 passed (87)
+   Start at  21:25:33
+   Duration  2.12s (transform 114ms, setup 0ms, collect 291ms, tests 3.12s, environment 0ms, prepare 104ms)
+

@@ -127,6 +127,64 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
 
+  packages/demo-ball-thrust:
+    dependencies:
+      '@dimforge/rapier3d-compat':
+        specifier: 0.15.0
+        version: 0.15.0
+      '@ignitionai/backend-tfjs':
+        specifier: workspace:*
+        version: link:../backend-tfjs
+      '@ignitionai/core':
+        specifier: workspace:*
+        version: link:../core
+      '@ignitionai/storage':
+        specifier: workspace:*
+        version: link:../storage
+      '@tensorflow/tfjs':
+        specifier: ^4.22.0
+        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
+      '@react-three/drei':
+        specifier: ^10.0.6
+        version: 10.0.7(@react-three/fiber@9.1.2(@types/react@19.1.2)(immer@11.1.4)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(three@0.162.0))(@types/react@19.1.2)(@types/three@0.162.0)(immer@11.1.4)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(three@0.162.0)
+      '@react-three/fiber':
+        specifier: ^9.1.2
+        version: 9.1.2(@types/react@19.1.2)(immer@11.1.4)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(three@0.162.0)
+      '@react-three/rapier':
+        specifier: ^2.1.0
+        version: 2.1.0(@react-three/fiber@9.1.2(@types/react@19.1.2)(immer@11.1.4)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(three@0.162.0))(react@19.2.3)(three@0.162.0)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.3(react@19.2.3)
+      three:
+        specifier: ^0.162.0
+        version: 0.162.0
+    devDependencies:
+      '@types/react':
+        specifier: 19.1.2
+        version: 19.1.2
+      '@types/react-dom':
+        specifier: 19.1.2
+        version: 19.1.2(@types/react@19.1.2)
+      '@types/three':
+        specifier: ^0.162.0
+        version: 0.162.0
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.3.4(vite@6.3.3(@types/node@22.14.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3))
+      typescript:
+        specifier: ~5.7.2
+        version: 5.7.3
+      vite:
+        specifier: ^6.3.1
+        version: 6.3.3(@types/node@22.14.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3)
+      vitest:
+        specifier: ^3.1.1
+        version: 3.1.1(@types/debug@4.1.13)(@types/node@22.14.1)(@vitest/ui@3.1.1)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.19.3)(yaml@2.8.3)
+
   packages/demo-cage-duel:
     dependencies:
       '@ignitionai/backend-tfjs':
@@ -775,6 +833,9 @@ importers:
       rehype-pretty-code:
         specifier: ^0.14.0
         version: 0.14.3(shiki@3.23.0)
+      remark-gfm:
+        specifier: 4.0.1
+        version: 4.0.1
       swiper:
         specifier: ^8.4.7
         version: 8.4.7
