@@ -1,0 +1,1 @@
+{"protocol":"multi-agent-corridor-v1","trainedTicks":2000,"policies":2,"tableSizes":[24,25],"evaluationEpisodes":20,"goals":40,"possibleGoals":40}

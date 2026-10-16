@@ -22,3 +22,6 @@ export type {
 export { mergeDefaults } from './defaults';
 export { validateTrainingEnv, validateInferenceEnv } from './env-validation';
 export { ExperienceSchema } from './schemas';
+
+export { MultiAgentRunner } from './multi-agent';
+export type { AgentId, MultiAgentAction, MultiAgentEnv, MultiAgentStepResult } from './multi-agent';
