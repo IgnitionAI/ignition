@@ -1,0 +1,22 @@
+{
+  "phase": "frozen-inference",
+  "ok": true,
+  "transitions": 223,
+  "updates": 81,
+  "epsilon": 0.9602994381881231,
+  "errors": [],
+  "fpsTrain": {
+    "avgFps": 48.6,
+    "p95FrameMs": 33.4,
+    "frames": 195
+  },
+  "fpsInfer": {
+    "avgFps": 53.6,
+    "p95FrameMs": 33.3,
+    "frames": 214
+  },
+  "weightCheck": {
+    "trained": true,
+    "inferenceInvariant": true
+  }
+}

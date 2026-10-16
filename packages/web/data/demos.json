@@ -87,5 +87,16 @@
     "algos": "Q-Table \u00b7 DQN \u00b7 PPO",
     "accent": "#06b6d4",
     "featured": false
+  },
+  {
+    "slug": "robot-arm",
+    "title": "Robot Arm 3D",
+    "description": "A 3-joint ideal kinematic arm learns to bring its tip onto an XYZ target. Grid actions, dense distance rewards, real DQN in the browser.",
+    "tech": "R3F",
+    "algos": "DQN",
+    "accent": "#f97316",
+    "pkg": "demo-robot-arm",
+    "dir": "packages/demo-robot-arm",
+    "featured": false
   }
 ]
