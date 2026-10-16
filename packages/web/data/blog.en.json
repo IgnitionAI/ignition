@@ -6,6 +6,12 @@
     "imageAlt": "The Ball Thrust arena and DQN panel showing actual neural-network updates"
   },
   {
+    "slug": "robot-arm-atteindre-xyz",
+    "title": "Robot Arm 3D: reaching an XYZ target with DQN",
+    "description": "An ideal 3-joint arm, 325 configurations and 6 actions: follow how a dense reward brings the tip closer to the target, with real measurements and their limits.",
+    "imageAlt": "The Robot Arm 3D demo during real training"
+  },
+  {
     "slug": "mountaincar-prendre-elan",
     "title": "MountainCar: learning to build momentum",
     "description": "Understand why backing up can help an agent reach the summit.",

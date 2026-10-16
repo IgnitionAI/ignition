@@ -10,6 +10,16 @@
     "example": "demo-ball-thrust/src/ball-thrust-env.ts"
   },
   {
+    "environment": "robot-arm",
+    "slug": "robot-arm-atteindre-xyz",
+    "title": "Robot Arm 3D : atteindre une cible XYZ avec un DQN",
+    "description": "Un bras idéal à 3 articulations, 325 configurations et 6 actions : suivez comment une récompense dense rapproche l’extrémité de la cible, avec des mesures réelles et leurs limites.",
+    "date": "2026-10-15",
+    "image": "/images/blog/robot-arm/training.png",
+    "imageAlt": "La démo Robot Arm 3D pendant un entraînement réel",
+    "example": "demo-robot-arm/src/examples/blog-experiment.ts"
+  },
+  {
     "environment": "mountaincar",
     "slug": "mountaincar-prendre-elan",
     "title": "MountainCar : apprendre à prendre de l’élan",

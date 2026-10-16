@@ -1,0 +1,35 @@
+{
+  "name": "demo-robot-arm",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "test": "vitest run --config ../../vitest.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.check.json",
+    "measure": "tsx measure/run.ts"
+  },
+  "dependencies": {
+    "@ignitionai/backend-tfjs": "workspace:*",
+    "@ignitionai/core": "workspace:*",
+    "@react-three/drei": "^10.0.6",
+    "@react-three/fiber": "^9.1.2",
+    "@tensorflow/tfjs": "^4.22.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.162.0",
+    "zustand": "^5.0.3"
+  },
+  "devDependencies": {
+    "@tensorflow/tfjs-node": "^4.22.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@types/three": "^0.162.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tsx": "^4.19.3",
+    "typescript": "~5.7.2",
+    "vite": "^6.3.1",
+    "vitest": "^3.1.1"
+  }
+}

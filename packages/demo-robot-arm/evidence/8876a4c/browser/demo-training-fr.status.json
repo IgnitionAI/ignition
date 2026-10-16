@@ -1,0 +1,13 @@
+{
+  "phase": "frozen-train",
+  "ok": true,
+  "transitions": 112,
+  "updates": 81,
+  "epsilon": 0.9602994381881231,
+  "errors": [],
+  "fpsTrain": {
+    "avgFps": 48.6,
+    "p95FrameMs": 33.4,
+    "frames": 194
+  }
+}
