@@ -1,0 +1,58 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node"
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "packages/demo-gridworld"
+    },
+    {
+      "path": "packages/core"
+    },
+    {
+      "path": "packages/demo-car-circuit"
+    },
+    {
+      "path": "packages/backend-onnx"
+    },
+    {
+      "path": "packages/ignitionai"
+    },
+    {
+      "path": "packages/demo-cartpole"
+    },
+    {
+      "path": "packages/backend-tfjs"
+    },
+    {
+      "path": "packages/demo-cartpole-3d"
+    },
+    {
+      "path": "packages/web"
+    },
+    {
+      "path": "packages/environments"
+    },
+    {
+      "path": "packages/demo-drone-navigation"
+    },
+    {
+      "path": "packages/demo-target-chasing"
+    },
+    {
+      "path": "packages/demo-mountaincar"
+    },
+    {
+      "path": "packages/storage"
+    }
+  ]
+}

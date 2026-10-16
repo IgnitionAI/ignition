@@ -1,0 +1,27 @@
+## PASS — revue Spec R2
+
+Lecture seule du diff canonique `.scratch/ball-thrust-rl/review-r2.diff`, des issues #68/#69, du plan, des sources et tests pertinents. Aucune commande exécutée ni modification effectuée.
+
+### Trois constats précédents clôturés
+
+1. **Plafond mural commun corrigé.**  
+   Exigence : « **Budget ceiling 5 minutes wall time for the experiment** ».  
+   `packages/demo-ball-thrust/src/training-session.ts:183–205,258–261` conserve l’échéance depuis la première transition d’entraînement et la transmet à l’évaluation. Les boucles vérifient le budget et rendent périodiquement la main ; `src/evaluation.ts:27–48,56–69` contrôle également l’échéance pendant l’évaluation. Le harness partage le temps restant et conserve un état final en cas d’échec (`test/training-browser.cjs:76–90,115–120,191–200`). Le nouveau test couvre l’expiration commune (`test/training-session.test.ts:103–121`).
+
+2. **Lecture IndexedDB corrigée.**  
+   Exigence : « **checkpoint round-trip predictions/weights equal** ».  
+   `packages/demo-ball-thrust/test/training-browser.cjs:43–45` lit désormais `model.modelArtifacts`, puis ses vrais `weightData` et `weightSpecs`. Le blocage statique précédent est supprimé.
+
+3. **Succès clavier terminal reconnu.**  
+   Exigence : « **Headed browser walkthrough […] manual […]** ».  
+   `packages/demo-ball-thrust/test/browser-check.cjs:23–25,42–46` accepte maintenant le succès réellement affiché avant d’exiger distance et freinage ; il n’attend plus une décélération impossible après terminaison.
+
+### Autres écarts matériels
+
+- **(a) Exigences absentes ou partielles :** aucun nouvel écart matériel relevé.
+- **(b) Dérive de périmètre :** aucune.
+- **(c) Implémentation incorrecte :** aucun nouveau défaut matériel relevé dans le périmètre Spec.
+
+Les preuves navigateur, builds et suite racine au SHA final restent volontairement à établir pendant la vérification suivante. Leur attente n’est pas un défaut de code ; aucune convergence n’est exigée.
+
+**Bilan Spec : 0 constat ouvert — (a) 0, (b) 0, (c) 0 ; 3/3 constats antérieurs clôturés ; pire sévérité restante : aucune.**

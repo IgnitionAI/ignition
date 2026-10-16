@@ -1,0 +1,8 @@
+$ GITHUB_SHA=94b621a64ec59cbb399a6f2f311f33a85cabeb7c pnpm run typecheck
+
+> ignition-monorepo@ typecheck /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+> tsc --build
+
+
+
+EXIT_CODE=0

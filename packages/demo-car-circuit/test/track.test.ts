@@ -54,3 +54,8 @@ describe('OvalTrack', () => {
     expect(track.totalLength).toBeLessThan(60);
   });
 });
+
+it('rejects points far beyond the end of a straight even when collinear', () => {
+  const track = new OvalTrack();
+  expect(track.isOnTrack(100, 4)).toBe(false);
+});

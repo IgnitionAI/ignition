@@ -11,7 +11,7 @@
     </filter>
     <linearGradient id="a" x1="48.703%" x2="48.703%" y1="5.528%" y2="95.154%">
       <stop offset="0%" stop-color="#D8B4FE"/>
-      <stop offset="44.143%" stop-color="#A855F7"/>
+      <stop offset="44.143%" stop-color="#6366F1"/>
       <stop offset="100%" stop-color="#6366F1" stop-opacity=".8"/>
     </linearGradient>
   </defs>

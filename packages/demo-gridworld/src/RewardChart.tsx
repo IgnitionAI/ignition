@@ -8,9 +8,10 @@ const MAX_POINTS = 300;
 export function RewardChart() {
   const { rewardHistory } = useDemoStore();
 
+  const firstEpisode = Math.max(0, rewardHistory.length - MAX_POINTS) + 1;
   const data = rewardHistory
     .slice(-MAX_POINTS)
-    .map((reward, i) => ({ episode: rewardHistory.length - MAX_POINTS + i + 1, reward }));
+    .map((reward, i) => ({ episode: firstEpisode + i, reward }));
 
   if (data.length === 0) {
     return (

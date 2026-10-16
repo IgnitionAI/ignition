@@ -1,0 +1,431 @@
+---
+title: 'Navigation de drone (physique)'
+description: Construis un quadcopter avec une vraie physique de corps rigide et regarde un agent DQN apprendre à voler vers des cibles mobiles. Le gain de friction, pas le gain de difficulté.
+---
+
+# Navigation de drone — Physique personnalisée
+
+C'est le tutoriel où on arrête de faire semblant. Pas de cartpole d'Euler. Pas de grille jouet. On construit un **quadcopter** — quatre rotors, six degrés de liberté, vraie gravité, vraie traînée, vrai couple — et on lui apprend à voler vers des points cibles mobiles. Depuis un navigateur.
+
+À la fin, tu auras construit un env de drone fonctionnel de zéro, entraîné un agent DQN dessus, et — c'est la partie que la plupart des tutoriels sautent — tu comprendras *pourquoi les 100 premiers épisodes ressemblent à de la bouillie*, et quoi faire à ce sujet.
+
+Durée estimée : **35–45 minutes** de construction. Ajoute **5–15 minutes de regarder** pour que l'entraînement commence à montrer des signes de vie.
+
+## Prérequis
+
+- Tu as terminé le [tutoriel CartPole 3D](/docs/tutorials/cartpole-3d) ou un travail R3F équivalent.
+- Tu comprends la [page de l'algorithme DQN](/docs/algorithms/dqn) — au moins le trio « replay buffer + réseau cible + décroissance d'epsilon ».
+- Projet Vite + React + TypeScript avec `@ignitionai/core`, `@ignitionai/backend-tfjs`, `@react-three/fiber`, `@react-three/drei`, `three` installés.
+- De la patience. Les quadcopters sont durs. C'est tout le propos.
+
+## Pourquoi les drones sont durs (un détour de 2 minutes)
+
+Un quadcopter a **quatre rotors** produisant une poussée verticale dans le repère propre du drone. La portance totale est la somme des quatre. Mais chaque rotor produit aussi un moment autour du centre — la poussée différentielle crée simultanément roulis, tangage et lacet. Voilà ce que ça signifie en pratique :
+
+- Tu veux **voler vers l'avant** ? Penche le nez vers le bas en réduisant un peu les rotors avant. Mais pencher le nez signifie que le vecteur de poussée pointe en partie horizontalement, donc tu perds de l'altitude. Il faut donc augmenter la poussée totale pour compenser. Mais augmenter la poussée affecte aussi ton lacet à cause de la traînée différentielle.
+
+- Tu veux **voler sur place** ? Il faut que les quatre rotors produisent presque exactement la bonne force pour annuler exactement la gravité, et toute asymétrie de la structure (ou du signal de contrôle de l'agent) provoque une lente dérive qu'il faut corriger.
+
+- Tu veux **arrêter une rotation** ? Tu ne peux pas juste « cesser d'appliquer un couple » — la vitesse angulaire persiste, donc tu dois appliquer un contre-couple pendant une durée précise. Si tu dépasses, tu oscillés.
+
+C'est pourquoi le contrôle de drone en ingénierie classique, ce sont **des semaines de réglage PID**. Trois boucles PID cascadées (attitude → vitesse → moteur), des filtres de Kalman pour la fusion de capteurs, des tables de gains figées pour différents régimes de vol, et un système de sécurité pour rattraper les divergences. C'est tout un sujet de doctorat.
+
+Le RL est *censé* tout apprendre de zéro, à partir d'un signal de récompense. Et il le peut. Mais l'espace état × action qu'il doit explorer avant que le gradient pointe quelque part d'utile est **énorme**. Retiens ça — on y reviendra dans la section « attentes honnêtes » ci-dessous.
+
+## Étape 1 — L'espace d'actions
+
+Avant d'écrire la moindre physique, décidons **ce que l'agent peut faire**. Le contrôle naturel d'un quadcopter, c'est « un float par moteur des 4, entre 0 et max_thrust ». C'est un espace d'actions continu en 4D — et le RL avec actions continues signifie généralement PPO ou SAC, qui sont plus durs à régler que DQN.
+
+Pour un tutoriel premier jet, **on discrétise**. Crée `src/drone-env.ts` et commence par la liste d'actions :
+
+```ts filename="src/drone-env.ts"
+import type { TrainingEnv } from '@ignitionai/core'
+import * as THREE from 'three'
+
+interface ThrustMix {
+  readonly label: string
+  readonly m0: number  // front-right
+  readonly m1: number  // front-left
+  readonly m2: number  // back-right
+  readonly m3: number  // back-left
+}
+
+const ACTIONS: readonly ThrustMix[] = [
+  { label: 'hover_low',    m0: 0.5, m1: 0.5, m2: 0.5, m3: 0.5 },
+  { label: 'hover_high',   m0: 0.9, m1: 0.9, m2: 0.9, m3: 0.9 },
+  { label: 'forward',      m0: 0.6, m1: 0.6, m2: 0.9, m3: 0.9 },
+  { label: 'backward',     m0: 0.9, m1: 0.9, m2: 0.6, m3: 0.6 },
+  { label: 'left',         m0: 0.9, m1: 0.6, m2: 0.9, m3: 0.6 },
+  { label: 'right',        m0: 0.6, m1: 0.9, m2: 0.6, m3: 0.9 },
+  { label: 'yaw_left',     m0: 0.9, m1: 0.6, m2: 0.6, m3: 0.9 },
+  { label: 'yaw_right',    m0: 0.6, m1: 0.9, m2: 0.9, m3: 0.6 },
+]
+```
+
+**Qu'observer** : huit combinaisons de poussée. Chacune est une « recette » statique pour les quatre moteurs. L'agent choisit une combo par pas. Ce n'est pas du contrôle continu *vrai* — le drone ne peut pas accélérer en douceur — mais c'est assez pour une démo convaincante et ça nous permet de rester sur DQN.
+
+**Pourquoi cette étape existe** : le goulot de temps n°1 du RL de drone, c'est de choisir un espace d'actions trop expressif. Les actions continues en 4D semblent idéales, mais DQN ne peut pas les gérer, PPO demande un réglage soigneux, et tu passes deux semaines sur les hyperparamètres avant de voir un drone planer. Huit combos discrets donnent à DQN une chance de converger en centaines d'épisodes au lieu de centaines de milliers.
+
+## Étape 2 — Les constantes et l'état
+
+```ts filename="src/drone-env.ts (continued)"
+// ---------- Physics constants ----------
+const GRAVITY = 9.8
+const MASS = 1.0              // kg
+const INERTIA = 0.02          // scalar angular inertia
+const DRAG_LINEAR = 0.15
+const DRAG_ANGULAR = 0.8
+const THRUST_MAX = 20         // N total across all 4 motors at full throttle
+const ARM_LENGTH = 0.25       // distance from center to rotor
+const DT = 0.02               // physics timestep (50 Hz)
+
+// ---------- Arena ----------
+const VOLUME_X = 6
+const VOLUME_Y = 4
+const VOLUME_Z = 6
+const GROUND_Y = 0
+const CEILING_Y = 6
+const MAX_STEPS = 1000
+
+// ---------- Reward shaping ----------
+const DISTANCE_WEIGHT = 0.1
+const CAPTURE_BONUS = 50
+const CRASH_PENALTY = -20
+const SPIN_PENALTY_WEIGHT = 0.01
+const TARGET_RADIUS = 0.4
+```
+
+**Qu'observer** : chaque nombre est un levier que tu peux tirer plus tard. `THRUST_MAX / MASS = 20 m/s² = 2g`, ce qui veut dire que le drone a une accélération max d'environ deux fois la gravité — réaliste pour un petit drone grand public. `DT = 0.02` signifie qu'on simule à 50 Hz ; plus bas c'est instable, plus haut ça gaspille du calcul.
+
+**Pourquoi cette étape existe** : les nombres magiques enfouis dans le code sont l'ennemi de l'itération. Quand le drone ne converge pas, tu dois pouvoir changer `CAPTURE_BONUS` de 50 à 100 à un seul endroit et réessayer. Les constantes en haut rendent ça trivial.
+
+## Étape 3 — Les champs d'état
+
+```ts filename="src/drone-env.ts (continued)"
+export class DroneEnv implements TrainingEnv {
+  readonly actions = ACTIONS.map((a) => a.label)
+
+  // World-frame state
+  position = new THREE.Vector3(0, 2, 0)
+  velocity = new THREE.Vector3()
+  orientation = new THREE.Euler(0, 0, 0, 'XYZ')
+  angularVelocity = new THREE.Vector3()
+
+  // Target navigation
+  target = new THREE.Vector3(0, 2, 0)
+  stepCount = 0
+  captures = 0
+  crashed = false
+
+  // Per-step shaping signals (computed in step(), read in reward())
+  private lastDistance = 0
+  private progressDelta = 0
+  private justCaptured = false
+
+  // Viz hints (read by the scene, not used for RL)
+  currentAction = 0
+  motorThrusts: [number, number, number, number] = [0.5, 0.5, 0.5, 0.5]
+
+  constructor() {
+    this.reset()
+  }
+```
+
+**Qu'observer** : on stocke l'état du drone sous forme de `THREE.Vector3` et `THREE.Euler` — deux types mutables, ce qu'on veut pour la performance dans une boucle d'entraînement. On les alloue une fois dans le constructeur, pas par pas.
+
+**Pourquoi cette étape existe** : la séparation entre « état pertinent pour le RL » (position, vitesse, orientation, vitesse angulaire) et « indices de visualisation » (currentAction, motorThrusts) est délibérée. La scène lit les indices de viz pour animer les rotors ; la boucle d'entraînement lit `observe()` qui ne les touche pas. La contamination croisée ici est un bug courant.
+
+## Étape 4 — Le vecteur d'observation
+
+```ts filename="src/drone-env.ts (continued)"
+  observe(): number[] {
+    const delta = this.target.clone().sub(this.position)
+    const dist = delta.length()
+
+    // Normalized delta to target (agent needs to know where to go)
+    const dx = THREE.MathUtils.clamp(delta.x / (VOLUME_X / 2), -1, 1)
+    const dy = THREE.MathUtils.clamp(delta.y / VOLUME_Y, -1, 1)
+    const dz = THREE.MathUtils.clamp(delta.z / (VOLUME_Z / 2), -1, 1)
+
+    // Normalized absolute position (so agent learns arena bounds)
+    const px = THREE.MathUtils.clamp(this.position.x / (VOLUME_X / 2), -1, 1)
+    const py = THREE.MathUtils.clamp((this.position.y - GROUND_Y) / VOLUME_Y, -1, 1)
+    const pz = THREE.MathUtils.clamp(this.position.z / (VOLUME_Z / 2), -1, 1)
+
+    // Velocity (normalized against 5 m/s nominal)
+    const vx = THREE.MathUtils.clamp(this.velocity.x / 5, -1, 1)
+    const vy = THREE.MathUtils.clamp(this.velocity.y / 5, -1, 1)
+
+    // Orientation in [-1, 1] via division by π
+    const roll = this.orientation.x / Math.PI
+    const pitch = this.orientation.z / Math.PI
+
+    // Angular velocity around yaw (normalized)
+    const wz = THREE.MathUtils.clamp(this.angularVelocity.z / 5, -1, 1)
+
+    // Scalar distance cue
+    const distNorm = Math.min(dist / Math.max(VOLUME_X, VOLUME_Z), 1)
+
+    return [dx, dy, dz, vx, vy, roll, pitch, wz, distNorm, px, py, pz, dist / 10]
+  }
+```
+
+**Qu'observer** : 13 floats, tous normalisés à peu près dans `[-1, 1]`. L'agent voit : où est la cible par rapport à lui, où il est dans l'arène, à quelle vitesse et dans quelle direction il bouge, comment il est incliné, et combien il tournoie. C'est la perception minimale viable pour le contrôle de vol 3D.
+
+**Pourquoi cette étape existe** : **la normalisation n'est pas optionnelle**. Un DQN avec des entrées non normalisées où une feature a une magnitude 100 et une autre 0.1 apprend à ignorer la petite. Chaque observation ici est divisée par un maximum plausible. Sérieusement — c'est le bug de débutant le plus courant en RL, et il est invisible : l'entraînement ne marche juste silencieusement pas.
+
+Note ce qui n'est **pas** dans l'observation : l'angle de lacet. La navigation est invariante en lacet (pivoter le monde entier autour de l'axe Y ne change pas la tâche), donc on l'omet. Chaque entrée inutile ajoute du bruit.
+
+## Étape 5 — Le pas de physique
+
+C'est la partie dense. Lis lentement.
+
+```ts filename="src/drone-env.ts (continued)"
+  step(action: number | number[]): void {
+    const a = typeof action === 'number' ? action : action[0]
+    const mix = ACTIONS[Math.max(0, Math.min(ACTIONS.length - 1, a))]
+    this.currentAction = a
+    this.motorThrusts = [mix.m0, mix.m1, mix.m2, mix.m3]
+
+    // Per-motor thrust magnitude (N)
+    const thrustPer = THRUST_MAX / 4
+    const m0 = mix.m0 * thrustPer
+    const m1 = mix.m1 * thrustPer
+    const m2 = mix.m2 * thrustPer
+    const m3 = mix.m3 * thrustPer
+
+    // Total lift in BODY frame (+Y body axis)
+    const lift = m0 + m1 + m2 + m3
+
+    // Body-frame torques from asymmetric thrust
+    const torqueRoll  = ((m0 + m2) - (m1 + m3)) * ARM_LENGTH
+    const torquePitch = ((m0 + m1) - (m2 + m3)) * ARM_LENGTH
+    const torqueYaw   = ((m0 + m3) - (m1 + m2)) * ARM_LENGTH * 0.3
+
+    // Rotate lift into world frame using current orientation
+    const liftVec = new THREE.Vector3(0, lift, 0)
+    liftVec.applyEuler(this.orientation)
+
+    // Linear acceleration: F/m - gravity - drag
+    const accel = liftVec.clone().divideScalar(MASS)
+    accel.y -= GRAVITY
+    accel.sub(this.velocity.clone().multiplyScalar(DRAG_LINEAR / MASS))
+
+    // Semi-implicit Euler integration
+    this.velocity.add(accel.clone().multiplyScalar(DT))
+    this.position.add(this.velocity.clone().multiplyScalar(DT))
+
+    // Angular acceleration: τ/I - angular drag
+    const angAccel = new THREE.Vector3(
+      torqueRoll / INERTIA,
+      torqueYaw / INERTIA,
+      torquePitch / INERTIA,
+    )
+    angAccel.sub(this.angularVelocity.clone().multiplyScalar(DRAG_ANGULAR))
+
+    this.angularVelocity.add(angAccel.clone().multiplyScalar(DT))
+    this.orientation.x += this.angularVelocity.x * DT
+    this.orientation.y += this.angularVelocity.y * DT
+    this.orientation.z += this.angularVelocity.z * DT
+
+    // Termination checks
+    if (this.position.y <= GROUND_Y + 0.1) {
+      this.crashed = true
+      this.position.y = GROUND_Y + 0.1
+      this.velocity.set(0, 0, 0)
+    }
+    if (this.position.y > CEILING_Y) this.crashed = true
+    if (Math.abs(this.position.x) > VOLUME_X) this.crashed = true
+    if (Math.abs(this.position.z) > VOLUME_Z) this.crashed = true
+
+    // Progress tracking for reward shaping
+    const dist = this.position.distanceTo(this.target)
+    this.progressDelta = this.lastDistance - dist
+    this.lastDistance = dist
+
+    // Target capture
+    this.justCaptured = false
+    if (dist < TARGET_RADIUS) {
+      this.captures++
+      this.justCaptured = true
+      this.spawnTarget()
+      this.lastDistance = this.position.distanceTo(this.target)
+    }
+
+    this.stepCount++
+  }
+```
+
+**Qu'observer** : on calcule quatre forces → on les somme pour la portance → on calcule trois couples à partir de leur asymétrie → on fait pivoter la portance dans le repère monde via l'orientation courante du drone → on intègre la vitesse et la position → on intègre la vitesse angulaire et l'orientation. C'est toute la boucle de dynamique du corps rigide. Chaque contrôleur de vol de drone commercial exécute essentiellement cette même boucle à 1–8 kHz.
+
+**Pourquoi cette étape existe** : c'est ici que se passe *la vraie physique*. Pas de Rapier, pas de cannon.js, pas de blob WASM. Juste des vecteurs et des angles d'Euler. Soixante-dix lignes de TypeScript suffisent pour simuler un quadcopter avec assez de précision pour l'entraînement RL. Si tu sais lire ce code, tu comprends comment les drones volent.
+
+**Note sur fait-main vs Rapier** : on a choisi d'écrire notre propre intégration parce que Rapier exige un arbre de composants React (parent `<Physics>`) et que la boucle d'entraînement tourne hors de React. Faire tourner Rapier dans un worker et miroiter l'état marcherait, mais ajouterait 500 KB de WASM et beaucoup de tuyauterie. Pour un quadcopter, l'intégration directe est plus simple, plus rapide et déterministe.
+
+## Étape 6 — Le reward shaping
+
+```ts filename="src/drone-env.ts (continued)"
+  reward(): number {
+    if (this.crashed) return CRASH_PENALTY
+
+    const dist = this.lastDistance
+    const distancePenalty = -dist * DISTANCE_WEIGHT
+
+    // Progress bonus: reward getting closer, not just being close.
+    // Without this, a drone hovering near the target earns as much as
+    // one actively chasing it. The progress term rewards motion.
+    const progressBonus = this.progressDelta * 2
+
+    // Anti-spin: the agent can learn to "survive by spinning" — rotating
+    // fast enough that it accidentally hovers. Penalize angular velocity
+    // to force stable flight.
+    const spinPenalty = -SPIN_PENALTY_WEIGHT * this.angularVelocity.length()
+
+    const base = distancePenalty + progressBonus + spinPenalty
+    return this.justCaptured ? base + CAPTURE_BONUS : base
+  }
+```
+
+**Qu'observer** : la récompense a quatre composants. La **pénalité de distance** dit « plus près, c'est mieux ». Le **bonus de progression** dit « se rapprocher, c'est encore mieux » — c'est le différentiateur clé qui empêche l'optimum local « planer à proximité ». La **pénalité anti-rotation** existe parce que DQN est assez malin pour apprendre une politique bizarre où le drone se fait tourner en un vol stationnaire approximatif par chance gyroscopique, et on ne veut pas ça. Le **bonus de capture** est la grosse récompense épisodique pour atteindre une cible.
+
+**Pourquoi cette étape existe** : le reward shaping est la compétence la plus importante de l'ingénierie RL. Si tu as réglé des hyperparamètres pendant une semaine sur une récompense cassée, tu as perdu une semaine. Chaque ligne de cette fonction de récompense a été ajoutée parce qu'une version antérieure du drone a appris à exploiter son absence. C'est la douleur accumulée qui parle.
+
+## Étape 7 — Done et reset
+
+```ts filename="src/drone-env.ts (continued)"
+  done(): boolean {
+    if (this.crashed) return true
+    if (this.stepCount >= MAX_STEPS) return true
+    return false
+  }
+
+  reset(): void {
+    this.position.set(0, 2, 0)
+    this.velocity.set(0, 0, 0)
+    this.orientation.set(0, 0, 0)
+    this.angularVelocity.set(0, 0, 0)
+    this.stepCount = 0
+    this.captures = 0
+    this.crashed = false
+    this.justCaptured = false
+    this.progressDelta = 0
+    this.currentAction = 0
+    this.motorThrusts = [0.5, 0.5, 0.5, 0.5]
+    this.spawnTarget()
+    this.lastDistance = this.position.distanceTo(this.target)
+  }
+
+  private spawnTarget(): void {
+    this.target.set(
+      (Math.random() - 0.5) * VOLUME_X * 0.8,
+      1 + Math.random() * (VOLUME_Y - 1.5),
+      (Math.random() - 0.5) * VOLUME_Z * 0.8,
+    )
+  }
+}
+```
+
+Ça clôt la classe. Tu as maintenant un `DroneEnv` complet.
+
+## Étape 8 — Le brancher à la boucle d'entraînement
+
+C'est la partie que tu as déjà faite trois fois. Dans ton fichier app principal :
+
+```ts filename="src/main.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { DroneEnv } from './drone-env'
+
+const drone = new DroneEnv()
+const env = new IgnitionEnvTFJS(drone)
+
+env.train('dqn')
+env.setSpeed(25)
+```
+
+Cinq lignes. Les mêmes cinq lignes que tu écrirais pour CartPole. Le framework se fiche que l'env soit un quadcopter 6-DOF — il ne voit que `observe()`, `step()`, `reward()`, `done()`, `reset()`, et une liste d'actions.
+
+**C'est tout le propos.**
+
+## Attentes honnêtes de convergence (lis ça)
+
+Lance ton code. Regarde la console. Après 100 épisodes :
+
+> **Le drone s'écrase encore au sol en tournoyant.**
+
+C'est **normal**. Attendu. Souhaité, même, parce que ça veut dire que tu n'es pas en train de regarder une illusion d'apprentissage.
+
+Voici le bilan honnête de ce qu'il faut attendre :
+
+| Épisodes | Ce que tu verras | Ce qui se passe |
+|---|---|---|
+| 0–50 | Chaos total. Le drone culbute, tournoie, s'écrase presque immédiatement. | Epsilon est proche de 1.0 → les actions sont effectivement aléatoires. Le replay buffer se remplit de transitions majoritairement poubelles. |
+| 50–200 | Toujours surtout des crashs. De temps en temps le drone reste en l'air ~20 étapes avant de perdre sa stabilité. | DQN a commencé à apprendre « ne pas crasher » mais n'a pas encore relié des actions spécifiques à des résultats spécifiques. |
+| 200–500 | Le drone plane de façon instable plus longtemps. Beaucoup de crashs encore. Les captures sont rares (0–1 par 10 épisodes). | La Q-function commence à généraliser. Epsilon est tombé à ~0.3. |
+| 500–1000 | Premiers vols stationnaires stables. Premières captures en chaîne. Crashs encore si le drone s'éloigne trop du centre. | La politique est cohérente. Encore beaucoup d'exploration. |
+| 1000–2000 | Vol stationnaire propre. Captures de cibles constantes. Crashs rares. | C'est ce que tu appellerais « entraîné ». |
+| 2000+ | Affinement. Trajectoires plus rapides. | Rendements décroissants à partir de là. |
+
+À vitesse d'entraînement 25× dans un navigateur moderne, 1000 épisodes représentent **~3–5 minutes de temps réel**. Deux minutes de setup + cinq minutes de regarder = tu as un drone entraîné en bien moins de 10 minutes au total. Dans un pipeline de contrôle classique, cette même expérience prend **des semaines**.
+
+### Pourquoi ça prend tant d'épisodes ?
+
+Parce que l'espace état × action est énorme. Le drone a 6 degrés de liberté, chacun pouvant être dans une plage plausible. L'agent a 8 actions. La récompense est dense mais pas *si* dense — il faut tomber accidentellement sur une « capture de cible » quelques fois avant que les Q-values autour de cette combo action-état commencent à monter. Jusque-là, le gradient ne pointe nulle part d'utile.
+
+Ce n'est pas un échec du framework. C'est la **difficulté inhérente du contrôle de vol 6-DOF appris de zéro sans connaissance préalable**. Chaque papier qui entraîne un drone par RL montre la même courbe — plate, plate, plate, plate, décollage soudain vers l'épisode 500–1500.
+
+### Quoi essayer quand ça ne converge pas
+
+Si à 2000 épisodes ton drone est encore mauvais, voici l'ordre des choses à régler :
+
+1. **Vérifie d'abord les observations.** Affiche `env.observe()`. Chaque valeur doit être dans `[-1, 1]`. Si une feature clippet constamment à ±1, elle est inutile.
+2. **Augmente `CAPTURE_BONUS`** de 50 à 100. Un plus gros bonus discret = un signal d'apprentissage plus fort quand le drone a de la chance.
+3. **Réduis `MAX_STEPS`** de 1000 à 500. Des épisodes plus courts signifient plus de resets par minute réelle, plus d'exploration.
+4. **Monte `minEpsilon`** dans la config DQN de `0.01` à `0.05`. Une exploration plus permanente empêche le verrouillage sur de mauvaises politiques.
+5. **Double `hiddenLayers`** de `[24, 24]` (défaut DQN) à `[64, 64]`. Les drones ont plus de dimensions d'état que CartPole ; le réseau par défaut est un peu petit.
+
+```ts
+env.train('dqn', {
+  hiddenLayers: [64, 64],
+  minEpsilon: 0.05,
+  epsilonDecay: 0.998,
+})
+```
+
+## La philosophie d'IgnitionAI
+
+Lis ça lentement.
+
+> **IgnitionAI ne rend pas le RL facile. Le RL est toujours dur. Entraîner un quadcopter prend toujours des milliers d'épisodes. Façonner la récompense demande toujours de l'itération. Choisir l'espace d'actions demande toujours du jugement.**
+>
+> **Ce qu'IgnitionAI enlève, c'est la *friction* entre l'idée et le premier run.**
+>
+> Dans le pipeline classique, passer de « je me demande si un drone peut apprendre X » à « j'ai une expérience qui tourne » prend quelques semaines : installer ROS, installer Gazebo, configurer des envs Python, épingler des versions de CUDA, câbler un logger de récompenses, déboguer le sim-to-real, régler un baseline PID. Pour la plupart des devs créatifs, l'expérience meurt sur la page d'installation.
+>
+> Dans IgnitionAI, la même transition tient en 200 lignes de TypeScript et un appel à `env.train()`. Trente minutes entre « je me demande » et « je le vois tourner ». Si le premier run est mauvais, tu itères. Si c'est encore mauvais après dix itérations, tu as appris quelque chose de réel sur ton problème en un après-midi, ce qui aurait pris un mois sinon.
+>
+> Le framework t'accélère. Il t'aide à démarrer. Il te passe la première vitesse sans friction.
+>
+> **Du cerveau au logiciel, en temps réel.**
+
+C'est ça, le gain. Pas que ton drone s'entraîne instantanément — ce n'est pas le cas. Mais que tu puisses *essayer des choses* au rythme de la pensée au lieu du rythme de l'outillage.
+
+## Ce que tu viens de construire
+
+- Un environnement quadcopter complet en ~200 lignes de TypeScript.
+- Une boucle de physique de corps rigide faite main qui gère correctement la gravité, la traînée, le couple, l'inertie et la poussée asymétrique.
+- Une discrétisation en 8 actions que DQN peut apprendre.
+- Une forme de récompense conçue pour éviter les optima locaux « planer près de la cible » et « survivre en tournoyant ».
+- Des attentes honnêtes sur le temps d'entraînement et des leviers de réglage concrets.
+
+Tu as aussi bâti de l'intuition sur pourquoi le RL de drone est dur en général — ce qui vaut plus que le code, parce que la prochaine fois que tu verras un article sur le contrôle de vol appris, tu le liras d'une toute autre façon.
+
+## Prochaines étapes
+
+- **Regarde-le voler pour de vrai.** [`/demos/drone-navigation/`](/demos/drone-navigation/) est la version finie de ce tutoriel avec une scène peaufinée. Ouvre-le, clique sur Train, attends quelques minutes.
+- **[Export vers Unity via ONNX](/docs/tutorials/onnx-unity)** — déploie ta politique de drone entraînée dans une scène Unity. Le fichier `.onnx` se fiche que la source était du TypeScript dans un navigateur.
+- **[Page de l'algorithme DQN](/docs/algorithms/dqn)** — revisite la section des modes d'échec avec de l'expérience fraîche. Tu as maintenant vu les cinq sur un vrai problème.
+- **Essaie PPO ensuite.** `env.train('ppo')` — le policy gradient peut aider avec le mode d'échec « survivre en tournoyant » parce que son bonus d'entropie force des politiques stochastiques qui ne peuvent pas se verrouiller dans des stratégies dégénérées.
+
+---
+
+Précédent : **[← Export vers Unity (ONNX)](/docs/tutorials/onnx-unity)** · Suivant : **[Index des tutoriels](/docs/tutorials)**

@@ -1,0 +1,25 @@
+{
+  "name": "demo-cage-duel",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run test",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "three": "^0.162.0",
+    "@ignitionai/core": "workspace:*",
+    "@ignitionai/backend-tfjs": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/three": "^0.162.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.3.1",
+    "vitest": "^3.1.1",
+    "@types/node": "^22.14.1"
+  }
+}

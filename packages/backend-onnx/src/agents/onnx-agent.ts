@@ -1,6 +1,6 @@
 import type { AgentInterface, Experience } from '@ignitionai/core';
 import { OnnxAgentConfigSchema, type OnnxAgentConfig, type OnnxAgentConfigInput } from '../types';
-import { createOnnxSession, runInference, inspectSession, type OrtSession } from '../runtime';
+import { createOnnxSession, runInference, inspectSession, type OrtSession } from '../runtime-universal';
 import { loadOnnxModelFromHub } from '../io/loadOnnxFromHub';
 
 /**

@@ -30,4 +30,4 @@ jobs:
         run: pnpm -r run build
 
       - name: Run all tests
-        run: pnpm -r run test
+        run: pnpm exec vitest run

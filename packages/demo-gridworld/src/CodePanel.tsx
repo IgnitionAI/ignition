@@ -1,4 +1,4 @@
-import type { JSX } from 'react'
+import type React from 'react';
 import { useDemoStore } from './store';
 
 export function CodePanel() {
@@ -8,15 +8,7 @@ export function CodePanel() {
 import { GridWorldEnv } from './gridworld-env';
 
 const grid = new GridWorldEnv(7);
-
-const env = new IgnitionEnv({
-  getObservation: () => grid.observe(),
-  actions: ['up', 'right', 'down', 'left'],
-  applyAction: (a) => grid.step(a),
-  computeReward: () => grid.reward(),
-  isTerminated: () => grid.done(),
-  onReset: () => grid.reset(),
-});
+const env = new IgnitionEnv(grid);
 
 env.train('${algorithm}');`;
 
@@ -37,7 +29,7 @@ env.train('${algorithm}');`;
   );
 }
 
-function highlightLine(line: string): JSX.Element {
+function highlightLine(line: string): React.JSX.Element {
   // Minimal syntax highlighting via regex
   const highlighted = line
     .replace(/(import|from|const|new)/g, '<kw>$1</kw>')
@@ -46,7 +38,7 @@ function highlightLine(line: string): JSX.Element {
     .replace(/(\.\w+)\(/g, '<fn>$1</fn>(');
 
   const parts = highlighted.split(/(<\/?(?:kw|str|cmt|fn)>)/);
-  const elements: JSX.Element[] = [];
+  const elements: React.JSX.Element[] = [];
   let currentTag: string | null = null;
 
   const colors: Record<string, string> = {

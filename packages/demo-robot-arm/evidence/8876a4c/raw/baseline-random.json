@@ -1,0 +1,194 @@
+{
+  "label": "random-uniform",
+  "episodes": [
+    {
+      "commands": 80,
+      "blocked": 12,
+      "return": -2.679293087738029,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.9113448940462547,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 21,
+      "return": -1.935079251626405,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.48939886719506676,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 16,
+      "return": -3.228974907610547,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 2.21735094932342,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 9,
+      "return": -2.842327630446355,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.356413431624556,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 6,
+      "return": -2.1944589873460965,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.401154570507801,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 6,
+      "return": -2.7221870564378174,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.4323270446424934,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 5,
+      "return": -0.4356706362695229,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.6842192939247299,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 36,
+      "blocked": 6,
+      "return": 1.329972326963939,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 36
+    },
+    {
+      "commands": 80,
+      "blocked": 21,
+      "return": -2.3178581818829476,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.651171519011914,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 18,
+      "return": -2.1835852604647967,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.3946811299894937,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 13,
+      "return": -3.390389074634107,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 2.6378578625377203,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 9,
+      "return": -2.22447940340898,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.9610524198083309,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 75,
+      "blocked": 9,
+      "return": 1.3554335816756002,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0.07517830916137336,
+      "commandsToSuccess": 75
+    },
+    {
+      "commands": 58,
+      "blocked": 3,
+      "return": 1.3029623631979634,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 58
+    },
+    {
+      "commands": 47,
+      "blocked": 8,
+      "return": 1.492138497395671,
+      "success": true,
+      "truncated": false,
+      "finalDistance": 0,
+      "commandsToSuccess": 47
+    },
+    {
+      "commands": 80,
+      "blocked": 13,
+      "return": -3.255890778209447,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.6870491595701413,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 13,
+      "return": -2.5416043801161634,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.9413797788430713,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 8,
+      "return": -2.580077899922247,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 2.089714131488227,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 9,
+      "return": -1.3183375076984487,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 1.0711118958388697,
+      "commandsToSuccess": null
+    },
+    {
+      "commands": 80,
+      "blocked": 17,
+      "return": -2.55540432626312,
+      "success": false,
+      "truncated": true,
+      "finalDistance": 0.7326388683842144,
+      "commandsToSuccess": null
+    }
+  ],
+  "successes": 4,
+  "truncations": 16,
+  "finalDistanceMean": 1.186702206294884,
+  "finalDistanceMedian": 1.3946811299894937,
+  "commandsToSuccessMean": 54,
+  "commandsToSuccessN": 4,
+  "blockedTotal": 222,
+  "returnMean": -1.646255580042093,
+  "commandsTotal": 1496
+}

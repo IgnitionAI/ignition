@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "vitest run"
+    "test": "vitest run --root ."
   },
   "dependencies": {
     "@ignitionai/backend-tfjs": "workspace:*",

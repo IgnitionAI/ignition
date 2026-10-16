@@ -1,0 +1,21 @@
+{
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpus": [
+    "Apple M4",
+    "Apple M4",
+    "Apple M4",
+    "Apple M4",
+    "Apple M4",
+    "Apple M4",
+    "Apple M4",
+    "Apple M4",
+    "Apple M4",
+    "Apple M4"
+  ],
+  "cpuCount": 10,
+  "totalMemoryGb": 16,
+  "node": "v26.10.0",
+  "tfjs": "4.22.0",
+  "backend": "tensorflow"
+}

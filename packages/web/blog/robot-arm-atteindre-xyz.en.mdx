@@ -1,0 +1,94 @@
+The arm moves in three dimensions, but the agent only sees six numbers. Robot Arm 3D isolates one spatial skill: bringing the tip of an ideal kinematic arm closer to an XYZ target — no gravity, no inertia, no inverse kinematics.
+
+Three joints on a 15° grid — base, shoulder, elbow — give 325 configurations and a tip living in a shell-shaped reachable volume. The 3D is not decorative: targets vary in height, depth and lateral position, and each action moves exactly one joint.
+
+**You will train a real DQN in the browser, then freeze its network for inference.**
+
+[**Try Robot Arm 3D in your browser →**](/demos/robot-arm/)
+
+## Start with the demo
+
+Click **Train**. The network is created, weights move at every update, epsilon decays. Switch to **Inference**: the weights are frozen, only the greedy policy runs. **New episode** draws a new target while keeping the network; **Restart learning** destroys and recreates the network.
+
+![The Robot Arm 3D demo at rest, before interaction.](/images/blog/robot-arm/initial.png)
+
+*Initial state captured in headless Chromium. Screenshots show the journey, not a converged policy.*
+
+## What the agent receives
+
+The `robot-arm-v1` contract places the pivot at (0, 0.6, 0) with L1 = 0.9 m and L2 = 0.7 m. Forward kinematics is exact: `r = L1·cos(q1) + L2·cos(q1+q2)`, `x = r·sin(q0)`, `y = 0.6 + L1·sin(q1) + L2·sin(q1+q2)`, `z = r·cos(q0)`.
+
+Six observations bounded in [-1, 1]: the three normalized joint angles, then `(target - tip)/3.2` on x, y and z. The target's generating configuration is not exposed — the agent must learn the geometry, not memorise it.
+
+Six actions: `base ±`, `shoulder ±`, `elbow ±`, one 15° step per command. At a grid limit the command is a no-op counted as blocked. An episode lasts 80 commands; success requires bringing the tip within 0.10 m of the target — which, on this grid, means reaching its exact configuration or one of the rare neighbouring ones (the closest distinct pair on the grid sits at ~0.075 m).
+
+## What the reward encourages
+
+Each command receives `2(d-d')/1.6 - 0.02d'/1.6 - 0.01 - 0.02·blocked + success`, where `d` and `d'` are the distances before/after. Approaching pays, retreating costs, blocked commands cost a little more, and success adds +1. This dense reward guides the agent at every command — unlike sparse-reward tasks.
+
+The network is a standard DQN: 6 inputs, two hidden layers of 64 ReLU neurons, 6 outputs. Learning rate 0.001, gamma 0.99, batch 32 over a 10,000-entry replay, epsilon from 1.0 to 0.05 decaying by 0.9995 per update, target network resynced every 500 updates.
+
+## Method and real measurements
+
+Protocol frozen before execution (`robot-arm-v1-protocol-1`): 80 unique targets drawn without replacement from the grid (48 train / 12 validation / 20 test), declared evaluation starts identical for every policy, three seeds 11/29/47 with separate environment/agent random streams. Budget: 5,000 transitions **or** 3 minutes per seed, whichever hits first — all three seeds were stopped by the transition budget.
+
+Training and inference use the same controller and preset as the browser demo; the measurement backend is the native TensorFlow backend (`tensorflow`, tfjs 4.22.0, macOS arm64). Weight variation during training: confirmed (Δ|w| ≈ 419–480, 4,969 updates, epsilon 1.0 → 0.083 on every seed).
+
+| Seed | Initial network | Final network (greedy) |
+|---|---|---|
+| 11 | 1/20 success, mean d 1.441 m | 5/20 success, mean d 0.466 m |
+| 29 | 0/20 success, mean d 1.805 m | 5/20 success, mean d 0.470 m |
+| 47 | 1/20 success, mean d 1.714 m | 11/20 success, mean d 0.283 m |
+
+Seeded uniform random policy (same episodes, same starts): 4/20 success, mean final distance 1.187 m. On successes, the final network reaches the target in ~6–7 commands on average versus ~54 for the random policy. The 12 validation episodes (observed only, no selection) point the same way: 6/12, 9/12 and 7/12 successes.
+
+![The demo during training: real counters advance.](/images/blog/robot-arm/training.png)
+
+*Real training launched before the capture: transitions, updates and epsilon come from the controller, not a simulation.*
+
+## What to take away (and what not to conclude)
+
+All three seeds cut the mean distance by a factor of 3 to 6 and beat the random baseline. But seed-to-seed variation (5/20 versus 11/20) is real, the 5,000-transition budget is short, and nothing here proves convergence: with ~15 minutes of cumulative training, the DQN learned a clearly better-than-chance policy on a discrete spatial task — that is the honest limit of the result.
+
+Inference verifies the expected invariance: weights and counters strictly frozen during greedy steps, as in the demo.
+
+## Reproduce the experiment with code
+
+Use Node.js 20+ and pnpm 10.8.0. From the repository:
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter demo-robot-arm dev
+```
+
+Open [localhost:3011](http://localhost:3011). The example is loaded directly from [blog-experiment.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-robot-arm/src/examples/blog-experiment.ts): the article's code and the repository's code stay in sync.
+
+<!-- FIRST_AGENT_CODE -->
+
+While Vite runs, import the module in the browser console:
+
+```js
+const { createExperiment } = await import('/examples/blog-experiment.ts');
+const session = createExperiment();
+await session.train();   // creates the DQN, starts training
+session.pause();         // waits for the current transition, then stops
+session.infer();         // greedy policy, frozen weights
+session.stop();
+```
+
+To replay the full measurement protocol (3 seeds, frozen evaluation, baseline): `pnpm --filter demo-robot-arm measure`. Raw per-seed data is kept in `packages/demo-robot-arm/evidence/`.
+
+![The demo in inference mode: the same network, frozen.](/images/blog/robot-arm/inference.png)
+
+*Inference launched after training, in the same session. Mode and counters come from the real controller.*
+
+## Your turn
+
+Reproduce the journey, then change exactly one contract element — the reward, the angle grid, the budget — and compare. You will have a concrete case for discussing what the agent knows, what it chooses, and what the reward actually values.
+
+[**Open Robot Arm 3D →**](/demos/robot-arm/)
+
+To go further, read [the Ignition runner](/docs/how-it-works/core) and [the available algorithms](/docs/algorithms).

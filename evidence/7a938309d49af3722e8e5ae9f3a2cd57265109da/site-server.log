@@ -1,0 +1,11 @@
+
+> web@0.1.0 start /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/packages/web
+> next start --hostname 127.0.0.1 --port 3071
+
+   ▲ Next.js 16.0.10
+   - Local:         http://127.0.0.1:3071
+   - Network:       http://127.0.0.1:3071
+
+ ✓ Starting...
+- [36minfo[0m [nextra] You have Next.js i18n enabled, read here https://nextjs.org/docs/app/building-your-application/routing/internationalization for the docs.
+ ✓ Ready in 162ms

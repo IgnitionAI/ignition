@@ -1,0 +1,202 @@
+---
+title: '@ignitionai/backend-tfjs'
+description: The TensorFlow.js backend — where the DQN, PPO, and Q-Table agents actually live, and where the browser-training magic happens.
+---
+
+# @ignitionai/backend-tfjs
+
+**Single responsibility**: provide TF.js implementations of the RL agents (DQN, PPO, Q-Table), plus the concrete `IgnitionEnvTFJS` that you instantiate in your app. If you're doing anything other than pure inference, this is the backend you'll be using.
+
+**Source**: [`packages/backend-tfjs/src/`](https://github.com/IgnitionAI/ignition/tree/main/packages/backend-tfjs/src) on GitHub.
+
+## Install
+
+```bash
+npm install @ignitionai/core @ignitionai/backend-tfjs
+```
+
+## Public API surface
+
+| Export | Kind | Purpose |
+|---|---|---|
+| `IgnitionEnvTFJS` (aliased `IgnitionEnv`) | class | Concrete training env with TF.js agent factories pre-registered. |
+| `DQNAgent` / `PPOAgent` / `QTableAgent` | classes | The three algorithm implementations. |
+| `ReplayBuffer` | class | Ring-buffer experience replay. |
+| `buildQNetwork` | function | Sequential MLP builder for Q-value networks. |
+| `setBackend` / `getAvailableBackends` | functions | TF.js backend control. |
+| `DQNConfig` / `PPOConfig` / `QTableConfig` | types | Config shapes for each algorithm. |
+| `DQNConfigSchema` / `PPOConfigSchema` / `QTableConfigSchema` | Zod schemas | Runtime validation for the configs. |
+| `DQN_DEFAULTS` / `PPO_DEFAULTS` / `QTABLE_DEFAULTS` / `ALGORITHM_DEFAULTS` | constants | Merged defaults used when you omit a config. |
+| `TFBackend` | type | String literal union for backend names. |
+
+## The `IgnitionEnvTFJS` class — a 30-line plugin on top of `core`
+
+This is the single file that wires TensorFlow.js into the core training loop:
+
+```ts filename="packages/backend-tfjs/src/ignition-env-tfjs.ts"
+import { IgnitionEnv, type TrainingEnv, type AgentFactory } from '@ignitionai/core'
+import { DQNAgent } from './agents/dqn'
+import { PPOAgent } from './agents/ppo'
+import { QTableAgent } from './agents/qtable'
+import { ALGORITHM_DEFAULTS } from './defaults'
+
+const FACTORIES: Record<string, AgentFactory> = {
+  dqn: (config) => new DQNAgent(config as unknown as DQNConfig),
+  ppo: (config) => new PPOAgent(config as unknown as PPOConfig),
+  qtable: (config) => new QTableAgent(config as unknown as QTableConfig),
+}
+
+export class IgnitionEnvTFJS extends IgnitionEnv {
+  constructor(env: TrainingEnv) {
+    super(env)
+    this.factories = { ...FACTORIES }
+    this.algorithmDefaults = { ...ALGORITHM_DEFAULTS }
+  }
+}
+```
+
+That's the whole file. It does two things:
+
+1. Extends the base `IgnitionEnv` from `core`.
+2. Registers three agent factories and their defaults.
+
+When you later call `env.train('dqn')`, `core` looks up `this.factories['dqn']`, calls it with the merged config, and gets back a `DQNAgent` instance — without ever importing TF.js into the `core` package. This is the clean dependency inversion: `core` defines the `AgentInterface` contract, and `backend-tfjs` fulfills it.
+
+## Backend selection — WebGPU → WebGL → WASM → CPU
+
+TensorFlow.js runs on multiple backends. You should think of them as "the same math, progressively less fast":
+
+| Backend | Speed | Availability |
+|---|---|---|
+| **WebGPU** | Fastest | Latest Chrome/Edge/Safari, behind a flag in Firefox |
+| **WebGL** | Fast | Every modern browser |
+| **WASM** | Medium | Every modern browser; best for low-end hardware |
+| **CPU** | Slow | Always available; fallback of last resort |
+
+The `setBackend` helper (in `packages/backend-tfjs/src/utils/backend-selector.ts`) tries your requested backend and falls back to CPU if it's unavailable:
+
+```ts filename="packages/backend-tfjs/src/utils/backend-selector.ts (excerpt)"
+export async function setBackend(backend: TFBackend): Promise<void> {
+  if (backend === 'auto') return  // let TF.js pick
+
+  // ... load WASM module if needed ...
+
+  try {
+    const success = await tf.setBackend(backend)
+    if (!success) {
+      console.warn(`[backend-selector] Backend '${backend}' could not be set, falling back to cpu`)
+      await tf.setBackend('cpu')
+    }
+    await tf.ready()
+  } catch (e) {
+    console.warn(`[backend-selector] Failed to set backend '${backend}': ${e}. Falling back to cpu`)
+    await tf.setBackend('cpu')
+    await tf.ready()
+  }
+}
+```
+
+Each agent constructor accepts a `backend` option with `'auto'` as the default. `'auto'` means "let TF.js decide" — it picks WebGPU if available, otherwise WebGL, otherwise WASM, otherwise CPU. This is usually what you want. Override it explicitly only if you're diagnosing a backend-specific bug.
+
+## The decoupled training loop — why your canvas stays at 60 fps
+
+This is one of the most important design decisions in the framework, and it lives in `core`, not `backend-tfjs`, but it's easiest to understand here in context.
+
+The training loop yields to the browser between steps via `setTimeout`:
+
+```ts filename="packages/core/src/ignition-env.ts (excerpt)"
+public start(): void {
+  this.isRunning = true
+  const loop = async (): Promise<void> => {
+    if (!this.isRunning) return
+    for (let i = 0; i < this.stepsPerTick; i++) {
+      if (!this.isRunning) return
+      await this.step()
+    }
+    setTimeout(loop, this.stepIntervalMs)   // ← yields the main thread
+  }
+  setTimeout(loop, this.stepIntervalMs)
+}
+```
+
+Why this matters:
+
+- **`requestAnimationFrame` runs as soon as the event loop is free.** If the training loop doesn't yield, your React Three Fiber canvas never re-renders.
+- **`setTimeout` with a non-zero interval guarantees yielding.** Even at `stepIntervalMs = 1`, the browser gets a chance to render between ticks.
+- **`stepsPerTick` lets you batch steps without yielding.** Running 50 steps before yielding trades render smoothness for training throughput.
+
+Default is `stepIntervalMs = 50` (20 steps/sec) and `stepsPerTick = 1`. That's slow by CPU standards but keeps the canvas buttery smooth. In practice, most envs converge just fine at this pace — the bottleneck is usually the environment logic, not the training.
+
+## `setSpeed(multiplier)` — the turbo knob
+
+This is the one thing users actually reach for when they want training to go faster:
+
+```ts filename="packages/core/src/ignition-env.ts (excerpt)"
+public setSpeed(multiplier: number): void {
+  if (multiplier <= 1) {
+    this.stepIntervalMs = 50
+    this.stepsPerTick = 1
+  } else if (multiplier <= 10) {
+    this.stepIntervalMs = 10
+    this.stepsPerTick = Math.round(multiplier)
+  } else {
+    // Turbo: minimal interval, batch many steps
+    this.stepIntervalMs = 1
+    this.stepsPerTick = Math.round(multiplier / 2)
+  }
+}
+```
+
+The function is a piecewise schedule:
+
+| Multiplier | `stepIntervalMs` | `stepsPerTick` | Effect |
+|---|---|---|---|
+| `1` | `50` | `1` | Real-time. Canvas stays at 60 fps. |
+| `1` → `10` | `10` | `multiplier` | Fast training, canvas still readable. |
+| `> 10` | `1` | `multiplier / 2` | Turbo. Canvas stutters, training flies. |
+
+Usage pattern during development:
+
+```ts
+env.train('dqn')
+env.setSpeed(50)      // turbo — converge fast
+// ... wait for convergence ...
+env.setSpeed(1)       // back to real-time
+env.infer()           // watch the policy play
+```
+
+Training integrity is preserved at all speeds — the agent does the same work per step, we just do more steps per second. Visual feedback suffers, which is why you drop back to `setSpeed(1)` before showing the result.
+
+## Where each agent lives
+
+| Agent | File | Key concept |
+|---|---|---|
+| `DQNAgent` | `packages/backend-tfjs/src/agents/dqn.ts` | Replay buffer + target network + epsilon-greedy. See the [DQN page](/docs/algorithms/dqn) for the algorithm. |
+| `PPOAgent` | `packages/backend-tfjs/src/agents/ppo.ts` | Actor-critic + clipped surrogate + GAE. See the [PPO page](/docs/algorithms/ppo). |
+| `QTableAgent` | `packages/backend-tfjs/src/agents/qtable.ts` | State discretization + tabular updates. See the [Q-Table page](/docs/algorithms/q-table). |
+| `ReplayBuffer` | `packages/backend-tfjs/src/memory/ReplayBuffer.ts` | Ring buffer with uniform sampling, used by DQN. |
+| MLP builder | `packages/backend-tfjs/src/model/BuildMLP.ts` | Small helper that builds a sequential Dense network from a `hiddenLayers` array. |
+
+## Where to add a new algorithm
+
+To add, say, SAC:
+
+1. Create `packages/backend-tfjs/src/agents/sac.ts` implementing `AgentInterface`.
+2. Add the Zod schema to `schemas.ts` and the config type to `types.ts`.
+3. Add the default config to `defaults.ts`.
+4. Register the factory in `ignition-env-tfjs.ts`:
+   ```ts
+   const FACTORIES: Record<string, AgentFactory> = {
+     dqn: (config) => new DQNAgent(config as DQNConfig),
+     ppo: (config) => new PPOAgent(config as PPOConfig),
+     qtable: (config) => new QTableAgent(config as QTableConfig),
+     sac: (config) => new SACAgent(config as SACConfig),   // ← new
+   }
+   ```
+5. Add a test under `packages/backend-tfjs/tests/`.
+
+Zero changes to `core` required. That's the point of the factory-registration pattern.
+
+---
+
+Previous: **[← @ignitionai/core](/docs/how-it-works/core)** · Next: **[@ignitionai/backend-onnx →](/docs/how-it-works/backend-onnx)**

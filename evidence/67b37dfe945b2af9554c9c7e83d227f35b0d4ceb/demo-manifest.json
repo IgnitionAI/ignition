@@ -1,0 +1,15 @@
+{
+  "builtAt": "2026-10-15T18:22:02.372Z",
+  "commit": "67b37dfe945b2af9554c9c7e83d227f35b0d4ceb",
+  "demos": [
+    "car-circuit",
+    "maze",
+    "cartpole",
+    "mountaincar",
+    "cartpole-3d",
+    "drone-navigation",
+    "maze-3d",
+    "gridworld",
+    "ball-thrust"
+  ]
+}

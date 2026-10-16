@@ -1,0 +1,15 @@
+{
+  "environment": "car-circuit",
+  "url": "http://127.0.0.1:5206/",
+  "title": "IgnitionAI — Car Circuit",
+  "initialText": "ignition / RACING\nEssais libres\nEntraîner\nCourse\nFR ↔\nLE LABORATOIRE DES PILOTES\nVotre voiture.\nVotre trajectoire.\n\n\nPrenez le volant sur Alpine Park. Familiarisez-vous avec le circuit avant d’entraîner votre premier pilote.\n\nVÉHICULE\n01\nFormule R\n↗\n02\nSport GT\n+\n\nMême physique. Deux caractères.\n\nPrendre le volant\n↗\nRetour aux stands\nCOMMANDES\n\n↑ / Z / W\nAccélérer\n\n↓ / S\nFreiner / maintenir pour reculer\n\n← →\nTourner\n\nESC\nPause\n\nLOCAL · NAVIGATEUR\nRemettre sur piste\nALPINE PARK\n10 virages · Circuit école\nESSAIS LIBRES\nAccélérez avec ↑ ou Z. Freinez avant le virage.\nVITESSE\n000\nKM/H",
+  "activeText": "ignition / RACING\nEssais libres\nEntraîner\nCourse\nFR ↔\nLE LABORATOIRE DES PILOTES\nVotre voiture.\nVotre trajectoire.\n\n\nPrenez le volant sur Alpine Park. Familiarisez-vous avec le circuit avant d’entraîner votre premier pilote.\n\nVÉHICULE\n01\nFormule R\n↗\n02\nSport GT\n+\n\nMême physique. Deux caractères.\n\nPause\n↗\nRetour aux stands\nCOMMANDES\n\n↑ / Z / W\nAccélérer\n\n↓ / S\nFreiner / maintenir pour reculer\n\n← →\nTourner\n\nESC\nPause\n\nLOCAL · NAVIGATEUR\nRemettre sur piste\nALPINE PARK\n10 virages · Circuit école\nESSAIS LIBRES\nAccélérez avec ↑ ou Z. Freinez avant le virage.\nVITESSE\n000\nKM/H",
+  "example": {
+    "algorithm": "dqn",
+    "samples": 64,
+    "updates": 9,
+    "weights": 6
+  },
+  "errors": [],
+  "failures": []
+}

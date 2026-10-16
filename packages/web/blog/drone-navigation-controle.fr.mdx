@@ -1,0 +1,75 @@
+Un drone monte, penche, puis dérive. Atteindre une cible demande davantage qu’une poussée vers le haut : l’orientation et la vitesse changent la suite du mouvement.
+
+Cette démo relie un choix discret à une action physique. L’agent choisit une combinaison de moteurs ; la poussée et les couples produisent ensuite un déplacement. Comprendre ce mécanisme aide à lire les échecs de contrôle.
+
+**Vous allez lancer l’expérience et comprendre le lien entre ses observations, ses décisions et son résultat.**
+
+[**Essayer Drone Navigation dans le navigateur →**](/demos/drone-navigation/)
+
+## Commencer par la démo
+
+Cliquez sur **Train**, observez les moteurs et la cible, puis sur **Infer**. La démo utilise un réseau [64, 64] et des options d’exploration spécifiques. L’exemple minimal ci-dessous utilise les paramètres par défaut : il vérifie le raccordement, pas l’équivalence des performances.
+
+![La démo Drone Navigation avant l’interaction.](/images/blog/drone-navigation/initial.png)
+
+*État initial capturé dans Chromium. Les captures servent à montrer le parcours, pas à garantir un score.*
+
+## Ce que reçoit l’agent
+
+DroneEnv expose huit combinaisons : deux niveaux de poussée uniforme, avant, arrière, gauche, droite et deux rotations. Son observation contient 13 valeurs, dont le décalage vers la cible, certaines vitesses, l’inclinaison, la position et la distance. La fonction observe() constitue le contrat exact : tous les champs physiques ne sont pas transmis.
+
+## Ce que la récompense encourage
+
+La récompense combine pénalité de distance, bonus de progrès et pénalité de rotation. Capturer une cible ajoute +50 ; un crash vaut −20. Un épisode finit au crash ou à 1 000 transitions. La position et les mouvements proviennent d’une intégration TypeScript ; le contexte Rapier de la scène ne remplace pas cette dynamique.
+
+Le contrat complet se trouve dans [drone-env.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-drone-navigation/src/drone-env.ts). Lisez ensemble `observe()`, `step()` et `reward()` : le nom du benchmark ne suffit pas à définir son implémentation.
+
+## Reproduire l’expérience avec du code
+
+Utilisez Node.js 20 ou 22 et pnpm 10.8.0. Depuis le dépôt :
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter demo-drone-navigation dev --host 127.0.0.1 --port 5173
+```
+
+Ouvrez [localhost:5173](http://localhost:5173). Sur un VPS, utilisez un tunnel SSH vers ce port pour y accéder depuis votre ordinateur.
+
+L’exemple est chargé directement depuis [blog-experiment.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-drone-navigation/src/examples/blog-experiment.ts) : le code de l’article et celui du dépôt restent synchronisés.
+
+<!-- FIRST_AGENT_CODE -->
+
+Pendant que Vite tourne, vous pouvez importer ce module dans la console du navigateur :
+
+```js
+const { createExperiment } = await import('/examples/blog-experiment.ts');
+const session = createExperiment();
+// Après quelques tentatives :
+session.infer();
+session.stop();
+```
+
+Le module crée une session indépendante. Il ne la branche pas à la scène déjà ouverte : utilisez les boutons de la démo pour le parcours visuel. infer() applique la politique courante sans entraînement ; resume() conserve l’agent et stop() annule les prochains ticks. Une transition déjà commencée peut encore finir.
+
+## Observer, puis évaluer
+
+![La démo Drone Navigation après son interaction principale.](/images/blog/drone-navigation/active.png)
+
+*Capture de la même session après interaction. La présence d’une scène et d’un indicateur actif confirme le parcours, pas une politique convergée.*
+
+Relevez captures de cibles, crashes et durée séparément. Un vol long ne signifie pas forcément une navigation utile. Si vous modifiez une récompense, gardez le même protocole d’évaluation pour pouvoir comparer.
+
+## Vérification de cette édition
+
+La démo a été ouverte dans Chromium et son entraînement lancé avant la capture. L’exemple indépendant a exécuté une transition d’entraînement et une transition d’inférence avec 13 observations, puis les commandes de changement de mode. Aucune erreur de page ou de runner n’a été relevée pendant cette vérification. Ce parcours vérifie l’intégration, sans prouver une convergence.
+
+## À vous de lancer l’expérience
+
+Reproduisez le parcours, puis modifiez un seul élément du contrat et comparez vos observations. Vous disposerez d’un cas concret pour discuter de ce que l’agent sait, de ce qu’il choisit et de ce que la récompense valorise.
+
+[**Ouvrir Drone Navigation →**](/demos/drone-navigation/)
+
+Pour approfondir, consultez [le runner Ignition](/docs/how-it-works/core) et [les algorithmes disponibles](/docs/algorithms).

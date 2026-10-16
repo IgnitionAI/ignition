@@ -1,0 +1,107 @@
+---
+title: Démarrage rapide
+description: Entraîne ton premier agent RL dans le navigateur en moins de 10 lignes de code. Aucun boilerplate de réseau de neurones, aucun réglage d'hyperparamètres, aucune config.
+---
+
+# Démarrage rapide
+
+À la fin de cette page, tu auras entraîné un agent d'apprentissage par renforcement à équilibrer un pendule dans le navigateur. Toute la configuration tient en 7 lignes de code. Tu ne configureras ni réseau de neurones, ni hyperparamètres, ni boucle d'entraînement.
+
+## Installation
+
+```bash
+npm install @ignitionai/core @ignitionai/backend-tfjs @ignitionai/environments
+```
+
+Tu auras besoin de :
+- Node.js 20 ou plus récent
+- Un bundler capable de servir des modules ES (Vite, Next.js, Webpack 5, etc.)
+
+## Entraîner un agent CartPole
+
+Crée `src/main.ts` et colle-y exactement ceci :
+
+```ts filename="src/main.ts"
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from '@ignitionai/environments'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+
+env.train('dqn')       // Zéro config. Ça marche tout seul.
+// env.infer()         // Bascule en inférence après l'entraînement.
+// env.setSpeed(50)    // Entraînement turbo — 50× plus rapide.
+```
+
+**Sept lignes.** C'est toute la configuration d'entraînement. Pas de code de réseau de neurones, pas de réglage d'hyperparamètres, pas de fichiers de config.
+
+## Sauvegarder et charger ton agent
+
+L'entraînement prend du temps. Ne le jette pas. Ajoute deux lignes pour persister le modèle :
+
+```ts filename="src/main.ts"
+import { IndexedDBProvider } from '@ignitionai/storage'
+
+const env = new IgnitionEnvTFJS(new CartPoleEnv())
+env.train('dqn', { storageProvider: new IndexedDBProvider() })
+
+// ... l'entraînement converge ...
+
+await env.save('cartpole-best', { meanReward: 195.4 })
+
+// Plus tard — au rechargement de la page, ou dans une autre session :
+await env.load('cartpole-best')
+env.infer()  // Regarde l'agent entraîné jouer
+```
+
+`save()` stocke les poids du modèle **et** l'état interne de l'agent (`epsilon`, compteur de pas, meilleure récompense). `load()` restaure tout. Aucune gestion manuelle.
+
+Ouvre la page dans ton navigateur, ouvre la console des outils de dev, et tu verras les logs de récompense défiler pendant que l'agent apprend. En quelques dizaines de secondes sur la plupart des machines, le pendule commencera à tenir debout.
+
+C'est tout. Si tu veux comprendre *comment* écrire ton propre `TrainingEnv` from scratch (au lieu d'utiliser le `CartPoleEnv` intégré), saute au [tutoriel GridWorld](/docs/tutorials/grid-world) — il détaille l'interface complète des 5 méthodes.
+
+## Ce qui vient de se passer
+
+Associons chaque ligne de l'exemple à un concept que tu verras expliqué plus en profondeur ailleurs dans la doc.
+
+### Ligne 1 — `import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'`
+
+`IgnitionEnvTFJS` est l'**environnement d'entraînement** qui tourne sur TensorFlow.js. Il possède la boucle d'entraînement, l'instance de l'agent et la sélection du backend TF.js. Tu verras ses internes dans [Fonctionnement → backend-tfjs](/docs/how-it-works/backend-tfjs).
+
+### Ligne 2 — `import { CartPoleEnv } from '@ignitionai/environments'`
+
+`CartPoleEnv` est un `TrainingEnv` intégré qui décrit le monde classique du cart-pole : un chariot qui peut aller à gauche ou à droite, un pendule posé dessus, une physique intégrée par Euler, et une condition de terminaison quand le pendule dépasse 12° ou que le chariot sort de la piste. Le paquet `@ignitionai/environments` embarque aussi `GridWorldEnv` et `MountainCarEnv`. C'est l'interface `TrainingEnv` que tu implémenteras pour tes propres mondes — voir [Fonctionnement → core](/docs/how-it-works/core).
+
+### Ligne 4 — `new IgnitionEnvTFJS(new CartPoleEnv())`
+
+Tu instancies ton env et tu l'enveloppes dans `IgnitionEnvTFJS`. **À ce moment-là, le framework appelle `cartpole.observe()` une fois, inspecte la longueur du tableau, et déduit la taille d'entrée du réseau de neurones. Il lit aussi `cartpole.actions.length` pour déduire la taille de sortie.** Tu ne touches jamais `inputSize` ou `actionSize` explicitement — c'est ça, le « zéro config » en pratique.
+
+### Ligne 6 — `env.train('dqn')`
+
+Ça démarre l'entraînement avec l'algorithme **Deep Q-Network** et les hyperparamètres par défaut d'IgnitionAI. Sous le capot, le framework :
+
+1. Construit un petit MLP adapté aux tailles d'entrée/sortie déduites (couches cachées `[24, 24]` par défaut).
+2. Alloue un replay buffer (10 000 expériences).
+3. Initialise l'exploration epsilon-greedy (`epsilon = 1.0`, décroissant de 0,5 % par épisode jusqu'à un plancher de `0.01`).
+4. Lance une boucle d'entraînement rendant la main via `setTimeout`, à 50 ms par pas, pour que le navigateur reste réactif.
+
+Tu peux lire la liste complète des valeurs par défaut sur la page [DQN](/docs/algorithms/dqn). Si tu préfères PPO, c'est un mot : `env.train('ppo')`.
+
+### Ligne 7 — `env.infer()` (en commentaire)
+
+Une fois ton agent convergé, bascule du mode entraînement au mode inférence. L'exploration epsilon tombe à zéro, les gradients cessent de circuler, et la politique joue de façon déterministe. Lis-en plus dans [Fonctionnement → core](/docs/how-it-works/core).
+
+### Ligne 8 — `env.setSpeed(50)` (en commentaire)
+
+Par défaut, la boucle d'entraînement rend la main toutes les 50 ms pour que le navigateur puisse rendre ta scène à 60 fps. `setSpeed(50)` accélère l'entraînement en exécutant 50 pas par tick et en ramenant l'intervalle à 1 ms. Les visuels saccadent mais l'intégrité de l'entraînement est préservée. Tu voudras ça en dev — repasse à `setSpeed(1)` quand tu voudras regarder l'agent jouer en temps réel.
+
+## Où aller ensuite
+
+Tu as trois chemins raisonnables à partir d'ici :
+
+1. **Comprendre ce que `env.train('dqn')` a réellement fait.** → [Algorithmes](/docs/algorithms). Les pages DQN, PPO et Q-Table sont volontairement détaillées et expliquent les maths sans exiger de doctorat.
+2. **Écrire ton propre environnement.** → [Fonctionnement → core](/docs/how-it-works/core) détaille l'interface `TrainingEnv` avec un exemple complet.
+3. **Suivre un tutoriel complet from scratch.** → [Tutoriels → GridWorld](/docs/tutorials/grid-world) est une construction pas à pas d'un env personnalisé.
+
+---
+
+Précédent : **[← Introduction](/docs)** · Suivant : **[Algorithmes →](/docs/algorithms)**

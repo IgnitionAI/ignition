@@ -1,0 +1,100 @@
+{
+  "sha": "67b37dfe945b2af9554c9c7e83d227f35b0d4ceb",
+  "browser": "155.0.8059.41",
+  "headless": false,
+  "viewport": {
+    "width": 1440,
+    "height": 1100
+  },
+  "locales": [
+    {
+      "locale": "fr",
+      "title": "Ball Thrust 3D : la physique avant l’apprentissage",
+      "listingStatus": 200,
+      "articleUrl": "http://localhost:3071/fr/blog/ball-thrust-physique-rapier",
+      "images": [
+        {
+          "src": "/images/blog/ball-thrust/initial.png",
+          "alt": "Ball Thrust avant toute impulsion : sphère cyan, trois obstacles et cible verte.",
+          "width": 1440
+        },
+        {
+          "src": "/images/blog/ball-thrust/goal.png",
+          "alt": "La sphère sur la balise verte ; le HUD annonce Cible atteinte.",
+          "width": 1440
+        }
+      ],
+      "demoUrl": "http://localhost:3071/demos/ball-thrust",
+      "initial": "-4.32, 0.35, 4.44",
+      "moving": "-3.38, 0.35, 4.44",
+      "resetMatches": true,
+      "narrowLayout": "390 × 844, no horizontal overflow"
+    },
+    {
+      "locale": "en",
+      "title": "Ball Thrust 3D: physics before learning",
+      "listingStatus": 200,
+      "articleUrl": "http://localhost:3071/en/blog/ball-thrust-physique-rapier",
+      "images": [
+        {
+          "src": "/images/blog/ball-thrust/initial.png",
+          "alt": "Ball Thrust before any impulse: cyan sphere, three obstacles and green target.",
+          "width": 1440
+        },
+        {
+          "src": "/images/blog/ball-thrust/goal.png",
+          "alt": "The sphere on the green beacon, with the HUD reporting Cible atteinte.",
+          "width": 1440
+        }
+      ],
+      "demoUrl": "http://localhost:3071/demos/ball-thrust",
+      "initial": "-4.32, 0.35, 4.44",
+      "moving": "-3.38, 0.35, 4.44",
+      "resetMatches": true,
+      "narrowLayout": "390 × 844, no horizontal overflow"
+    }
+  ],
+  "errors": [
+    "http://localhost:3071/fr/docs: net::ERR_ABORTED",
+    "http://localhost:3071/fr: net::ERR_ABORTED",
+    "http://localhost:3071/en/docs: net::ERR_ABORTED",
+    "http://localhost:3071/en: net::ERR_ABORTED"
+  ],
+  "warnings": [
+    "using deprecated parameters for the initialization function; pass a single object instead",
+    "using deprecated parameters for the initialization function; pass a single object instead"
+  ],
+  "cancelledPrefetches": [
+    "http://localhost:3071/fr/blog/cartpole-3d-observations?_rsc=ikl1s",
+    "http://localhost:3071/fr/blog/gridworld-valeurs-actions?_rsc=ikl1s",
+    "http://localhost:3071/fr/blog/mountaincar-prendre-elan?_rsc=ikl1s",
+    "http://localhost:3071/fr/blog/ball-thrust-physique-rapier?_rsc=ikl1s",
+    "http://localhost:3071/fr/blog?_rsc=ikl1s",
+    "http://localhost:3071/en/blog?_rsc=ikl1s",
+    "http://localhost:3071/fr/blog/cartpole-3d-observations?_rsc=aocta",
+    "http://localhost:3071/fr/blog/ball-thrust-physique-rapier?_rsc=aocta",
+    "http://localhost:3071/fr/blog/gridworld-valeurs-actions?_rsc=aocta",
+    "http://localhost:3071/fr/blog/mountaincar-prendre-elan?_rsc=aocta",
+    "http://localhost:3071/fr/blog?_rsc=aocta",
+    "http://localhost:3071/en/blog?_rsc=aocta",
+    "http://localhost:3071/fr/docs?_rsc=aocta",
+    "http://localhost:3071/fr?_rsc=aocta",
+    "http://localhost:3071/en/blog/ball-thrust-physique-rapier?_rsc=15cpb",
+    "http://localhost:3071/en/blog/cartpole-3d-observations?_rsc=1tnl8",
+    "http://localhost:3071/en/blog/gridworld-valeurs-actions?_rsc=1tnl8",
+    "http://localhost:3071/en/blog/mountaincar-prendre-elan?_rsc=1tnl8",
+    "http://localhost:3071/en/blog/ball-thrust-physique-rapier?_rsc=1tnl8",
+    "http://localhost:3071/fr/blog?_rsc=1tnl8",
+    "http://localhost:3071/en/blog?_rsc=1tnl8",
+    "http://localhost:3071/en/blog/ball-thrust-physique-rapier?_rsc=1lrcz",
+    "http://localhost:3071/en/blog/cartpole-3d-observations?_rsc=1lrcz",
+    "http://localhost:3071/en/blog/gridworld-valeurs-actions?_rsc=1lrcz",
+    "http://localhost:3071/en/blog/mountaincar-prendre-elan?_rsc=1lrcz",
+    "http://localhost:3071/fr/blog?_rsc=1lrcz",
+    "http://localhost:3071/en/docs?_rsc=1lrcz",
+    "http://localhost:3071/en/blog?_rsc=1lrcz",
+    "http://localhost:3071/en?_rsc=1lrcz",
+    "http://localhost:3071/en/blog/ball-thrust-physique-rapier?_rsc=19lpi",
+    "http://localhost:3071/fr/blog/ball-thrust-physique-rapier?_rsc=wrajq"
+  ]
+}

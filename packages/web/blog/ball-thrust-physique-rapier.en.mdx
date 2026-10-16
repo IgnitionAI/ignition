@@ -1,0 +1,108 @@
+Release the right arrow: the sphere keeps rolling. Push toward an obstacle: it gets blocked or bounces. In Ball Thrust, these reactions come from the Rapier physics world, not an animation selected by the network.
+
+**The demo now connects manual play, a real `TrainingEnv`, a trainable TensorFlow.js DQN and inference on that same network.** You can pause training, keep the weights in your browser, reload the page and observe the policy without further updates. This demonstrates actual learning updates, not automatic convergence.
+
+[**Play, train and test Ball Thrust 3D →**](/demos/ball-thrust/)
+
+## A network controlling real physics
+
+A cyan 1 kg sphere moves inside a 12 × 12 m arena with four walls and three fixed obstacles. All have real colliders. Only the sphere is dynamic; impulses, gravity and contacts determine its movement.
+
+![The Ball Thrust arena and DQN panel: architecture, transitions, updates, exploration and weight fingerprint.](/images/blog/ball-thrust/training.png)
+
+*Actual short development run: 108 transitions, 77 updates and changed weights. This is neither the 4096-transition experiment nor proof of successful navigation. The demo interface is currently in French.*
+
+The world advances in fixed 1/60 s steps. Each decision applies a normalized 0.65 N·s impulse followed by six Rapier steps: one action represents 0.1 simulated seconds. Friction is 0.65 and restitution 0.55; CCD and predictive contacts limit tunneling at speed. No position clamp or hidden controller helps the agent.
+
+`BallThrustEnv` owns the only physics clock. R3F copies the Rapier pose without advancing another simulation. Accelerated training changes wall-clock speed, never the solver timestep. The HUD reads the same body: position, velocity, distance and simulated time.
+
+## Start by playing
+
+The demo opens in manual mode. Click the arena or select it with Tab:
+
+| Control | Effect |
+| --- | --- |
+| Arrow keys, WASD or ZQSD | Horizontal impulses |
+| Two combined directions | Diagonal movement, without extra thrust magnitude |
+| Space, even while a direction remains held | No-op: no new impulse |
+| Releasing the keys | Also a no-op, not a brake |
+| Opposite direction to motion | Counter-thrust to brake |
+| Drag / scroll | Orbit / zoom without changing the control axes |
+
+Up means −z and right means +x regardless of the camera. Losing focus releases keys; keyboard input never controls the policy during training or inference. A narrow layout is not a touch controller.
+
+The uint32 world seed, default 70, determines spawn and target positions. **Réinitialiser** recreates the world, settles the sphere for 120 ticks outside the episode counter, then leaves the episode paused without changing the network. Choose **Manuel**, **Entraîner / reprendre** or **Inférence** afterwards. Equal seeds, engine version and action sequences produce equal trajectories in tests; this is not a cross-version Rapier guarantee.
+
+## An explicit RL contract
+
+The environment accepts nine indices: **0 no-op, 1 N, 2 NE, 3 E, 4 SE, 5 S, 6 SW, 7 W, 8 NW**. Arrays and invalid indices are rejected.
+
+Its 21 finite observations, bounded to `[-1,1]`, contain:
+
+- x/z position divided by 6 and x/z velocity divided by 10;
+- x/z target delta divided by 12;
+- height above the sphere radius divided by 2, then vertical velocity divided by 10;
+- all three angular velocities divided by 25;
+- eight horizontal N, NE, E, SE, S, SW, W, NW solid rays, range 4 m, normalized to `[0,1]` and excluding the sphere;
+- x/z target position divided by 6.
+
+Clipping only normalizes observations, never the physics state. The dense reward is `5 × (previousDistance − currentDistance) − 0.01`, minus `0.001` for thrust, plus 15 for reaching the target or minus 15 for abnormal physical escape.
+
+Success requires being within 0.7 m of the target near the floor. Success or physical failure produces `terminated`. The 300-action limit, 30 simulated seconds, produces `truncated`, never both. A manual episode ends; the runner automatically resets the world during training and inference.
+
+## The environment code that actually runs
+
+This block is injected from `packages/demo-ball-thrust/src/ball-thrust-env.ts`. The scene, runner and WASM tests use that same contract. `populateWorld()` reuses the first slice’s physical factory; the network never receives a simplified physics substitute.
+
+<!-- FIRST_AGENT_CODE -->
+
+## Train, pause and run inference
+
+The existing DQN has **2057 parameters**, with architecture **21 → 32 → 32 → 9**. It uses TF.js CPU, Adam at 0.001, batches of 32, a replay of 8192 transitions, γ = 0.99 and a target update every 100 updates. Its network seed is 68. Exploration starts at 1 and decays towards 0.05.
+
+`IgnitionEnvTFJS.step()` provides training transitions; `inferStep()` selects greedy actions without replay insertion or `fit`. The demo does not reimplement replay or Bellman targets.
+
+In the browser, **Entraîner / reprendre** changes the network. **Pause** also waits for an already running `fit`. **Inférence** uses exactly that network without changing weights. The panel exposes update counters, epsilon and a weight fingerprint; the chart shows episode returns, not a fabricated loss.
+
+To reproduce those operations inside the package:
+
+```ts
+import RAPIER from '@dimforge/rapier3d-compat';
+import * as tf from '@tensorflow/tfjs';
+import { BallThrustEnv } from './src/ball-thrust-env';
+import { TrainingSession } from './src/training-session';
+
+await RAPIER.init();
+await tf.setBackend('cpu');
+await tf.ready();
+const session = new TrainingSession(new BallThrustEnv(70));
+await session.runSteps(4096, 'training');
+await session.save();
+const evaluation = await session.evaluate();
+await session.start('inference');
+// On teardown: await session.dispose();
+```
+
+**Sauvegarder localement** writes the model to IndexedDB with version, configuration, epsilon and counters. **Charger** retrieves the weights after a page reload. Metadata and actual tensors are validated before replacing the active agent. Quota, missing-checkpoint and incompatibility errors remain visible.
+
+This is not a bit-for-bit training-process resume: **replay, optimizer state and random-generator position are not restored**. Replay must warm up again. **Nouveau réseau** explicitly restarts from initial weights.
+
+## Measure instead of promising convergence
+
+The versioned protocol was fixed before execution: environment seed 70, network seed 68, a ceiling of **4096 transitions and five minutes**. Pausing or creating a new episode does not refund a network’s spent budget.
+
+**Évaluer les 3 politiques** compares the initial network, the current greedy network and a uniform random baseline seeded 2026 on the same held-out seeds **1000 through 1007**, at most 300 actions per episode. Evaluation uses separate worlds, leaves the visible arena unchanged and performs no training. Expandable raw results give return, success, duration and final distance per seed. A higher return with zero targets reached is still a navigation failure, not a success to relabel.
+
+Real tests verify collisions and resets, the bounded contract, episode endings, changed training weights, exact inference equality, checkpoint reload and tensor-count plateaus. Browser harnesses drive actual buttons and read IndexedDB artifacts. Dated, SHA-linked evidence lives in `evidence/`; RAF cadence and p95 are not GPU timings or mobile performance promises.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm --filter demo-ball-thrust dev --host 127.0.0.1 --port 5173
+pnpm --filter demo-ball-thrust test
+pnpm --filter demo-ball-thrust typecheck
+pnpm test
+```
+
+Open [localhost:5173](http://localhost:5173), or use the embedded demo directly. No token, remote service or pretrained model is required.
+
+[**Train and then test the network in Ball Thrust 3D →**](/demos/ball-thrust/)

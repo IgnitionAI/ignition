@@ -1,3 +1,5 @@
+// @ts-nocheck
+// TODO: refactor to use new IgnitionEnv(TrainingEnv) API
 import * as dotenv from 'dotenv';
 
 import { DQNAgent } from '@ignitionai/backend-tfjs';

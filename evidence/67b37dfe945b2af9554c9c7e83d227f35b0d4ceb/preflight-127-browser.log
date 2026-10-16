@@ -1,0 +1,71 @@
+$ node /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/evidence/67b37dfe945b2af9554c9c7e83d227f35b0d4ceb/blog-browser-check.cjs
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'http://127.0.0.1:3071/fr/blog/cartpole-3d-observations?_rsc=ikl1s: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/fr/blog/gridworld-valeurs-actions?_rsc=ikl1s: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/fr/blog/mountaincar-prendre-elan?_rsc=ikl1s: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/fr/blog/ball-thrust-physique-rapier?_rsc=ikl1s: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/fr/blog?_rsc=ikl1s: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog?_rsc=ikl1s: net::ERR_ABORTED',
++   "Access to fetch at 'http://localhost:3071/fr/docs' (redirected from 'http://127.0.0.1:3071/docs?_rsc=ikl1s') from origin 'http://127.0.0.1:3071' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
++   'http://localhost:3071/fr/docs: net::ERR_FAILED',
++   'Failed to load resource: net::ERR_FAILED',
++   'http://127.0.0.1:3071/fr/blog/ball-thrust-physique-rapier?_rsc=aocta: net::ERR_ABORTED',
++   "Access to fetch at 'http://localhost:3071/fr' (redirected from 'http://127.0.0.1:3071/?_rsc=ikl1s') from origin 'http://127.0.0.1:3071' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
++   'http://localhost:3071/fr: net::ERR_FAILED',
++   'Failed to load resource: net::ERR_FAILED',
++   'http://127.0.0.1:3071/fr/blog/cartpole-3d-observations?_rsc=aocta: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/fr/blog/gridworld-valeurs-actions?_rsc=aocta: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/fr/blog/mountaincar-prendre-elan?_rsc=aocta: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/fr/blog?_rsc=aocta: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog?_rsc=aocta: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/fr/blog/ball-thrust-physique-rapier?_rsc=1m3we: net::ERR_ABORTED',
++   "Access to fetch at 'http://localhost:3071/en/docs' (redirected from 'http://127.0.0.1:3071/docs?_rsc=1rc6h') from origin 'http://127.0.0.1:3071' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
++   'http://localhost:3071/en/docs: net::ERR_FAILED',
++   'Failed to load resource: net::ERR_FAILED',
++   "Access to fetch at 'http://localhost:3071/en' (redirected from 'http://127.0.0.1:3071/?_rsc=1rc6h') from origin 'http://127.0.0.1:3071' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
++   'http://localhost:3071/en: net::ERR_FAILED',
++   'Failed to load resource: net::ERR_FAILED',
++   'http://127.0.0.1:3071/en/blog/ball-thrust-physique-rapier?_rsc=1rc6h: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog/ball-thrust-physique-rapier?_rsc=15cpb: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog/cartpole-3d-observations?_rsc=1tnl8: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog/mountaincar-prendre-elan?_rsc=1tnl8: net::ERR_ABORTED',
++   "Access to fetch at 'http://localhost:3071/en/docs' (redirected from 'http://127.0.0.1:3071/docs?_rsc=1tnl8') from origin 'http://127.0.0.1:3071' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
++   'http://localhost:3071/en/docs: net::ERR_FAILED',
++   'Failed to load resource: net::ERR_FAILED',
++   'http://127.0.0.1:3071/fr/blog?_rsc=1tnl8: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog?_rsc=1tnl8: net::ERR_ABORTED',
++   "Access to fetch at 'http://localhost:3071/en' (redirected from 'http://127.0.0.1:3071/?_rsc=1tnl8') from origin 'http://127.0.0.1:3071' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
++   'http://localhost:3071/en: net::ERR_FAILED',
++   'Failed to load resource: net::ERR_FAILED',
++   'http://127.0.0.1:3071/en/blog/ball-thrust-physique-rapier?_rsc=1lrcz: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog/cartpole-3d-observations?_rsc=1lrcz: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog/gridworld-valeurs-actions?_rsc=1lrcz: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog/mountaincar-prendre-elan?_rsc=1lrcz: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/fr/blog?_rsc=1lrcz: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog?_rsc=1lrcz: net::ERR_ABORTED',
++   'http://127.0.0.1:3071/en/blog/ball-thrust-physique-rapier?_rsc=hc1k5: net::ERR_ABORTED',
++   "Access to fetch at 'http://localhost:3071/fr/docs' (redirected from 'http://127.0.0.1:3071/docs?_rsc=1iqrp') from origin 'http://127.0.0.1:3071' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
++   'http://localhost:3071/fr/docs: net::ERR_FAILED',
++   'Failed to load resource: net::ERR_FAILED',
++   'http://127.0.0.1:3071/fr/blog/ball-thrust-physique-rapier?_rsc=1iqrp: net::ERR_ABORTED',
++   "Access to fetch at 'http://localhost:3071/fr' (redirected from 'http://127.0.0.1:3071/?_rsc=1iqrp') from origin 'http://127.0.0.1:3071' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
++   'http://localhost:3071/fr: net::ERR_FAILED',
++   'Failed to load resource: net::ERR_FAILED',
++   'http://127.0.0.1:3071/fr/blog/ball-thrust-physique-rapier?_rsc=wrajq: net::ERR_ABORTED'
++ ]
+- []
+
+    at /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/evidence/67b37dfe945b2af9554c9c7e83d227f35b0d4ceb/blog-browser-check.cjs:54:12 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [Array],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+EXIT_CODE=1

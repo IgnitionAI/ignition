@@ -1,0 +1,56 @@
+$ node packages/web/test/blog-tables-browser.cjs /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust/evidence/94b621a64ec59cbb399a6f2f311f33a85cabeb7c
+{
+  "sha": "94b621a64ec59cbb399a6f2f311f33a85cabeb7c",
+  "browser": "155.0.8059.41",
+  "checks": [
+    {
+      "locale": "fr",
+      "width": 1440,
+      "headers": [
+        "Commande",
+        "Effet"
+      ],
+      "rows": 6,
+      "cells": 12,
+      "overflow": false
+    },
+    {
+      "locale": "fr",
+      "width": 390,
+      "headers": [
+        "Commande",
+        "Effet"
+      ],
+      "rows": 6,
+      "cells": 12,
+      "overflow": false
+    },
+    {
+      "locale": "en",
+      "width": 1440,
+      "headers": [
+        "Control",
+        "Effect"
+      ],
+      "rows": 6,
+      "cells": 12,
+      "overflow": false
+    },
+    {
+      "locale": "en",
+      "width": 390,
+      "headers": [
+        "Control",
+        "Effect"
+      ],
+      "rows": 6,
+      "cells": 12,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "passed": true
+}
+
+
+EXIT_CODE=0

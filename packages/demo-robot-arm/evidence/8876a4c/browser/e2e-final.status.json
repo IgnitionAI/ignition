@@ -1,0 +1,22 @@
+{
+  "phase": "done",
+  "ok": true,
+  "transitions": 200,
+  "updates": 69,
+  "epsilon": 0.9660800044319772,
+  "errors": [],
+  "fpsTrain": {
+    "avgFps": 43.4,
+    "p95FrameMs": 33.4,
+    "frames": 174
+  },
+  "fpsInfer": {
+    "avgFps": 47.9,
+    "p95FrameMs": 33.4,
+    "frames": 192
+  },
+  "weightCheck": {
+    "trained": true,
+    "inferenceInvariant": true
+  }
+}

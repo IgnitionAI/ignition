@@ -1,0 +1,75 @@
+The camera orbits around the cart. The pole glints, shadows shift. The agent, meanwhile, keeps receiving four numbers. CartPole 3D shows how to separate a spectacular scene from the learned problem.
+
+Rendering helps you understand the motion, but it does not necessarily define the network's observations. This separation lets you work on the interface without silently changing the learning task.
+
+**You will run the experiment and understand the link between its observations, its decisions, and its outcome.**
+
+[**Try CartPole 3D in the browser →**](/demos/cartpole-3d/)
+
+## Start with the demo
+
+Keep **DQN** selected and click **Train**. Watch the pole in the scene, then switch to **Inference**. Changing the camera is not a new learning run; to change the task, you must modify what the environment provides or computes.
+
+![The CartPole 3D demo before interaction.](/images/blog/cartpole-3d/initial.png)
+
+*Initial state captured in Chromium. Screenshots show the walkthrough, they do not guarantee a score.*
+
+## What the agent receives
+
+The demo imports CartPoleEnv from the environments package. The network receives the cart's position, its velocity, the pole's angle, and its angular velocity. It chooses between a push to the left and a push to the right. The camera does not enter this observation.
+
+## What the reward encourages
+
+As in the 2D version, the angle limit is 12 degrees, the position limit is 2.4 meters, and the horizon is 500 transitions. A non-terminal transition is worth +1; the last one is worth 0. The chart counts balanced transitions, including the last one.
+
+The full contract lives in [App.tsx](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-cartpole-3d/src/App.tsx). Read `observe()`, `step()`, and `reward()` together: a benchmark's name is not enough to define its implementation.
+
+## Reproduce the experiment with code
+
+Use Node.js 20 or 22 and pnpm 10.8.0. From the repository:
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter demo-cartpole-3d dev --host 127.0.0.1 --port 5173
+```
+
+Open [localhost:5173](http://localhost:5173). On a VPS, use an SSH tunnel to that port to access it from your computer.
+
+The example is loaded directly from [blog-experiment.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-cartpole-3d/src/examples/blog-experiment.ts): the article's code and the repository's code stay in sync.
+
+<!-- FIRST_AGENT_CODE -->
+
+While Vite is running, you can import this module in the browser console:
+
+```js
+const { createExperiment } = await import('/examples/blog-experiment.ts');
+const session = createExperiment();
+// Après quelques tentatives :
+session.infer();
+session.stop();
+```
+
+The module creates an independent session. It does not wire it into the already-open scene: use the demo's buttons for the visual walkthrough. infer() applies the current policy without training; resume() keeps the agent and stop() cancels upcoming ticks. A transition already in progress can still finish.
+
+## Observe, then evaluate
+
+![The CartPole 3D demo after its main interaction.](/images/blog/cartpole-3d/active.png)
+
+*Screenshot of the same session after interaction. The presence of a scene and an active indicator confirms the walkthrough, not a converged policy.*
+
+Compare the 2D and 3D versions with identical parameters and protocol. Measure episodes, not frame smoothness: rendering cost and compute time can vary. A 3D representation does not prove a better policy.
+
+## Verification of this edition
+
+The demo was opened in Chromium and its training launched before the screenshot. The independent example ran one training transition and one inference transition with 4 observations, then the mode-switch commands. No page or runner errors were reported during this verification. This walkthrough verifies integration; it does not prove convergence.
+
+## Your turn to run the experiment
+
+Reproduce the walkthrough, then change a single element of the contract and compare your observations. You will have a concrete case to discuss what the agent knows, what it chooses, and what the reward values.
+
+[**Open CartPole 3D →**](/demos/cartpole-3d/)
+
+To go further, see [the Ignition runner](/docs/how-it-works/core) and [the available algorithms](/docs/algorithms).

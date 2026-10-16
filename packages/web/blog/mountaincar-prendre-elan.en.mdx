@@ -1,0 +1,75 @@
+The summit is to the right. Yet pushing only to the right is not always enough. For the MountainCar, part of the path consists of building up momentum before the climb.
+
+Two observations change how you read the trajectory: position and velocity. A move to the left can be useful if the speed gained sets up the next pass to the right. The distance to the summit therefore does not tell the whole story.
+
+**You will run the experiment and understand the link between its observations, its decisions, and its outcome.**
+
+[**Try MountainCar in the browser →**](/demos/mountaincar/)
+
+## Start with the demo
+
+Pick DQN, click **Train**, then watch the changes of direction. **Inference** then applies the current policy without learning. Record summit arrivals and episodes ended by the limit separately.
+
+![The MountainCar demo before interaction.](/images/blog/mountaincar/initial.png)
+
+*Initial state captured in Chromium. The screenshots show the journey, not a guaranteed score.*
+
+## What the agent receives
+
+The model receives `[position, velocity]` and chooses push left, no push, or push right. Position is bounded between −1.2 and 0.6 and velocity between −0.07 and 0.07. The engine force and the terrain together determine the transition.
+
+## What the reward encourages
+
+The reward is −1 at each transition. The episode ends when the position reaches 0.5 or after 200 transitions. Reaching the goal quickly avoids additional penalties; waiting until the limit is not a success.
+
+The full contract lives in [mountaincar-env.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-mountaincar/src/mountaincar-env.ts). Read `observe()`, `step()`, and `reward()` together: a benchmark's name is not enough to define its implementation.
+
+## Reproducing the experiment with code
+
+Use Node.js 20 or 22 and pnpm 10.8.0. From the repository:
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter demo-mountaincar dev --host 127.0.0.1 --port 5173
+```
+
+Open [localhost:5173](http://localhost:5173). On a VPS, use an SSH tunnel to that port to access it from your computer.
+
+The example is loaded directly from [blog-experiment.ts](https://github.com/IgnitionAI/ignition/blob/main/packages/demo-mountaincar/src/examples/blog-experiment.ts): the article's code and the repository's code stay in sync.
+
+<!-- FIRST_AGENT_CODE -->
+
+While Vite is running, you can import this module in the browser console:
+
+```js
+const { createExperiment } = await import('/examples/blog-experiment.ts');
+const session = createExperiment();
+// After a few attempts:
+session.infer();
+session.stop();
+```
+
+The module creates an independent session. It does not attach it to the already-open scene: use the demo's buttons for the visual journey. `infer()` applies the current policy without training; `resume()` keeps the agent, and `stop()` cancels the upcoming ticks. A transition already in progress can still finish.
+
+## Observe, then evaluate
+
+![The MountainCar demo after its main interaction.](/images/blog/mountaincar/active.png)
+
+*Screenshot of the same session after interaction. The presence of a scene and an active indicator confirms the journey, not a converged policy.*
+
+Compare an always-push-right strategy with the trained policy, over several initial states. Record the arrival rate and the number of transitions. A reward curve alone does not replace this measurement.
+
+## Verifying this edition
+
+The demo was opened in Chromium and its training launched before the screenshot. The standalone example ran one training transition and one inference transition with 2 observations, then the mode-switching commands. No page or runner error was recorded during this verification. This journey verifies the integration; it does not prove convergence.
+
+## Your turn to run the experiment
+
+Reproduce the journey, then change a single element of the contract and compare your observations. You will have a concrete case to discuss what the agent knows, what it chooses, and what the reward values.
+
+[**Open MountainCar →**](/demos/mountaincar/)
+
+To go further, see [the Ignition runner](/docs/how-it-works/core) and [the available algorithms](/docs/algorithms).

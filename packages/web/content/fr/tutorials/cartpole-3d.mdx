@@ -1,0 +1,220 @@
+---
+title: 'CartPole 3D (React Three Fiber)'
+description: Branche le CartPole du Quickstart dans une scène React Three Fiber. Un chariot, une perche, des ombres, et un agent qui apprend en temps réel.
+---
+
+# CartPole 3D — React Three Fiber
+
+C'est le tutoriel pont entre le RL et le rendu 3D. Tu sais déjà entraîner un agent cart-pole (depuis le [Quickstart](/docs/quickstart)). Tu as déjà lu la page [R3F](/docs/r3f) et tu sais que la boucle d'entraînement est découplée de la boucle de rendu. Ce tutoriel relie ces deux fils en une démo 3D fonctionnelle que tu peux livrer.
+
+Durée estimée : **35–45 minutes** (plus long que les tutoriels 2D parce qu'on monte un projet R3F).
+
+## Prérequis
+
+- Tu as fait les tutoriels [GridWorld](/docs/tutorials/grid-world) et [Quickstart](/docs/quickstart).
+- Tu as lu la page [React Three Fiber](/docs/r3f) pour comprendre la séparation boucle d'entraînement / boucle de rendu.
+- Un peu d'aise avec les hooks React (`useEffect`, `useRef`) et les bases de R3F (`<Canvas>`, `useFrame`).
+
+## Étape 1 — Scaffolder un projet Vite React
+
+```bash
+npm create vite@latest cartpole-3d -- --template react-ts
+cd cartpole-3d
+npm install
+npm install @ignitionai/core @ignitionai/backend-tfjs @react-three/fiber @react-three/drei three
+npm install -D @types/three
+```
+
+**Qu'observer** : `package.json` doit maintenant lister `@ignitionai/core`, `@ignitionai/backend-tfjs`, `@react-three/fiber`, `@react-three/drei` et `three` sous dependencies.
+
+**Pourquoi cette étape existe** : `@react-three/fiber` est le moteur de rendu React pour Three.js, `@react-three/drei` fournit des helpers qu'on utilisera pour les contrôles de caméra et les ombres, et `three` est le moteur sous-jacent. Le modèle Vite nous donne le rechargement à chaud et TypeScript d'office.
+
+## Étape 2 — Ajouter l'env CartPole
+
+Crée `src/cartpole-env.ts` et colle le `CartPoleEnv` complet du [Quickstart](/docs/quickstart). Il est inchangé par rapport à avant.
+
+**Qu'observer** : rien encore — tu te prépares pour l'Étape 3.
+
+**Pourquoi cette étape existe** : R3F est la couche de rendu. L'env reste du TypeScript pur, agnostique au framework, et n'importe rien de React. Cette séparation est tout l'intérêt du motif « boucles découplées ».
+
+## Étape 3 — Les composants de la scène
+
+Crée `src/CartPoleScene.tsx` :
+
+```tsx filename="src/CartPoleScene.tsx"
+import { useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
+import * as THREE from 'three'
+import type { CartPoleEnv } from './cartpole-env'
+
+// Render the cart as a box and update its x each frame
+export function Cart({ env }: { env: CartPoleEnv }) {
+  const ref = useRef<THREE.Mesh>(null!)
+  useFrame(() => {
+    // Read env state, update mesh position
+    ref.current.position.x = (env as any).x
+  })
+  return (
+    <mesh ref={ref} position={[0, 0.1, 0]} castShadow>
+      <boxGeometry args={[0.5, 0.2, 0.3]} />
+      <meshStandardMaterial color="#6366F1" metalness={0.7} roughness={0.2} />
+    </mesh>
+  )
+}
+
+// Render the pole as a thin cylinder attached to the cart
+export function Pole({ env }: { env: CartPoleEnv }) {
+  const ref = useRef<THREE.Group>(null!)
+  useFrame(() => {
+    const e = env as any
+    // Position matches cart; rotation is theta (pole angle)
+    ref.current.position.x = e.x
+    ref.current.position.y = 0.2
+    ref.current.rotation.z = -e.theta
+  })
+  return (
+    <group ref={ref}>
+      {/* pivot at the base — geometry extends up */}
+      <mesh position={[0, 0.5, 0]} castShadow>
+        <cylinderGeometry args={[0.03, 0.03, 1, 16]} />
+        <meshStandardMaterial color="#A5B4FC" metalness={0.5} roughness={0.3} />
+      </mesh>
+    </group>
+  )
+}
+
+export function Ground() {
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
+      <planeGeometry args={[10, 10]} />
+      <meshStandardMaterial color="#0f172a" />
+    </mesh>
+  )
+}
+```
+
+**Qu'observer** : trois composants purs qui ne savent rien de l'entraînement — ils lisent juste `env.x` et `env.theta` à chaque frame et positionnent leurs meshes. Le cast `as any` est là parce que notre `CartPoleEnv` marque ces champs private ; en production, tu les exposerais via un getter `state`.
+
+**Pourquoi cette étape existe** : c'est la couche vue. Elle lit l'état de l'env au moment du rendu et met à jour les meshes. Elle ne mute jamais l'env. C'est la boucle de rendu.
+
+## Étape 4 — Exposer l'état de l'env
+
+Ton `CartPoleEnv` a `private x` et `private theta`. La scène a besoin d'un accès en lecture. Ajuste `cartpole-env.ts` pour rendre les cinq champs d'état publics (ou expose-les via un getter `state`) :
+
+```ts filename="src/cartpole-env.ts (change private → public)"
+export class CartPoleEnv implements TrainingEnv {
+  actions = ['push_left', 'push_right']
+  x = 0
+  xDot = 0
+  theta = 0
+  thetaDot = 0
+  stepCount = 0
+  // ... everything else unchanged
+}
+```
+
+Tu peux maintenant retirer les casts `as any` des composants de la scène.
+
+**Pourquoi cette étape existe** : c'est l'heure du compromis. Garder les champs private est plus propre dans la classe env. Les exposer en public laisse d'autres parties de ton app (comme un moteur de rendu 3D) lire l'état à peu de frais. Pour du code de tutoriel, public gagne ; pour du code de bibliothèque, tu préférerais un getter en lecture seule.
+
+## Étape 5 — Monter la scène et lancer l'entraînement
+
+Remplace `src/App.tsx` :
+
+```tsx filename="src/App.tsx"
+import { useEffect, useRef } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { OrbitControls, Environment, ContactShadows } from '@react-three/drei'
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from './cartpole-env'
+import { Cart, Pole, Ground } from './CartPoleScene'
+
+export default function App() {
+  const envRef = useRef<CartPoleEnv>(new CartPoleEnv())
+  const trainerRef = useRef<IgnitionEnvTFJS | null>(null)
+
+  useEffect(() => {
+    const trainer = new IgnitionEnvTFJS(envRef.current)
+    trainer.train('dqn')
+    trainer.setSpeed(10)   // 10x — turbo but still watchable
+    trainerRef.current = trainer
+    return () => trainer.stop()
+  }, [])
+
+  return (
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <Canvas
+        shadows
+        camera={{ position: [2, 1.5, 3], fov: 50 }}
+      >
+        <ambientLight intensity={0.3} />
+        <directionalLight
+          position={[3, 4, 2]}
+          intensity={1}
+          castShadow
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+        />
+        <Cart env={envRef.current} />
+        <Pole env={envRef.current} />
+        <Ground />
+        <ContactShadows position={[0, 0.01, 0]} opacity={0.4} scale={5} blur={2} />
+        <Environment preset="sunset" />
+        <OrbitControls />
+      </Canvas>
+    </div>
+  )
+}
+```
+
+**Qu'observer** : lance `npm run dev`. Tu devrais voir un chariot en `(0, 0)` avec une perche debout, une ombre de contact douce en dessous, un environnement teinté au couchant, et après quelques secondes d'entraînement DQN, le chariot commence à osciller de gauche à droite en gardant la perche verticale. Fais glisser pour orbiter la caméra avec la souris.
+
+**Pourquoi cette étape existe** : c'est l'intégration complète. Le `useEffect` possède le cycle de vie du trainer — il lance l'entraînement au montage et l'arrête au démontage. Le `<Canvas>` rend la scène à 60 fps. Les deux boucles communiquent exclusivement via `envRef.current`, qui est un objet stable détenu par le système de refs React.
+
+## Étape 6 — Comprendre ce que tu viens de construire
+
+**Où vit la boucle d'entraînement** : dans le `useEffect`, à l'intérieur de `trainer.train('dqn')`. Cet appel met en place une boucle `setTimeout` qui tourne entièrement en dehors du cycle de rendu de React. React ne re-rend pas quand l'agent fait un pas. L'entraînement se passe « en arrière-plan » par rapport au rendu.
+
+**Où vit la boucle de rendu** : dans les callbacks `useFrame` à l'intérieur de `Cart` et `Pole`. Ils se déclenchent à chaque frame d'animation (60 fps) et lisent `envRef.current.x` / `envRef.current.theta`. Ils ne mutent jamais l'env. Ils observent et rendent.
+
+**Pourquoi ça ne crée pas de race condition** : JavaScript est mono-threadé. Le callback `setTimeout` et le callback `requestAnimationFrame` ne peuvent pas s'exécuter simultanément. L'un finit toujours avant que l'autre ne commence. L'état de l'env est cohérent à tout instant où un callback le lit.
+
+**Pourquoi `setSpeed(10)` est la bonne valeur par défaut** : à 10×, le chariot bouge visiblement vite — tu vois la progression de l'entraînement en temps réel au lieu d'attendre. À 50×, c'est un flou. À 1×, il faut des minutes pour converger et l'image change à peine.
+
+## Étape 7 — Ajouter un bouton reset (optionnel)
+
+Une fois l'entraînement convergé, tu voudras tester la politique entraînée. Ajoute un bouton qui passe en mode inférence :
+
+```tsx filename="src/App.tsx (additions)"
+// Inside the App component's return, before the closing </div>:
+<button
+  onClick={() => trainerRef.current?.infer()}
+  style={{
+    position: 'absolute', top: 20, left: 20,
+    padding: '10px 20px', background: '#6366F1', color: 'white',
+    border: 'none', borderRadius: 8, cursor: 'pointer',
+  }}
+>
+  Switch to inference
+</button>
+```
+
+Clique dessus après ~1 minute d'entraînement. L'agent devrait passer de « mouvements désordonnés + exploration » à « équilibrage fluide et déterministe ».
+
+## Ce que tu viens de construire
+
+- Une intégration R3F + IgnitionAI complète depuis un projet Vite vierge.
+- Un motif que tu peux transposer directement dans n'importe quel projet R3F : env dans un `useRef`, trainer dans un `useEffect` avec nettoyage, meshes lisant l'état dans `useFrame`.
+- Une intuition concrète de pourquoi les deux boucles ne s'interfèrent pas.
+
+Ce même motif monte en charge jusqu'à des scènes arbitrairement complexes. Le tutoriel [Circuit de voiture](/docs/tutorials/car-circuit) va plus loin — piste pilotée par la physique, caméra de poursuite, minimap — mais la structure de la boucle de base est identique à ce que tu viens d'écrire.
+
+## Prochaines étapes
+
+- **[Tutoriel Circuit de voiture](/docs/tutorials/car-circuit)** — le niveau au-dessus : physique, contrôles de caméra et l'expérience « démo phare ».
+- **[Export vers Unity via ONNX](/docs/tutorials/onnx-unity)** — une fois que tu as une politique entraînée dans le navigateur, déploie-la dans un projet Unity Sentis.
+- **[Page R3F](/docs/r3f)** — revisite le plongeon profond sur les boucles d'entraînement/de rendu avec ton nouveau contexte pratique.
+
+---
+
+Précédent : **[← MountainCar : reward shaping](/docs/tutorials/mountaincar-shaping)** · Suivant : **[Circuit de voiture →](/docs/tutorials/car-circuit)**

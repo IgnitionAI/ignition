@@ -6,6 +6,8 @@ const TFBackendSchema = z.enum(['webgpu', 'webgl', 'cpu', 'wasm', 'node', 'auto'
 
 export const DQNConfigSchema = z
   .object({
+    doubleQ: z.boolean().optional(),
+    seed: z.number().int().min(1).max(1000000).optional(),
     backend: TFBackendSchema,
     inputSize: z
       .number()
@@ -73,6 +75,7 @@ export type DQNConfig = z.infer<typeof DQNConfigSchema>;
 // ─── PPOConfig ────────────────────────────────────────────────────────────────
 
 export const PPOConfigSchema = z.object({
+  rolloutSize: z.number().int().positive().optional(),
   backend: TFBackendSchema,
   inputSize: z
     .number()
@@ -123,6 +126,7 @@ export const PPOConfigSchema = z.object({
     .number()
     .positive({ message: 'valueLossCoef must be > 0' })
     .optional(),
+  storageProvider: z.any().optional(), // ModelStorageProvider instance
 });
 
 export type PPOConfig = z.infer<typeof PPOConfigSchema>;
@@ -145,10 +149,10 @@ export const QTableConfigSchema = z.object({
     .positive({ message: 'stateBins must be > 0' })
     .optional(),
   stateLow: z
-    .array(z.number())
+    .array(z.number().finite())
     .optional(),
   stateHigh: z
-    .array(z.number())
+    .array(z.number().finite())
     .optional(),
   lr: z
     .number()
@@ -174,6 +178,18 @@ export const QTableConfigSchema = z.object({
     .min(0, { message: 'minEpsilon must be >= 0' })
     .max(1, { message: 'minEpsilon must be <= 1' })
     .optional(),
+  storageProvider: z.any().optional(), // ModelStorageProvider instance
+}).superRefine((config, context) => {
+  const low = config.stateLow ?? new Array<number>(config.inputSize).fill(0);
+  const high = config.stateHigh ?? new Array<number>(config.inputSize).fill(1);
+  if (low.length !== config.inputSize || high.length !== config.inputSize) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: 'stateLow and stateHigh must have inputSize elements' });
+  } else if (low.some((value, index) => high[index] <= value)) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: 'Each stateHigh must be greater than stateLow' });
+  }
+  if ((config.stateBins ?? 10) ** config.inputSize > Number.MAX_SAFE_INTEGER) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: 'Q-table state encoding exceeds Number.MAX_SAFE_INTEGER; reduce inputSize or stateBins' });
+  }
 });
 
 export type QTableConfig = z.infer<typeof QTableConfigSchema>;

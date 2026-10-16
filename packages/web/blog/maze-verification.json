@@ -1,0 +1,59 @@
+{
+  "environment": "maze",
+  "url": "http://127.0.0.1:5204/",
+  "title": "IgnitionAI — Maze 3D Demo",
+  "initialText": "← IgnitionAI\nIgnitionAIMaze 3D\nTrain\nReset\nQ-Table\nDQN\nPPO\nEpisodes 0 · Steps 0\n// Rapier scene, tiny RL loop\n 1import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';\n 2import { MazeEnv } from './maze-env';\n 3\n 4const maze = new MazeEnv();\n 5const trainer = new IgnitionEnvTFJS(maze);\n 6trainer.train('dqn');\nPress Train to begin",
+  "activeText": "← IgnitionAI\nIgnitionAIMaze 3D\nStop\nInference\nReset\nQ-Table\nDQN\nPPO\nEpisodes 0 · Steps 33\nTRAINING\n// Rapier scene, tiny RL loop\n 1import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';\n 2import { MazeEnv } from './maze-env';\n 3\n 4const maze = new MazeEnv();\n 5const trainer = new IgnitionEnvTFJS(maze);\n 6trainer.train('dqn');\nPress Train to begin",
+  "example": {
+    "observationSize": 16,
+    "training": {
+      "observation": [
+        0.09722222222222228,
+        0.12500000000000003,
+        0.28305813044122097,
+        0.9504844339512095,
+        1,
+        1,
+        0.7808129119185998,
+        0.33548387096774196,
+        0.2935483870967742,
+        0.4193548387096773,
+        0.4193548387096773,
+        0.4193548387096773,
+        0.8806451612903221,
+        0.9575880177649315,
+        0,
+        0.5
+      ],
+      "reward": -0.012,
+      "terminated": false,
+      "truncated": false
+    },
+    "inference": {
+      "observation": [
+        0.09722222222222228,
+        0.12500000000000003,
+        0.1090842587659851,
+        0.8117449009293668,
+        1,
+        1,
+        0.7808129119185998,
+        0.37741935483870964,
+        0.2935483870967742,
+        0.2935483870967742,
+        0.5032258064516127,
+        0.4193548387096773,
+        0.5032258064516127,
+        0.9849393354398269,
+        0,
+        0.5
+      ],
+      "reward": -0.012,
+      "terminated": false,
+      "truncated": false
+    },
+    "lastError": null
+  },
+  "errors": [],
+  "failures": []
+}

@@ -1,0 +1,30 @@
+export const pricing = {
+  billing: {
+    monthly: 'Monthly',
+    yearly: 'Yearly',
+    yearlyDiscount: '-20%',
+    srOnly: 'Pay Yearly',
+  },
+  perMonth: '/mo',
+  planTagline: 'Everything at your fingertips.',
+  getStarted: 'Get Started',
+  categories: {
+    usage: 'Usage',
+    features: 'Features',
+    support: 'Support',
+  },
+  rows: {
+    socialConnections: 'Social Connections',
+    customDomains: 'Custom Domains',
+    userRoleManagement: 'User Role Management',
+    externalDatabases: 'External Databases',
+    customConnection: 'Custom Connection',
+    advancedDeployment: 'Advanced Deployment Options',
+    extraAddons: 'Extra Add-ons',
+    adminRoles: 'Admin Roles',
+    deployAndMonitor: 'Deploy and Monitor',
+    enterpriseAddons: 'Enterprise Add-ons',
+    premiumSupport: 'Premium Support',
+  },
+  unlimited: 'Unlimited',
+}

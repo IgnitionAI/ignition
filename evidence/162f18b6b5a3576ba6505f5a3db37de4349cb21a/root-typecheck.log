@@ -1,0 +1,10 @@
+$ GITHUB_SHA=162f18b6b5a3576ba6505f5a3db37de4349cb21a pnpm run typecheck
+
+> ignition-monorepo@ typecheck /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
+> tsc --build
+
+packages/web/test/ball-thrust-blog.test.ts(25,27): error TS2802: Type 'RegExpStringIterator<RegExpExecArray>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+ ELIFECYCLE  Command failed with exit code 2.
+
+
+EXIT_CODE=2

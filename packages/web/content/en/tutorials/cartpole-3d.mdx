@@ -1,0 +1,220 @@
+---
+title: 'CartPole 3D (React Three Fiber)'
+description: Wire the Quickstart CartPole into a React Three Fiber scene. A cart, a pole, shadows, and an agent learning in real time.
+---
+
+# CartPole 3D — React Three Fiber
+
+This is the bridge tutorial between RL and 3D rendering. You already know how to train a cart-pole agent (from the [Quickstart](/docs/quickstart)). You already read the [R3F page](/docs/r3f) and know the training loop is decoupled from the render loop. This tutorial connects those two threads into a working 3D demo you can ship.
+
+Estimated time: **35–45 minutes** (longer than the 2D tutorials because you set up an R3F project).
+
+## Prerequisites
+
+- You've done the [GridWorld](/docs/tutorials/grid-world) and [Quickstart](/docs/quickstart) tutorials.
+- You've read the [React Three Fiber page](/docs/r3f) so you understand the training-loop/render-loop split.
+- Comfort with React hooks (`useEffect`, `useRef`) and basic R3F (`<Canvas>`, `useFrame`).
+
+## Step 1 — Scaffold a Vite React project
+
+```bash
+npm create vite@latest cartpole-3d -- --template react-ts
+cd cartpole-3d
+npm install
+npm install @ignitionai/core @ignitionai/backend-tfjs @react-three/fiber @react-three/drei three
+npm install -D @types/three
+```
+
+**What to observe**: `package.json` should now list `@ignitionai/core`, `@ignitionai/backend-tfjs`, `@react-three/fiber`, `@react-three/drei`, and `three` under dependencies.
+
+**Why this step exists**: `@react-three/fiber` is the React renderer for Three.js, `@react-three/drei` ships helpers we'll use for camera controls and shadows, and `three` is the underlying engine. The Vite template gives us hot reload and TypeScript out of the box.
+
+## Step 2 — Add the CartPole env
+
+Create `src/cartpole-env.ts` and paste the full `CartPoleEnv` from the [Quickstart](/docs/quickstart). This is unchanged from before.
+
+**What to observe**: nothing yet — you're preparing for Step 3.
+
+**Why this step exists**: R3F is the rendering layer. The env is still pure TypeScript, framework-agnostic, and doesn't import anything from React. This separation is the whole point of the "decoupled loops" pattern.
+
+## Step 3 — The scene components
+
+Create `src/CartPoleScene.tsx`:
+
+```tsx filename="src/CartPoleScene.tsx"
+import { useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
+import * as THREE from 'three'
+import type { CartPoleEnv } from './cartpole-env'
+
+// Render the cart as a box and update its x each frame
+export function Cart({ env }: { env: CartPoleEnv }) {
+  const ref = useRef<THREE.Mesh>(null!)
+  useFrame(() => {
+    // Read env state, update mesh position
+    ref.current.position.x = (env as any).x
+  })
+  return (
+    <mesh ref={ref} position={[0, 0.1, 0]} castShadow>
+      <boxGeometry args={[0.5, 0.2, 0.3]} />
+      <meshStandardMaterial color="#6366F1" metalness={0.7} roughness={0.2} />
+    </mesh>
+  )
+}
+
+// Render the pole as a thin cylinder attached to the cart
+export function Pole({ env }: { env: CartPoleEnv }) {
+  const ref = useRef<THREE.Group>(null!)
+  useFrame(() => {
+    const e = env as any
+    // Position matches cart; rotation is theta (pole angle)
+    ref.current.position.x = e.x
+    ref.current.position.y = 0.2
+    ref.current.rotation.z = -e.theta
+  })
+  return (
+    <group ref={ref}>
+      {/* pivot at the base — geometry extends up */}
+      <mesh position={[0, 0.5, 0]} castShadow>
+        <cylinderGeometry args={[0.03, 0.03, 1, 16]} />
+        <meshStandardMaterial color="#A5B4FC" metalness={0.5} roughness={0.3} />
+      </mesh>
+    </group>
+  )
+}
+
+export function Ground() {
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
+      <planeGeometry args={[10, 10]} />
+      <meshStandardMaterial color="#0f172a" />
+    </mesh>
+  )
+}
+```
+
+**What to observe**: three pure components that know nothing about training — they just read `env.x` and `env.theta` on every frame and position their meshes. The `as any` cast is there because our `CartPoleEnv` marks those fields private; in production you'd expose them via a `state` getter.
+
+**Why this step exists**: this is the view layer. It reads the env's state at render-time and updates the meshes. It never mutates the env. That's the render loop.
+
+## Step 4 — Expose the env state
+
+Your `CartPoleEnv` has `private x` and `private theta`. The scene needs read access. Adjust `cartpole-env.ts` to make the five state fields public (or expose them via a `state` getter):
+
+```ts filename="src/cartpole-env.ts (change private → public)"
+export class CartPoleEnv implements TrainingEnv {
+  actions = ['push_left', 'push_right']
+  x = 0
+  xDot = 0
+  theta = 0
+  thetaDot = 0
+  stepCount = 0
+  // ... everything else unchanged
+}
+```
+
+You can now remove the `as any` casts from the scene components.
+
+**Why this step exists**: trade-off time. Keeping fields private is cleaner inside the env class. Exposing them as public lets other parts of your app (like a 3D renderer) read the state cheaply. For tutorial code, public wins; for library code, you'd prefer a read-only getter.
+
+## Step 5 — Mount the scene and start training
+
+Replace `src/App.tsx`:
+
+```tsx filename="src/App.tsx"
+import { useEffect, useRef } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { OrbitControls, Environment, ContactShadows } from '@react-three/drei'
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs'
+import { CartPoleEnv } from './cartpole-env'
+import { Cart, Pole, Ground } from './CartPoleScene'
+
+export default function App() {
+  const envRef = useRef<CartPoleEnv>(new CartPoleEnv())
+  const trainerRef = useRef<IgnitionEnvTFJS | null>(null)
+
+  useEffect(() => {
+    const trainer = new IgnitionEnvTFJS(envRef.current)
+    trainer.train('dqn')
+    trainer.setSpeed(10)   // 10x — turbo but still watchable
+    trainerRef.current = trainer
+    return () => trainer.stop()
+  }, [])
+
+  return (
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <Canvas
+        shadows
+        camera={{ position: [2, 1.5, 3], fov: 50 }}
+      >
+        <ambientLight intensity={0.3} />
+        <directionalLight
+          position={[3, 4, 2]}
+          intensity={1}
+          castShadow
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+        />
+        <Cart env={envRef.current} />
+        <Pole env={envRef.current} />
+        <Ground />
+        <ContactShadows position={[0, 0.01, 0]} opacity={0.4} scale={5} blur={2} />
+        <Environment preset="sunset" />
+        <OrbitControls />
+      </Canvas>
+    </div>
+  )
+}
+```
+
+**What to observe**: Run `npm run dev`. You should see a cart at `(0, 0)` with a pole standing up, a soft contact shadow below it, a sunset-tinted environment, and after a few seconds of DQN training, the cart starts wobbling back and forth keeping the pole upright. Drag to orbit the camera with your mouse.
+
+**Why this step exists**: this is the full integration. The `useEffect` owns the trainer lifecycle — it starts training on mount and stops on unmount. The `<Canvas>` renders the scene at 60 fps. The two loops communicate exclusively through `envRef.current`, which is a stable object owned by the React ref system.
+
+## Step 6 — Understand what you just built
+
+**Where the training loop lives**: in `useEffect`, inside `trainer.train('dqn')`. That call sets up a `setTimeout` loop that runs entirely outside React's render cycle. React doesn't re-render when the agent takes a step. Training happens in the "background" relative to rendering.
+
+**Where the render loop lives**: in the `useFrame` callbacks inside `Cart` and `Pole`. Those fire on every animation frame (60 fps) and read `envRef.current.x` / `envRef.current.theta`. They never mutate the env. They just observe and render.
+
+**Why this doesn't race**: JavaScript is single-threaded. The `setTimeout` callback and the `requestAnimationFrame` callback can't run simultaneously. One always finishes before the other starts. The env state is consistent at any instant a callback reads it.
+
+**Why `setSpeed(10)` is the right default**: at 10×, the cart is visibly moving fast — you can see the training progress in real time instead of waiting. At 50×, it's a blur. At 1×, it takes minutes to converge and the visual is barely changing.
+
+## Step 7 — Add a reset button (optional)
+
+Once training converges, you'll want to test the trained policy. Add a button that swaps to inference mode:
+
+```tsx filename="src/App.tsx (additions)"
+// Inside the App component's return, before the closing </div>:
+<button
+  onClick={() => trainerRef.current?.infer()}
+  style={{
+    position: 'absolute', top: 20, left: 20,
+    padding: '10px 20px', background: '#6366F1', color: 'white',
+    border: 'none', borderRadius: 8, cursor: 'pointer',
+  }}
+>
+  Switch to inference
+</button>
+```
+
+Click it after ~1 minute of training. The agent should switch from "flailing + exploring" to "smooth, deterministic balancing."
+
+## What you just built
+
+- A full R3F + IgnitionAI integration from a blank Vite project.
+- A pattern you can lift directly into any R3F project: env in a `useRef`, trainer in a `useEffect` with cleanup, meshes reading state in `useFrame`.
+- Concrete intuition for why the two loops don't interfere.
+
+This same pattern scales up to arbitrarily complex scenes. The [Car Circuit](/docs/tutorials/car-circuit) tutorial takes it further — physics-driven track, chase camera, minimap — but the core loop structure is identical to what you just wrote.
+
+## Next steps
+
+- **[Car Circuit tutorial](/docs/tutorials/car-circuit)** — the next step up: physics, camera controls, and the "hero demo" experience.
+- **[Export to Unity via ONNX](/docs/tutorials/onnx-unity)** — once you have a trained policy in the browser, deploy it to a Unity Sentis project.
+- **[R3F page](/docs/r3f)** — revisit the training-loop/render-loop deep dive with your new hands-on context.
+
+---
+
+Previous: **[← MountainCar: reward shaping](/docs/tutorials/mountaincar-shaping)** · Next: **[Car Circuit →](/docs/tutorials/car-circuit)**

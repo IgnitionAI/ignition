@@ -1,0 +1,31 @@
+{
+  "environment": "mountaincar",
+  "url": "http://127.0.0.1:5200/",
+  "title": "IgnitionAI — MountainCar Demo",
+  "initialText": "← IgnitionAI\nIgnitionAI — MountainCar\n\nBuild momentum. Reach the flag. Discover the counterintuitive strategy.\n\n// Your code — that's it.\n 1import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';\n 2import { MountainCarEnv } from './mountaincar-env';\n 3\n 4const car = new MountainCarEnv();\n 5const env = new IgnitionEnvTFJS(car);\n 6env.train('dqn');\nPress Start to begin training\nTrain\nReset\nDQN\nPPO",
+  "activeText": "← IgnitionAI\nIgnitionAI — MountainCar\n\nBuild momentum. Reach the flag. Discover the counterintuitive strategy.\n\n// Your code — that's it.\n 1import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';\n 2import { MountainCarEnv } from './mountaincar-env';\n 3\n 4const car = new MountainCarEnv();\n 5const env = new IgnitionEnvTFJS(car);\n 6env.train('dqn');\nPress Start to begin training\nStop\nInference\nReset\nDQN\nPPO\nTRAINING",
+  "example": {
+    "observationSize": 2,
+    "training": {
+      "observation": [
+        -0.5785585365569748,
+        0.0004133912006465829
+      ],
+      "reward": -1,
+      "terminated": false,
+      "truncated": false
+    },
+    "inference": {
+      "observation": [
+        -0.5787348122258105,
+        -0.0001762756688357034
+      ],
+      "reward": -1,
+      "terminated": false,
+      "truncated": false
+    },
+    "lastError": null
+  },
+  "errors": [],
+  "failures": []
+}
