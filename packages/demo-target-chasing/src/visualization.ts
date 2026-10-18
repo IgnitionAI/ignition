@@ -91,7 +91,7 @@ const checkDone = (): boolean => {
 
 // Créer l'environnement
 // shortcut: core (dist) valide `isDone` côté schéma zod mais appelle `isTerminated` côté runtime —
-// on fournit les deux jusqu'à réparation de core (hors scope, cf. issue #75).
+// on fournit les deux jusqu'à réparation de core (hors scope, cf. issue #76).
 const envConfig = {
   agent: dqnAgent,
   getObservation: () => {
