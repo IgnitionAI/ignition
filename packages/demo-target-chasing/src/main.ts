@@ -68,7 +68,7 @@ const env: IgnitionEnv = new IgnitionEnv({
 // Étendre la méthode step pour gérer les checkpoints
 const originalStep = env.step.bind(env);
 env.step = async () => {
-  await originalStep();
+  const result = await originalStep();
   
   const d = Math.abs(position - target);
   
@@ -107,6 +107,8 @@ env.step = async () => {
     env.stop();
     process.exit(0);
   }
+
+  return result;
 };
 
 env.start();
