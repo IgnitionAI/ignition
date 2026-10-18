@@ -1,0 +1,42 @@
+{
+  "name": "@ignitionai/viz",
+  "version": "0.1.0",
+  "description": "Standard React dashboards for IgnitionAI training and inference metrics",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "reinforcement-learning",
+    "visualization",
+    "metrics",
+    "react"
+  ],
+  "author": "salim4n (@IgnitionAI)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IgnitionAI/ignition"
+  },
+  "homepage": "https://github.com/IgnitionAI/ignition#readme",
+  "dependencies": {
+    "recharts": "^2.15.1",
+    "zustand": "^5.0.3"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
+  }
+}
