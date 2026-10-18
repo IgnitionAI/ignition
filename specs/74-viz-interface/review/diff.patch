@@ -124,7 +124,7 @@ index 0000000..882563e
 +/** Store de métriques partagé : pousseurs (boucle d'entraînement) et dashboard React le consomment. */
 +export const metricsStore = createMetricsStore();
 diff --git a/packages/demo-target-chasing/src/visualization.ts b/packages/demo-target-chasing/src/visualization.ts
-index 243b37e..01f269e 100644
+index 243b37e..8cffa6b 100644
 --- a/packages/demo-target-chasing/src/visualization.ts
 +++ b/packages/demo-target-chasing/src/visualization.ts
 @@ -3,6 +3,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -165,7 +165,7 @@ index 243b37e..01f269e 100644
 +
  // Créer l'environnement
 -const env: IgnitionEnv = new IgnitionEnv({
-+// shortcut: core (dist) valide `isDone` côté schéma zod mais appelle `isTerminated` côté runtime —
++// shortcut: core (src et dist) valide `isDone` côté schéma zod mais appelle `isTerminated` côté runtime —
 +// on fournit les deux jusqu'à réparation de core (hors scope, cf. issue #76).
 +const envConfig = {
    agent: dqnAgent,
@@ -1496,7 +1496,7 @@ index 0000000..36019e0
 +PR avec `Closes #74` / `Closes #75` (fermeture au merge par l'owner — pas de merge agent sans demande explicite). Issues préexistantes jamais fermées implicitement.
 diff --git a/specs/74-viz-interface/spec.md b/specs/74-viz-interface/spec.md
 new file mode 100644
-index 0000000..df744f7
+index 0000000..4b8155e
 --- /dev/null
 +++ b/specs/74-viz-interface/spec.md
 @@ -0,0 +1,66 @@
@@ -1518,7 +1518,7 @@ index 0000000..df744f7
 +
 +```ts
 +// Store (factory zustand, indépendant des démos)
-+const useMetrics = createMetricsStore({ maxFrames?: number }); // défaut 500
++const useMetrics = createMetricsStore({ maxFrames?: number, successWindow?: number }); // défauts 500 / 100
 +useMetrics.getState().pushTrainingFrame(frame);
 +useMetrics.getState().pushInferenceFrame(frame);
 +useMetrics.getState().reset();

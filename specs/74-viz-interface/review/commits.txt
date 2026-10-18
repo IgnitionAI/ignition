@@ -1,3 +1,6 @@
+00d1acc docs: précision shortcut (src et dist) + spec #74 documente successWindow
+ffcda74 docs(viz): diff de revue hors artefacts eux-mêmes
+e29f25b docs(viz): artefacts de revue régénérés après fix référence #76
 c12fc33 docs(demo-target-chasing): le shortcut core référence l'issue #76 (pas #75)
 60722d6 docs(viz): plan d'exécution + artefacts de preuve (review/verify) (#74 #75)
 106a239 feat(demo-target-chasing): intègre @ignitionai/viz (MetricsDashboard) (#75)
