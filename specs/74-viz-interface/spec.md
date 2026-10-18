@@ -16,7 +16,7 @@ consommables par n'importe quelle démo.
 
 ```ts
 // Store (factory zustand, indépendant des démos)
-const useMetrics = createMetricsStore({ maxFrames?: number }); // défaut 500
+const useMetrics = createMetricsStore({ maxFrames?: number, successWindow?: number }); // défauts 500 / 100
 useMetrics.getState().pushTrainingFrame(frame);
 useMetrics.getState().pushInferenceFrame(frame);
 useMetrics.getState().reset();
