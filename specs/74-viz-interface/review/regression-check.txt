@@ -1,0 +1,7 @@
+== Régression check à 00d1acc ==
+Baseline dev@323fa68 : Test Files 4 failed | 11 passed | 2 skipped (17) ; Tests 20 failed | 86 passed
+HEAD 00d1acc        : Test Files 4 failed | 12 passed | 2 skipped (18) ; Tests 20 failed | 87 passed
+
+Mêmes 20 échecs pré-existants (core #76) ; +1 fichier/+1 test = episodeTracker.test.ts ajouté par ce diff.
+
+== Delta docs-only : git diff 00d1acc..<artifacts> ne touche que specs/74-viz-interface/review ==

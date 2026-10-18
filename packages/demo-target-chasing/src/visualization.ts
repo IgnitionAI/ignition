@@ -3,6 +3,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import { DQNAgent } from '@ignitionai/backend-tfjs';
 import { IgnitionEnv } from '@ignitionai/core';
+import type { IgnitionEnvConfig } from '@ignitionai/core';
+
+import { createEpisodeTracker } from './episodeTracker';
+import { mountMetricsPanel } from './metricsPanel';
+import { metricsStore } from './metricsStore';
 
 // Configuration de la scène Three.js
 const scene = new THREE.Scene();
@@ -64,20 +69,43 @@ if (!hfToken) {
   console.warn('⚠️ VITE_HF_TOKEN non trouvé. Les checkpoints ne seront pas sauvegardés.');
 }
 
+// Une frame TrainingFrame est poussée dans le dashboard à chaque fin d'épisode
+const episodeTracker = createEpisodeTracker((frame) => metricsStore.getState().pushTrainingFrame(frame));
+let episodeEnded = false;
+let episodeFinalDistance = Infinity;
+
+// Fin d'épisode : distance < 0.1 (cible atteinte) ou limite de steps.
+// Appelée par l'env AVANT onReset, donc avec les positions finales encore valides.
+const checkDone = (): boolean => {
+  const d = Math.abs(position - targetPosition);
+  const done = d < 0.1 || stepCount > 1000;
+
+  if (done) {
+    episodeEnded = true;
+    episodeFinalDistance = d;
+    console.log(`[DONE] Distance finale: ${d.toFixed(2)}`);
+  }
+
+  return done;
+};
+
 // Créer l'environnement
-const env: IgnitionEnv = new IgnitionEnv({
+// shortcut: core (src et dist) valide `isDone` côté schéma zod mais appelle `isTerminated` côté runtime —
+// on fournit les deux jusqu'à réparation de core (hors scope, cf. issue #76).
+const envConfig = {
   agent: dqnAgent,
-  getObservation: () => [position, targetPosition],
+  getObservation: () => {
+    return [position, targetPosition];
+  },
   applyAction: (action: number | number[]) => {
     const a = Array.isArray(action) ? action[0] : action;
     const dx = a - 1;
     position += dx * 0.2;
     agent.position.x = position;
-  
+
     // Log de l'action
     console.log(`[ACTION] ${a} (dx: ${dx.toFixed(2)})`);
   },
-  
   computeReward: () => {
     const d = Math.abs(position - targetPosition);
     
@@ -100,16 +128,8 @@ const env: IgnitionEnv = new IgnitionEnv({
     
     return reward;
   },
-  isDone: (): boolean => {
-    const d = Math.abs(position - targetPosition);
-    const done = d < 0.1 || stepCount > 1000;
-    
-    if (done) {
-      console.log(`[DONE] Distance finale: ${d.toFixed(2)}`);
-    }
-    
-    return done;
-  },
+  isDone: checkDone,
+  isTerminated: checkDone,
   onReset: () => {
     position = 0;
     targetPosition = (Math.random() - 0.5) * 4;
@@ -125,7 +145,9 @@ const env: IgnitionEnv = new IgnitionEnv({
   stepIntervalMs: 100,
   hfRepoId: 'salim4n/dqn-checkpoint-threejs',
   hfToken: hfToken || '',
-});
+} as unknown as IgnitionEnvConfig;
+
+const env: IgnitionEnv = new IgnitionEnv(envConfig);
 
 // Étendre la méthode step pour gérer les checkpoints
 const originalStep = env.step.bind(env);
@@ -133,7 +155,10 @@ env.step = async (action?: number) => {
   // Attendre que l'étape précédente soit terminée
   const result = await originalStep();
   stepCount++;
-  
+
+  // Alimente le dashboard de métriques (@ignitionai/viz)
+  episodeTracker.step(result.reward);
+
   const d = Math.abs(position - targetPosition);
   
   // Log de l'étape
@@ -166,24 +191,15 @@ env.step = async (action?: number) => {
     // );
   }
   
-  // Si c'est la fin, sauvegarder un dernier checkpoint
-  const isDone = (): boolean => {
-    const d = Math.abs(position - targetPosition);
-    return d < 0.1 || stepCount > 1000;
-  };
-  
-  if (isDone()) {
-    console.log(`[FINISH] Entraînement terminé à l'étape ${stepCount}!`);
-    console.log(`[FINISH] Distance finale: ${d.toFixed(2)}`);
-    // Désactiver la sauvegarde dans le navigateur
-    // await dqnAgent.saveCheckpoint(
-    //   'salim4n/dqn-checkpoint-threejs',
-    //   hfToken || '',
-    //   'final'
-    // );
-    env.stop();
+  // Fin d'épisode détectée par checkDone (avant le reset interne de l'env) :
+  // on pousse la frame dans le dashboard et l'entraînement continue sur un nouvel épisode.
+  if (episodeEnded) {
+    console.log(`[FINISH] Épisode terminé à l'étape ${stepCount} !`);
+    console.log(`[FINISH] Distance finale: ${episodeFinalDistance.toFixed(2)}`);
+    episodeTracker.end(episodeFinalDistance < 0.1);
+    episodeEnded = false;
   }
-  
+
   return result;
 };
 
@@ -203,5 +219,6 @@ window.addEventListener('resize', () => {
 
 // Démarrer l'animation et l'environnement
 console.log('[START] Démarrage de la visualisation...');
+mountMetricsPanel();
 animate();
 env.start(); 
