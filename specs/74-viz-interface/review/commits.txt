@@ -1,2 +1,4 @@
+c12fc33 docs(demo-target-chasing): le shortcut core référence l'issue #76 (pas #75)
+60722d6 docs(viz): plan d'exécution + artefacts de preuve (review/verify) (#74 #75)
 106a239 feat(demo-target-chasing): intègre @ignitionai/viz (MetricsDashboard) (#75)
 6f21cbf feat(viz): package @ignitionai/viz — dashboards standard training/inférence (#74)
