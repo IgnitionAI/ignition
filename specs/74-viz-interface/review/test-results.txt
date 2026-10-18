@@ -1,0 +1,19 @@
+== pnpm --filter @ignitionai/viz build ==
+> tsc
+
+exit=0
+
+== cd packages/demo-target-chasing && pnpm build ==
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.55s
+exit=0
+
+== pnpm vitest run packages/viz packages/demo-target-chasing ==
+ Test Files  2 passed (2)
+      Tests  4 passed (4)
+   Start at  18:56:09
+   Duration  199ms (transform 20ms, setup 0ms, collect 26ms, tests 3ms, environment 0ms, prepare 65ms)
+
+
+== BASELINE pré-existante (hors scope, NON causée par ce diff) ==
+dev@323fa68 : packages/core tsc ÉCHOUE (ignition-env.ts, 5+ erreurs TS2322/TS2339) ; pnpm test racine : 20 failed / 86 passed.

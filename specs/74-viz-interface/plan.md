@@ -31,6 +31,15 @@ Mode : autonome (owner : « pilote jusqu'au bout sans moi »).
 - #74 : spec.md § Critères — package buildable ✓, dashboards ✓, store injectable ✓, tests store ✓, build/test du package verts ✓ (critère workspace scopé, cf. décision 2).
 - #75 : cf. corps de l'issue — build démo vert, dashboard alimenté par un entraînement réel, preuve navigateur, zéro régression.
 
+## Checkpoint (2026-10-18, fin de run)
+
+- Branches : `feat/74-viz-interface` (6f21cbf, package viz) ← `feat/75-demo-viz-integration` (106a239, intégration démo).
+- ANALYZE/PLAN/IMPLEMENT/VERIFY : faits. VERIFY 6/6 PASS (preuves : review/REVIEW-VERIFY.md + captures).
+- CODE-REVIEW : **BLOQUÉ** — OAuth OpenAI `invalid_grant`, preset reviewer (openai/gpt-6.1-sol) inutilisable ; relancer les deux axes (prompts prêts dans l'historique orchestrateur) après re-auth. Artefacts prêts : review/diff.patch, commits.txt, test-results.txt.
+- Bug core pré-existant découvert → issue #76 (Ingénieur RL).
+- Conversations : implement=e8e15d4f, reviews échouées=f4e54497/e1936086/12e4ecb2 (OAuth), verify=398a2c2c.
+- issue_created_this_run : #75, #76. Clôture : au merge des PR (liens Closes), jamais par l'agent sans demande explicite.
+
 ## Clôture
 
 PR avec `Closes #74` / `Closes #75` (fermeture au merge par l'owner — pas de merge agent sans demande explicite). Issues préexistantes jamais fermées implicitement.

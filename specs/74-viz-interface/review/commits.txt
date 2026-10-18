@@ -1,0 +1,2 @@
+106a239 feat(demo-target-chasing): intègre @ignitionai/viz (MetricsDashboard) (#75)
+6f21cbf feat(viz): package @ignitionai/viz — dashboards standard training/inférence (#74)
