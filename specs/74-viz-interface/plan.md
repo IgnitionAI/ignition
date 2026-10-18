@@ -35,7 +35,7 @@ Mode : autonome (owner : « pilote jusqu'au bout sans moi »).
 
 - Branches : `feat/74-viz-interface` (6f21cbf, package viz) ← `feat/75-demo-viz-integration` (106a239, intégration démo).
 - ANALYZE/PLAN/IMPLEMENT/VERIFY : faits. VERIFY 6/6 PASS (preuves : review/REVIEW-VERIFY.md + captures).
-- CODE-REVIEW : **BLOQUÉ** — OAuth OpenAI `invalid_grant`, preset reviewer (openai/gpt-6.1-sol) inutilisable ; relancer les deux axes (prompts prêts dans l'historique orchestrateur) après re-auth. Artefacts prêts : review/diff.patch, commits.txt, test-results.txt.
+- CODE-REVIEW : **APPROUVÉ les deux axes** (reviewer repinné deepseek/deepseek-flash après mort du modèle openai/gpt-6.1-sol ; 2e/3e passes à SHA code `00d1acc`). Décisions #75 consignées en commentaire d'issue.
 - Bug core pré-existant découvert → issue #76 (Ingénieur RL).
 - Conversations : implement=e8e15d4f, reviews échouées=f4e54497/e1936086/12e4ecb2 (OAuth), verify=398a2c2c.
 - issue_created_this_run : #75, #76. Clôture : au merge des PR (liens Closes), jamais par l'agent sans demande explicite.
