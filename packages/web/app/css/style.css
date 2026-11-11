@@ -23,10 +23,10 @@
   --text-sm--line-height: 1.5715;
   --text-base: 1rem;
   --text-base--line-height: 1.5;
-  --text-base--letter-spacing: -0.017em;
+  --text-base--letter-spacing: 0em;
   --text-lg: 1.125rem;
   --text-lg--line-height: 1.5;
-  --text-lg--letter-spacing: -0.017em;
+  --text-lg--letter-spacing: 0em;
   --text-xl: 1.25rem;
   --text-xl--line-height: 1.5;
   --text-xl--letter-spacing: -0.017em;
