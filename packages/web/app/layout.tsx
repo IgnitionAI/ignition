@@ -12,21 +12,18 @@ const displayFont = localFont({
     { path: '../public/fonts/ignition/ChakraPetch-Bold.woff2', weight: '700' },
   ],
   variable: '--font-chakra-petch',
-  declarations: [{ prop: 'font-family', value: 'Chakra Petch' }],
   display: 'swap'
 })
 
 const bodyFont = localFont({
   src: '../public/fonts/ignition/SourceSans3-Variable.woff2',
   variable: '--font-source-sans',
-  declarations: [{ prop: 'font-family', value: 'Source Sans 3' }],
   display: 'swap'
 })
 
 const monoFont = localFont({
   src: '../public/fonts/ignition/RedHatMono-Variable.woff2',
   variable: '--font-red-hat-mono',
-  declarations: [{ prop: 'font-family', value: 'Red Hat Mono' }],
   display: 'swap'
 })
 
