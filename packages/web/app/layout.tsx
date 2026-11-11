@@ -52,7 +52,7 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={`scroll-smooth ${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
     >
-      <body className="font-inter antialiased bg-slate-900 text-slate-100 tracking-tight">
+      <body className="font-inter antialiased bg-slate-900 text-slate-100">
         <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip">
           {children}
         </div>
