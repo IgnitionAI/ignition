@@ -1,39 +1,55 @@
 {
-  "gitSha": "d7657aa88e0eef33dca3866173649399c9ee3aa6",
+  "gitSha": "a30219b5da14f1bf9a4ab483b01defc270141189",
   "nodeVersion": "v22.23.4",
-  "startedAt": "2026-11-12T16:28:36.222Z",
-  "finishedAt": "2026-11-12T16:28:39.095Z",
+  "startedAt": "2026-11-12T19:15:22.230Z",
+  "finishedAt": "2026-11-12T19:15:25.189Z",
   "experimentPath": "packages/demo-target-chasing/ppo-experiment.json",
+  "selection": "max(trainedGreedyEvalMean - untrainedGreedyEvalMean)",
   "seeds": [
     11,
     29,
     47
   ],
-  "selectedSeed": 11,
+  "selectedSeed": 29,
   "anyImproved": true,
   "summaries": [
     {
       "seed": 11,
       "improved": true,
       "firstMean20": 0.4425,
-      "lastMean20": 0.85
+      "lastMean20": 0.85,
+      "untrainedGreedyEvalMean": 0.8450000000000003,
+      "greedyEvalMean": 0.8450000000000003,
+      "greedyGap": 0,
+      "untrainedGreedyReturnAt02": 0.85,
+      "trainedGreedyReturnAt02": 0.85
     },
     {
       "seed": 29,
       "improved": true,
       "firstMean20": -0.1800000000000002,
-      "lastMean20": 0.8175000000000001
+      "lastMean20": 0.8175000000000001,
+      "untrainedGreedyEvalMean": -1.2500000000000002,
+      "greedyEvalMean": 0.8550000000000002,
+      "greedyGap": 2.1050000000000004,
+      "untrainedGreedyReturnAt02": -1.2500000000000004,
+      "trainedGreedyReturnAt02": 0.85
     },
     {
       "seed": 47,
       "improved": true,
       "firstMean20": 0.1474999999999999,
-      "lastMean20": 0.8550000000000002
+      "lastMean20": 0.8550000000000002,
+      "untrainedGreedyEvalMean": 0.8549999999999999,
+      "greedyEvalMean": 0.8549999999999999,
+      "greedyGap": 0,
+      "untrainedGreedyReturnAt02": 0.85,
+      "trainedGreedyReturnAt02": 0.85
     }
   ],
   "checkpoints": {
-    "untrained": "seed-11/untrained",
-    "trained": "seed-11/trained"
+    "untrained": "seed-29/untrained",
+    "trained": "seed-29/trained"
   },
   "logs": {
     "episodesJsonl": [

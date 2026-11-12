@@ -11,7 +11,7 @@ import {
   YAxis,
 } from 'recharts';
 import { PPOAgent } from '@ignitionai/backend-tfjs';
-import { fetchJson, parseEpisodeReturns, type PpoManifest } from './artifacts';
+import { fetchJson, parseEpisodeReturns, type PpoManifest, type PpoSeedSummary } from './artifacts';
 import { httpModelProvider } from './http-provider';
 
 const COLORS = ['#6366f1', '#22c55e', '#f59e0b'];
@@ -53,6 +53,8 @@ export default function PpoReplayApp() {
   const [manifest, setManifest] = useState<PpoManifest | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [policy, setPolicy] = useState<'untrained' | 'trained'>('untrained');
+  const [seed, setSeed] = useState<number | null>(null);
+  const [summaries, setSummaries] = useState<PpoSeedSummary[]>([]);
   const [position, setPosition] = useState(0.2);
   const [episodeReturn, setEpisodeReturn] = useState(0);
   const [status, setStatus] = useState('idle');
@@ -65,7 +67,7 @@ export default function PpoReplayApp() {
     return params.get('manifest') ?? '/ppo/manifest.json';
   }, []);
 
-  const loadPolicy = useCallback(async (kind: 'untrained' | 'trained', data: PpoManifest) => {
+  const loadPolicy = useCallback(async (kind: 'untrained' | 'trained', nextSeed: number) => {
     agentRef.current?.dispose?.();
     const agent = new PPOAgent({
       inputSize: 1,
@@ -73,8 +75,9 @@ export default function PpoReplayApp() {
       hiddenLayers: [32, 32],
       storageProvider: httpModelProvider('/ppo'),
     });
-    await agent.load(data.checkpoints[kind]);
+    await agent.load(`seed-${nextSeed}/${kind}`);
     agentRef.current = agent;
+    setSeed(nextSeed);
     setPolicy(kind);
   }, []);
 
@@ -99,10 +102,15 @@ export default function PpoReplayApp() {
           });
           chart.push(row);
         }
+        const loadedSummaries: PpoSeedSummary[] = [];
+        for (const seedId of data.seeds) {
+          loadedSummaries.push(await fetchJson<PpoSeedSummary>(`/ppo/seed-${seedId}/summary.json`));
+        }
         if (cancelled) return;
         setCurves(chart);
+        setSummaries(loadedSummaries);
         setManifest(data);
-        await loadPolicy('untrained', data);
+        await loadPolicy('untrained', data.selectedSeed);
         setStatus('loaded');
       } catch (cause) {
         if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
@@ -157,29 +165,41 @@ export default function PpoReplayApp() {
     );
   }
 
+  const activeSummary = summaries.find((row) => row.seed === seed);
+
   return (
     <div style={page}>
       <header style={{ display: 'flex', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
         <div>
           <h1 style={{ margin: 0 }}>PPO before / after</h1>
           <p style={{ color: '#94a3b8', margin: '8px 0 0' }}>
-            Seed {manifest.selectedSeed} · SHA {manifest.gitSha.slice(0, 12)} · curve from loaded logs, not hardcoded
+            Seed {seed} · SHA {manifest.gitSha.slice(0, 12)} · greedy means from loaded summary.json
           </p>
         </div>
         <a href="/" style={{ color: '#a5b4fc' }}>Live DQN 3D</a>
       </header>
 
       <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
+        {manifest.seeds.map((seedId) => (
+          <button
+            key={seedId}
+            data-testid={`ppo-seed-${seedId}`}
+            onClick={() => void loadPolicy(policy, seedId)}
+            style={seed === seedId ? activeBtn : btn}
+          >
+            Seed {seedId}
+          </button>
+        ))}
         <button
           data-testid="ppo-untrained"
-          onClick={() => loadPolicy('untrained', manifest)}
+          onClick={() => seed !== null && void loadPolicy('untrained', seed)}
           style={policy === 'untrained' ? activeBtn : btn}
         >
           Replay untrained
         </button>
         <button
           data-testid="ppo-trained"
-          onClick={() => loadPolicy('trained', manifest)}
+          onClick={() => seed !== null && void loadPolicy('trained', seed)}
           style={policy === 'trained' ? activeBtn : btn}
         >
           Replay trained checkpoint
@@ -189,9 +209,17 @@ export default function PpoReplayApp() {
         </button>
       </div>
 
+      <p data-testid="ppo-greedy-from-file">
+        Loaded greedy eval (same 20 starts): untrained {activeSummary?.untrainedGreedyEvalMean ?? 'absent'} ·
+        trained {activeSummary?.greedyEvalMean ?? 'absent'} · gap {activeSummary?.greedyGap ?? 'absent'}
+        <br />
+        Greedy episode from 0.2 (file): untrained {activeSummary?.untrainedGreedyReturnAt02 ?? 'absent'} ·
+        trained {activeSummary?.trainedGreedyReturnAt02 ?? 'absent'}
+      </p>
+
       <p data-testid="ppo-policy">
-        Active policy: <strong>{policy}</strong> · checkpoint {manifest.checkpoints[policy]} ·
-        status {status} · episode return {episodeReturn.toFixed(3)}
+        Active policy: <strong>{policy}</strong> · checkpoint seed-{seed}/{policy} ·
+        status {status} · live replay return {episodeReturn.toFixed(3)}
       </p>
 
       <div data-testid="ppo-canvas" style={{ height: 280, border: '1px solid #334155', borderRadius: 8, overflow: 'hidden' }}>
@@ -224,10 +252,11 @@ export default function PpoReplayApp() {
       </div>
 
       <ul data-testid="ppo-seed-results">
-        {manifest.summaries.map((row) => (
+        {summaries.map((row) => (
           <li key={row.seed}>
             seed {row.seed}: first20={row.firstMean20} last20={row.lastMean20}{' '}
-            {row.improved ? 'improved' : 'did not improve'}
+            greedy untrained={row.untrainedGreedyEvalMean} trained={row.greedyEvalMean} gap={row.greedyGap}{' '}
+            {row.improved ? 'improved (train curve)' : 'did not improve (train curve)'}
           </li>
         ))}
       </ul>

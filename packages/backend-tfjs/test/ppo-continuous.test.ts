@@ -28,9 +28,20 @@ describe('PPOAgent — continuous actions', () => {
       const greedy = await agent.getAction([0], true);
       expect((greedy as number[])[0]).toBeGreaterThanOrEqual(-1.5);
       expect((greedy as number[])[0]).toBeLessThanOrEqual(0.5);
+      await agent.getAction([0]);
       const diag = agent.getLastActionDiagnostics();
       expect(diag.actionSpace).toBe('continuous');
-      expect(Number.isFinite(diag.logProb)).toBe(true);
+      expect(diag.preTanh).toHaveLength(1);
+      expect(diag.mean).toHaveLength(1);
+      expect(diag.logStd).toHaveLength(1);
+      const u = diag.preTanh![0];
+      const mu = diag.mean![0];
+      const logStd = diag.logStd![0];
+      const z = (u - mu) / Math.exp(logStd);
+      const gaussian = -0.5 * (z * z + 2 * logStd + Math.log(2 * Math.PI));
+      const squashed = Math.tanh(u);
+      const tanhCorrection = Math.log(Math.max(1 - squashed * squashed, 1e-6));
+      expect(diag.logProb).toBeCloseTo(gaussian - tanhCorrection, 6);
     } finally {
       agent.dispose();
     }

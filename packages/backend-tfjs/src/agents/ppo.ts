@@ -39,6 +39,9 @@ export interface PPOActionDiagnostics {
   action: number | number[];
   logProb: number;
   value: number;
+  preTanh?: number[];
+  mean?: number[];
+  logStd?: number[];
 }
 
 export function clipSurrogate(ratio: number, advantage: number, clipRatio: number): number {
@@ -174,7 +177,11 @@ export class PPOAgent implements AgentInterface {
   private lastValue = 0;
   private lastAction: number | number[] = 0;
   private lastPreTanh: number[] | undefined;
+  private lastMean: number[] | undefined;
+  private lastLogStd: number[] | undefined;
   private lastUpdateStats: PPOUpdateStats | null = null;
+  private firstUpdateStats: PPOUpdateStats | null = null;
+  private captureFirstMinibatch = false;
 
   private readonly gamma: number;
   private readonly gaeLambda: number;
@@ -239,7 +246,7 @@ export class PPOAgent implements AgentInterface {
     this.actorNet = buildMLP(inputSize, actionSize, hiddenLayers, seed, 0);
     this.criticNet = buildMLP(inputSize, 1, hiddenLayers, seed, 100);
     if (actionSpace === 'continuous') {
-      this.logStd = tf.variable(tf.fill([actionSize], -0.5), true, 'ppo_log_std');
+      this.logStd = tf.variable(tf.fill([actionSize], -0.5), true);
     }
 
     this.actorOptimizer = tf.train.adam(lr);
@@ -282,11 +289,19 @@ export class PPOAgent implements AgentInterface {
       action: this.lastAction,
       logProb: this.lastLogProb,
       value: this.lastValue,
+      preTanh: this.lastPreTanh ? [...this.lastPreTanh] : undefined,
+      mean: this.lastMean ? [...this.lastMean] : undefined,
+      logStd: this.lastLogStd ? [...this.lastLogStd] : undefined,
     };
   }
 
   getLastUpdateStats(): PPOUpdateStats | null {
     return this.lastUpdateStats;
+  }
+
+  /** Stats of the first mini-batch of the most recent `train()`, before the actor step. */
+  getFirstUpdateStats(): PPOUpdateStats | null {
+    return this.firstUpdateStats;
   }
 
   getWeightFingerprint(): number[] {
@@ -320,6 +335,9 @@ export class PPOAgent implements AgentInterface {
   async train(): Promise<void> {
     const n = this.rollout.length;
     if (n === 0) return;
+
+    this.captureFirstMinibatch = true;
+    this.firstUpdateStats = null;
 
     const { returns, advantages } = this.computeGAE();
     const states = this.rollout.map((entry) => entry.state);
@@ -383,6 +401,8 @@ export class PPOAgent implements AgentInterface {
       this.lastLogProb = Math.log(Math.max(probsData[action], 1e-8));
       this.lastAction = action;
       this.lastPreTanh = undefined;
+      this.lastMean = undefined;
+      this.lastLogStd = undefined;
       tf.dispose([logits, probs, valueTensor]);
       return action;
     } finally {
@@ -412,6 +432,8 @@ export class PPOAgent implements AgentInterface {
       this.lastLogProb = gaussianLogProb(preTanh, mean, logStd) - tanhLogProbCorrection(preTanh);
       this.lastAction = action;
       this.lastPreTanh = preTanh;
+      this.lastMean = mean;
+      this.lastLogStd = logStd;
       tf.dispose([meanTensor, valueTensor]);
       return action;
     } finally {
@@ -438,6 +460,17 @@ export class PPOAgent implements AgentInterface {
     const criticVars = trainableVars(this.criticNet);
 
     try {
+      if (this.captureFirstMinibatch) {
+        this.firstUpdateStats = this.readUpdateStats(
+          statesTensor,
+          actions,
+          oldLogProbsTensor,
+          advantagesTensor,
+          returnsTensor,
+          preTanh,
+        );
+        this.captureFirstMinibatch = false;
+      }
       switch (this.actionSpace) {
         case 'discrete':
           this.minimizeDiscreteActor(
@@ -775,7 +808,7 @@ export class PPOAgent implements AgentInterface {
     try {
       const weights = wrapper.getWeights();
       if (!this.logStd) {
-        this.logStd = tf.variable(weights[1].clone(), true, 'ppo_log_std');
+        this.logStd = tf.variable(weights[1].clone(), true);
       } else {
         this.logStd.assign(weights[1]);
       }

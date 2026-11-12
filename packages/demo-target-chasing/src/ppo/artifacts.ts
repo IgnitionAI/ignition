@@ -3,6 +3,11 @@ export interface PpoSeedSummary {
   improved: boolean;
   firstMean20: number | null;
   lastMean20: number | null;
+  untrainedGreedyEvalMean?: number | null;
+  greedyEvalMean?: number | null;
+  greedyGap?: number | null;
+  untrainedGreedyReturnAt02?: number | null;
+  trainedGreedyReturnAt02?: number | null;
 }
 
 export interface PpoManifest {
@@ -11,6 +16,7 @@ export interface PpoManifest {
   selectedSeed: number;
   seeds: number[];
   anyImproved: boolean;
+  selection?: string;
   summaries: PpoSeedSummary[];
   checkpoints: { untrained: string; trained: string };
   logs: { episodesJsonl: string[]; summaries: string[] };

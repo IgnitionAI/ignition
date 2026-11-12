@@ -35,6 +35,7 @@
   "improvementTask": "The same nav1d-discrete task. Report every seed (success and failure). No fabricated convergence.",
   "eval": {
     "greedyEpisodes": 20,
-    "checkpoint": "trained policy for that seed versus a freshly constructed untrained agent with the same seed"
+    "checkpoint": "trained policy for that seed versus the same agent's untrained checkpoint, same greedy starts",
+    "demoSeedSelection": "max(trainedGreedyEvalMean - untrainedGreedyEvalMean)"
   }
 }

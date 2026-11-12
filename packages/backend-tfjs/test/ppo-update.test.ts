@@ -66,6 +66,75 @@ describe('PPOAgent — mini-batch updates', () => {
     }
   });
 
+  it('records a meanRatio near 1 on the first mini-batch of the first epoch', async () => {
+    const agent = new PPOAgent({
+      inputSize: 1,
+      actionSize: 2,
+      hiddenLayers: [8],
+      lr: 1e-4,
+      epochs: 1,
+      batchSize: 8,
+      entropyCoef: 0,
+      seed: 13,
+    });
+    try {
+      for (let i = 0; i < 8; i++) {
+        const action = await agent.getAction([0]);
+        agent.remember({
+          state: [0],
+          action,
+          reward: 1,
+          nextState: [0],
+          terminated: true,
+          truncated: false,
+        });
+      }
+      await agent.train();
+      const first = agent.getFirstUpdateStats();
+      expect(first).not.toBeNull();
+      expect(first!.meanRatio).toBeCloseTo(1, 5);
+      expect(first!.clipFraction).toBeCloseTo(0, 5);
+    } finally {
+      agent.dispose();
+    }
+  });
+
+  it('records a positive clipFraction after the policy has moved on the same rollout', async () => {
+    const agent = new PPOAgent({
+      inputSize: 1,
+      actionSize: 2,
+      hiddenLayers: [8],
+      lr: 0.2,
+      epochs: 8,
+      batchSize: 8,
+      clipRatio: 0.05,
+      entropyCoef: 0,
+      seed: 19,
+    });
+    try {
+      for (let i = 0; i < 8; i++) {
+        await agent.getAction([0], true);
+        agent.remember({
+          state: [0],
+          action: 1,
+          reward: 1,
+          nextState: [0],
+          terminated: true,
+          truncated: false,
+        });
+      }
+      await agent.train();
+      const first = agent.getFirstUpdateStats();
+      const last = agent.getLastUpdateStats();
+      expect(first).not.toBeNull();
+      expect(last).not.toBeNull();
+      expect(first!.meanRatio).toBeCloseTo(1, 4);
+      expect(last!.clipFraction).toBeGreaterThan(0);
+    } finally {
+      agent.dispose();
+    }
+  });
+
   it('handles mini-batches of size 1 without NaN', async () => {
     const agent = new PPOAgent({
       inputSize: 1,
