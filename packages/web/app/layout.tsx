@@ -6,24 +6,20 @@ import localFont from 'next/font/local'
 import { isLocale } from '@/lib/locales'
 
 const displayFont = localFont({
-  src: [
-    { path: '../public/fonts/ignition/ChakraPetch-Medium.woff2', weight: '500' },
-    { path: '../public/fonts/ignition/ChakraPetch-SemiBold.woff2', weight: '600' },
-    { path: '../public/fonts/ignition/ChakraPetch-Bold.woff2', weight: '700' },
-  ],
-  variable: '--font-chakra-petch',
+  src: '../public/fonts/ignition/Geist-Variable.woff2',
+  variable: '--font-geist-display',
   display: 'swap'
 })
 
 const bodyFont = localFont({
-  src: '../public/fonts/ignition/SourceSans3-Variable.woff2',
-  variable: '--font-source-sans',
+  src: '../public/fonts/ignition/Geist-Variable.woff2',
+  variable: '--font-geist',
   display: 'swap'
 })
 
 const monoFont = localFont({
-  src: '../public/fonts/ignition/RedHatMono-Variable.woff2',
-  variable: '--font-red-hat-mono',
+  src: '../public/fonts/ignition/GeistMono-Variable.woff2',
+  variable: '--font-geist-mono',
   display: 'swap'
 })
 

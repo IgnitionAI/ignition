@@ -53,7 +53,7 @@ export default async function ChangelogPage({ params }: { params: Promise<{ loca
                 className="p-6 md:p-8 rounded-xl bg-slate-900/40 border border-slate-800"
               >
                 <header className="flex items-baseline gap-3 flex-wrap mb-2">
-                  <h2 className="text-xl md:text-2xl font-bold text-slate-100">
+                  <h2 className="text-xl md:text-2xl font-semibold text-slate-100">
                     {release.version}
                   </h2>
                   <span className="text-slate-400">— {release.title}</span>
