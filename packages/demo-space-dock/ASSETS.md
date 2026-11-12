@@ -2,7 +2,7 @@
 
 Tous les modèles sont des **créations originales pour IgnitionAI**, produites localement par `source/build-assets.mjs` avec Three.js 0.162.0 et `GLTFExporter`. Aucune texture tierce et aucun asset importé d'un service externe. Aucun personnage riggé nécessaire.
 
-Licence : les quatre modèles originaux sont couverts par la licence MIT de `IgnitionAI/ignition`. Copyright (c) 2025–2026 Salim Laimeche. Le texte applicable est dans `LICENSE` à la racine du dépôt et dans `public/models/LICENSE.txt` pour la distribution statique. Titulaire confirmé par le mainteneur dans https://github.com/IgnitionAI/ignition/issues/45#issuecomment-5989916644 ; années 2025–2026 déduites de l’historique du dépôt au commit `8e1a174`, non présentées comme une citation du mainteneur. Aucun asset privé ou tiers n’est relicencié.
+Licence : les quatre modèles originaux sont couverts par la licence MIT de `IgnitionAI/ignition`. Copyright (c) 2025-2026 Salim Laimeche / IgnitionAI. Le texte applicable est dans `LICENSE` à la racine du dépôt et dans `public/models/LICENSE.txt` pour la distribution statique. Titulaire confirmé par le mainteneur dans https://github.com/IgnitionAI/ignition/issues/45#issuecomment-5989916644 ; années 2025-2026 déduites de l’historique du dépôt au commit `8e1a174`, non présentées comme une citation du mainteneur. Aucun asset privé ou tiers n’est relicencié.
 
 ## Fichiers livrés
 
@@ -52,8 +52,8 @@ Les commandes de reproduction précédentes sont historiques et relatives à ce 
 pas des commandes exécutées dans ce package. `public/models/validation.json` est le
 rapport fourni en amont ; gltf-validator n'a pas été relancé ici.
 
-La licence MIT est formalisée au commit `8e1a174` : Copyright (c) 2025–2026
-Salim Laimeche. Le titulaire est confirmé par le mainteneur ; les années sont
+La licence MIT est formalisée au commit `8e1a174` : Copyright (c) 2025-2026
+Salim Laimeche / IgnitionAI. Le titulaire est confirmé par le mainteneur ; les années sont
 déduites de l’historique. Voir la licence racine et `public/models/LICENSE.txt`.
 
 Mesures nouvelles avec GLTFLoader/Box3 Three 0.162.0 : le drone après .5 et yaw −π/2

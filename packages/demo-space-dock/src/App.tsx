@@ -64,8 +64,8 @@ export default function App() {
     } catch (error: unknown) { setInputError(String(error)); }
   };
   return <main>
-    <header><p className="eyebrow">IGN-118 · Prévisualisation GLB sous réserves</p><h1>Dock spatial</h1>
-      <p className="temporary">Scène intégrée à recetter. Modèles sous licence MIT ; voir les <a href={`${(import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL}models/LICENSE.txt`}>mentions de licence</a>.</p>
+    <header><p className="eyebrow">Démo · physique Rapier</p><h1>Dock spatial</h1>
+      <p className="temporary">Modèles 3D originaux sous licence MIT ; voir les <a href={`${(import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL}models/LICENSE.txt`}>mentions de licence</a>.</p>
       <p>Transportez le cargo vers le poste d’arrimage ; le témoin devient vert au succès. La poussée change la vitesse ; anticipez le freinage.</p>
       <strong>{runtime.currentMode === 'auto' ? 'AUTO DÉMO — PD SCRIPTÉ, NON ENTRAÎNÉ' : 'MANUEL — 8 ACTIONS'}</strong>
     </header>
@@ -77,7 +77,7 @@ export default function App() {
       <button onClick={reset}>Reset seedé</button>
     </div>
     {inputError && <p role="alert">{inputError}</p>}
-    <div className="viewport" style={{ minHeight: compact ? 320 : 460 }} aria-label="Prévisualisation GLB du cargo, du remorqueur et du dock ; télémétrie textuelle ci-dessous">
+    <div className="viewport" style={{ minHeight: compact ? 320 : 460 }} aria-label="Vue 3D du cargo, du remorqueur et du dock ; télémétrie textuelle ci-dessous">
       <Scene env={runtime.env} compact={compact} reducedMotion={reducedMotion} />
     </div>
     <div className="controls" aria-label="Commandes de poussée">
