@@ -41,7 +41,7 @@ export default async function EnvironmentArticlePage({ params }: ArticleParams) 
         <h1 className="h1 mb-6">{article.title}</h1>
         <p className="text-xl text-slate-300">{article.description}</p>
       </header>
-      <div className="prose prose-invert prose-lg max-w-none prose-headings:text-slate-100 prose-a:text-indigo-300 prose-pre:overflow-x-auto prose-pre:bg-slate-950 prose-img:rounded-xl prose-img:border prose-img:border-slate-700">
+      <div className="prose prose-invert prose-lg max-w-none prose-headings:font-semibold prose-headings:text-slate-100 prose-a:text-indigo-300 prose-pre:overflow-x-auto prose-pre:bg-slate-950 prose-img:rounded-xl prose-img:border prose-img:border-slate-700">
         <BlogContent source={readBlogArticle(article, locale)} />
       </div>
     </article>
