@@ -89,6 +89,16 @@ export interface CheckpointableAgent extends AgentInterface {
 // ─── Environment interfaces ─────────────────────────────────────────────────
 
 /**
+ * Lookup order for episode-end flags: canonical method first, then the `is*` alias.
+ * The first defined function wins. Construction requires `done()` or `isDone()`.
+ */
+export const EPISODE_FLAG_NAMES = {
+  truncated: ['truncated', 'isTruncated'],
+  terminated: ['terminated', 'isTerminated'],
+  done: ['done', 'isDone'],
+} as const;
+
+/**
  * Contract for a training environment. The developer implements this
  * to describe their game/simulation for RL training.
  */
@@ -101,12 +111,22 @@ export interface TrainingEnv {
   step(action: number | number[]): void;
   /** Return the reward for the current state */
   reward(): number;
-  /** Return true if the episode is over */
-  done(): boolean;
+  /**
+   * Return true if the episode is over.
+   * Required unless isDone() is provided. Construction (type, Zod, validateTrainingEnv)
+   * accepts done() alone, isDone() alone, or both.
+   */
+  done?(): boolean;
+  /** Retrocompatible alias of done(). Accepted alone when done() is omitted. */
+  isDone?(): boolean;
   /** Optional explicit terminal condition; overrides legacy done(). */
   terminated?(): boolean;
+  /** Retrocompatible alias of terminated(). */
+  isTerminated?(): boolean;
   /** Optional external episode limit (default: false). */
   truncated?(): boolean;
+  /** Retrocompatible alias of truncated(). */
+  isTruncated?(): boolean;
   /** Reset the environment for a new episode */
   reset(): void;
 }
@@ -130,3 +150,21 @@ export type AlgorithmType = 'dqn' | 'double-dqn' | 'ppo' | 'qtable';
  * Used by IgnitionEnv.train() to auto-create agents.
  */
 export type AgentFactory = (config: Record<string, unknown>) => AgentInterface;
+
+type TrainingEnvCore = {
+  actions: string[] | number;
+  observe(): number[];
+  step(action: number | number[]): void;
+  reward(): number;
+  reset(): void;
+};
+
+type ExtendsTrainingEnv<T> = T extends TrainingEnv ? true : false;
+
+/** Compile-time check: canonical only, alias only, and both must satisfy TrainingEnv. */
+const trainingEnvDoneCombinations: {
+  canonical: ExtendsTrainingEnv<TrainingEnvCore & { done(): boolean }>;
+  alias: ExtendsTrainingEnv<TrainingEnvCore & { isDone(): boolean }>;
+  both: ExtendsTrainingEnv<TrainingEnvCore & { done(): boolean; isDone(): boolean }>;
+} = { canonical: true, alias: true, both: true };
+void trainingEnvDoneCombinations;
