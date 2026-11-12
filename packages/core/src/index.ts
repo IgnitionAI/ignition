@@ -21,4 +21,4 @@ export type {
 
 export { mergeDefaults } from './defaults';
 export { validateTrainingEnv, validateInferenceEnv } from './env-validation';
-export { ExperienceSchema } from './schemas';
+export { ExperienceSchema, TrainingEnvSchema } from './schemas';

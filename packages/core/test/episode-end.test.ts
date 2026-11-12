@@ -16,6 +16,17 @@ it.each(['step', 'inferStep'] as const)('%s reports truncation and resets withou
   if (method === 'step') expect(remember).toHaveBeenCalledWith(expect.objectContaining({ nextState: [5], terminated: false, truncated: true }));
 });
 
+it('honors isTerminated/isTruncated aliases over done()', async () => {
+  const reset = vi.fn();
+  const loop = new IgnitionEnv({
+    actions: 2, observe: () => [0], step: () => {}, reward: () => 0,
+    done: () => true, reset, isTerminated: () => false, isTruncated: () => true,
+  });
+  loop.agent = { getAction: async () => 0, remember: () => {}, train: async () => {} };
+  expect(await loop.step()).toMatchObject({ terminated: false, truncated: true });
+  expect(reset).toHaveBeenCalledTimes(1);
+});
+
 it.each([
   { explicit: undefined, truncated: undefined, terminal: true, cut: false },
   { explicit: true, truncated: true, terminal: true, cut: true },
@@ -32,8 +43,11 @@ it.each([
   expect(reset).toHaveBeenCalledTimes(terminal || cut ? 1 : 0);
 });
 
-it.each(['terminated', 'truncated'])('rejects a non-function %s callback at construction', (name) => {
-  expect(() => new IgnitionEnv({ actions: 2, observe: () => [0], step: () => {},
-    reward: () => 0, done: () => false, reset: () => {}, [name]: true,
-  })).toThrow(new RegExp(name));
-});
+it.each(['terminated', 'truncated', 'isTerminated', 'isTruncated', 'isDone'])(
+  'rejects a non-function %s callback at construction',
+  (name) => {
+    expect(() => new IgnitionEnv({ actions: 2, observe: () => [0], step: () => {},
+      reward: () => 0, done: () => false, reset: () => {}, [name]: true,
+    })).toThrow(new RegExp(name));
+  },
+);

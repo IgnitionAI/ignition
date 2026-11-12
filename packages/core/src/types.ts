@@ -103,10 +103,16 @@ export interface TrainingEnv {
   reward(): number;
   /** Return true if the episode is over */
   done(): boolean;
+  /** Retrocompatible alias of done(). Used when done() is omitted. */
+  isDone?(): boolean;
   /** Optional explicit terminal condition; overrides legacy done(). */
   terminated?(): boolean;
+  /** Retrocompatible alias of terminated(). */
+  isTerminated?(): boolean;
   /** Optional external episode limit (default: false). */
   truncated?(): boolean;
+  /** Retrocompatible alias of truncated(). */
+  isTruncated?(): boolean;
   /** Reset the environment for a new episode */
   reset(): void;
 }

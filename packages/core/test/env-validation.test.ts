@@ -66,6 +66,15 @@ describe('validateTrainingEnv', () => {
     expect(() => validateTrainingEnv({ ...validTrainingEnv, observe: 'nope' })).toThrow(/observe.*function/);
   });
 
+  it('accepts isDone as a retrocompatible alias of done', () => {
+    const { done, ...rest } = validTrainingEnv;
+    expect(() => validateTrainingEnv({ ...rest, isDone: () => false })).not.toThrow();
+  });
+
+  it('throws if isTerminated is not a function', () => {
+    expect(() => validateTrainingEnv({ ...validTrainingEnv, isTerminated: true })).toThrow(/isTerminated/);
+  });
+
   it('accepts a class instance (duck typing)', () => {
     class MyEnv {
       actions = ['a', 'b'];

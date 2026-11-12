@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ExperienceSchema } from '../src/schemas';
+import { ExperienceSchema, TrainingEnvSchema } from '../src/schemas';
 import type { Experience } from '../src/types';
 
 describe('ExperienceSchema', () => {
@@ -31,5 +31,34 @@ describe('ExperienceSchema', () => {
     expect(() =>
       ExperienceSchema.parse({ state: [], action: 0, reward: 0, nextState: [], terminated: 'yes', truncated: false })
     ).toThrow();
+  });
+});
+
+describe('TrainingEnvSchema', () => {
+  const valid = {
+    actions: 2,
+    observe: () => [0],
+    step: () => {},
+    reward: () => 0,
+    reset: () => {},
+    done: () => false,
+  };
+
+  it('accepts isTerminated, isTruncated and isDone aliases', () => {
+    expect(() => TrainingEnvSchema.parse({
+      ...valid,
+      isTerminated: () => false,
+      isTruncated: () => false,
+      isDone: () => false,
+    })).not.toThrow();
+  });
+
+  it('accepts isDone without done', () => {
+    const { done: _done, ...rest } = valid;
+    expect(() => TrainingEnvSchema.parse({ ...rest, isDone: () => false })).not.toThrow();
+  });
+
+  it('rejects a non-function isTerminated', () => {
+    expect(() => TrainingEnvSchema.parse({ ...valid, isTerminated: true })).toThrow(/isTerminated/);
   });
 });

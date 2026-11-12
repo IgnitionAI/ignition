@@ -2,6 +2,19 @@ import { AgentInterface, AgentFactory, AlgorithmType, StepResult, TrainingEnv } 
 import { validateTrainingEnv } from './env-validation';
 import { mergeDefaults } from './defaults';
 
+function readFlag(env: TrainingEnv, names: readonly string[]): boolean | undefined {
+  const record = env as TrainingEnv & Record<string, unknown>;
+  for (const name of names) {
+    const value = record[name];
+    if (value === undefined) continue;
+    if (typeof value !== 'function') {
+      throw new TypeError(`${name} is not a function`);
+    }
+    return Boolean((value as () => unknown).call(env));
+  }
+  return undefined;
+}
+
 export class IgnitionEnv {
   private env: TrainingEnv;
   private _agent: AgentInterface | null = null;
@@ -93,8 +106,9 @@ export class IgnitionEnv {
     this.env.step(action);
     const observation = this.env.observe();
     const reward = this.env.reward();
-    const truncated = this.env.truncated?.() ?? false;
-    const terminated = this.env.terminated?.() ?? (this.env.done() && !truncated);
+    const truncated = readFlag(this.env, ['isTruncated', 'truncated']) ?? false;
+    const terminated = readFlag(this.env, ['isTerminated', 'terminated'])
+      ?? ((readFlag(this.env, ['done', 'isDone']) ?? false) && !truncated);
     if (!greedy) {
       agent.remember({ state: this.currentState, action, reward, nextState: observation, terminated, truncated });
       if (agent.shouldTrain?.() ?? true) await agent.train();
