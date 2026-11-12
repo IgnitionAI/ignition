@@ -12,10 +12,10 @@
 }
 
 @theme {
-  --font-inter: var(--font-source-sans), sans-serif;
-  --font-sans: var(--font-source-sans), sans-serif;
-  --font-display: var(--font-chakra-petch), sans-serif;
-  --font-mono: var(--font-red-hat-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-inter: var(--font-geist), sans-serif;
+  --font-sans: var(--font-geist), sans-serif;
+  --font-display: var(--font-geist-display), sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   --text-xs: 0.75rem;
   --text-xs--line-height: 1.5;
@@ -29,7 +29,7 @@
   --text-lg--letter-spacing: 0em;
   --text-xl: 1.25rem;
   --text-xl--line-height: 1.5;
-  --text-xl--letter-spacing: -0.017em;
+  --text-xl--letter-spacing: 0em;
   --text-2xl: 1.5rem;
   --text-2xl--line-height: 1.415;
   --text-2xl--letter-spacing: -0.017em;

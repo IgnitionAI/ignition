@@ -46,7 +46,7 @@ export default function Demos({ t }: { t: typeof DemosMessages }) {
                     </span>
                   )}
                 </div>
-                <h3 className="text-xl font-bold text-slate-200 mb-2"><a href={`/demos/${demo.slug}/`}>{demo.title}</a></h3>
+                <h3 className="text-xl font-semibold text-slate-200 mb-2"><a href={`/demos/${demo.slug}/`}>{demo.title}</a></h3>
                 <p className="text-slate-400 text-sm mb-4 leading-relaxed">{demo.description}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-500 font-mono">{demo.algos}</span>
