@@ -1,0 +1,23 @@
+{
+  "url": "http://127.0.0.1:4173/ppo.html",
+  "checks": [
+    {
+      "name": "untrained view",
+      "policy": "Active policy: untrained · checkpoint seed-11/untrained · status loaded · episode return 0.000"
+    },
+    {
+      "name": "trained view",
+      "policy": "Active policy: trained · checkpoint seed-11/trained · status loaded · episode return 0.000"
+    },
+    {
+      "name": "missing checkpoint/log",
+      "text": "PPO before / after\n\nPPO checkpoint/log absent: /ppo/does-not-exist.json (200)\n\nNo simulated success. Place checkpoints and logs under public/ppo then reload."
+    }
+  ],
+  "errors": [],
+  "renderer": {
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)"
+  }
+}
+EXIT:0

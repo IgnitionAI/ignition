@@ -1,0 +1,50 @@
+{
+  "gitSha": "28c6420b4aadcef4a6d5705ff7ccf479327c21a1",
+  "nodeVersion": "v22.23.4",
+  "startedAt": "2026-11-12T16:21:19.040Z",
+  "finishedAt": "2026-11-12T16:21:21.701Z",
+  "experimentPath": "packages/demo-target-chasing/ppo-experiment.json",
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "selectedSeed": 11,
+  "anyImproved": true,
+  "summaries": [
+    {
+      "seed": 11,
+      "improved": true,
+      "firstMean20": 0.4425,
+      "lastMean20": 0.85
+    },
+    {
+      "seed": 29,
+      "improved": true,
+      "firstMean20": -0.1800000000000002,
+      "lastMean20": 0.8175000000000001
+    },
+    {
+      "seed": 47,
+      "improved": true,
+      "firstMean20": 0.1474999999999999,
+      "lastMean20": 0.8550000000000002
+    }
+  ],
+  "checkpoints": {
+    "untrained": "seed-11/untrained",
+    "trained": "seed-11/trained"
+  },
+  "logs": {
+    "episodesJsonl": [
+      "seed-11/episodes.jsonl",
+      "seed-29/episodes.jsonl",
+      "seed-47/episodes.jsonl"
+    ],
+    "summaries": [
+      "seed-11/summary.json",
+      "seed-29/summary.json",
+      "seed-47/summary.json"
+    ]
+  }
+}

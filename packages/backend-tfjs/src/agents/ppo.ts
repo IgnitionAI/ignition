@@ -1,73 +1,141 @@
 /**
  * Proximal Policy Optimization (PPO-Clip) — Actor-Critic
  *
- * Références :
- *   - "Proximal Policy Optimization Algorithms" (Schulman et al., 2017)
- *   - "High-Dimensional Continuous Control Using GAE" (Schulman et al., 2016)
- *
- * Fonctionnement :
- *   1. Collecter N transitions avec la politique courante (rollout)
- *   2. Calculer les avantages via GAE-λ
- *   3. Faire K epochs de mise à jour en mini-batchs :
- *      - Actor  : minimiser L_CLIP = -E[min(r·A, clip(r,1±ε)·A)] − coef_H·H(π)
- *      - Critic : minimiser L_V = E[(V(s) − R)²]
- *   4. Vider le rollout (algorithme ON-POLICY)
+ * Discrete: categorical policy over action indices.
+ * Continuous: diagonal Gaussian in tanh space, then affine-mapped to [low, high].
  */
 
 import * as tf from '@tensorflow/tfjs';
-import { AgentInterface, Experience, PPOConfig } from '../types';
+import { AgentInterface, Experience, PPOActionSpace, PPOConfig } from '../types';
 import { PPOConfigSchema } from '../schemas';
 
-// ---------------------------------------------------------------------------
-// Types internes
-// ---------------------------------------------------------------------------
-
-/**
- * Entrée du rollout buffer : enrichit Experience avec les métadonnées
- * nécessaires à PPO (log-prob et valeur d'état au moment de la collecte).
- */
 interface RolloutEntry extends Experience {
-  /** log π_θ_old(a|s) — log-probabilité de l'action sous l'ancienne politique */
   logProb: number;
-  /** V(s) — estimation du critic au moment de la collecte */
+  value: number;
+  preTanh?: number[];
+}
+
+export interface GAEInput {
+  rewards: number[];
+  values: number[];
+  nextValues: number[];
+  terminated: boolean[];
+  truncated: boolean[];
+  gamma: number;
+  gaeLambda: number;
+  normalize: boolean;
+}
+
+export interface PPOUpdateStats {
+  actorLoss: number;
+  criticLoss: number;
+  entropy: number;
+  meanRatio: number;
+  clipFraction: number;
+}
+
+export interface PPOActionDiagnostics {
+  actionSpace: PPOActionSpace;
+  action: number | number[];
+  logProb: number;
   value: number;
 }
 
-// ---------------------------------------------------------------------------
-// Utilitaires
-// ---------------------------------------------------------------------------
+export function clipSurrogate(ratio: number, advantage: number, clipRatio: number): number {
+  const clipped = Math.min(Math.max(ratio, 1 - clipRatio), 1 + clipRatio);
+  return Math.min(ratio * advantage, clipped * advantage);
+}
 
-/**
- * Echantillonner une action depuis une distribution catégorielle
- * (méthode de la roue roulette / inverse CDF).
- */
-function sampleCategorical(probs: number[]): number {
-  const u = Math.random();
+export function computeGeneralizedAdvantages(input: GAEInput): {
+  returns: number[];
+  advantages: number[];
+} {
+  const n = input.rewards.length;
+  const advantages = new Array<number>(n);
+  const returns = new Array<number>(n);
+  let lastGAE = 0;
+
+  for (let t = n - 1; t >= 0; t--) {
+    const bootstrapMask = input.terminated[t] ? 0 : 1;
+    const traceMask = input.terminated[t] || input.truncated[t] ? 0 : 1;
+    const delta =
+      input.rewards[t] + input.gamma * input.nextValues[t] * bootstrapMask - input.values[t];
+    lastGAE = delta + input.gamma * input.gaeLambda * traceMask * lastGAE;
+    advantages[t] = lastGAE;
+    returns[t] = lastGAE + input.values[t];
+  }
+
+  if (!input.normalize || n <= 1) {
+    return { returns, advantages };
+  }
+
+  const mean = advantages.reduce((sum, value) => sum + value, 0) / n;
+  const std =
+    Math.sqrt(advantages.reduce((sum, value) => sum + (value - mean) ** 2, 0) / n) + 1e-8;
+
+  return {
+    returns,
+    advantages: std > 1e-8 ? advantages.map((value) => (value - mean) / std) : advantages,
+  };
+}
+
+function sampleCategorical(probs: number[], random: () => number): number {
+  const u = random();
   let cumsum = 0;
   for (let i = 0; i < probs.length; i++) {
     cumsum += probs[i];
     if (u < cumsum) return i;
   }
-  return probs.length - 1; // sécurité numérique
+  return probs.length - 1;
 }
 
-/**
- * Construire un MLP avec activations tanh (standard pour les réseaux de politique).
- * La couche de sortie est linéaire ; l'activation finale (softmax / identité)
- * est appliquée à l'extérieur selon le réseau (actor vs critic).
- */
+function gaussianSample(random: () => number): number {
+  const u1 = Math.max(random(), 1e-12);
+  const u2 = random();
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+}
+
+function gaussianLogProb(preTanh: number[], mean: number[], logStd: number[]): number {
+  let logProb = 0;
+  for (let i = 0; i < preTanh.length; i++) {
+    const std = Math.exp(logStd[i]);
+    const z = (preTanh[i] - mean[i]) / std;
+    logProb += -0.5 * (z * z + 2 * logStd[i] + Math.log(2 * Math.PI));
+  }
+  return logProb;
+}
+
+function tanhLogProbCorrection(preTanh: number[]): number {
+  let correction = 0;
+  for (const u of preTanh) {
+    const squashed = Math.tanh(u);
+    correction += Math.log(Math.max(1 - squashed * squashed, 1e-6));
+  }
+  return correction;
+}
+
+function affineFromTanh(tanhValue: number, low: number, high: number): number {
+  return low + (tanhValue + 1) * 0.5 * (high - low);
+}
+
 function buildMLP(
   inputSize: number,
   outputSize: number,
   hiddenLayers: number[],
+  seed?: number,
+  seedOffset = 0,
 ): tf.Sequential {
   const model = tf.sequential();
+  const initializer = (index: number) =>
+    seed === undefined
+      ? 'glorotUniform'
+      : tf.initializers.glorotUniform({ seed: seed + seedOffset + index });
   model.add(
     tf.layers.dense({
       inputShape: [inputSize],
       units: hiddenLayers[0],
       activation: 'tanh',
-      kernelInitializer: 'glorotUniform',
+      kernelInitializer: initializer(0),
     }),
   );
   for (let i = 1; i < hiddenLayers.length; i++) {
@@ -75,7 +143,7 @@ function buildMLP(
       tf.layers.dense({
         units: hiddenLayers[i],
         activation: 'tanh',
-        kernelInitializer: 'glorotUniform',
+        kernelInitializer: initializer(i),
       }),
     );
   }
@@ -83,39 +151,30 @@ function buildMLP(
     tf.layers.dense({
       units: outputSize,
       activation: 'linear',
-      kernelInitializer: 'glorotUniform',
+      kernelInitializer: initializer(hiddenLayers.length),
     }),
   );
   return model;
 }
 
-// ---------------------------------------------------------------------------
-// Agent PPO
-// ---------------------------------------------------------------------------
+function trainableVars(net: tf.LayersModel): tf.Variable[] {
+  return net.trainableWeights.map((w) => (w as unknown as { val: tf.Variable }).val);
+}
 
 export class PPOAgent implements AgentInterface {
-  /** Réseau acteur : état → logits d'action (avant softmax) */
-  private actorNet: tf.Sequential;
-  /** Réseau critique : état → valeur scalaire V(s) */
-  private criticNet: tf.Sequential;
+  private actorNet: tf.LayersModel;
+  private criticNet: tf.LayersModel;
+  private logStd: tf.Variable | null = null;
 
   private actorOptimizer: tf.Optimizer;
   private criticOptimizer: tf.Optimizer;
 
-  /** Buffer de rollout — vidé après chaque appel à train() */
   private rollout: RolloutEntry[] = [];
-
-  /**
-   * Log-probabilité de la dernière action sélectionnée.
-   * Rempli dans getAction(), consommé dans remember().
-   */
   private lastLogProb = 0;
-
-  /**
-   * Valeur d'état estimée par le critic pour le dernier état observé.
-   * Rempli dans getAction(), consommé dans remember().
-   */
   private lastValue = 0;
+  private lastAction: number | number[] = 0;
+  private lastPreTanh: number[] | undefined;
+  private lastUpdateStats: PPOUpdateStats | null = null;
 
   private readonly gamma: number;
   private readonly gaeLambda: number;
@@ -125,6 +184,10 @@ export class PPOAgent implements AgentInterface {
   private readonly entropyCoef: number;
   private readonly valueLossCoef: number;
   private readonly actionSize: number;
+  private readonly actionSpace: PPOActionSpace;
+  private readonly actionLow: number[];
+  private readonly actionHigh: number[];
+  private readonly random: () => number;
   private config: PPOConfig;
   private trainStepCounter = 0;
   private bestReward = -Infinity;
@@ -147,9 +210,14 @@ export class PPOAgent implements AgentInterface {
       batchSize = 64,
       entropyCoef = 0.01,
       valueLossCoef = 0.5,
+      actionSpace = 'discrete',
+      seed,
     } = config;
 
     this.actionSize = actionSize;
+    this.actionSpace = actionSpace;
+    this.actionLow = config.actionLow ?? Array.from({ length: actionSize }, () => -1);
+    this.actionHigh = config.actionHigh ?? Array.from({ length: actionSize }, () => 1);
     this.gamma = gamma;
     this.gaeLambda = gaeLambda;
     this.clipRatio = clipRatio;
@@ -158,63 +226,89 @@ export class PPOAgent implements AgentInterface {
     this.entropyCoef = entropyCoef;
     this.valueLossCoef = valueLossCoef;
 
-    this.actorNet = buildMLP(inputSize, actionSize, hiddenLayers);
-    this.criticNet = buildMLP(inputSize, 1, hiddenLayers);
+    if (seed !== undefined) {
+      let state = seed >>> 0;
+      this.random = () => {
+        state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+        return state / 4294967296;
+      };
+    } else {
+      this.random = Math.random;
+    }
+
+    this.actorNet = buildMLP(inputSize, actionSize, hiddenLayers, seed, 0);
+    this.criticNet = buildMLP(inputSize, 1, hiddenLayers, seed, 100);
+    if (actionSpace === 'continuous') {
+      this.logStd = tf.variable(tf.fill([actionSize], -0.5), true, 'ppo_log_std');
+    }
 
     this.actorOptimizer = tf.train.adam(lr);
     this.criticOptimizer = tf.train.adam(lr);
     this.config = config;
   }
 
-  // -------------------------------------------------------------------------
-  // Interface AgentInterface
-  // -------------------------------------------------------------------------
+  async getAction(state: number[], greedy?: boolean): Promise<number | number[]> {
+    switch (this.actionSpace) {
+      case 'discrete':
+        return this.getDiscreteAction(state, greedy === true);
+      case 'continuous':
+        return this.getContinuousAction(state, greedy === true);
+      default: {
+        const _exhaustive: never = this.actionSpace;
+        throw new Error(`[PPOAgent] unsupported action space: ${String(_exhaustive)}`);
+      }
+    }
+  }
 
-  /**
-   * Sélectionner une action par échantillonnage stochastique depuis π_θ.
-   * Stocke lastLogProb et lastValue pour le prochain remember().
-   */
-  async getAction(state: number[], greedy?: boolean): Promise<number> {
+  async getActionProbs(state: number[]): Promise<number[]> {
+    if (this.actionSpace !== 'discrete') {
+      throw new Error('[PPOAgent] getActionProbs is defined for discrete action spaces');
+    }
     const stateTensor = tf.tensor2d([state]);
     try {
-      // Passe avant de l'acteur → probabilités d'action
       const logits = this.actorNet.predict(stateTensor) as tf.Tensor2D;
       const probs = tf.softmax(logits);
-      const probsData = (probs.arraySync() as number[][])[0];
-
-      // Passe avant du critic → estimation de valeur
-      const valueTensor = this.criticNet.predict(stateTensor) as tf.Tensor2D;
-      this.lastValue = (valueTensor.arraySync() as number[][])[0][0];
-
-      // Greedy = argmax, sinon échantillonnage stochastique
-      const action = greedy
-        ? probsData.indexOf(Math.max(...probsData))
-        : sampleCategorical(probsData);
-
-      // Log-probabilité pour le ratio d'importance lors de l'update
-      this.lastLogProb = Math.log(Math.max(probsData[action], 1e-8));
-
-      tf.dispose([logits, probs, valueTensor]);
-      return action;
+      const data = (probs.arraySync() as number[][])[0];
+      tf.dispose([logits, probs]);
+      return data;
     } finally {
       stateTensor.dispose();
     }
   }
 
-  /**
-   * Stocker une transition dans le buffer de rollout.
-   * Doit être appelé immédiatement après getAction() pour que
-   * lastLogProb et lastValue correspondent bien à cet état.
-   */
+  getLastActionDiagnostics(): PPOActionDiagnostics {
+    return {
+      actionSpace: this.actionSpace,
+      action: this.lastAction,
+      logProb: this.lastLogProb,
+      value: this.lastValue,
+    };
+  }
+
+  getLastUpdateStats(): PPOUpdateStats | null {
+    return this.lastUpdateStats;
+  }
+
+  getWeightFingerprint(): number[] {
+    const parts: number[] = [];
+    for (const tensor of [...this.actorNet.getWeights(), ...this.criticNet.getWeights()]) {
+      parts.push(...Array.from(tensor.dataSync()));
+    }
+    if (this.logStd) {
+      parts.push(...Array.from(this.logStd.dataSync()));
+    }
+    return parts;
+  }
+
   remember(experience: Experience): void {
     this.rollout.push({
       ...experience,
       logProb: this.lastLogProb,
       value: this.lastValue,
+      preTanh: this.lastPreTanh ? [...this.lastPreTanh] : undefined,
     });
   }
 
-  /** Discard data when the training trajectory is interrupted. */
   discardRollout(): void {
     this.rollout = [];
   }
@@ -223,225 +317,372 @@ export class PPOAgent implements AgentInterface {
     return this.rollout.length >= (this.config.rolloutSize ?? 128);
   }
 
-  /** Explicitly update all collected transitions, including partial rollouts. */
   async train(): Promise<void> {
     const n = this.rollout.length;
     if (n === 0) return;
 
     const { returns, advantages } = this.computeGAE();
-
-    const states = this.rollout.map(e => e.state);
-    const actions = this.rollout.map(e => e.action as number);
-    const oldLogProbs = this.rollout.map(e => e.logProb);
+    const states = this.rollout.map((entry) => entry.state);
+    const actions = this.rollout.map((entry) => entry.action);
+    const oldLogProbs = this.rollout.map((entry) => entry.logProb);
+    const preTanh = this.rollout.map((entry) => entry.preTanh);
 
     for (let epoch = 0; epoch < this.epochs; epoch++) {
-      // Mélanger les indices pour des mini-batchs non biaisés
       const indices = Array.from({ length: n }, (_, i) => i);
       for (let i = n - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(this.random() * (i + 1));
         [indices[i], indices[j]] = [indices[j], indices[i]];
       }
 
       for (let start = 0; start < n; start += this.batchSize) {
         const mb = indices.slice(start, start + this.batchSize);
         if (mb.length === 0) continue;
-
         await this.updateMinibatch(
-          mb.map(i => states[i]),
-          mb.map(i => actions[i]),
-          mb.map(i => oldLogProbs[i]),
-          mb.map(i => advantages[i]),
-          mb.map(i => returns[i]),
+          mb.map((i) => states[i]),
+          mb.map((i) => actions[i]),
+          mb.map((i) => oldLogProbs[i]),
+          mb.map((i) => advantages[i]),
+          mb.map((i) => returns[i]),
+          mb.map((i) => preTanh[i]),
         );
       }
     }
 
-    // Vider le rollout — PPO est on-policy
     this.rollout = [];
     this.trainStepCounter++;
   }
 
-  // -------------------------------------------------------------------------
-  // Calcul des avantages
-  // -------------------------------------------------------------------------
-
-  /**
-   * Generalized Advantage Estimation (GAE-λ).
-   *
-   * Compromis biais/variance contrôlé par λ :
-   *   λ = 0 → TD(0) (faible variance, fort biais)
-   *   λ = 1 → Monte-Carlo (forte variance, faible biais)
-   *
-   * Formule :
-   *   δ_t = r_t + γ·V(s_{t+1})·(1−done) − V(s_t)
-   *   A_t = δ_t + (γλ)·A_{t+1}
-   *   R_t = A_t + V(s_t)   ← cible pour le critic
-   *
-   * Les avantages sont normalisés (μ=0, σ=1) pour la stabilité.
-   */
   private computeGAE(): { returns: number[]; advantages: number[] } {
-    const n = this.rollout.length;
-    const advantages = new Array<number>(n);
-    const returns = new Array<number>(n);
-
-    // Evaluate the actual successor before any update, including truncated
-    // episodes and the end of a nonterminal rollout.
     const nextValues = tf.tidy(() => {
-      const states = tf.tensor2d(this.rollout.map(e => e.nextState));
+      const states = tf.tensor2d(this.rollout.map((entry) => entry.nextState));
       return Array.from((this.criticNet.predict(states) as tf.Tensor).dataSync());
     });
-    let lastGAE = 0;
-
-    for (let t = n - 1; t >= 0; t--) {
-      const { reward, terminated, truncated, value } = this.rollout[t];
-      const bootstrapMask = terminated ? 0 : 1;
-      const traceMask = (terminated || truncated) ? 0 : 1;
-
-      // Erreur TD
-      const delta = reward + this.gamma * nextValues[t] * bootstrapMask - value;
-      // Accumulation GAE
-      lastGAE = delta + this.gamma * this.gaeLambda * traceMask * lastGAE;
-
-      advantages[t] = lastGAE;
-      returns[t] = lastGAE + value;
-    }
-
-    // Normalisation des avantages
-    const mean = advantages.reduce((s, a) => s + a, 0) / n;
-    const std =
-      Math.sqrt(advantages.reduce((s, a) => s + (a - mean) ** 2, 0) / n) +
-      1e-8;
-
-    return {
-      returns,
-      advantages: n > 1 && std > 1e-8
-        ? advantages.map(a => (a - mean) / std)
-        : advantages,
-    };
+    return computeGeneralizedAdvantages({
+      rewards: this.rollout.map((entry) => entry.reward),
+      values: this.rollout.map((entry) => entry.value),
+      nextValues,
+      terminated: this.rollout.map((entry) => entry.terminated),
+      truncated: this.rollout.map((entry) => entry.truncated),
+      gamma: this.gamma,
+      gaeLambda: this.gaeLambda,
+      normalize: true,
+    });
   }
 
-  // -------------------------------------------------------------------------
-  // Mise à jour des réseaux
-  // -------------------------------------------------------------------------
+  private async getDiscreteAction(state: number[], greedy: boolean): Promise<number> {
+    const stateTensor = tf.tensor2d([state]);
+    try {
+      const logits = this.actorNet.predict(stateTensor) as tf.Tensor2D;
+      const probs = tf.softmax(logits);
+      const probsData = (probs.arraySync() as number[][])[0];
+      const valueTensor = this.criticNet.predict(stateTensor) as tf.Tensor2D;
+      this.lastValue = (valueTensor.arraySync() as number[][])[0][0];
+      const action = greedy
+        ? probsData.indexOf(Math.max(...probsData))
+        : sampleCategorical(probsData, this.random);
+      this.lastLogProb = Math.log(Math.max(probsData[action], 1e-8));
+      this.lastAction = action;
+      this.lastPreTanh = undefined;
+      tf.dispose([logits, probs, valueTensor]);
+      return action;
+    } finally {
+      stateTensor.dispose();
+    }
+  }
 
-  /**
-   * Un pas de gradient sur acteur + critic pour un mini-batch.
-   *
-   * Acteur — L_CLIP(θ) :
-   *   r_t(θ) = π_θ(a_t|s_t) / π_θ_old(a_t|s_t)
-   *   L = −E[min(r·A, clip(r, 1±ε)·A)] − coef_H · H(π)
-   *
-   * Critic — L_V(φ) :
-   *   L = coef_V · E[(V_φ(s) − R)²]
-   */
+  private async getContinuousAction(state: number[], greedy: boolean): Promise<number[]> {
+    if (!this.logStd) {
+      throw new Error('[PPOAgent] continuous policy is missing log-std');
+    }
+    const stateTensor = tf.tensor2d([state]);
+    try {
+      const meanTensor = this.actorNet.predict(stateTensor) as tf.Tensor2D;
+      const mean = (meanTensor.arraySync() as number[][])[0];
+      const logStd = Array.from(this.logStd.dataSync());
+      const valueTensor = this.criticNet.predict(stateTensor) as tf.Tensor2D;
+      this.lastValue = (valueTensor.arraySync() as number[][])[0][0];
+
+      const preTanh = mean.map((mu, i) => {
+        if (greedy) return mu;
+        return mu + Math.exp(logStd[i]) * gaussianSample(this.random);
+      });
+      const action = preTanh.map((u, i) =>
+        affineFromTanh(Math.tanh(u), this.actionLow[i], this.actionHigh[i]),
+      );
+      this.lastLogProb = gaussianLogProb(preTanh, mean, logStd) - tanhLogProbCorrection(preTanh);
+      this.lastAction = action;
+      this.lastPreTanh = preTanh;
+      tf.dispose([meanTensor, valueTensor]);
+      return action;
+    } finally {
+      stateTensor.dispose();
+    }
+  }
+
   private async updateMinibatch(
     states: number[][],
-    actions: number[],
+    actions: Array<number | number[]>,
     oldLogProbs: number[],
     advantages: number[],
     returns: number[],
+    preTanh: Array<number[] | undefined>,
   ): Promise<void> {
-    // Tenseurs d'entrée (créés hors des closures pour survivre aux deux updates)
     const statesTensor = tf.tensor2d(states);
-    const actionsTensor = tf.tensor1d(actions, 'int32');
     const oldLogProbsTensor = tf.tensor1d(oldLogProbs);
     const advantagesTensor = tf.tensor1d(advantages);
     const returnsTensor = tf.tensor1d(returns);
-
-    // Variables entraînables — passées explicitement pour cibler le bon réseau
-    // ponytail: `val` est protégé dans les types tfjs actuels — cast structurel,
-    // l'accès runtime reste valide (rétrocompat API interne tfjs)
-    const actorVars = this.actorNet.trainableWeights.map(
-      w => (w as unknown as { val: tf.Variable }).val,
-    );
-    const criticVars = this.criticNet.trainableWeights.map(
-      w => (w as unknown as { val: tf.Variable }).val,
-    );
+    const actorVars = [
+      ...trainableVars(this.actorNet),
+      ...(this.logStd ? [this.logStd] : []),
+    ];
+    const criticVars = trainableVars(this.criticNet);
 
     try {
-      // --- Mise à jour de l'acteur ---
-      // tf.tidy nettoie les tenseurs intermédiaires après le calcul des gradients
-      tf.tidy(() => {
-        this.actorOptimizer.minimize(
-          () => {
-            const logits = this.actorNet.apply(statesTensor, {
-              training: true,
-            }) as tf.Tensor2D;
-            const probs = tf.softmax(logits);
-            const logProbsAll = tf.log(tf.add(probs, 1e-8));
+      switch (this.actionSpace) {
+        case 'discrete':
+          this.minimizeDiscreteActor(
+            statesTensor,
+            actions.map((action) => action as number),
+            oldLogProbsTensor,
+            advantagesTensor,
+            actorVars,
+          );
+          break;
+        case 'continuous':
+          this.minimizeContinuousActor(
+            statesTensor,
+            preTanh.map((value) => {
+              if (!value) throw new Error('[PPOAgent] missing pre-tanh action in continuous rollout');
+              return value;
+            }),
+            oldLogProbsTensor,
+            advantagesTensor,
+            actorVars,
+          );
+          break;
+        default: {
+          const _exhaustive: never = this.actionSpace;
+          throw new Error(`[PPOAgent] unsupported action space: ${String(_exhaustive)}`);
+        }
+      }
 
-            // Sélectionner log π(a|s) pour chaque action via encodage one-hot
-            const oneHot = tf.oneHot(actionsTensor, this.actionSize).cast('float32');
-            const newLogProbs = tf.sum(tf.mul(logProbsAll, oneHot), 1);
-
-            // Ratio d'importance : r = π_new(a|s) / π_old(a|s)
-            const ratio = tf.exp(tf.sub(newLogProbs, oldLogProbsTensor));
-
-            // Objectif surrogate clipé (PPO-Clip)
-            const surr1 = tf.mul(ratio, advantagesTensor);
-            const surr2 = tf.mul(
-              tf.clipByValue(ratio, 1 - this.clipRatio, 1 + this.clipRatio),
-              advantagesTensor,
-            );
-            const ppoLoss = tf.neg(tf.mean(tf.minimum(surr1, surr2)));
-
-            // Bonus d'entropie H(π) = −Σ π(a|s) log π(a|s)
-            const entropy = tf.neg(
-              tf.mean(tf.sum(tf.mul(probs, logProbsAll), 1)),
-            );
-
-            return tf.sub(
-              ppoLoss,
-              tf.mul(tf.scalar(this.entropyCoef), entropy),
-            ) as tf.Scalar;
-          },
-          false,
-          actorVars,
-        );
-      });
-
-      // --- Mise à jour du critic ---
       tf.tidy(() => {
         this.criticOptimizer.minimize(
           () => {
-            const values = this.criticNet.apply(statesTensor, {
-              training: true,
-            }) as tf.Tensor2D;
+            const values = this.criticNet.apply(statesTensor, { training: true }) as tf.Tensor2D;
             const valuesSqueezed = values.squeeze([1]) as tf.Tensor1D;
-            const valueLoss = tf.losses.meanSquaredError(
-              returnsTensor,
-              valuesSqueezed,
-            );
-            return tf.mul(
-              tf.scalar(this.valueLossCoef),
-              valueLoss,
-            ) as tf.Scalar;
+            const valueLoss = tf.losses.meanSquaredError(returnsTensor, valuesSqueezed);
+            return tf.mul(tf.scalar(this.valueLossCoef), valueLoss) as tf.Scalar;
           },
           false,
           criticVars,
         );
       });
-    } finally {
-      tf.dispose([
+
+      this.lastUpdateStats = this.readUpdateStats(
         statesTensor,
-        actionsTensor,
+        actions,
         oldLogProbsTensor,
         advantagesTensor,
         returnsTensor,
-      ]);
+        preTanh,
+      );
+    } finally {
+      tf.dispose([statesTensor, oldLogProbsTensor, advantagesTensor, returnsTensor]);
     }
   }
 
-  // -------------------------------------------------------------------------
-  // Utilitaires
-  // -------------------------------------------------------------------------
+  private minimizeDiscreteActor(
+    statesTensor: tf.Tensor2D,
+    actions: number[],
+    oldLogProbsTensor: tf.Tensor1D,
+    advantagesTensor: tf.Tensor1D,
+    actorVars: tf.Variable[],
+  ): void {
+    const actionsTensor = tf.tensor1d(actions, 'int32');
+    try {
+      tf.tidy(() => {
+        this.actorOptimizer.minimize(
+          () => {
+            const logits = this.actorNet.apply(statesTensor, { training: true }) as tf.Tensor2D;
+            const { actorLoss, entropy } = this.discreteSurrogate(
+              logits,
+              actionsTensor,
+              oldLogProbsTensor,
+              advantagesTensor,
+            );
+            return tf.sub(actorLoss, tf.mul(tf.scalar(this.entropyCoef), entropy)) as tf.Scalar;
+          },
+          false,
+          actorVars,
+        );
+      });
+    } finally {
+      actionsTensor.dispose();
+    }
+  }
 
-  // ── Persistence ─────────────────────────────────────────────────────────
+  private minimizeContinuousActor(
+    statesTensor: tf.Tensor2D,
+    preTanh: number[][],
+    oldLogProbsTensor: tf.Tensor1D,
+    advantagesTensor: tf.Tensor1D,
+    actorVars: tf.Variable[],
+  ): void {
+    if (!this.logStd) {
+      throw new Error('[PPOAgent] continuous policy is missing log-std');
+    }
+    const preTanhTensor = tf.tensor2d(preTanh);
+    try {
+      tf.tidy(() => {
+        this.actorOptimizer.minimize(
+          () => {
+            const mean = this.actorNet.apply(statesTensor, { training: true }) as tf.Tensor2D;
+            const { actorLoss, entropy } = this.continuousSurrogate(
+              mean,
+              preTanhTensor,
+              oldLogProbsTensor,
+              advantagesTensor,
+            );
+            return tf.sub(actorLoss, tf.mul(tf.scalar(this.entropyCoef), entropy)) as tf.Scalar;
+          },
+          false,
+          actorVars,
+        );
+      });
+    } finally {
+      preTanhTensor.dispose();
+    }
+  }
+
+  private discreteSurrogate(
+    logits: tf.Tensor2D,
+    actionsTensor: tf.Tensor1D,
+    oldLogProbsTensor: tf.Tensor1D,
+    advantagesTensor: tf.Tensor1D,
+  ): { actorLoss: tf.Scalar; entropy: tf.Scalar; ratio: tf.Tensor1D } {
+    const probs = tf.softmax(logits);
+    const logProbsAll = tf.log(tf.add(probs, 1e-8));
+    const oneHot = tf.oneHot(actionsTensor, this.actionSize).cast('float32');
+    const newLogProbs = tf.sum(tf.mul(logProbsAll, oneHot), 1);
+    const ratio = tf.exp(tf.sub(newLogProbs, oldLogProbsTensor));
+    const surr1 = tf.mul(ratio, advantagesTensor);
+    const surr2 = tf.mul(
+      tf.clipByValue(ratio, 1 - this.clipRatio, 1 + this.clipRatio),
+      advantagesTensor,
+    );
+    const actorLoss = tf.neg(tf.mean(tf.minimum(surr1, surr2))) as tf.Scalar;
+    const entropy = tf.neg(tf.mean(tf.sum(tf.mul(probs, logProbsAll), 1))) as tf.Scalar;
+    return { actorLoss, entropy, ratio: ratio as tf.Tensor1D };
+  }
+
+  private continuousSurrogate(
+    mean: tf.Tensor2D,
+    preTanhTensor: tf.Tensor2D,
+    oldLogProbsTensor: tf.Tensor1D,
+    advantagesTensor: tf.Tensor1D,
+  ): { actorLoss: tf.Scalar; entropy: tf.Scalar; ratio: tf.Tensor1D } {
+    if (!this.logStd) {
+      throw new Error('[PPOAgent] continuous policy is missing log-std');
+    }
+    const logStd = this.logStd;
+    const std = tf.exp(logStd);
+    const z = tf.div(tf.sub(preTanhTensor, mean), std);
+    const gauss =
+      tf.neg(
+        tf.sum(
+          tf.add(
+            tf.mul(tf.scalar(0.5), tf.square(z)),
+            tf.add(logStd, tf.scalar(0.5 * Math.log(2 * Math.PI))),
+          ),
+          1,
+        ),
+      ) as tf.Tensor1D;
+    const tanh = tf.tanh(preTanhTensor);
+    const correction = tf.sum(tf.log(tf.add(tf.sub(1, tf.square(tanh)), 1e-6)), 1);
+    const newLogProbs = tf.sub(gauss, correction);
+    const ratio = tf.exp(tf.sub(newLogProbs, oldLogProbsTensor));
+    const surr1 = tf.mul(ratio, advantagesTensor);
+    const surr2 = tf.mul(
+      tf.clipByValue(ratio, 1 - this.clipRatio, 1 + this.clipRatio),
+      advantagesTensor,
+    );
+    const actorLoss = tf.neg(tf.mean(tf.minimum(surr1, surr2))) as tf.Scalar;
+    const entropy = tf.sum(tf.add(logStd, tf.scalar(0.5 * Math.log(2 * Math.PI * Math.E)))) as tf.Scalar;
+    return { actorLoss, entropy, ratio: ratio as tf.Tensor1D };
+  }
+
+  private readUpdateStats(
+    statesTensor: tf.Tensor2D,
+    actions: Array<number | number[]>,
+    oldLogProbsTensor: tf.Tensor1D,
+    advantagesTensor: tf.Tensor1D,
+    returnsTensor: tf.Tensor1D,
+    preTanh: Array<number[] | undefined>,
+  ): PPOUpdateStats {
+    return tf.tidy(() => {
+      let actorLoss: tf.Scalar;
+      let entropy: tf.Scalar;
+      let ratio: tf.Tensor1D;
+      switch (this.actionSpace) {
+        case 'discrete': {
+          const actionsTensor = tf.tensor1d(actions as number[], 'int32');
+          const logits = this.actorNet.predict(statesTensor) as tf.Tensor2D;
+          const discrete = this.discreteSurrogate(
+            logits,
+            actionsTensor,
+            oldLogProbsTensor,
+            advantagesTensor,
+          );
+          actorLoss = discrete.actorLoss;
+          entropy = discrete.entropy;
+          ratio = discrete.ratio;
+          break;
+        }
+        case 'continuous': {
+          const mean = this.actorNet.predict(statesTensor) as tf.Tensor2D;
+          const preTanhTensor = tf.tensor2d(
+            preTanh.map((value) => {
+              if (!value) throw new Error('[PPOAgent] missing pre-tanh action in continuous rollout');
+              return value;
+            }),
+          );
+          const continuous = this.continuousSurrogate(
+            mean,
+            preTanhTensor,
+            oldLogProbsTensor,
+            advantagesTensor,
+          );
+          actorLoss = continuous.actorLoss;
+          entropy = continuous.entropy;
+          ratio = continuous.ratio;
+          break;
+        }
+        default: {
+          const _exhaustive: never = this.actionSpace;
+          throw new Error(`[PPOAgent] unsupported action space: ${String(_exhaustive)}`);
+        }
+      }
+      const values = this.criticNet.predict(statesTensor) as tf.Tensor2D;
+      const criticLoss = tf.losses.meanSquaredError(returnsTensor, values.squeeze([1]));
+      const clipFraction = tf.mean(
+        tf.cast(tf.greater(tf.abs(tf.sub(ratio, 1)), this.clipRatio), 'float32'),
+      );
+      return {
+        actorLoss: actorLoss.dataSync()[0],
+        criticLoss: (criticLoss as tf.Scalar).dataSync()[0],
+        entropy: entropy.dataSync()[0],
+        meanRatio: ratio.mean().dataSync()[0],
+        clipFraction: (clipFraction as tf.Scalar).dataSync()[0],
+      };
+    });
+  }
 
   getState(): Record<string, unknown> {
     return {
       trainStepCounter: this.trainStepCounter,
       bestReward: this.bestReward,
+      actionSpace: this.actionSpace,
     };
   }
 
@@ -455,11 +696,19 @@ export class PPOAgent implements AgentInterface {
     if (!provider) {
       throw new Error('[PPO] No storageProvider configured. Pass one in PPOConfig.');
     }
-    // Save actor
-    const actorUri = await provider.save(`${modelId}/actor`, this.actorNet, { ...metadata, network: 'actor' });
-    // Save critic
-    const criticUri = await provider.save(`${modelId}/critic`, this.criticNet, { ...metadata, network: 'critic' });
-    console.log(`[PPO] ✅ Saved actor: ${actorUri}, critic: ${criticUri}`);
+    const actorUri = await provider.save(`${modelId}/actor`, this.actorNet, {
+      ...metadata,
+      network: 'actor',
+      actionSpace: this.actionSpace,
+    });
+    const criticUri = await provider.save(`${modelId}/critic`, this.criticNet, {
+      ...metadata,
+      network: 'critic',
+    });
+    if (this.logStd) {
+      await this.saveLogStd(provider, modelId, metadata);
+    }
+    console.log(`[PPO] Saved actor: ${actorUri}, critic: ${criticUri}`);
     return actorUri;
   }
 
@@ -473,16 +722,65 @@ export class PPOAgent implements AgentInterface {
     this.actorNet.dispose();
     this.criticNet.dispose();
     this.rollout = [];
-    this.actorNet = actor as tf.Sequential;
-    this.criticNet = critic as tf.Sequential;
-    console.log(`[PPO] ✅ Loaded model ${modelId}`);
+    this.actorNet = actor;
+    this.criticNet = critic;
+    if (this.actionSpace === 'continuous') {
+      await this.loadLogStd(provider, modelId);
+    }
+    console.log(`[PPO] Loaded model ${modelId}`);
   }
 
   dispose(): void {
     this.actorNet?.dispose();
     this.criticNet?.dispose();
+    this.logStd?.dispose();
+    this.logStd = null;
     this.actorOptimizer.dispose();
     this.criticOptimizer.dispose();
     this.rollout = [];
+  }
+
+  private async saveLogStd(
+    provider: NonNullable<PPOConfig['storageProvider']>,
+    modelId: string,
+    metadata?: Record<string, unknown>,
+  ): Promise<void> {
+    if (!this.logStd) return;
+    const wrapper = tf.sequential();
+    wrapper.add(
+      tf.layers.dense({
+        inputShape: [1],
+        units: this.actionSize,
+        kernelInitializer: 'zeros',
+        biasInitializer: 'zeros',
+      }),
+    );
+    const kernel = tf.zeros([1, this.actionSize]);
+    const bias = this.logStd.clone();
+    wrapper.setWeights([kernel, bias]);
+    try {
+      await provider.save(`${modelId}/logstd`, wrapper, { ...metadata, network: 'logstd' });
+    } finally {
+      kernel.dispose();
+      bias.dispose();
+      wrapper.dispose();
+    }
+  }
+
+  private async loadLogStd(
+    provider: NonNullable<PPOConfig['storageProvider']>,
+    modelId: string,
+  ): Promise<void> {
+    const wrapper = await provider.load(`${modelId}/logstd`);
+    try {
+      const weights = wrapper.getWeights();
+      if (!this.logStd) {
+        this.logStd = tf.variable(weights[1].clone(), true, 'ppo_log_std');
+      } else {
+        this.logStd.assign(weights[1]);
+      }
+    } finally {
+      wrapper.dispose();
+    }
   }
 }

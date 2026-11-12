@@ -85,6 +85,10 @@ export const PPOConfigSchema = z.object({
     .number()
     .int()
     .positive({ message: 'actionSize must be a positive integer' }),
+  actionSpace: z.enum(['discrete', 'continuous']).optional(),
+  actionLow: z.array(z.number().finite()).optional(),
+  actionHigh: z.array(z.number().finite()).optional(),
+  seed: z.number().int().min(1).max(1000000).optional(),
   hiddenLayers: z
     .array(z.number().int().positive({ message: 'each hiddenLayer value must be a positive integer' }))
     .optional(),
@@ -127,6 +131,32 @@ export const PPOConfigSchema = z.object({
     .positive({ message: 'valueLossCoef must be > 0' })
     .optional(),
   storageProvider: z.any().optional(), // ModelStorageProvider instance
+}).superRefine((data, context) => {
+  if (data.actionSpace !== 'continuous') {
+    return;
+  }
+  const low = data.actionLow;
+  const high = data.actionHigh;
+  if ((low === undefined) !== (high === undefined)) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'actionLow and actionHigh must both be provided for continuous actions',
+    });
+    return;
+  }
+  if (low && high) {
+    if (low.length !== data.actionSize || high.length !== data.actionSize) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'actionLow and actionHigh must have actionSize elements',
+      });
+    } else if (low.some((value, index) => high[index] <= value)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Each actionHigh must be greater than actionLow',
+      });
+    }
+  }
 });
 
 export type PPOConfig = z.infer<typeof PPOConfigSchema>;

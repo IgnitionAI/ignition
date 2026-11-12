@@ -146,6 +146,34 @@ describe('PPOConfigSchema', () => {
     const result = PPOConfigSchema.safeParse({ ...validPPO, valueLossCoef: -1 });
     expect(result.success).toBe(false);
   });
+
+  it('keeps actionSpace omitted as undefined (discrete default, no migration required)', () => {
+    const parsed = PPOConfigSchema.parse(validPPO);
+    expect(parsed.actionSpace).toBeUndefined();
+  });
+
+  it('accepts continuous actionSpace with matching bounds', () => {
+    const parsed = PPOConfigSchema.parse({
+      ...validPPO,
+      actionSize: 1,
+      actionSpace: 'continuous',
+      actionLow: [-1],
+      actionHigh: [1],
+    });
+    expect(parsed.actionSpace).toBe('continuous');
+    expect(parsed.actionLow).toEqual([-1]);
+    expect(parsed.actionHigh).toEqual([1]);
+  });
+
+  it('rejects continuous bounds of the wrong length', () => {
+    const result = PPOConfigSchema.safeParse({
+      ...validPPO,
+      actionSpace: 'continuous',
+      actionLow: [-1],
+      actionHigh: [1, 2],
+    });
+    expect(result.success).toBe(false);
+  });
 });
 
 describe('PPOAgent constructor validation', () => {

@@ -24,12 +24,22 @@ export interface DQNConfig {
   storageProvider?: ModelStorageProvider; // Optional storage provider for save/load
 }
 
+export type PPOActionSpace = 'discrete' | 'continuous';
+
 export interface PPOConfig {
   /** Transitions collected before automatic training (default: 128). */
   rolloutSize?: number;
   backend?: TFBackend;             // TF.js backend to use (default: 'auto')
   inputSize: number;        // Dimension du vecteur d'état
-  actionSize: number;       // Nombre d'actions discrètes
+  actionSize: number;       // Discrete: number of actions. Continuous: action dimension.
+  /** Defaults to discrete so existing callers keep a scalar action index. */
+  actionSpace?: PPOActionSpace;
+  /** Inclusive lower bound per continuous dimension (default: -1). */
+  actionLow?: number[];
+  /** Inclusive upper bound per continuous dimension (default: 1). */
+  actionHigh?: number[];
+  /** Reproducible sampling and minibatch shuffle when supplied. */
+  seed?: number;
   hiddenLayers?: number[];  // Neurones par couche cachée (défaut : [64, 64])
   lr?: number;              // Taux d'apprentissage (défaut : 3e-4)
   gamma?: number;           // Facteur de discount (défaut : 0.99)

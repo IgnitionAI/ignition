@@ -1,0 +1,63 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+stderr | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+[PPO] Loaded model fixture
+
+stderr | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — interface > getAction retourne un indice d'action valide
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":true,"expected":0}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":true,"truncated":false,"expected":1}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] Saved actor: memory, critic: memory
+
+ ✓ packages/backend-tfjs/test/ppo-bootstrap.test.ts (6 tests) 74ms
+stderr | packages/backend-tfjs/test/ppo-public.test.ts > PPO learns rewarded actions through the public loop (seed 11)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-public.test.ts (5 tests) 659ms
+   ✓ PPO learns rewarded actions through the public loop (seed 11)  315ms
+stdout | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+[PPO convergence] premiers 40 épisodes: 0.622, derniers 40 épisodes: 0.858
+
+ ✓ packages/backend-tfjs/test/ppo.test.ts (4 tests) 2182ms
+   ✓ PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)  2069ms
+
+ Test Files  3 passed (3)
+      Tests  15 passed (15)
+   Start at  16:27:08
+   Duration  2.63s (transform 203ms, setup 0ms, collect 866ms, tests 2.92s, environment 0ms, prepare 149ms)
+
+EXIT:0
