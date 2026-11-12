@@ -75,7 +75,11 @@ export default function RaceGarage({
     }
   };
   return (
-    <div className="training-panel" onFocusCapture={onConfigure}>
+    <div
+      className="training-panel"
+      data-testid="race-garage"
+      onFocusCapture={onConfigure}
+    >
       <div className="eyebrow">
         {fr ? "LA GRILLE DE DÉPART" : "THE STARTING GRID"}
       </div>
@@ -95,6 +99,7 @@ export default function RaceGarage({
       <label>
         {fr ? "Mode" : "Mode"}
         <select
+          data-testid="race-mode"
           value={human ? "human" : "ai"}
           onChange={(e) => {
             const isHuman = e.target.value === "human";
@@ -113,6 +118,7 @@ export default function RaceGarage({
           <label>
             {fr ? "Votre véhicule" : "Your vehicle"}
             <select
+              data-testid="player-vehicle"
               value={humanModel}
               onChange={(e) =>
                 setHumanModel(e.target.value as "race" | "sedan-sports")
@@ -162,6 +168,7 @@ export default function RaceGarage({
             <label>
               {fr ? "Pilote" : "Driver"} {i + 1}
               <select
+                data-testid={`opponent-${i}`}
                 disabled={!ready}
                 value={drivers.some((d) => d.id === id) ? id : ""}
                 onChange={(e) =>
@@ -206,7 +213,12 @@ export default function RaceGarage({
         );
       })}
       <div className="training-actions">
-        <button className="drive-button" disabled={!ready} onClick={start}>
+        <button
+          className="drive-button"
+          data-testid="start-race"
+          disabled={!ready}
+          onClick={start}
+        >
           {human
             ? fr
               ? "Prendre le départ"

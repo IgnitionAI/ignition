@@ -1,0 +1,4 @@
+2026-11-12T16:16:28.801Z [debug] [vite] connecting...
+2026-11-12T16:16:28.808Z [debug] [vite] connected.
+2026-11-12T16:16:28.930Z [info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+2026-11-12T16:16:33.470Z [error] Cannot update a component (`%s`) while rendering a different component (`%s`). To locate the bad setState() call inside `%s`, follow the stack trace as described in https://react.dev/link/setstate-in-render Driver Vehicle Vehicle

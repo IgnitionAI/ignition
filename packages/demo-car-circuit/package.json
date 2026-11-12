@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "e2e:human-race": "node e2e/human-race.mjs"
   },
   "dependencies": {
     "@ignitionai/backend-tfjs": "workspace:*",
@@ -27,6 +28,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "~5.7.2",
     "vite": "^6.3.1",
+    "playwright": "^1.56.1",
     "vitest": "^3.1.1"
   }
 }

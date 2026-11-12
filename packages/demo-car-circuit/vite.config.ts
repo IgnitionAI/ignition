@@ -6,7 +6,7 @@ export default defineConfig({
   root: 'src',
   base: process.env.DEMO_BASE ?? '/',
   build: { outDir: '../dist', emptyOutDir: true },
-  server: { port: 3020 },
+  server: { port: 3020, host: "127.0.0.1" },
   plugins: [react()],
   resolve: {
     alias: {

@@ -9,6 +9,19 @@ export const DRIVING_CONTRACT = Object.freeze({
   barrierOffset: 7,
   barrierThickness: 0.45,
 });
+/** Map held keyboard codes to the nine discrete driving actions. */
+export function actionFromKeys(keys: ReadonlySet<string>): number {
+  const steer =
+    (keys.has("ArrowRight") || keys.has("KeyD") ? 1 : 0) -
+    (keys.has("ArrowLeft") || keys.has("KeyA") || keys.has("KeyQ") ? 1 : 0);
+  const throttle =
+    keys.has("ArrowDown") || keys.has("KeyS")
+      ? -1
+      : keys.has("ArrowUp") || keys.has("KeyW") || keys.has("KeyZ")
+        ? 1
+        : 0;
+  return (throttle + 1) * 3 + steer + 1;
+}
 export interface RoadSample {
   x: number;
   z: number;

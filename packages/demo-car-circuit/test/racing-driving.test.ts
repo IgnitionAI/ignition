@@ -1,5 +1,19 @@
 import { it, expect } from "vitest";
-import { DrivingWorld, DRIVING_CONTRACT } from "../src/racing/driving";
+import {
+  DrivingWorld,
+  DRIVING_CONTRACT,
+  actionFromKeys,
+} from "../src/racing/driving";
+
+it("maps keyboard holds onto the nine discrete driving actions", () => {
+  expect(actionFromKeys(new Set())).toBe(4);
+  expect(actionFromKeys(new Set(["ArrowUp", "KeyZ"]))).toBe(7);
+  expect(actionFromKeys(new Set(["KeyW"]))).toBe(7);
+  expect(actionFromKeys(new Set(["ArrowDown", "KeyS"]))).toBe(1);
+  expect(actionFromKeys(new Set(["ArrowLeft", "KeyQ"]))).toBe(3);
+  expect(actionFromKeys(new Set(["ArrowRight", "KeyD"]))).toBe(5);
+  expect(actionFromKeys(new Set(["ArrowUp", "ArrowRight"]))).toBe(8);
+});
 
 it("accelerates, brakes and advances on the public fixed-step contract", () => {
   const world = new DrivingWorld();
