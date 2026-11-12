@@ -54,9 +54,22 @@ describe('TrainingEnvSchema', () => {
     })).not.toThrow();
   });
 
-  it('accepts isDone without done', () => {
+  it('accepts canonical done() alone', () => {
+    expect(() => TrainingEnvSchema.parse(valid)).not.toThrow();
+  });
+
+  it('accepts alias isDone() alone', () => {
     const { done: _done, ...rest } = valid;
     expect(() => TrainingEnvSchema.parse({ ...rest, isDone: () => false })).not.toThrow();
+  });
+
+  it('accepts both done() and isDone()', () => {
+    expect(() => TrainingEnvSchema.parse({ ...valid, isDone: () => false })).not.toThrow();
+  });
+
+  it('rejects an env with neither done nor isDone', () => {
+    const { done: _done, ...rest } = valid;
+    expect(() => TrainingEnvSchema.parse(rest)).toThrow(/done\(\) or isDone\(\)/);
   });
 
   it('rejects a non-function isTerminated', () => {

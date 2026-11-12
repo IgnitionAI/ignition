@@ -106,6 +106,7 @@ export class IgnitionEnv {
     this.env.step(action);
     const observation = this.env.observe();
     const reward = this.env.reward();
+    // EPISODE_FLAG_NAMES: canonical method first, then is* alias; first defined function wins.
     const truncated = readFlag(this.env, EPISODE_FLAG_NAMES.truncated) ?? false;
     const terminated = readFlag(this.env, EPISODE_FLAG_NAMES.terminated)
       ?? ((readFlag(this.env, EPISODE_FLAG_NAMES.done) ?? false) && !truncated);

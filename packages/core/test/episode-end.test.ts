@@ -1,5 +1,22 @@
 import { expect, it, vi } from 'vitest';
 import { IgnitionEnv } from '../src/ignition-env';
+import type { TrainingEnv } from '../src/types';
+
+function baseWorld() {
+  return {
+    actions: 2,
+    observe: () => [0],
+    step: () => {},
+    reward: () => 0,
+    reset: () => {},
+  };
+}
+
+async function stepWith(world: object) {
+  const loop = new IgnitionEnv({ ...baseWorld(), ...world } as TrainingEnv);
+  loop.agent = { getAction: async () => 0, remember: () => {}, train: async () => {} };
+  return loop.step();
+}
 
 it.each(['step', 'inferStep'] as const)('%s reports truncation and resets without losing the last observation', async (method) => {
   let position = 0;
@@ -16,59 +33,59 @@ it.each(['step', 'inferStep'] as const)('%s reports truncation and resets withou
   if (method === 'step') expect(remember).toHaveBeenCalledWith(expect.objectContaining({ nextState: [5], terminated: false, truncated: true }));
 });
 
-it('prefers canonical terminated/truncated over is* aliases when both are defined', async () => {
+it('canonical terminated() alone sets terminated', async () => {
+  expect(await stepWith({ done: () => false, terminated: () => true })).toMatchObject({ terminated: true, truncated: false });
+});
+
+it('alias isTerminated() alone sets terminated', async () => {
+  expect(await stepWith({ done: () => false, isTerminated: () => true })).toMatchObject({ terminated: true, truncated: false });
+});
+
+it('prefers canonical terminated() over isTerminated() when both are defined', async () => {
   const terminated = vi.fn(() => false);
-  const truncated = vi.fn(() => false);
   const isTerminated = vi.fn(() => true);
-  const isTruncated = vi.fn(() => true);
-  const loop = new IgnitionEnv({
-    actions: 2, observe: () => [0], step: () => {}, reward: () => 0,
-    done: () => true, reset: () => {}, terminated, truncated, isTerminated, isTruncated,
-  });
-  loop.agent = { getAction: async () => 0, remember: () => {}, train: async () => {} };
-  expect(await loop.step()).toMatchObject({ terminated: false, truncated: false });
+  expect(await stepWith({ done: () => true, terminated, isTerminated })).toMatchObject({ terminated: false, truncated: false });
   expect(terminated).toHaveBeenCalledTimes(1);
-  expect(truncated).toHaveBeenCalledTimes(1);
   expect(isTerminated).not.toHaveBeenCalled();
+});
+
+it('canonical truncated() alone sets truncated', async () => {
+  expect(await stepWith({ done: () => false, truncated: () => true })).toMatchObject({ terminated: false, truncated: true });
+});
+
+it('alias isTruncated() alone sets truncated', async () => {
+  expect(await stepWith({ done: () => false, isTruncated: () => true })).toMatchObject({ terminated: false, truncated: true });
+});
+
+it('prefers canonical truncated() over isTruncated() when both are defined', async () => {
+  const truncated = vi.fn(() => false);
+  const isTruncated = vi.fn(() => true);
+  expect(await stepWith({ done: () => false, truncated, isTruncated })).toMatchObject({ terminated: false, truncated: false });
+  expect(truncated).toHaveBeenCalledTimes(1);
   expect(isTruncated).not.toHaveBeenCalled();
 });
 
-it('prefers done() over isDone() when both are defined', async () => {
+it('canonical done() alone sets terminated', async () => {
+  expect(await stepWith({ done: () => true })).toMatchObject({ terminated: true, truncated: false });
+});
+
+it('alias isDone() alone sets terminated', async () => {
+  expect(await stepWith({ isDone: () => true })).toMatchObject({ terminated: true, truncated: false });
+});
+
+it('prefers canonical done() over isDone() when both are defined', async () => {
   const done = vi.fn(() => false);
   const isDone = vi.fn(() => true);
-  const loop = new IgnitionEnv({
-    actions: 2, observe: () => [0], step: () => {}, reward: () => 0, reset: () => {}, done, isDone,
-  });
-  loop.agent = { getAction: async () => 0, remember: () => {}, train: async () => {} };
-  expect(await loop.step()).toMatchObject({ terminated: false, truncated: false });
+  expect(await stepWith({ done, isDone })).toMatchObject({ terminated: false, truncated: false });
   expect(done).toHaveBeenCalledTimes(1);
   expect(isDone).not.toHaveBeenCalled();
 });
 
-it('uses isTerminated/isTruncated/isDone when canonical methods are absent', async () => {
-  const isTerminated = vi.fn(() => false);
-  const isTruncated = vi.fn(() => true);
-  const isDone = vi.fn(() => true);
-  const reset = vi.fn();
-  const loop = new IgnitionEnv({
-    actions: 2, observe: () => [0], step: () => {}, reward: () => 0, reset, isTerminated, isTruncated, isDone,
-  });
-  loop.agent = { getAction: async () => 0, remember: () => {}, train: async () => {} };
-  expect(await loop.step()).toMatchObject({ terminated: false, truncated: true });
-  expect(isTerminated).toHaveBeenCalledTimes(1);
-  expect(isTruncated).toHaveBeenCalledTimes(1);
-  expect(isDone).not.toHaveBeenCalled();
-  expect(reset).toHaveBeenCalledTimes(1);
-});
-
 it('honors isTerminated/isTruncated aliases over done()', async () => {
   const reset = vi.fn();
-  const loop = new IgnitionEnv({
-    actions: 2, observe: () => [0], step: () => {}, reward: () => 0,
+  expect(await stepWith({
     done: () => true, reset, isTerminated: () => false, isTruncated: () => true,
-  });
-  loop.agent = { getAction: async () => 0, remember: () => {}, train: async () => {} };
-  expect(await loop.step()).toMatchObject({ terminated: false, truncated: true });
+  })).toMatchObject({ terminated: false, truncated: true });
   expect(reset).toHaveBeenCalledTimes(1);
 });
 

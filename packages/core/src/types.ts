@@ -111,7 +111,11 @@ export interface TrainingEnv {
   step(action: number | number[]): void;
   /** Return the reward for the current state */
   reward(): number;
-  /** Return true if the episode is over. Required unless isDone() is provided. */
+  /**
+   * Return true if the episode is over.
+   * Required unless isDone() is provided. Construction (type, Zod, validateTrainingEnv)
+   * accepts done() alone, isDone() alone, or both.
+   */
   done?(): boolean;
   /** Retrocompatible alias of done(). Accepted alone when done() is omitted. */
   isDone?(): boolean;
@@ -146,3 +150,21 @@ export type AlgorithmType = 'dqn' | 'double-dqn' | 'ppo' | 'qtable';
  * Used by IgnitionEnv.train() to auto-create agents.
  */
 export type AgentFactory = (config: Record<string, unknown>) => AgentInterface;
+
+type TrainingEnvCore = {
+  actions: string[] | number;
+  observe(): number[];
+  step(action: number | number[]): void;
+  reward(): number;
+  reset(): void;
+};
+
+type ExtendsTrainingEnv<T> = T extends TrainingEnv ? true : false;
+
+/** Compile-time check: canonical only, alias only, and both must satisfy TrainingEnv. */
+const trainingEnvDoneCombinations: {
+  canonical: ExtendsTrainingEnv<TrainingEnvCore & { done(): boolean }>;
+  alias: ExtendsTrainingEnv<TrainingEnvCore & { isDone(): boolean }>;
+  both: ExtendsTrainingEnv<TrainingEnvCore & { done(): boolean; isDone(): boolean }>;
+} = { canonical: true, alias: true, both: true };
+void trainingEnvDoneCombinations;
