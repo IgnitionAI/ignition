@@ -110,5 +110,17 @@
     "pkg": "demo-robot-arm",
     "dir": "packages/demo-robot-arm",
     "featured": false
+  },
+  {
+    "slug": "space-dock",
+    "title": "Space Dock — technical preview",
+    "description": "Temporary technical mockup: tow a rigidly linked cargo with real Rapier forces and collisions. Manual controls and an untrained scripted PD demonstration; final visuals pending.",
+    "tech": "R3F · Rapier",
+    "algos": "Manuel · PD scripté non entraîné",
+    "accent": "#7ac5f0",
+    "pkg": "demo-space-dock",
+    "dir": "packages/demo-space-dock",
+    "featured": false,
+    "platform": "Keyboard · Touch"
   }
 ]

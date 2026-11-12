@@ -1,0 +1,151 @@
+Cargo that reaches its target too fast is not docked. To make that difference visible, our dock separates three responsibilities: Rapier computes the motion, an environment decides whether the episode is over, and R3F displays the physical state. The renderer never moves bodies to make them match an animation.
+
+This tutorial explains the foundation that is actually written. The chosen mission is planar: translation along X/Z and rotation around Y, in a 3D scene. The drone and the cargo are two linked bodies, not a single mesh moved along a path. Automatic mode uses a scripted, **untrained** PD controller; no learning result is claimed.
+
+[Try the Space Dock](/demos/space-dock/) · [Read the model licence](/demos/space-dock/models/LICENSE.txt).
+
+## Read the contract before launching the scene
+
+`src/simulation-contract.ts` defines eight actions and the parameters; `SpaceDockEnv.observe()` builds the twenty-six observations. The values below are environment rules, not measured performance.
+
+| Parameter | Declared value | Meaning in the code |
+|---|---|---|
+| Physics substep | 1/60 s | Fixed Rapier step |
+| Substeps per decision | 6 at most | One action covers at most 0.1 s, early stop if terminal |
+| Axial force | 600 N | Forward or reverse thrust |
+| Lateral force | 120 N | Local port or starboard thrust |
+| Yaw torque | 300 N·m | Rotation around Y |
+| Docking distance | 0.45 m | Success threshold |
+| Yaw error | 8° | Success threshold |
+| Linear speed | 0.2 m/s | Success threshold |
+| Angular speed | 0.1 rad/s | Success threshold |
+| Hold | 90 physics ticks | Simultaneous, continuous conditions |
+| Episode limit | 5,400 ticks | Time truncation |
+
+Success therefore cannot be reduced to distance. It also requires acceptable orientation and speeds, held for the whole hold period. The contract distinguishes `success`, `bounds`, `nonfinite` and `timeout`. Leaving the bounds is not a success; a timeout is not a successful termination either.
+
+## Build an environment, then choose an action
+
+Creation is asynchronous because Rapier WASM must be ready. This excerpt shows the module's API; it is neither an annotated run nor proof of docking.
+
+```ts
+import { SpaceDockEnv } from './space-dock-env';
+
+const env = await SpaceDockEnv.create(42);
+try {
+  const observation = env.observe();
+  env.step(1); // forward action, at most six fixed substeps
+  const transition = {
+    observation,
+    reward: env.reward(),
+    done: env.done(),
+    outcome: env.telemetry.outcome,
+  };
+  console.log(transition);
+} finally {
+  env.dispose();
+}
+```
+
+`observe()` returns a copy of twenty-six values and does not advance the simulation. `step()` applies an action; `reward()` reads the last stored return. After termination, a valid action must no longer advance the episode or add a terminal bonus. An invalid action is still an error: being terminal is no reason to hide a bad input.
+
+The seed is an unsigned 32-bit integer. Reproducibility is limited to the same runtime and the same versions; it is not a promise of identical results across platforms or browser engines.
+
+## Keep a single authority over time
+
+`DockRuntime.advance(deltaSeconds)` accumulates time up to a 0.1-second decision. It runs at most three decisions per frame and caps accumulation at 0.3 seconds. It does not make up for a slow frame by enlarging the physics step: the excess time is dropped. This is a deliberate limit, not universal real-time synchronisation.
+
+The runtime picks a manual action or calls `scriptedPD`. In manual mode, counter-thrust takes priority over the other manual commands; automatic mode chooses its PD action on its own. Pausing, switching modes or resetting clears the accumulator and the commands. History is limited to sixty-four transitions.
+
+The App owns the time loop and the runtime. The R3F scene reads transforms in `useFrame`. It does not create a second world, does not call `step` and applies no force. In this architecture, wrapping the renderer in an R3F physics provider would not replace the world already owned by the environment: it would be another simulation, outside the contract.
+
+## Sync the models without keeping stale references
+
+The visual contract receives exactly these props:
+
+```ts
+interface SceneProps {
+  env: SpaceDockEnv;
+  compact: boolean;
+  reducedMotion: boolean;
+}
+```
+
+The scene reads the `env.drone` and `env.cargo` bodies, their positions and quaternions. After a reset, `generation` changes and the old Rapier bodies are no longer valid. Two options are provided: re-read the bodies every frame, or explicitly invalidate cached references when that change happens.
+
+The adapter re-exports `Scene`. The App does not own a `Canvas`: the scene owns the single R3F surface and reads the existing simulation. Four GLB models are loaded: the tug, the cargo, the docking station and the static hangar. Their provenance is described in `packages/demo-space-dock/ASSETS.md`. Assets use `import.meta.env.BASE_URL` under the `/demos/space-dock/` base.
+
+## Make the renderer react to state without changing physics
+
+`Scene.tsx` copies the translations and quaternions of the current bodies every frame. It also builds signals from `action`, `contacts`, `outcome`, `torque` and `generation`. The thrusters react to the command; the red signal represents a general contact, not an invented docking sensor. The dock's mechanical clips are triggered by the `success` state, not by any collision.
+
+The models carry node animations, with no rigged character. They decorate a state confirmed by the environment and do not move the physical cargo. The generation counter resets the signals on reset.
+
+Compact mode is read from a 600-pixel media query; `prefers-reduced-motion` is reactive too. The code includes DPR caps, adapted shadows and alerts for lost or missing WebGL. These behaviours were exercised on targeted states in a software-rendering browser. This is neither a GPU consumption measurement nor validation on a real phone; mobile readability is limited to the views observed.
+
+## Load the hangar into the world without moving the world
+
+The set is `hangar-orbital.glb`, fingerprint <code style={{overflowWrap:'anywhere'}}>c004741dffc17a18f9d66d04b21e7a28001a693a689ca872f54114c7aa58b8ee</code>. Reading the shipped file confirms this fingerprint.
+
+`World` instantiates `StaticHangar` next to the floor and the simulation solids. The set is exported in world coordinates and keeps an identity transform: no recentring and no corrective scaling. The loader adds no collider, force, time loop or animation. Overlaps and occlusions are a matter of visual checking, not physics.
+
+`StaticHangar` loads from `BASE_URL` and hands the tree to `createHangarLoad`. That owner uses the existing loading slot. Its cleanup closes the slot; a late response must be released rather than attached. The R3F group carries `dispose={null}` so it does not become a second owner of these resources. Switching to compact mode replaces the owner to change the shadow policy, without changing physics.
+
+The scene tracks the hangar's status separately from the three mechanical models. A failure must display `NONFINAL` and state that the set is incomplete; it must not announce a ready hangar or substitute a fake set. Refused or lost graphics states must not show an imaginary GLB load. An independent browser test checked the WebGL-refusal branch: alert visible outside the canvas on desktop and mobile, stable after pause, reset and resize, with no false hangar or GLB status and no repeated error observed. The exact number of `getContext` calls was not instrumented. This check validates neither 3D rendering, nor on-screen GLB loading, nor animations, contacts, occlusions or performance.
+
+GLTFLoader reports 1,911,040 bytes and 26,430 triangles for the hangar; the four files total 4,792,364 bytes and 66,198 triangles. These are file characteristics, not draw calls or a frame rate. A geometry test checks the nominal corridor of the axial approach; it does not prove that the player sees every object, nor that every manoeuvre stays clear. Asset captures do not replace the start, approach and success views in the demo.
+
+## Identify the models and their visual role
+
+The chosen direction is an industrial dock: open structure, technical networks, a gangway and yellow markings around the docking station. The hangar frames the manoeuvre; it has no collider and no simulation loop. This scene belongs to the IgnitionRL Space Dock.
+
+The four GLB files are original, generated procedurally with Three.js and GLTFExporter. Their identities are:
+
+<div tabIndex={0} role="region" aria-label="SHA-256 fingerprints of the models" style={{width:'100%',maxWidth:'100%',overflowX:'auto'}}>
+
+| Model | SHA-256 |
+|---|---|
+| drone-remorqueur.glb | f5b646dbdaaa37e0a605723d4c4fd65b53aed09c54e96f20e88bc937718e373a |
+| cargo-orbitale.glb | 3fcb44848c941ca34daa9a7ee58019ca3b7bccd602f08947da9adf1e8819a203 |
+| poste-arrimage.glb | 29b711743137c0fef813e7bb3bfe962fb9f912092fb5ef1d91246a79c5074e0d |
+| hangar-orbital.glb | c004741dffc17a18f9d66d04b21e7a28001a693a689ca872f54114c7aa58b8ee |
+
+</div>
+
+The model inventory counts 49 meshes across the four files; the byte and triangle totals given above are file properties, not the App's render counters. The inventory reports glTF validation with no errors or warnings, no third-party textures and no assets imported from an external service. These findings come from the inventory; they were not re-run for this article. Details are in `packages/demo-space-dock/ASSETS.md` and `public/models/validation.json`.
+
+## Understand the autopilot without mistaking it for a trained agent
+
+`scriptedPD(telemetry, state)` receives telemetry and a discrete allocation state. It receives neither bodies nor the world. Its position/velocity and yaw/angular-velocity gains are constants in `PD_GAINS`; no learned checkpoint is loaded.
+
+The controller requests a force from the position error and the velocity of the centre of mass. It also requests a torque from the yaw error. The discrete allocation accounts for the torque created by an off-centre lateral thrust. The result is still an environment action, followed by the same physics substeps and docking criteria as manual play. This separation avoids confusing an imposed trajectory with commands applied to physical bodies.
+
+## Run the demo locally
+
+Run the following commands from the root of the `ignition` repository; they use the scripts in `package.json`. Prerequisites: Node 22, pnpm 10 and the repository's dependencies installed.
+
+```bash
+cd ignition
+pnpm --filter demo-space-dock run typecheck
+pnpm --filter demo-space-dock run test
+pnpm --filter demo-space-dock run build
+```
+
+To build the demo under its public base: `DEMO_BASE=/demos/space-dock/ pnpm --filter demo-space-dock run build`.
+
+For an interactive local session, start Vite and open the URL shown in the terminal:
+
+```bash
+cd ignition
+pnpm --filter demo-space-dock run dev --host 127.0.0.1
+```
+
+The initial mode is manual. Click outside buttons and fields to use the keyboard: W/up arrow = forward, S/down = reverse, A/left = port, D/right = starboard; Q/E = yaw, Space = counter-thrust, X = no thrust. P toggles pause and R resets. Keys are identified by `KeyboardEvent.code`: on an AZERTY keyboard, W maps to the physical Z position and A to Q. Touch buttons use the same action contract. Events from BUTTON, SUMMARY, INPUT, SELECT and TEXTAREA are ignored by the shortcut handler to preserve their native behaviour.
+
+Switching to automatic mode from the interface explicitly displays an untrained PD. Watch distance, speed and hold together; at docking, all four conditions must stay true for 90 ticks, i.e. 1.5 s of simulated time. Resetting recreates the physical bodies and changes the generation.
+
+## Limits of this demo
+
+The autopilot is a scripted, untrained PD controller. The tests' five nominal seeds are neither convergence nor a general success measure. Types, Rapier/Three tests and the build do not replace a graphical test of the final bundle. Observations made with software rendering (SwiftShader) are not GPU or real-phone performance.
+
+The models are declared original, generated with Three.js and GLTFExporter, and released under the MIT licence: Copyright (c) 2025–2026 Salim Laimeche, per the [maintainer's decision](https://github.com/IgnitionAI/ignition/issues/45#issuecomment-5989916644). The model licence text is in `public/models/LICENSE.txt`.

@@ -1,0 +1,87 @@
+{
+  "drone-remorqueur": {
+    "bytes": 755040,
+    "meshes": 21,
+    "triangles": 10448,
+    "nodes": [
+      "ThrusterCore_L_F",
+      "ThrusterCore_L_A",
+      "ThrusterCore_R_F",
+      "ThrusterCore_R_A",
+      "RetroCore_L",
+      "RetroCore_R",
+      "LateralCore_L",
+      "LateralCore_R",
+      "TowArm",
+      "Jaw",
+      "JawPad",
+      "ClampPivot_L",
+      "TowArm",
+      "Jaw",
+      "JawPad",
+      "ClampPivot_R",
+      "TowSocket",
+      "Static_35444b",
+      "Static_b4772c",
+      "Static_11191e",
+      "Static_83d9e8",
+      "Static_849198",
+      "Static_c9c8b7",
+      "Static_e2a13c",
+      "DroneRemorqueur"
+    ],
+    "animations": [
+      "ClampOpen",
+      "ClampClose"
+    ],
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  "cargo-orbitale": {
+    "bytes": 914796,
+    "meshes": 6,
+    "triangles": 12636,
+    "nodes": [
+      "Static_35444b",
+      "Static_11191e",
+      "Static_b4772c",
+      "Static_849198",
+      "Static_c9c8b7",
+      "Static_e2a13c",
+      "CargaisonOrbitale"
+    ],
+    "animations": [],
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  "poste-arrimage": {
+    "bytes": 1211488,
+    "meshes": 12,
+    "triangles": 16684,
+    "nodes": [
+      "DockClampArm",
+      "DockClampPad",
+      "DockClampPivot_L",
+      "DockClampArm",
+      "DockClampPad",
+      "DockClampPivot_R",
+      "Static_11191e",
+      "Static_849198",
+      "Static_e2a13c",
+      "Static_35444b",
+      "Static_b4772c",
+      "Static_83d9e8",
+      "Static_c9c8b7",
+      "Static_62c997",
+      "PosteArrimage"
+    ],
+    "animations": [
+      "DockLock"
+    ],
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  }
+}
