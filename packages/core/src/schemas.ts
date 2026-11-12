@@ -19,6 +19,7 @@ export const ExperienceSchema = z.object({
   info: z.record(z.unknown()).optional(),
 });
 
+/** Same optional done/isDone pair as TrainingEnv; at least one function is required. */
 export const TrainingEnvSchema = z.object({
   actions: z.union([
     z.array(z.string()).min(1, { message: 'TrainingEnv.actions must have at least one action' }),

@@ -1,4 +1,4 @@
-import { AgentInterface, AgentFactory, AlgorithmType, StepResult, TrainingEnv } from './types';
+import { AgentInterface, AgentFactory, AlgorithmType, EPISODE_FLAG_NAMES, StepResult, TrainingEnv } from './types';
 import { validateTrainingEnv } from './env-validation';
 import { mergeDefaults } from './defaults';
 
@@ -106,9 +106,9 @@ export class IgnitionEnv {
     this.env.step(action);
     const observation = this.env.observe();
     const reward = this.env.reward();
-    const truncated = readFlag(this.env, ['isTruncated', 'truncated']) ?? false;
-    const terminated = readFlag(this.env, ['isTerminated', 'terminated'])
-      ?? ((readFlag(this.env, ['done', 'isDone']) ?? false) && !truncated);
+    const truncated = readFlag(this.env, EPISODE_FLAG_NAMES.truncated) ?? false;
+    const terminated = readFlag(this.env, EPISODE_FLAG_NAMES.terminated)
+      ?? ((readFlag(this.env, EPISODE_FLAG_NAMES.done) ?? false) && !truncated);
     if (!greedy) {
       agent.remember({ state: this.currentState, action, reward, nextState: observation, terminated, truncated });
       if (agent.shouldTrain?.() ?? true) await agent.train();

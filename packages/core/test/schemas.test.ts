@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { ExperienceSchema, TrainingEnvSchema } from '../src/schemas';
+import { EPISODE_FLAG_NAMES } from '../src/types';
 import type { Experience } from '../src/types';
 
 describe('ExperienceSchema', () => {
@@ -60,5 +61,13 @@ describe('TrainingEnvSchema', () => {
 
   it('rejects a non-function isTerminated', () => {
     expect(() => TrainingEnvSchema.parse({ ...valid, isTerminated: true })).toThrow(/isTerminated/);
+  });
+});
+
+describe('EPISODE_FLAG_NAMES', () => {
+  it('lists the canonical method before the is* alias for every flag', () => {
+    expect(EPISODE_FLAG_NAMES.terminated).toEqual(['terminated', 'isTerminated']);
+    expect(EPISODE_FLAG_NAMES.truncated).toEqual(['truncated', 'isTruncated']);
+    expect(EPISODE_FLAG_NAMES.done).toEqual(['done', 'isDone']);
   });
 });

@@ -89,6 +89,16 @@ export interface CheckpointableAgent extends AgentInterface {
 // ─── Environment interfaces ─────────────────────────────────────────────────
 
 /**
+ * Lookup order for episode-end flags: canonical method first, then the `is*` alias.
+ * The first defined function wins. Construction requires `done()` or `isDone()`.
+ */
+export const EPISODE_FLAG_NAMES = {
+  truncated: ['truncated', 'isTruncated'],
+  terminated: ['terminated', 'isTerminated'],
+  done: ['done', 'isDone'],
+} as const;
+
+/**
  * Contract for a training environment. The developer implements this
  * to describe their game/simulation for RL training.
  */
@@ -101,9 +111,9 @@ export interface TrainingEnv {
   step(action: number | number[]): void;
   /** Return the reward for the current state */
   reward(): number;
-  /** Return true if the episode is over */
-  done(): boolean;
-  /** Retrocompatible alias of done(). Used when done() is omitted. */
+  /** Return true if the episode is over. Required unless isDone() is provided. */
+  done?(): boolean;
+  /** Retrocompatible alias of done(). Accepted alone when done() is omitted. */
   isDone?(): boolean;
   /** Optional explicit terminal condition; overrides legacy done(). */
   terminated?(): boolean;
