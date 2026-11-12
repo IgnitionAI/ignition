@@ -1,9 +1,9 @@
-import { readFileSync, writeFileSync } from 'node:fs';
 import { AnimationMixer, Box3, Matrix4, PerspectiveCamera, Vector3 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { expect, test } from 'vitest';
 import { adaptModel } from './modelConfig';
 import { cameraFrame } from './mobileCamera';
+import { readModelBytes, writeVisualProof } from './visualTestIo';
 
 const poses = [
   { name: 'depart', cargo: [-7, 0, 0], drone: [-4.7, 0, 0] },
@@ -27,7 +27,7 @@ function project(points: Vector3[], camera: PerspectiveCamera, width: number, he
 test('compact frames actual adapted GLB and collider corners, goal, poses and viewport changes; desktop stays exact', async () => {
   const models = {} as Record<'cargo' | 'drone' | 'dock', Box3>;
   for (const [kind, name] of [['cargo', 'cargo-orbitale'], ['drone', 'drone-remorqueur'], ['dock', 'poste-arrimage']] as const) {
-    const b = readFileSync(`packages/demo-space-dock/public/models/${name}.glb`);
+    const b = readModelBytes(name);
     const gltf = await new GLTFLoader().parseAsync(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength), '');
     const model = adaptModel(gltf.scene, kind);
     models[kind] = new Box3().setFromObject(model);
@@ -65,5 +65,5 @@ test('compact frames actual adapted GLB and collider corners, goal, poses and vi
     }
     measurements.push({ viewport: [width, height], fixture: pose.name, fov: frame.fov, position: frame.position.toArray(), target: frame.target.toArray(), subjects });
   }
-  writeFileSync('packages/demo-space-dock/proofs/summary-v2/projections.json', JSON.stringify({ bounds: models, measurements }, null, 2) + '\n');
+  writeVisualProof('projections.json', JSON.stringify({ bounds: models, measurements }, null, 2) + '\n');
 });

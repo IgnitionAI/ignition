@@ -1,5 +1,4 @@
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Box3, Group, Matrix4, Mesh, Triangle, Vector3 } from 'three';
@@ -8,9 +7,10 @@ import { expect, test } from 'vitest';
 import { HangarStatus } from '../Scene';
 import { createHangarLoad } from './hangarLifecycle';
 import type { AssetStatus } from './useGLB';
+import { readModelBytes } from './visualTestIo';
 
 async function load(name = 'hangar-orbital') {
-  const bytes = readFileSync(`packages/demo-space-dock/public/models/${name}.glb`);
+  const bytes = readModelBytes(name);
   const gltf = await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
   return { bytes, ...gltf };
 }

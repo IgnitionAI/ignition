@@ -1,9 +1,9 @@
 import { test } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { Box3, Group, Vector3 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { readModelBytes } from './visualTestIo';
 export async function loadAsset(name: string) {
-  const bytes = readFileSync(`packages/demo-space-dock/public/models/${name}.glb`);
+  const bytes = readModelBytes(name);
   return new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
 }
 test('inspect original bounds', async () => {

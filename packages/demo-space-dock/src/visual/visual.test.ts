@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { AnimationClip, Box3, BoxGeometry, Group, Mesh, MeshStandardMaterial, NumberKeyframeTrack, Texture, Vector3 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { adaptModel, ENVELOPES } from './modelConfig';
 import { createClipPlayer, createLoadSlot, ownModel } from './modelLifecycle';
 import { ContactSignal, initialSignals, nozzleActive, updateMaterials } from './signals';
+import { readModelBytes } from './visualTestIo';
 async function load(name: string) {
-  const data = readFileSync(`packages/demo-space-dock/public/models/${name}.glb`);
+  const data = readModelBytes(name);
   return new GLTFLoader().parseAsync(data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength), '');
 }
 describe('visual contract on actual Three objects', () => {

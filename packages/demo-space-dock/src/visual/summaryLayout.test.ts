@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { expect, test } from 'vitest';
 import Scene from '../Scene';
 import type { SceneProps } from '../simulation-contract';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readModelBytes, writeVisualProof } from './visualTestIo';
 import { Box3, Matrix4, PerspectiveCamera, Vector3 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { adaptModel } from './modelConfig';
@@ -67,7 +67,7 @@ test('Scene sizing follows viewport resize and orientation; accepted desktop sty
 test('same-state open and closed areas preserve actual Three projections of GLBs and colliders across resize', async () => {
   const models = {} as Record<'cargo' | 'drone' | 'dock', Box3>;
   for (const [kind, name] of [['cargo', 'cargo-orbitale'], ['drone', 'drone-remorqueur'], ['dock', 'poste-arrimage']] as const) {
-    const bytes = readFileSync(`packages/demo-space-dock/public/models/${name}.glb`);
+    const bytes = readModelBytes(name);
     const gltf = await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
     models[kind] = new Box3().setFromObject(adaptModel(gltf.scene, kind));
   }
@@ -110,5 +110,5 @@ test('same-state open and closed areas preserve actual Three projections of GLBs
       measurements.push({ fixture: name, viewport: [width, height], closed: areas[0], open: areas[1], position: frames[0].position.toArray(), projected });
     }
   }
-  writeFileSync('packages/demo-space-dock/proofs/summary-v2/layout-projections.json', JSON.stringify({ layer: 'Node SSR bounded flex calculation + Three; no browser layout or physics replay', measurements }, null, 2) + '\n');
+  writeVisualProof('layout-projections.json', JSON.stringify({ layer: 'Node SSR bounded flex calculation + Three; no browser layout or physics replay', measurements }, null, 2) + '\n');
 });
