@@ -1,5 +1,5 @@
 {
-  "process": "eval-ppo-checkpoint.run.ts",
+  "process": "ppo-eval-checkpoint.test.ts",
   "seed": 11,
   "loaded": "trained",
   "state": [
