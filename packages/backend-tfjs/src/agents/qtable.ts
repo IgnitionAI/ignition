@@ -10,8 +10,8 @@
  * Référence : Watkins & Dayan, "Q-Learning" (1992)
  */
 
-import { AgentInterface, Experience, QTableConfig } from '../types';
-import { QTableConfigSchema } from '../schemas';
+import { AgentInterface, Experience, QTableConfig } from '../types.js';
+import { QTableConfigSchema } from '../schemas.js';
 import { z } from 'zod';
 
 const checkpointSchema = z.object({

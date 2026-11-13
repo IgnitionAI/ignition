@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { fetchJson, missingArtifactMessage, parseEpisodeReturns } from '../src/ppo/artifacts';
+import {
+  fetchJson,
+  formatPpoReturn,
+  missingArtifactMessage,
+  parseEpisodeReturns,
+} from '../src/ppo/artifacts';
 
 describe('PPO demo artifacts', () => {
   it('formats an explicit missing-checkpoint error', () => {
@@ -12,6 +17,13 @@ describe('PPO demo artifacts', () => {
     expect(() => parseEpisodeReturns({ fake: true, reward: 999 })).toThrow(
       /not an array of numbers/,
     );
+  });
+
+  it('rounds float returns for display (avoids -1.2500000000000002)', () => {
+    expect(formatPpoReturn(-1.2500000000000002)).toBe('-1.2500');
+    expect(formatPpoReturn(0.8550000000000002)).toBe('0.8550');
+    expect(formatPpoReturn(undefined)).toBe('absent');
+    expect(formatPpoReturn(null)).toBe('absent');
   });
 
   it('treats an HTML fallback as a missing artifact, not a successful load', async () => {

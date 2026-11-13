@@ -119,8 +119,11 @@ From the repository root:
 corepack pnpm install --frozen-lockfile
 corepack pnpm --filter @ignitionai/core build
 corepack pnpm --filter @ignitionai/backend-tfjs build
-RUN_PPO_TRAIN=1 corepack pnpm exec vitest run packages/backend-tfjs/test/ppo-train-budget.test.ts
+node scripts/train-ppo-nav1d.mjs
+# equivalent: node packages/backend-tfjs/scripts/train-ppo-nav1d.mjs
+# equivalent: RUN_PPO_TRAIN=1 corepack pnpm exec vitest run packages/backend-tfjs/test/ppo-train-budget.test.ts
 RUN_PPO_EVAL=1 corepack pnpm exec vitest run packages/backend-tfjs/test/ppo-eval-checkpoint.test.ts
+corepack pnpm exec vitest run packages/backend-tfjs/test/ppo-node-dist.test.ts
 corepack pnpm --filter target-chasing build
 corepack pnpm --filter target-chasing dev
 # DQN 3D: http://localhost:3000/
@@ -128,7 +131,15 @@ corepack pnpm --filter target-chasing dev
 corepack pnpm --filter target-chasing preview --host 127.0.0.1 --port 4173
 ```
 
-`node packages/backend-tfjs/scripts/train-ppo-nav1d.mjs` cannot import extensionless `dist/` ESM (kept as a recorded failure). Training is the Vitest command above.
+`node scripts/train-ppo-nav1d.mjs` must exit 0 after the two `build` steps. Root cause of the previous Node failure: `tsc` emitted ESM (`"module": "ESNext"`) with extensionless specifiers (`./agents/dqn`). Node 22 loads that as ESM and requires `./agents/dqn.js`. Relative imports in `packages/core` and `packages/backend-tfjs` now end in `.js`; `vitest` still covers `PPOAgent` via source aliases.
+
+**`gitSha` rule (self-reference is impossible):** training writes `git rev-parse HEAD` at run time. The commit that stores `public/ppo/manifest.json` cannot also be the SHA named inside that file. After the artifacts commit, verify:
+
+```sh
+jq -r .gitSha packages/demo-target-chasing/public/ppo/manifest.json
+git log -1 --format=%P -- packages/demo-target-chasing/public/ppo/manifest.json
+# first parent of the artifacts commit must equal gitSha
+```
 
 Copied from `public/ppo/seed-*/summary.json` after `RUN_PPO_TRAIN=1` (`evidence/ign-170/24-retrain-greedy-gap.txt`):
 

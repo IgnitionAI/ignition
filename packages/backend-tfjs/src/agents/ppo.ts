@@ -6,8 +6,8 @@
  */
 
 import * as tf from '@tensorflow/tfjs';
-import { AgentInterface, Experience, PPOActionSpace, PPOConfig } from '../types';
-import { PPOConfigSchema } from '../schemas';
+import { AgentInterface, Experience, PPOActionSpace, PPOConfig } from '../types.js';
+import { PPOConfigSchema } from '../schemas.js';
 
 interface RolloutEntry extends Experience {
   logProb: number;

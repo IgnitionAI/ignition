@@ -22,6 +22,11 @@ export interface PpoManifest {
   logs: { episodesJsonl: string[]; summaries: string[] };
 }
 
+export function formatPpoReturn(value: number | null | undefined): string {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return 'absent';
+  return value.toFixed(4);
+}
+
 export function missingArtifactMessage(url: string, status?: number): string {
   return status === undefined
     ? `PPO checkpoint/log absent: ${url}`

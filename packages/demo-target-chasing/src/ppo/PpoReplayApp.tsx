@@ -11,7 +11,13 @@ import {
   YAxis,
 } from 'recharts';
 import { PPOAgent } from '@ignitionai/backend-tfjs';
-import { fetchJson, parseEpisodeReturns, type PpoManifest, type PpoSeedSummary } from './artifacts';
+import {
+  fetchJson,
+  formatPpoReturn,
+  parseEpisodeReturns,
+  type PpoManifest,
+  type PpoSeedSummary,
+} from './artifacts';
 import { httpModelProvider } from './http-provider';
 
 const COLORS = ['#6366f1', '#22c55e', '#f59e0b'];
@@ -210,11 +216,11 @@ export default function PpoReplayApp() {
       </div>
 
       <p data-testid="ppo-greedy-from-file">
-        Loaded greedy eval (same 20 starts): untrained {activeSummary?.untrainedGreedyEvalMean ?? 'absent'} ·
-        trained {activeSummary?.greedyEvalMean ?? 'absent'} · gap {activeSummary?.greedyGap ?? 'absent'}
+        Loaded greedy eval (same 20 starts): untrained {formatPpoReturn(activeSummary?.untrainedGreedyEvalMean)} ·
+        trained {formatPpoReturn(activeSummary?.greedyEvalMean)} · gap {formatPpoReturn(activeSummary?.greedyGap)}
         <br />
-        Greedy episode from 0.2 (file): untrained {activeSummary?.untrainedGreedyReturnAt02 ?? 'absent'} ·
-        trained {activeSummary?.trainedGreedyReturnAt02 ?? 'absent'}
+        Greedy episode from 0.2 (file): untrained {formatPpoReturn(activeSummary?.untrainedGreedyReturnAt02)} ·
+        trained {formatPpoReturn(activeSummary?.trainedGreedyReturnAt02)}
       </p>
 
       <p data-testid="ppo-policy">
@@ -254,8 +260,9 @@ export default function PpoReplayApp() {
       <ul data-testid="ppo-seed-results">
         {summaries.map((row) => (
           <li key={row.seed}>
-            seed {row.seed}: first20={row.firstMean20} last20={row.lastMean20}{' '}
-            greedy untrained={row.untrainedGreedyEvalMean} trained={row.greedyEvalMean} gap={row.greedyGap}{' '}
+            seed {row.seed}: first20={formatPpoReturn(row.firstMean20)} last20={formatPpoReturn(row.lastMean20)}{' '}
+            greedy untrained={formatPpoReturn(row.untrainedGreedyEvalMean)} trained={formatPpoReturn(row.greedyEvalMean)}{' '}
+            gap={formatPpoReturn(row.greedyGap)}{' '}
             {row.improved ? 'improved (train curve)' : 'did not improve (train curve)'}
           </li>
         ))}
