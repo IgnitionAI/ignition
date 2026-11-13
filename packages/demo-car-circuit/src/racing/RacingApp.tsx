@@ -9,12 +9,15 @@ import {
 } from "react";
 import { useProgress } from "@react-three/drei";
 import { RaceWorld } from "./race";
-import { DrivingWorld } from "./driving";
+import { DrivingWorld, actionFromKeys } from "./driving";
 import { RaceMap } from "./RaceMap";
 import { RacingScene } from "./RacingScene";
 import "./racing.css";
-
-import type { LearnedRace } from "./learned-race";
+import {
+  completeHumanRaceWithFrozenPolicy,
+  type LearnedRace,
+} from "./learned-race";
+import type { DriverCheckpoint } from "./learned-driver";
 const RaceGarage = lazy(() => import("./RaceGarage"));
 const TrainingPanel = lazy(() => import("./TrainingPanel"));
 
@@ -152,6 +155,48 @@ export default function RacingApp() {
     [model, setModel] = useState("race"),
     [speed, setSpeed] = useState(0);
   useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("e2e") !== "1") return;
+    const api = {
+      actionFromKeys,
+      snapshot: () =>
+        learned
+          ? {
+              finished: learned.race.finished,
+              countdown: learned.race.countdown,
+              elapsedTicks: learned.race.elapsedTicks,
+              laps: learned.race.drivers.map((d) => d.laps),
+              finishSeconds: learned.race.drivers.map((d) => d.finishSeconds),
+              penaltySeconds: learned.race.drivers.map(
+                (d) => d.penaltySeconds,
+              ),
+              competitorIds: learned.competitors.map((c) => c.id),
+              rulesId: learned.race.rulesId,
+              human: learned.human,
+              keyCount: keys.size,
+            }
+          : null,
+      hold(code: string) {
+        keys.add(code);
+      },
+      release(code: string) {
+        keys.delete(code);
+      },
+      completeWithFrozenCheckpoint(checkpoint: unknown) {
+        if (!learned) throw new Error("No learned race");
+        const result = completeHumanRaceWithFrozenPolicy(
+          learned,
+          checkpoint as DriverCheckpoint,
+        );
+        updateHUD((n) => n + 1);
+        return result;
+      },
+    };
+    window.__IGNITION_E2E__ = api;
+    return () => {
+      if (window.__IGNITION_E2E__ === api) delete window.__IGNITION_E2E__;
+    };
+  }, [learned, keys]);
+  useEffect(() => {
     const handled = new Set([
       "ArrowUp",
       "ArrowDown",
@@ -227,6 +272,7 @@ export default function RacingApp() {
           </button>
           <button
             className={race || garageMode ? "active" : ""}
+            data-testid="nav-race"
             onClick={() => {
               keys.clear();
               setPaused(true);
@@ -265,6 +311,7 @@ export default function RacingApp() {
                   setLearned(session);
                   setRace(session.race);
                   setWorld(session.race.drivers[0].world);
+                  setModel(session.humanModel);
                   setFollow(0);
                   setStarted(true);
                   setPaused(false);
@@ -457,7 +504,7 @@ export default function RacingApp() {
             </div>
           )}
           {race?.finished && displayedDriver && (
-            <div className="pause-overlay">
+            <div className="pause-overlay" data-testid="race-results">
               <h2>{lang === "fr" ? "Résultat" : "Result"}</h2>
               {race.ghost && <p>{lang === "fr" ? "Course en mode fantôme" : "Ghost race"}</p>}
               {learned && <p>{learned.competitors[follow].name}</p>}
@@ -485,6 +532,7 @@ export default function RacingApp() {
                 ))}
               </ol>
               <button
+                data-testid="new-race"
                 onClick={() => {
                   if (learned) {
                     setGarageMode(true);
@@ -495,7 +543,11 @@ export default function RacingApp() {
                   } else resetSession(true, reference);
                 }}
               >
-                {t.reset}
+                {learned
+                  ? lang === "fr"
+                    ? "Nouvelle course"
+                    : "New race"
+                  : t.reset}
               </button>
             </div>
           )}
@@ -504,6 +556,7 @@ export default function RacingApp() {
               <h2>{t.paused}</h2>
               <p>{t.pausedHint}</p>
               <button
+                data-testid="resume-race"
                 onClick={() => {
                   keys.clear();
                   setPaused(false);
