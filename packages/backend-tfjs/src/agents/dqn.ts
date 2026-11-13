@@ -1,15 +1,15 @@
 import * as tf from '@tensorflow/tfjs';
 import { AgentInterface, Experience } from '@ignitionai/core';
 
-import { loadModelFromHub } from '../io/loadModel';
+import { loadModelFromHub } from '../io/loadModel.js';
 // ponytail: import dynamique — saveModelToHub charge fs/path/tfjs-node (node-only),
 // un import statique casserait le graphe navigateur des démos
-const loadSaveModelToHub = () => import('../io/saveModelToHub');
-import { ReplayBuffer } from '../memory/ReplayBuffer';
-import { buildQNetwork } from '../model/BuildMLP';
-import { DQNConfig } from '../types';
-import { DQNConfigSchema } from '../schemas';
-import { setBackend } from '../utils/backend-selector';
+const loadSaveModelToHub = () => import('../io/saveModelToHub.js');
+import { ReplayBuffer } from '../memory/ReplayBuffer.js';
+import { buildQNetwork } from '../model/BuildMLP.js';
+import { DQNConfig } from '../types.js';
+import { DQNConfigSchema } from '../schemas.js';
+import { setBackend } from '../utils/backend-selector.js';
 
 export class DQNAgent implements AgentInterface {
   private model: tf.Sequential;

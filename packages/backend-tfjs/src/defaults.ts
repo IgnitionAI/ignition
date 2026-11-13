@@ -14,6 +14,7 @@ export const DQN_DEFAULTS: Record<string, unknown> = {
 
 export const PPO_DEFAULTS: Record<string, unknown> = {
   hiddenLayers: [64, 64],
+  actionSpace: 'discrete',
   gamma: 0.99,
   gaeLambda: 0.95,
   clipRatio: 0.2,

@@ -1,0 +1,106 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+stderr | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — interface > getAction retourne un indice d'action valide
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/ppo-update.test.ts > PPOAgent — mini-batch updates > keeps a non-zero policy signal on a small batch of more than one transition
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+[PPO] Saved actor: file:///tmp/ppo-ckpt-qGw8ft/policy/actor, critic: file:///tmp/ppo-ckpt-qGw8ft/policy/critic
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+[PPO] Loaded model policy
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy continuous action including log-std
+[PPO] Saved actor: file:///tmp/ppo-ckpt-cont-mU4cGo/policy/actor, critic: file:///tmp/ppo-ckpt-cont-mU4cGo/policy/critic
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy continuous action including log-std
+[PPO] Loaded model policy
+
+ ✓ packages/backend-tfjs/test/ppo-checkpoint.test.ts (4 tests) 186ms
+ ✓ packages/backend-tfjs/test/ppo-update.test.ts (7 tests) 240ms
+stderr | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":true,"expected":0}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":true,"truncated":false,"expected":1}
+[PPO] Loaded model fixture
+
+ ✓ packages/backend-tfjs/test/ppo-gae.test.ts (6 tests) 4ms
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] Saved actor: memory, critic: memory
+
+ ✓ packages/backend-tfjs/test/ppo-bootstrap.test.ts (6 tests) 87ms
+stderr | packages/backend-tfjs/test/ppo-continuous.test.ts > PPOAgent — continuous actions > samples a 1-D action inside configured bounds
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/ppo-public.test.ts > PPO learns rewarded actions through the public loop (seed 11)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-continuous.test.ts (2 tests) 837ms
+   ✓ PPOAgent — continuous actions > learns a deterministic 1-D control task (push toward +1)  804ms
+ ✓ packages/backend-tfjs/test/ppo-public.test.ts (5 tests) 986ms
+   ✓ PPO learns rewarded actions through the public loop (seed 11)  465ms
+stderr | packages/backend-tfjs/test/ppo-discrete.test.ts > PPOAgent — discrete distribution > returns a valid categorical distribution and a coherent log-prob
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-discrete.test.ts (2 tests) 24ms
+ ✓ packages/demo-target-chasing/test/ppo-artifacts.test.ts (3 tests) 5ms
+stdout | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+[PPO convergence] premiers 40 épisodes: 0.375, derniers 40 épisodes: 0.856
+
+ ✓ packages/backend-tfjs/test/ppo.test.ts (4 tests) 2873ms
+   ✓ PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)  2730ms
+
+ Test Files  9 passed (9)
+      Tests  39 passed (39)
+   Start at  19:15:12
+   Duration  3.36s (transform 278ms, setup 0ms, collect 2.12s, tests 5.24s, environment 1ms, prepare 475ms)
+
+EXIT:0

@@ -1,6 +1,6 @@
-import { AgentInterface, AgentFactory, AlgorithmType, StepResult, TrainingEnv } from './types';
-import { validateTrainingEnv } from './env-validation';
-import { mergeDefaults } from './defaults';
+import { AgentInterface, AgentFactory, AlgorithmType, StepResult, TrainingEnv } from './types.js';
+import { validateTrainingEnv } from './env-validation.js';
+import { mergeDefaults } from './defaults.js';
 
 export class IgnitionEnv {
   private env: TrainingEnv;

@@ -1,0 +1,56 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+stderr | packages/backend-tfjs/test/ppo-eval-checkpoint.test.ts > loads the trained checkpoint in this new process and matches recorded greedy action
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-eval-checkpoint.test.ts > loads the trained checkpoint in this new process and matches recorded greedy action
+[PPO] Loaded model trained
+
+stdout | packages/backend-tfjs/test/ppo-eval-checkpoint.test.ts > loads the trained checkpoint in this new process and matches recorded greedy action
+{
+  "process": "eval-ppo-checkpoint.run.ts",
+  "seed": 11,
+  "loaded": "trained",
+  "state": [
+    0.2
+  ],
+  "expectedAction": 1,
+  "loadedAction": 1,
+  "identicalGreedyAction": true,
+  "greedyEvalMean": 0.8450000000000003,
+  "greedyEvalReturns": [
+    0.85,
+    0.85,
+    0.9,
+    0.9,
+    0.8,
+    0.9,
+    0.8,
+    0.9,
+    0.8,
+    0.85,
+    0.8,
+    0.9,
+    0.8,
+    0.9,
+    0.85,
+    0.8,
+    0.9,
+    0.8,
+    0.8,
+    0.8
+  ]
+}
+
+ ✓ packages/backend-tfjs/test/ppo-eval-checkpoint.test.ts (1 test) 64ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  16:21:29
+   Duration  452ms (transform 65ms, setup 0ms, collect 225ms, tests 64ms, environment 0ms, prepare 40ms)
+
+EXIT:0

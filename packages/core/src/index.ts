@@ -1,6 +1,6 @@
 export const version = '0.1.0';
 
-export { IgnitionEnv } from './ignition-env';
+export { IgnitionEnv } from './ignition-env.js';
 
 export type {
   TFBackend,
@@ -17,8 +17,8 @@ export type {
   DiscreteSpace,
   BoxSpace,
   MultiDiscreteSpace,
-} from './types';
+} from './types.js';
 
-export { mergeDefaults } from './defaults';
-export { validateTrainingEnv, validateInferenceEnv } from './env-validation';
-export { ExperienceSchema } from './schemas';
+export { mergeDefaults } from './defaults.js';
+export { validateTrainingEnv, validateInferenceEnv } from './env-validation.js';
+export { ExperienceSchema } from './schemas.js';

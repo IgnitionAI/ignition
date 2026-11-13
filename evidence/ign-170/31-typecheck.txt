@@ -1,0 +1,5 @@
+
+> ignition-monorepo@ typecheck /agent/repos/ignition
+> tsc --build
+
+EXIT:0

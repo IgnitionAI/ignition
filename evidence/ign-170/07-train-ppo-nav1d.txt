@@ -1,0 +1,21 @@
+node:internal/modules/esm/resolve:275
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/agent/repos/ignition/packages/backend-tfjs/dist/agents/dqn' imported from /agent/repos/ignition/packages/backend-tfjs/dist/index.js
+    at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+    at moduleResolve (node:internal/modules/esm/resolve:865:10)
+    at defaultResolve (node:internal/modules/esm/resolve:989:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///agent/repos/ignition/packages/backend-tfjs/dist/agents/dqn'
+}
+
+Node.js v22.23.4
+undefined
+/agent/repos/ignition/packages/backend-tfjs:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: node ./scripts/train-ppo-nav1d.mjs
+EXIT:1

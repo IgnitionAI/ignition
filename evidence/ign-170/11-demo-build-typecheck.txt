@@ -1,0 +1,67 @@
+
+> @ignitionai/storage@0.1.0 build /agent/repos/ignition/packages/storage
+> tsc
+
+STORAGE:0
+
+> target-chasing@0.0.0 build /agent/repos/ignition/packages/demo-target-chasing
+> tsc -b && vite build
+
+src/ppo/http-provider.ts(1,21): error TS2307: Cannot find module '@tensorflow/tfjs' or its corresponding type declarations.
+/agent/repos/ignition/packages/demo-target-chasing:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  target-chasing@0.0.0 build: `tsc -b && vite build`
+Exit status 1
+DEMO_BUILD:1
+
+> ignition-monorepo@ typecheck /agent/repos/ignition
+> tsc --build
+
+packages/ignitionai/src/index.ts(85,8): error TS2307: Cannot find module '@ignitionai/environments' or its corresponding type declarations.
+packages/demo-cartpole/src/inference.ts(15,29): error TS2307: Cannot find module '@ignitionai/environments' or its corresponding type declarations.
+packages/demo-cartpole-3d/src/App.tsx(3,29): error TS2307: Cannot find module '@ignitionai/environments' or its corresponding type declarations.
+packages/demo-cartpole-3d/src/examples/blog-experiment.ts(2,29): error TS2307: Cannot find module '@ignitionai/environments' or its corresponding type declarations.
+packages/web/components/clients.tsx(5,22): error TS2307: Cannot find module '@/public/images/client-01.svg' or its corresponding type declarations.
+packages/web/components/clients.tsx(6,22): error TS2307: Cannot find module '@/public/images/client-02.svg' or its corresponding type declarations.
+packages/web/components/clients.tsx(7,22): error TS2307: Cannot find module '@/public/images/client-03.svg' or its corresponding type declarations.
+packages/web/components/clients.tsx(8,22): error TS2307: Cannot find module '@/public/images/client-04.svg' or its corresponding type declarations.
+packages/web/components/clients.tsx(9,22): error TS2307: Cannot find module '@/public/images/client-05.svg' or its corresponding type declarations.
+packages/web/components/clients.tsx(10,22): error TS2307: Cannot find module '@/public/images/client-06.svg' or its corresponding type declarations.
+packages/web/components/clients.tsx(11,22): error TS2307: Cannot find module '@/public/images/client-07.svg' or its corresponding type declarations.
+packages/web/components/clients.tsx(12,22): error TS2307: Cannot find module '@/public/images/client-08.svg' or its corresponding type declarations.
+packages/web/components/clients.tsx(13,22): error TS2307: Cannot find module '@/public/images/client-09.svg' or its corresponding type declarations.
+packages/web/components/customers.tsx(2,27): error TS2307: Cannot find module '@/public/images/customer-01.jpg' or its corresponding type declarations.
+packages/web/components/customers.tsx(3,27): error TS2307: Cannot find module '@/public/images/customer-02.jpg' or its corresponding type declarations.
+packages/web/components/customers.tsx(4,27): error TS2307: Cannot find module '@/public/images/customer-03.jpg' or its corresponding type declarations.
+packages/web/components/customers.tsx(5,27): error TS2307: Cannot find module '@/public/images/customer-04.jpg' or its corresponding type declarations.
+packages/web/components/customers.tsx(6,27): error TS2307: Cannot find module '@/public/images/customer-05.jpg' or its corresponding type declarations.
+packages/web/components/customers.tsx(7,27): error TS2307: Cannot find module '@/public/images/customer-06.jpg' or its corresponding type declarations.
+packages/web/components/customers.tsx(8,27): error TS2307: Cannot find module '@/public/images/customer-07.jpg' or its corresponding type declarations.
+packages/web/components/customers.tsx(9,27): error TS2307: Cannot find module '@/public/images/customer-08.jpg' or its corresponding type declarations.
+packages/web/components/customers.tsx(10,27): error TS2307: Cannot find module '@/public/images/customer-09.jpg' or its corresponding type declarations.
+packages/web/components/features.tsx(8,26): error TS2307: Cannot find module '@/public/images/glow-top.svg' or its corresponding type declarations.
+packages/web/components/hero.tsx(3,26): error TS2307: Cannot find module '@/public/images/glow-bottom.svg' or its corresponding type declarations.
+packages/web/components/story.tsx(2,18): error TS2307: Cannot find module '@/public/images/team.jpg' or its corresponding type declarations.
+packages/web/components/team.tsx(3,22): error TS2307: Cannot find module '@/public/images/team-01.png' or its corresponding type declarations.
+packages/web/components/team.tsx(4,22): error TS2307: Cannot find module '@/public/images/team-02.png' or its corresponding type declarations.
+packages/web/components/team.tsx(5,22): error TS2307: Cannot find module '@/public/images/team-03.png' or its corresponding type declarations.
+packages/web/components/team.tsx(6,22): error TS2307: Cannot find module '@/public/images/team-04.png' or its corresponding type declarations.
+packages/web/components/team.tsx(7,22): error TS2307: Cannot find module '@/public/images/team-05.png' or its corresponding type declarations.
+packages/web/components/team.tsx(8,22): error TS2307: Cannot find module '@/public/images/team-06.png' or its corresponding type declarations.
+packages/web/components/team.tsx(9,22): error TS2307: Cannot find module '@/public/images/team-07.png' or its corresponding type declarations.
+packages/web/components/team.tsx(10,22): error TS2307: Cannot find module '@/public/images/team-08.png' or its corresponding type declarations.
+packages/web/components/team.tsx(11,22): error TS2307: Cannot find module '@/public/images/team-09.png' or its corresponding type declarations.
+packages/web/components/team.tsx(12,22): error TS2307: Cannot find module '@/public/images/team-10.png' or its corresponding type declarations.
+packages/web/components/team.tsx(13,22): error TS2307: Cannot find module '@/public/images/team-11.png' or its corresponding type declarations.
+packages/web/components/team.tsx(14,22): error TS2307: Cannot find module '@/public/images/team-12.png' or its corresponding type declarations.
+packages/web/components/team.tsx(15,22): error TS2307: Cannot find module '@/public/images/team-13.png' or its corresponding type declarations.
+packages/web/components/team.tsx(16,22): error TS2307: Cannot find module '@/public/images/team-14.png' or its corresponding type declarations.
+packages/web/components/team.tsx(17,22): error TS2307: Cannot find module '@/public/images/team-15.png' or its corresponding type declarations.
+packages/web/components/team.tsx(18,22): error TS2307: Cannot find module '@/public/images/team-16.png' or its corresponding type declarations.
+packages/web/components/team.tsx(19,22): error TS2307: Cannot find module '@/public/images/team-17.png' or its corresponding type declarations.
+packages/web/components/team.tsx(20,22): error TS2307: Cannot find module '@/public/images/team-18.png' or its corresponding type declarations.
+packages/web/components/team.tsx(21,22): error TS2307: Cannot find module '@/public/images/team-19.png' or its corresponding type declarations.
+packages/web/components/team.tsx(22,22): error TS2307: Cannot find module '@/public/images/team-20.png' or its corresponding type declarations.
+packages/web/components/ui/logo.tsx(3,21): error TS2307: Cannot find module '@/public/images/ignition-flame.gif' or its corresponding type declarations.
+packages/demo-target-chasing/src/ppo/http-provider.ts(1,21): error TS2307: Cannot find module '@tensorflow/tfjs' or its corresponding type declarations.
+ ELIFECYCLE  Command failed with exit code 2.
+TYPECHECK:2

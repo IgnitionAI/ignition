@@ -1,0 +1,83 @@
+Scope: all 20 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +1223
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+   ╭───────────────────────────────────────────────╮
+   │                                               │
+   │      Update available! 10.8.0 → 12.18.0.      │
+   │     Changelog: https://pnpm.io/v/12.18.0      │
+   │   To update, run: corepack use pnpm@12.18.0   │
+   │                                               │
+   ╰───────────────────────────────────────────────╯
+
+Progress: resolved 1223, reused 0, downloaded 168, added 135
+Progress: resolved 1223, reused 0, downloaded 411, added 365
+Progress: resolved 1223, reused 0, downloaded 626, added 561
+Progress: resolved 1223, reused 0, downloaded 797, added 794
+Progress: resolved 1223, reused 0, downloaded 873, added 842
+Progress: resolved 1223, reused 0, downloaded 1206, added 1222
+Progress: resolved 1223, reused 0, downloaded 1207, added 1222
+Progress: resolved 1223, reused 0, downloaded 1207, added 1223, done
+.../node_modules/protobufjs postinstall$ node scripts/postinstall
+.../core-js@3.29.1/node_modules/core-js postinstall$ node -e "try{require('./postinstall')}catch(e){}"
+.../node_modules/onnxruntime-node postinstall$ node ./script/install
+.../esbuild@0.28.0/node_modules/esbuild postinstall$ node install.js
+.../esbuild@0.25.2/node_modules/esbuild postinstall$ node install.js
+.../node_modules/protobufjs postinstall: Done
+.../core-js@3.29.1/node_modules/core-js postinstall: Thank you for using core-js ( https://github.com/zloirock/core-js ) for polyfilling JavaScript standard library!
+.../core-js@3.29.1/node_modules/core-js postinstall: The project needs your help! Please consider supporting of core-js:
+.../core-js@3.29.1/node_modules/core-js postinstall: > https://opencollective.com/core-js 
+.../core-js@3.29.1/node_modules/core-js postinstall: > https://patreon.com/zloirock 
+.../core-js@3.29.1/node_modules/core-js postinstall: > https://boosty.to/zloirock 
+.../core-js@3.29.1/node_modules/core-js postinstall: > bitcoin: bc1qlea7544qtsmj2rayg0lthvza9fau63ux0fstcz 
+.../core-js@3.29.1/node_modules/core-js postinstall: I highly recommend reading this: https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md 
+.../core-js@3.29.1/node_modules/core-js postinstall: Done
+.../esbuild@0.28.0/node_modules/esbuild postinstall: Done
+.../preact@8.2.9/node_modules/preact postinstall$ node -e "console.log('\u001b[35m\u001b[1mLove Preact? You can now donate to our open collective:\u001b[22m\u001b[39m\n > \u001b[34mhttps://opencollective.com/preact/donate\u001b[0m')"
+.../esbuild@0.25.2/node_modules/esbuild postinstall: Done
+.../preact@8.2.9/node_modules/preact postinstall: [35m[1mLove Preact? You can now donate to our open collective:[22m[39m
+.../preact@8.2.9/node_modules/preact postinstall:  > [34mhttps://opencollective.com/preact/donate[0m
+.../preact@8.2.9/node_modules/preact postinstall: Done
+.../sharp@0.34.5/node_modules/sharp install$ node install/check.js || npm run build
+.../node_modules/onnxruntime-node postinstall: Downloading https://api.nuget.org/v3-flatcontainer/microsoft.ml.onnxruntime.gpu.linux/1.24.3/microsoft.ml.onnxruntime.gpu.linux.1.24.3.nupkg
+.../swiper@8.4.7/node_modules/swiper postinstall$ node -e "try{require('./postinstall')}catch(e){}"
+.../swiper@8.4.7/node_modules/swiper postinstall: Love Swiper? Support Vladimir's work by donating or pledging: 
+.../swiper@8.4.7/node_modules/swiper postinstall: > On Patreon https://patreon.com/swiperjs 
+.../swiper@8.4.7/node_modules/swiper postinstall: > On Open Collective https://opencollective.com/swiper
+.../swiper@8.4.7/node_modules/swiper postinstall: Done
+.../sharp@0.34.5/node_modules/sharp install: Done
+.../node_modules/onnxruntime-node postinstall: Extracting runtimes/linux-x64/native/libonnxruntime_providers_cuda.so to /agent/repos/ignition/node_modules/.pnpm/onnxruntime-node@1.24.3/node_modules/onnxruntime-node/bin/napi-v6/linux/x64/libonnxruntime_providers_cuda.so
+.../node_modules/onnxruntime-node postinstall: Extracting runtimes/linux-x64/native/libonnxruntime_providers_shared.so to /agent/repos/ignition/node_modules/.pnpm/onnxruntime-node@1.24.3/node_modules/onnxruntime-node/bin/napi-v6/linux/x64/libonnxruntime_providers_shared.so
+.../node_modules/onnxruntime-node postinstall: Extracting runtimes/linux-x64/native/libonnxruntime_providers_tensorrt.so to /agent/repos/ignition/node_modules/.pnpm/onnxruntime-node@1.24.3/node_modules/onnxruntime-node/bin/napi-v6/linux/x64/libonnxruntime_providers_tensorrt.so
+.../node_modules/onnxruntime-node postinstall: Done
+.../node_modules/@tensorflow/tfjs-node install$ node scripts/install.js
+.../node_modules/@tensorflow/tfjs-node install: CPU-linux-4.22.0.tar.gz
+.../node_modules/@tensorflow/tfjs-node install: * Downloading libtensorflow
+.../node_modules/@tensorflow/tfjs-node install: https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.9.1.tar.gz
+.../node_modules/@tensorflow/tfjs-node install: * Building TensorFlow Node.js bindings
+.../node_modules/@tensorflow/tfjs-node install: Done
+
+dependencies:
++ reactflow 11.11.4
++ zod 3.24.2
+
+devDependencies:
++ @vitest/ui 3.1.1
++ dotenv 16.5.0
++ typedoc 0.28.19
++ typedoc-plugin-markdown 4.11.0
++ typescript 5.8.3
++ vitest 3.1.1
+
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: unrs-resolver.                                      │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Done in 18.4s using pnpm v10.8.0
+EXIT:0
