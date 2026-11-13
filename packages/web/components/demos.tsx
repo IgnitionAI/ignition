@@ -24,7 +24,9 @@ export default function Demos({ t }: { t: typeof DemosMessages }) {
 
           {/* Demo grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {DEMOS.map((demo) => (
+            {DEMOS.map((demo) => {
+              const tutorial = blogArticles.find(article => article.environment === demo.slug)
+              return (
               <article
                 key={demo.title}
                 data-aos="fade-up"
@@ -52,9 +54,9 @@ export default function Demos({ t }: { t: typeof DemosMessages }) {
                   <span className="text-xs text-slate-500 font-mono">{demo.algos}</span>
                   <a href={`/demos/${demo.slug}/`} className="text-indigo-400 text-sm font-medium">{t.view}</a>
                 </div>
-                <a href={`/blog/${blogArticles.find(article => article.environment === demo.slug)?.slug ?? ''}`} className="inline-block mt-4 text-sm text-indigo-300 hover:text-white">{t.readTutorial}</a>
+                {tutorial && <a href={`/blog/${tutorial.slug}`} className="inline-block mt-4 text-sm text-indigo-300 hover:text-white">{t.readTutorial}</a>}
               </article>
-            ))}
+            )})}
           </div>
 
         </div>

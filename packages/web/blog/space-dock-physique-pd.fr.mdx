@@ -1,0 +1,151 @@
+Une cargaison qui atteint une cible trop vite n'est pas arrimée. Pour rendre cette différence visible, notre dock sépare trois responsabilités : Rapier calcule le mouvement, un environnement décide si l'épisode est terminé, et R3F affiche l'état physique. Le rendu ne déplace pas les corps pour les faire coïncider avec une animation.
+
+Ce tutoriel explique le socle effectivement écrit. La mission choisie est plane : translation dans X/Z et rotation autour de Y, dans une scène 3D. Le drone et la cargaison sont deux corps liés, pas un seul mesh déplacé sur une trajectoire. Le mode automatique utilise un contrôleur PD scripté **non entraîné** ; aucun résultat d'apprentissage n'est annoncé.
+
+[Essayer le Dock spatial](/demos/space-dock/) · [Lire la licence des modèles](/demos/space-dock/models/LICENSE.txt).
+
+## Lire le contrat avant de lancer la scène
+
+`src/simulation-contract.ts` définit huit actions et les paramètres ; `SpaceDockEnv.observe()` construit les vingt-six observations. Les valeurs suivantes sont des règles de l'environnement, pas des performances mesurées.
+
+| Paramètre | Valeur déclarée | Sens dans le code |
+|---|---|---|
+| Sous-pas physique | 1/60 s | Pas fixe Rapier |
+| Sous-pas par décision | 6 au maximum | Une action couvre au plus 0,1 s, arrêt anticipé si terminal |
+| Force axiale | 600 N | Poussée avant ou arrière |
+| Force latérale | 120 N | Poussée locale bâbord ou tribord |
+| Couple de lacet | 300 N·m | Rotation autour de Y |
+| Distance d'arrimage | 0,45 m | Seuil de réussite |
+| Erreur de lacet | 8° | Seuil de réussite |
+| Vitesse linéaire | 0,2 m/s | Seuil de réussite |
+| Vitesse angulaire | 0,1 rad/s | Seuil de réussite |
+| Maintien | 90 ticks physiques | Conditions simultanées et continues |
+| Limite d'épisode | 5 400 ticks | Troncature temporelle |
+
+Le succès ne doit donc pas se réduire à la distance. Il demande aussi une orientation et des vitesses acceptables, maintenues pendant toute la durée de maintien. Le contrat distingue `success`, `bounds`, `nonfinite` et `timeout`. Un dépassement de limite n'est pas une réussite ; un timeout n'est pas non plus une terminaison réussie.
+
+## Construire un environnement, puis choisir une action
+
+L'API est asynchrone à la création, car Rapier WASM doit être prêt. Cet extrait montre l'API du module ; ce n'est ni une exécution commentée ni une preuve d'arrimage.
+
+```ts
+import { SpaceDockEnv } from './space-dock-env';
+
+const env = await SpaceDockEnv.create(42);
+try {
+  const observation = env.observe();
+  env.step(1); // action avant, au plus six sous-pas fixes
+  const transition = {
+    observation,
+    reward: env.reward(),
+    done: env.done(),
+    outcome: env.telemetry.outcome,
+  };
+  console.log(transition);
+} finally {
+  env.dispose();
+}
+```
+
+`observe()` retourne une copie de vingt-six valeurs et n'avance pas la simulation. `step()` applique une action ; `reward()` lit le dernier retour mémorisé. Après terminaison, une action valide ne doit plus avancer l'épisode ni ajouter un bonus terminal. Une action invalide reste une erreur : le terminal n'est pas une raison de masquer une mauvaise entrée.
+
+Le seed est un entier non signé de 32 bits. La reproductibilité est bornée au même runtime et aux mêmes versions ; ce n'est pas une promesse d'identité entre plateformes ou moteurs de navigateur.
+
+## Garder une seule autorité sur le temps
+
+`DockRuntime.advance(deltaSeconds)` accumule le temps jusqu'à une décision de 0,1 seconde. Il exécute au maximum trois décisions par frame et plafonne l'accumulation à 0,3 seconde. Il ne compense pas une frame lente en agrandissant le pas physique : le temps excédentaire est abandonné. C'est une limite voulue, pas une synchronisation temps réel universelle.
+
+Le runtime choisit une action manuelle ou appelle `scriptedPD`. En mode manuel, la contre-poussée est prioritaire sur les autres commandes manuelles ; le mode automatique choisit seul son action PD. Une pause, un changement de mode ou un reset effacent l'accumulateur et les commandes. L'historique est limité à soixante-quatre transitions.
+
+L'App possède la boucle temporelle et le runtime. La scène R3F lit les transforms dans `useFrame`. Elle ne crée pas un second monde, n'appelle pas `step` et n'applique pas de force. Dans cette architecture, ajouter un provider physique R3F autour du rendu ne remplacerait pas le monde déjà possédé par l'environnement : ce serait une autre simulation, hors contrat.
+
+## Synchroniser les modèles sans conserver des références périmées
+
+Le contrat visuel reçoit exactement ces propriétés :
+
+```ts
+interface SceneProps {
+  env: SpaceDockEnv;
+  compact: boolean;
+  reducedMotion: boolean;
+}
+```
+
+La scène lit les corps `env.drone` et `env.cargo`, leurs positions et quaternions. Après un reset, `generation` change et les anciens corps Rapier ne sont plus valides. Deux options sont prévues : relire les corps à chaque frame, ou invalider explicitement les références mises en cache lors de ce changement.
+
+L'adaptateur réexporte `Scene`. L'App ne possède pas de `Canvas` : la scène possède l'unique surface R3F et lit la simulation existante. Quatre modèles GLB sont chargés : le remorqueur, la cargaison, le poste d'arrimage et le hangar statique. Leur provenance est décrite dans `packages/demo-space-dock/ASSETS.md`. Les assets utilisent `import.meta.env.BASE_URL` sous la base `/demos/space-dock/`.
+
+## Faire réagir le rendu à l'état, sans modifier la physique
+
+`Scene.tsx` copie les translations et quaternions des corps courants à chaque frame. Elle construit aussi des signaux à partir de `action`, `contacts`, `outcome`, `torque` et `generation`. Les tuyères réagissent à la commande ; le signal rouge représente un contact général, pas un capteur d'arrimage inventé. Les clips mécaniques du dock sont déclenchés par l'état `success`, pas par une collision quelconque.
+
+Les modèles possèdent des animations nodales, sans personnage riggé. Elles décorent un état attesté par l'environnement et ne déplacent pas le cargo physique. Le compteur de génération permet de remettre à zéro les signaux lors d'un reset.
+
+Le mode compact est lu depuis une media query à 600 pixels ; `prefers-reduced-motion` est également réactif. Le code prévoit des plafonds de DPR, des ombres adaptées et des alertes de perte ou d'absence de WebGL. Ces comportements ont été exercés sur des états ciblés dans un navigateur à rendu logiciel. Cela ne constitue ni une mesure de consommation GPU ni une validation sur téléphone réel ; la lisibilité mobile reste bornée aux vues observées.
+
+## Charger le hangar dans le monde, sans déplacer le monde
+
+Le décor est `hangar-orbital.glb`, empreinte <code style={{overflowWrap:'anywhere'}}>c004741dffc17a18f9d66d04b21e7a28001a693a689ca872f54114c7aa58b8ee</code>. La lecture du fichier livré confirme cette empreinte.
+
+`World` instancie `StaticHangar` à côté du sol et des solides de simulation. Le décor est exporté en coordonnées monde et conserve une transformation identité : ni recentrage ni mise à l'échelle corrective. Le chargeur n'ajoute pas de collider, de force, de boucle temporelle ou d'animation. Les superpositions et occultations relèvent de la vérification visuelle, pas de la physique.
+
+`StaticHangar` charge depuis `BASE_URL` et confie l'arbre à `createHangarLoad`. Ce propriétaire utilise le slot de chargement existant. Son nettoyage ferme le slot ; une réponse tardive doit être libérée plutôt qu'attachée. Le groupe R3F porte `dispose={null}` pour ne pas créer un second propriétaire de ces ressources. Passer en mode compact remplace le propriétaire afin de changer la politique d'ombres, sans changer la physique.
+
+La scène distingue le statut du hangar de celui des trois modèles mécaniques. Un échec doit afficher `NONFINAL` et indiquer que le décor est incomplet ; il ne doit pas annoncer un hangar prêt ni substituer un faux décor. Les états de refus ou de perte graphique ne doivent pas montrer un chargement GLB imaginaire. Une recette navigateur indépendante a vérifié la branche de refus WebGL : alerte visible hors canvas sur desktop et mobile, stable après pause, reset et redimensionnement, sans faux statut hangar ou GLB ni erreur répétée observée. Le nombre exact d'appels `getContext` n'a pas été instrumenté. Cette vérification ne valide ni le rendu 3D, ni le chargement GLB à l'écran, ni les animations, contacts, occultations ou performances.
+
+GLTFLoader rapporte 1 911 040 octets et 26 430 triangles pour le hangar ; les quatre fichiers totalisent 4 792 364 octets et 66 198 triangles. Ce sont des caractéristiques des fichiers, ni des draw calls ni une fréquence d'image. Un test géométrique vérifie le corridor nominal du parcours axial ; il ne prouve pas que le joueur voit tous les objets, ni que toutes les manœuvres restent libres. Les captures d'assets ne remplacent pas les vues de départ, d'approche et de succès dans la démo.
+
+## Identifier les modèles et leur rôle visuel
+
+La direction retenue est un dock industriel : structure ouverte, réseaux techniques, passerelle et balisage jaune autour du poste d'arrimage. Le hangar expose la manœuvre ; il ne possède ni collider ni boucle de simulation. Cette scène appartient au Dock spatial IgnitionRL.
+
+Les quatre GLB sont originaux, générés de façon procédurale avec Three.js et GLTFExporter. Leurs identités sont :
+
+<div tabIndex={0} role="region" aria-label="Empreintes SHA-256 des modèles" style={{width:'100%',maxWidth:'100%',overflowX:'auto'}}>
+
+| Modèle | SHA-256 |
+|---|---|
+| drone-remorqueur.glb | f5b646dbdaaa37e0a605723d4c4fd65b53aed09c54e96f20e88bc937718e373a |
+| cargo-orbitale.glb | 3fcb44848c941ca34daa9a7ee58019ca3b7bccd602f08947da9adf1e8819a203 |
+| poste-arrimage.glb | 29b711743137c0fef813e7bb3bfe962fb9f912092fb5ef1d91246a79c5074e0d |
+| hangar-orbital.glb | c004741dffc17a18f9d66d04b21e7a28001a693a689ca872f54114c7aa58b8ee |
+
+</div>
+
+L'inventaire des modèles compte 49 meshes pour les quatre fichiers ; les totaux d'octets et de triangles indiqués plus haut sont des propriétés des fichiers, pas des compteurs de rendu de l'App. Cet inventaire rapporte une validation glTF sans erreur ni avertissement, aucune texture tierce et aucun asset importé d'un service externe. Ces constats proviennent de l'inventaire ; ils n'ont pas été rejoués pour cet article. Le détail est dans `packages/demo-space-dock/ASSETS.md` et `public/models/validation.json`.
+
+## Comprendre le pilote automatique sans le confondre avec un agent entraîné
+
+`scriptedPD(telemetry, state)` reçoit la télémétrie et un état d'allocation discret. Il ne reçoit ni corps ni monde. Ses gains position/vitesse et lacet/vitesse angulaire sont des constantes dans `PD_GAINS` ; aucun checkpoint appris n'est chargé.
+
+Le contrôleur demande une force d'après l'erreur de position et la vitesse du barycentre. Il demande aussi un couple d'après l'erreur de lacet. L'allocation discrète tient compte du couple créé par une poussée latérale déportée. Le résultat reste une action de l'environnement, suivie des mêmes sous-pas physiques et critères d'arrimage que le manuel. Cette séparation évite de confondre trajectoire imposée et commande de corps physiques.
+
+## Lancer la démo en local
+
+Les commandes suivantes se lancent à la racine du dépôt `ignition` et utilisent les scripts de `package.json`. Pré-requis : Node 22, pnpm 10 et les dépendances du dépôt installées.
+
+```bash
+cd ignition
+pnpm --filter demo-space-dock run typecheck
+pnpm --filter demo-space-dock run test
+pnpm --filter demo-space-dock run build
+```
+
+Pour construire la démo sous sa base publique : `DEMO_BASE=/demos/space-dock/ pnpm --filter demo-space-dock run build`.
+
+Pour une session locale interactive, démarrer Vite et ouvrir l'URL affichée par le terminal :
+
+```bash
+cd ignition
+pnpm --filter demo-space-dock run dev --host 127.0.0.1
+```
+
+Le mode initial est manuel. Cliquer hors des boutons et des champs pour utiliser le clavier : W/flèche haut = avant, S/bas = arrière, A/gauche = bâbord, D/droite = tribord ; Q/E = lacet, Espace = contre-poussée, X = aucune poussée. P bascule la pause et R réinitialise. Les touches sont identifiées par `KeyboardEvent.code` : sur clavier AZERTY, W correspond à la position physique de Z, A à Q. Les boutons tactiles utilisent le même contrat d'actions. Les événements venant de BUTTON, SUMMARY, INPUT, SELECT et TEXTAREA sont ignorés par le gestionnaire de raccourcis pour préserver leur usage natif.
+
+Passer au mode automatique depuis l'interface affiche explicitement un PD non entraîné. Observer distance, vitesse et maintien ensemble ; à l'arrimage, les quatre conditions doivent rester vraies 90 ticks, soit 1,5 s simulée. Réinitialiser recrée les corps physiques et change la génération.
+
+## Limites de cette démonstration
+
+Le pilote automatique est un PD scripté non entraîné. Les cinq graines nominales des tests ne constituent ni une convergence ni une mesure de réussite générale. Types, tests Rapier/Three et build ne remplacent pas une recette graphique sur le bundle final. Les observations faites en rendu logiciel (SwiftShader) ne sont pas des performances GPU ou téléphone réel.
+
+Les modèles sont déclarés originaux, générés avec Three.js et GLTFExporter, et publiés sous licence MIT : Copyright (c) 2025–2026 Salim Laimeche, d'après la [décision du mainteneur](https://github.com/IgnitionAI/ignition/issues/45#issuecomment-5989916644). Le texte de licence des modèles est dans `public/models/LICENSE.txt`.
