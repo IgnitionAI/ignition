@@ -120,6 +120,30 @@ L'inventaire des modèles compte 49 meshes pour les quatre fichiers ; les totaux
 
 Le contrôleur demande une force d'après l'erreur de position et la vitesse du barycentre. Il demande aussi un couple d'après l'erreur de lacet. L'allocation discrète tient compte du couple créé par une poussée latérale déportée. Le résultat reste une action de l'environnement, suivie des mêmes sous-pas physiques et critères d'arrimage que le manuel. Cette séparation évite de confondre trajectoire imposée et commande de corps physiques.
 
+## Entraîner un DQN dans le navigateur
+
+Le panneau « Réseau de neurones / DQN » entraîne un vrai réseau, dans la page, avec `@ignitionai/backend-tfjs` et `@ignitionai/core`. `DockTrainingEnv` enveloppe `SpaceDockEnv` sans changer la physique et définit l'épisode d'apprentissage :
+
+- 26 observations normalisées et 8 actions discrètes, celles du mode manuel ;
+- une récompense dense bornée à [−1, 1] par décision : progression vers le poste, alignement du lacet, vitesse pénalisée près du poste, léger coût de temps ; −1 par nouveau contact ; +10 à l'arrimage ; −10 en cas de collision ou de sortie des limites ;
+- terminaison sur arrimage, collision ou sortie des limites ; troncature après 300 décisions (30 s simulées) ;
+- une suite de graines déterministe : `reset(seed)` rejoue le même épisode, `reset()` passe à la graine suivante.
+
+```ts
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
+import { SpaceDockEnv } from './space-dock-env';
+import { DockTrainingEnv } from './dock-training-env';
+
+const trainingEnv = new DockTrainingEnv(await SpaceDockEnv.create(42));
+trainingEnv.reset(2026);
+const runner = new IgnitionEnvTFJS(trainingEnv);
+runner.train('dqn'); // ε-greedy, replay, réseau cible
+```
+
+Dans la démo, `TrainingSession` exécute ces transitions par tranches de 12 ms pour laisser la scène s'afficher. Le réseau (26 → 64 → 64 → 8) tourne sur le backend CPU de TF.js. « Pause » attend la fin de la mise à jour en cours. « Regarder l'agent » pilote sans exploration ni mise à jour des poids. Le modèle s'exporte et s'importe en JSON TF.js. Manuel et PD restent disponibles comme références ; choisir l'un d'eux rend la main au runtime.
+
+La courbe affiche la récompense moyenne des dix derniers épisodes joués dans votre navigateur ; le taux d'arrimage compte les épisodes réellement réussis. Aucun réseau pré-entraîné n'est fourni et aucune durée de convergence n'est annoncée : les tests vérifient que l'entraînement démarre, que la perte reste finie et que l'inférence ne modifie pas les poids, pas que l'agent apprend à arrimer.
+
 ## Lancer la démo en local
 
 Les commandes suivantes se lancent à la racine du dépôt `ignition` et utilisent les scripts de `package.json`. Pré-requis : Node 22, pnpm 10 et les dépendances du dépôt installées.
@@ -146,6 +170,6 @@ Passer au mode automatique depuis l'interface affiche explicitement un PD non en
 
 ## Limites de cette démonstration
 
-Le pilote automatique est un PD scripté non entraîné. Les cinq graines nominales des tests ne constituent ni une convergence ni une mesure de réussite générale. Types, tests Rapier/Three et build ne remplacent pas une recette graphique sur le bundle final. Les observations faites en rendu logiciel (SwiftShader) ne sont pas des performances GPU ou téléphone réel.
+Le pilote automatique est un PD scripté non entraîné. L'entraînement DQN n'a pas de résultat publié : aucun taux d'arrimage ni aucune courbe de référence ne sont revendiqués. Les cinq graines nominales des tests ne constituent ni une convergence ni une mesure de réussite générale. Types, tests Rapier/Three et build ne remplacent pas une recette graphique sur le bundle final. Les observations faites en rendu logiciel (SwiftShader) ne sont pas des performances GPU ou téléphone réel.
 
 Les modèles sont déclarés originaux, générés avec Three.js et GLTFExporter, et publiés sous licence MIT : Copyright (c) 2025–2026 Salim Laimeche, d'après la [décision du mainteneur](https://github.com/IgnitionAI/ignition/issues/45#issuecomment-5989916644). Le texte de licence des modèles est dans `public/models/LICENSE.txt`.

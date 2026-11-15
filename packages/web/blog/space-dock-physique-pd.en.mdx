@@ -120,6 +120,30 @@ The model inventory counts 49 meshes across the four files; the byte and triangl
 
 The controller requests a force from the position error and the velocity of the centre of mass. It also requests a torque from the yaw error. The discrete allocation accounts for the torque created by an off-centre lateral thrust. The result is still an environment action, followed by the same physics substeps and docking criteria as manual play. This separation avoids confusing an imposed trajectory with commands applied to physical bodies.
 
+## Train a DQN in the browser
+
+The "RÉSEAU DE NEURONES / DQN" panel (the demo interface is in French) trains a real network, in the page, with `@ignitionai/backend-tfjs` and `@ignitionai/core`. `DockTrainingEnv` wraps `SpaceDockEnv` without changing the physics and defines the learning episode:
+
+- 26 normalized observations and 8 discrete actions, the same as manual mode;
+- a dense reward bounded to [−1, 1] per decision: progress toward the dock, yaw alignment, speed penalized near the dock, a small time cost; −1 per new contact; +10 on docking; −10 on collision or leaving the bounds;
+- termination on docking, collision or leaving the bounds; truncation after 300 decisions (30 s simulated);
+- a deterministic seed sequence: `reset(seed)` replays the same episode, `reset()` moves to the next seed.
+
+```ts
+import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
+import { SpaceDockEnv } from './space-dock-env';
+import { DockTrainingEnv } from './dock-training-env';
+
+const trainingEnv = new DockTrainingEnv(await SpaceDockEnv.create(42));
+trainingEnv.reset(2026);
+const runner = new IgnitionEnvTFJS(trainingEnv);
+runner.train('dqn'); // ε-greedy, replay, target network
+```
+
+In the demo, `TrainingSession` runs these transitions in 12 ms chunks so the scene keeps rendering. The network (26 → 64 → 64 → 8) runs on the TF.js CPU backend. "Pause" waits for the update in progress to finish. "Regarder l'agent" (watch the agent) flies the tug with no exploration and no weight update. The model can be exported and imported as TF.js JSON. Manual and PD remain available as references; choosing one hands control back to the runtime.
+
+The curve shows the mean reward of the last ten episodes played in your browser; the docking rate counts episodes that actually succeeded. No pre-trained network is shipped and no convergence time is claimed: the tests check that training starts, that the loss stays finite and that inference does not change the weights, not that the agent learns to dock.
+
 ## Run the demo locally
 
 Run the following commands from the root of the `ignition` repository; they use the scripts in `package.json`. Prerequisites: Node 22, pnpm 10 and the repository's dependencies installed.
@@ -146,6 +170,6 @@ Switching to automatic mode from the interface explicitly displays an untrained 
 
 ## Limits of this demo
 
-The autopilot is a scripted, untrained PD controller. The tests' five nominal seeds are neither convergence nor a general success measure. Types, Rapier/Three tests and the build do not replace a graphical test of the final bundle. Observations made with software rendering (SwiftShader) are not GPU or real-phone performance.
+The autopilot is a scripted, untrained PD controller. DQN training has no published result: no docking rate or reference curve is claimed. The tests' five nominal seeds are neither convergence nor a general success measure. Types, Rapier/Three tests and the build do not replace a graphical test of the final bundle. Observations made with software rendering (SwiftShader) are not GPU or real-phone performance.
 
 The models are declared original, generated with Three.js and GLTFExporter, and released under the MIT licence: Copyright (c) 2025–2026 Salim Laimeche, per the [maintainer's decision](https://github.com/IgnitionAI/ignition/issues/45#issuecomment-5989916644). The model licence text is in `public/models/LICENSE.txt`.
