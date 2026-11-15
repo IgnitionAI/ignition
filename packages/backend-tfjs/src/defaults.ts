@@ -1,5 +1,3 @@
-import type { AlgorithmType } from '@ignitionai/core';
-
 export const DQN_DEFAULTS: Record<string, unknown> = {
   hiddenLayers: [64, 64],
   gamma: 0.99,
