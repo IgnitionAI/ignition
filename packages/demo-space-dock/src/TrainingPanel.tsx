@@ -90,7 +90,7 @@ export function TrainingPanel({ session, snapshot: state }: { session: TrainingS
       {' '}{state.provenance.trainingSteps.toLocaleString('fr-FR')} pas DQN (graine {state.provenance.seed}
       {state.provenance.curriculum ? `, départs d’entraînement entre ${state.provenance.curriculum[0].toLocaleString('fr-FR')} et ${state.provenance.curriculum[1].toLocaleString('fr-FR')} m` : ''}).
       {' '}Mesure greedy avant publication : {Math.round(state.provenance.evaluation.successRate * state.provenance.evaluation.episodes)}/{state.provenance.evaluation.episodes} arrimages
-      {' '}depuis le départ standard (graines à partir de {state.provenance.evaluation.firstSeed}), distance finale moyenne {state.provenance.evaluation.meanFinalDistance.toFixed(2)} m.
+      {' '}depuis le départ standard (graines à partir de {state.provenance.evaluation.firstSeed}), distance finale moyenne {state.provenance.evaluation.meanFinalDistance.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} m.
       {' '}Recette : commit {state.provenance.commit}, {state.provenance.date}. Cliquez « Regarder l’agent » pour le voir piloter ; « Réinitialiser le réseau » repart de zéro pour l’entraîner vous-même.</p>}
     {state.nonFiniteLosses > 0 && <p role="alert">Perte non finie observée {state.nonFiniteLosses} fois : réinitialisez le réseau.</p>}
     {error && <p role="alert">{error}</p>}
