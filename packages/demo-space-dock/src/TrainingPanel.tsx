@@ -27,6 +27,11 @@ export function TrainingPanel({ session, snapshot: state }: { session: TrainingS
     link.href = url; link.download = `space-dock-dqn-${state.trainingSteps}.json`; link.click();
     setTimeout(() => URL.revokeObjectURL(url), 0);
   });
+  // The shipped weights stay out of the main bundle until the visitor asks for them.
+  const loadPretrained = () => invoke(async () => {
+    const { default: file } = await import('./pretrained/space-dock-dqn.json');
+    await session.importModel(JSON.stringify(file), { pretrained: true });
+  });
   const upload = (input: HTMLInputElement) => {
     const chosen = input.files?.[0]; input.value = '';
     if (chosen) invoke(async () => session.importModel(await chosen.text()));
@@ -75,20 +80,30 @@ export function TrainingPanel({ session, snapshot: state }: { session: TrainingS
         : <p>La courbe apparaît après deux épisodes terminés.</p>}
     </div>
     <div className="toolbar">
+      <button data-testid="pretrained" disabled={state.busy} onClick={loadPretrained}>Charger un agent pré-entraîné</button>
       <button data-testid="export" disabled={state.busy} onClick={download}>Exporter le modèle (JSON TF.js)</button>
       <button data-testid="import" disabled={state.busy} onClick={() => file.current?.click()}>Importer un modèle</button>
       <input ref={file} type="file" accept="application/json,.json" hidden onChange={event => upload(event.currentTarget)} />
     </div>
     {state.notice && <p role="status">{state.notice}</p>}
+    {state.provenance && <p data-testid="provenance">Agent entraîné hors ligne par IgnitionAI, avec cette même démo en Node.js sans rendu :
+      {' '}{state.provenance.trainingSteps.toLocaleString('fr-FR')} pas DQN (graine {state.provenance.seed}
+      {state.provenance.curriculum ? `, départs d’entraînement entre ${state.provenance.curriculum[0].toLocaleString('fr-FR')} et ${state.provenance.curriculum[1].toLocaleString('fr-FR')} m` : ''}).
+      {' '}Mesure greedy avant publication : {Math.round(state.provenance.evaluation.successRate * state.provenance.evaluation.episodes)}/{state.provenance.evaluation.episodes} arrimages
+      {' '}depuis le départ standard (graines à partir de {state.provenance.evaluation.firstSeed}), distance finale moyenne {state.provenance.evaluation.meanFinalDistance.toFixed(2)} m.
+      {' '}Recette : commit {state.provenance.commit}, {state.provenance.date}. Cliquez « Regarder l’agent » pour le voir piloter ; « Réinitialiser le réseau » repart de zéro pour l’entraîner vous-même.</p>}
     {state.nonFiniteLosses > 0 && <p role="alert">Perte non finie observée {state.nonFiniteLosses} fois : réinitialisez le réseau.</p>}
     {error && <p role="alert">{error}</p>}
     <details><summary>Ce que fait l’entraînement</summary>
       <p>Le réseau reçoit les 26 observations normalisées du dock et choisit l’une des 8 actions toutes les 0,1 s simulées.
-        Récompense par pas : progression vers le poste, alignement du lacet, vitesse pénalisée près du poste, léger coût de temps,
+        Récompense par pas : variation d’un potentiel (distance au poste, alignement du lacet, vitesse près du poste) moins un léger coût de temps,
         bornée à [−1, 1] ; −1 par contact ; +10 à l’arrimage ; −10 en cas de collision ou de sortie des limites.
         Un épisode dure au plus {TRAINING_ENV.maxSteps} décisions ({TRAINING_ENV.maxSteps / 10} s simulées).</p>
+      <p>Curriculum : pendant l’entraînement, chaque épisode part à l’arrêt sur l’axe du poste, à une distance tirée
+        {state.curriculum ? ` entre ${state.curriculum[0].toLocaleString('fr-FR')} et ${state.curriculum[1].toLocaleString('fr-FR')} m` : ''}.
+        « Regarder l’agent » part toujours du départ standard. Le critère d’arrimage ne change pas.</p>
       <p>Le calcul tourne dans ce navigateur, sur le processeur, par tranches de {SESSION_DEFAULTS.chunkMs} ms pour laisser la scène s’afficher.
-        Aucun réseau pré-entraîné n’est fourni et aucune convergence n’est garantie : la courbe et les taux affichés sont ceux des épisodes réellement joués ici.
+        Aucune convergence n’est garantie : la courbe et les taux affichés sont ceux des épisodes réellement joués ici. L’agent pré-entraîné est un résultat mesuré hors ligne, pas une promesse pour votre propre entraînement.
         L’export contient les poids du réseau, pas le replay ni l’état de l’optimiseur.</p>
     </details>
   </section>;

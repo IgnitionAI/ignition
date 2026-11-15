@@ -26,7 +26,7 @@ export default function Hud({ runtime }: { runtime: DockRuntime }) {
       <p>PD NON ENTRAÎNÉ : Kp {PD_GAINS.position}, Kd {PD_GAINS.velocity}, lacet Kp {PD_GAINS.yaw}, Kd {PD_GAINS.angularVelocity}.
         Qualification limitée aux départs axiaux seedés, sans évitement d’obstacles.</p>
       <p>Contrat TrainingEnv : 26 observations normalisées, 8 actions discrètes. Le panneau DQN entraîne un réseau dans ce navigateur
-        via DockTrainingEnv (récompense bornée, épisode de 30 s simulées, collision = échec). Aucun checkpoint pré-entraîné n’est livré.
+        via DockTrainingEnv (récompense bornée, épisode de 30 s simulées, collision = échec). Un agent pré-entraîné hors ligne peut être chargé depuis ce panneau.
         Récompense de cette télémétrie (runtime manuel / PD) : progression signée + orientation, coûts temps/poussée/contact, bonus terminal unique.</p>
     </details>
     <details><summary>Historique des 64 dernières transitions</summary><ol>

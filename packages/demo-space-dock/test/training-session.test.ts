@@ -1,8 +1,9 @@
+import { readFileSync } from 'node:fs';
 import RAPIER from '@dimforge/rapier3d-compat';
 import * as tf from '@tensorflow/tfjs';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { SpaceDockEnv } from '../src/space-dock-env';
-import { DockTrainingEnv } from '../src/dock-training-env';
+import { DockTrainingEnv, TRAINING_CURRICULUM } from '../src/dock-training-env';
 import { DQN_CONFIG, TrainingSession, weightValues } from '../src/training-session';
 import { DockRuntime } from '../src/runtime';
 
@@ -161,5 +162,38 @@ describe('DQN training session on the real dock', () => {
     expect(weightValues(s.agent)).toEqual(initial);
     expect(s.snapshot()).toMatchObject({ mode: 'idle', trainingSteps: 0, episodes: 0, updates: 0, curve: [], lastLoss: null });
     expect(runtime.isExternal).toBe(false);
+  }, 60000);
+  it('trains on curriculum starts but watches from the standard start', async () => {
+    const s = await session();
+    await s.runSteps(3, 'training');
+    expect(s.env.startDistance).toEqual(TRAINING_CURRICULUM);
+    expect(s.snapshot().curriculum).toEqual(TRAINING_CURRICULUM);
+    await s.runSteps(2, 'inference');
+    expect(s.env.startDistance).toBeUndefined();
+    expect(s.env.steps).toBe(2); // switching mode starts a fresh standard episode
+    const off = await session({ curriculum: null });
+    await off.runSteps(1, 'training'); expect(off.env.startDistance).toBeUndefined();
+  }, 30000);
+
+  it('ships a pre-trained agent with provenance that docks greedily from the standard start', async () => {
+    const text = readFileSync(new URL('../src/pretrained/space-dock-dqn.json', import.meta.url), 'utf8');
+    const file = JSON.parse(text);
+    const s = await session();
+    await s.importModel(text, { pretrained: true });
+    const state = s.snapshot();
+    expect(state.provenance).toEqual(file.provenance);
+    expect(state.provenance!.evaluation.start).toBe('standard');
+    expect(state.epsilon).toBeLessThanOrEqual(DQN_CONFIG.minEpsilon!);
+    const before = weightValues(s.agent);
+    for (let i = 0; i < 300 && s.snapshot().inferenceEpisodes === 0; i++) await s.runSteps(1, 'inference');
+    const watched = s.snapshot();
+    expect(watched.lastInferenceEpisode?.outcome).toBe('success');
+    expect(weightValues(s.agent)).toEqual(before);
+    console.info('pretrained-standard-start', JSON.stringify(watched.lastInferenceEpisode));
+    // A visitor's own file never displays a provenance, even if it carries one.
+    const other = await session();
+    await other.importModel(text);
+    expect(other.snapshot().provenance).toBeNull();
+    await expect(other.importModel(JSON.stringify({ ...file, provenance: { source: 'offline' } }), { pretrained: true })).rejects.toThrow(/provenance/);
   }, 60000);
 });
