@@ -8,13 +8,13 @@ Licence : les quatre modèles originaux sont couverts par la licence MIT de `Ign
 
 | Asset | Octets | Triangles | Meshes | SHA-256 |
 |---|---:|---:|---:|---|
-| `drone-remorqueur.glb` | 755 040 | 10 448 | 21 | `f5b646dbdaaa37e0a605723d4c4fd65b53aed09c54e96f20e88bc937718e373a` |
-| `cargo-orbitale.glb` | 914 796 | 12 636 | 6 | `3fcb44848c941ca34daa9a7ee58019ca3b7bccd602f08947da9adf1e8819a203` |
-| `poste-arrimage.glb` | 1 211 488 | 16 684 | 12 | `29b711743137c0fef813e7bb3bfe962fb9f912092fb5ef1d91246a79c5074e0d` |
-| `hangar-orbital.glb` | 1 911 040 | 26 430 | 10 | `c004741dffc17a18f9d66d04b21e7a28001a693a689ca872f54114c7aa58b8ee` |
-| **Total** | **4 792 364** | **66 198** | **49** | — |
+| `drone-remorqueur.glb` | 227 860 | 10 448 | 21 | `57f7fe737076b54ce7ae5ca48d8e45b2321076339c29189d79387dcacb3a7dce` |
+| `cargo-orbitale.glb` | 237 016 | 12 636 | 6 | `e50162c7553895bde65debeac279aab32f8020d007d73fa71b2f8c4e223f4297` |
+| `poste-arrimage.glb` | 331 240 | 16 684 | 12 | `f5b0432ffc9117700383b932d9735ea0b8c75871b414653109cd46a1e06bad50` |
+| `hangar-orbital.glb` | 636 036 | 26 430 | 10 | `da6076c750b128f0c8ccdbcdbfcc2f8738969da3774328d0827e88eae8ac68e9` |
+| **Total** | **1 432 152** | **66 198** | **49** | — |
 
-Budget sans compression Draco/Meshopt : **4,79 Mo**, aucune texture image. Les détails visibles sont de la géométrie chanfreinée et des matériaux PBR, pas des primitives de fallback. Les meshes statiques sont fusionnés par matériau ; les pivots mécaniques et les tuyères d’action restent séparés. Le berth est aligné pour anneau `x=6` et paroi `x=10,5` après rotation d’intégration.
+Budget sans compression Draco/Meshopt : **1,43 Mo**, aucune texture image. Les sommets identiques sont soudés et indexés (`gltf-transform weld`), à géométrie inchangée. Les détails visibles sont de la géométrie chanfreinée et des matériaux PBR, pas des primitives de fallback. Les meshes statiques sont fusionnés par matériau ; les pivots mécaniques et les tuyères d’action restent séparés. Le berth est aligné pour anneau `x=6` et paroi `x=10,5` après rotation d’intégration.
 
 ## Conventions
 
@@ -87,7 +87,7 @@ max (17.660225, 14.869, 9.6), mesuré par GLTFLoader/Box3.
 
 L'instance statique est ajoutée au vrai World R3F à l'identité, sans adaptation,
 clip, collider ni interaction physique. 10 meshes et 26 430 triangles mesurés
-dans le vrai GLB avec Three 0.162.0. Les 66 198 triangles / 49 meshes / 4 792 364
+dans le vrai GLB avec Three 0.162.0. Les 66 198 triangles / 49 meshes / 1 432 152
 octets sont les totaux des fichiers, pas une mesure des appels de rendu ou du GPU.
 Aucune texture image externe ; aucun achat ni nouvelle dépendance. Les captures
 amont d'assets ne prouvent pas l'intégration. Licence MIT et attribution comme ci-dessus.
