@@ -6,7 +6,12 @@ import type { LearnedRace } from "./learned-race";
 import { RacingCamera } from "./camera";
 import { referenceAction } from "./reference";
 import { RaceWorld } from "./race";
-import { DrivingWorld, DRIVING_CONTRACT, RacingTrack } from "./driving";
+import {
+  DrivingWorld,
+  DRIVING_CONTRACT,
+  RacingTrack,
+  actionFromKeys,
+} from "./driving";
 
 export function Vehicle({
   world,
@@ -157,18 +162,7 @@ function Driver({
     if (!paused && !loading) {
       accumulator.current += Math.min(delta, 0.1);
       while (accumulator.current >= DRIVING_CONTRACT.dt) {
-        const steer =
-          (keys.has("ArrowRight") || keys.has("KeyD") ? 1 : 0) -
-          (keys.has("ArrowLeft") || keys.has("KeyA") || keys.has("KeyQ")
-            ? 1
-            : 0);
-        const throttle =
-          keys.has("ArrowDown") || keys.has("KeyS")
-            ? -1
-            : keys.has("ArrowUp") || keys.has("KeyW") || keys.has("KeyZ")
-              ? 1
-              : 0;
-        const action = (throttle + 1) * 3 + steer + 1;
+        const action = actionFromKeys(keys);
         if (learned) learned.step(action);
         else if (race)
           race.step(

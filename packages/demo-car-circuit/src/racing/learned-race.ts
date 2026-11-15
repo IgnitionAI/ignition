@@ -2,6 +2,14 @@ import { RaceWorld } from "./race";
 import { LearnedDriver, type DriverCheckpoint } from "./learned-driver";
 import { observeDriver } from "./observations";
 
+export interface HumanRaceCompletion {
+  finishSeconds: (number | null)[];
+  laps: number[];
+  competitorIds: string[];
+  rulesId: string;
+  driving: string;
+}
+
 export interface RaceEntry {
   id: string;
   name: string;
@@ -68,4 +76,38 @@ export class LearnedRace {
     for (const p of this.policies) p.dispose();
     this.policies.length = 0;
   }
+}
+/**
+ * Finish a human session by driving the player slot with a frozen learned
+ * checkpoint. Opponents keep the session policies. No rule controller.
+ */
+export function completeHumanRaceWithFrozenPolicy(
+  session: LearnedRace,
+  checkpoint: DriverCheckpoint,
+): HumanRaceCompletion {
+  if (!session.human)
+    throw new Error("Frozen-policy completion is for human races");
+  const player = LearnedDriver.fromCheckpoint(checkpoint);
+  const before = session.snapshots().map((p) => p.weights);
+  try {
+    while (!session.race.finished)
+      session.step(player.action(observeDriver(session.race, 0)));
+    expectUnchangedWeights(before, session.snapshots().map((p) => p.weights));
+    return {
+      finishSeconds: session.race.drivers.map((d) => d.finishSeconds),
+      laps: session.race.drivers.map((d) => d.laps),
+      competitorIds: session.competitors.map((c) => c.id),
+      rulesId: session.race.rulesId,
+      driving: checkpoint.driving,
+    };
+  } finally {
+    player.dispose();
+  }
+}
+function expectUnchangedWeights(
+  before: DriverCheckpoint["weights"][],
+  after: DriverCheckpoint["weights"][],
+) {
+  if (JSON.stringify(before) !== JSON.stringify(after))
+    throw new Error("Learned opponent weights mutated during the race");
 }
