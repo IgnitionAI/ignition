@@ -1,12 +1,12 @@
 import path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   root: 'src',
   base: process.env.DEMO_BASE ?? '/',
   build: { outDir: '../dist', emptyOutDir: true },
-  server: { port: 3020 },
+  server: { port: 3020, host: "127.0.0.1" },
   plugins: [react()],
   resolve: {
     alias: {
@@ -16,4 +16,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: { exclude: ['@tensorflow/tfjs-node'] },
+  // vitest hérite de root:'src' — les tests vivent dans test/.
+  test: { root: '.' },
 });

@@ -106,7 +106,7 @@ describe('PPOConfigSchema', () => {
   const validPPO = {
     inputSize: 4,
     actionSize: 2,
-    clipEpsilon: 0.2,
+    clipRatio: 0.2,
     gamma: 0.99,
     gaeLambda: 0.95,
     epochs: 10,

@@ -1,6 +1,10 @@
 import { expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { LearnedRace, type RaceEntry } from "../src/racing/learned-race";
+import {
+  LearnedRace,
+  completeHumanRaceWithFrozenPolicy,
+  type RaceEntry,
+} from "../src/racing/learned-race";
 const entries: RaceEntry[] = [11, 29].map((seed) => ({
   id: `checkpoint-${seed}`,
   name: `Driver ${seed}`,
@@ -58,3 +62,22 @@ it.each([false,true])('uses ghost mode for learned races, including human=%s', h
   const session=new LearnedRace(human ? [entries[0]] : entries,human);
   try {expect(session.race.ghost).toBe(true);} finally {session.dispose();}
 });
+
+it("finishes a human race against a frozen learned checkpoint without mutating weights", () => {
+  const session = new LearnedRace([entries[1]], true, false, "sedan-sports");
+  const before = session.snapshots().map((p) => p.weights);
+  try {
+    const result = completeHumanRaceWithFrozenPolicy(
+      session,
+      entries[0].checkpoint,
+    );
+    expect(session.race.drivers[1].laps).toBe(3);
+    expect(session.race.drivers[1].finishSeconds).not.toBeNull();
+    expect(result.competitorIds).toEqual(["player", "checkpoint-29"]);
+    expect(result.rulesId).toBe("circuit-race-v2-ghost-v1");
+    expect(result.driving).toBe("circuit-racing-v2");
+    expect(session.snapshots().map((p) => p.weights)).toEqual(before);
+  } finally {
+    session.dispose();
+  }
+}, 60000);

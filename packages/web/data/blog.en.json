@@ -1,5 +1,11 @@
 [
   {
+    "slug": "space-dock-physique-pd",
+    "title": "Space Dock: docking cargo with Rapier and an untrained PD controller",
+    "description": "A tug and its cargo physically linked: manual controls, a PD controller and docking criteria, with no learning claimed.",
+    "imageAlt": "The tug and its cargo facing the docking ring in the industrial orbital hangar."
+  },
+  {
     "slug": "ball-thrust-physique-rapier",
     "title": "Ball Thrust 3D: from Rapier to a trainable DQN",
     "description": "Real physics, 21 observations, a DQN that learns and verifiable inference after a local checkpoint reload.",

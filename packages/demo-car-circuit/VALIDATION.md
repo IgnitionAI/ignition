@@ -1,6 +1,8 @@
-# Local validation — 6 September 2026
+# Local validation — 12 November 2026 (IGN-221 / #17)
 
-Status: implementation and automated/local-browser checks delivered; **a full human-driven three-lap race against a named learned checkpoint remains unverified**. No push, merge, deployment or issue closure is implied.
+Status: garage → keyboard race → results → new race is implemented and covered by Circuit tests plus a Playwright pass on CPU WebGL (SwiftShader). **A complete three-lap human keyboard race on a GPU browser remains NON VÉRIFIÉE.** No merge, publish, retraining or new asset is included. Follow [HUMAN-RACE.md](HUMAN-RACE.md) for the remaining GPU recipe.
+
+Previous 6 September 2026 notes are kept below as historical context.
 
 ## Scope and evidence
 
@@ -15,7 +17,7 @@ Status: implementation and automated/local-browser checks delivered; **a full hu
 | #16 Learned races | Fresh imitation V2 checkpoints 29 and 11 completed three browser laps in 103.27 s and 115.40 s, zero penalties/rescues. Separate frozen copies and unchanged weights tested. | No rule-controller fallback. This is not a human race proof. |
 | #11 Double DQN | Public analytic online/target test, API train/save/infer, same-seed weights, repeated-load memory test, selector and Q checkpoint reload. Browser CPU Double DQN seed 11 trained 20,000 transitions and scored 15/20 after save/full reload/load. Old race-V1 checkpoints show an incompatibility error. | Browser CPU and native TensorFlow are different numeric backends. Mixed browser race completed: Q checkpoint `driver-11-1788718008363` in 222.15 s, imitation `bundled-29` in 240.77 s. |
 | #12 Equal-budget comparison | [V3 report](src/public/reports/racing-q-v3/index.html): five seeds × twenty full evaluations × two methods, 20,000 transitions and 4,993 updates each. All failures, weights, timings, versions and source hashes retained; two independent reviews verified the artifacts. | DQN 42/100 successes, 61 finishes; Double DQN 33/100, 77 finishes. No gain on aggregate success. V1/V2 are historical archives. |
-| #17 Player versus trained AI | Two vehicle choices, one to three trained opponents, common physics/rules, HUD/map, pause/results. Public acceleration/braking/shared-clock/frozen-opponent tests pass. Browser short-key acceleration/pause previously verified. | **A complete three-lap human keyboard race against a named learned checkpoint is still unverified.** |
+| #17 Player versus trained AI | Two vehicle choices, one to three trained opponents, common physics/rules, HUD/map, pause/results. Public acceleration/braking/shared-clock/frozen-opponent tests pass. Playwright CPU WebGL path: garage, keyboard hold, pause/resume, finish against `bundled-29`, results, new race. Weights unchanged in simulation. | **GPU-browser human three-lap race: NON VÉRIFIÉE.** Playwright completion drives the player slot with frozen imitation-11, not a human. No rule-controller substitute. |
 
 ## V3 experiment contract
 
@@ -37,6 +39,14 @@ With browser cache disabled, final local Formula GLB transfer took **16.2 ms** (
 
 Final rendered V3 report opened through the Training link. Report, raw JSON and all ten weight files returned HTTP 200; raw JSON contains all 200 evaluations. Narrow-window lap counter and readable result rows checked visually.
 
+## IGN-221 Playwright (CPU WebGL / SwiftShader) — 12 November 2026
+
+Environment: Linux 6.12, Chromium Playwright 158, `ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero)))`. Viewport 1280×720. Dev server `http://127.0.0.1:3020/?e2e=1`. Circuit `alpine-park-v1`, driving `circuit-racing-v2`, rules `circuit-race-v2-ghost-v1`. Vehicles: player Sport GT, opponent Formule R. Opponent checkpoint `bundled-29` (imitation V2 seed 29). Player finish used frozen imitation seed 11 on the keyboard contract — **not** a human GPU race.
+
+Measured: keyboard hold reached 72 km/h after countdown; pause/resume; both cars completed 3 laps (player 244.10 s with 5 rescues / +41 s, `bundled-29` 59.05 s). Results overlay showed checkpoint ids. New race restarted countdown at 3 s with the same opponent. 90 animation-frame intervals: median **50 ms**, p95 **100 ms**, mean **58.8 ms**, ≈**17 FPS**. Not a 60 FPS claim. Artifacts: `evidence/ign-221/`.
+
+Console: Vite HMR debug, React DevTools hint, and a pre-existing `setState` during `Vehicle` render warning. No rule-controller fallback.
+
 ## Commands and remaining manual check
 
 - `npm test`: full workspace build, static demo build, Next build and **343 passing tests**, three credential-dependent integration skips.
@@ -44,7 +54,18 @@ Final rendered V3 report opened through the Training link. Report, raw JSON and 
 - `npm run lint`: exits successfully but explicitly skips ESLint because of existing configuration incompatibility. This is **not lint validation**.
 - All eight production demo HTML files reference their correct `/demos/<slug>/assets/` base.
 
-To complete #17: open local Circuit, choose Course → Play against AI, Sport GT and supplied imitation V2 checkpoint 29, then finish all three laps. Record checkpoint ID, result, penalties and replay/pause behavior. The available CUA key API emits short presses and has no key-hold operation. Automatic approval review rejected direct CDP key input in favour of CUA. The required human race has not been substituted with scripted AI driving.
+Automated recipe (not the GPU human race):
+
+```sh
+corepack pnpm install --frozen-lockfile
+corepack pnpm --filter demo-car-circuit test
+corepack pnpm --filter demo-car-circuit build
+corepack pnpm typecheck
+corepack pnpm --filter demo-car-circuit exec vite --host 127.0.0.1 --port 3020
+CIRCUIT_URL=http://127.0.0.1:3020 corepack pnpm --filter demo-car-circuit e2e:human-race
+```
+
+GPU human race: still **NON VÉRIFIÉE**. Follow [HUMAN-RACE.md](HUMAN-RACE.md). The Playwright finish drives the player with a frozen learned checkpoint, not a person.
 
 ## Training UX follow-up
 

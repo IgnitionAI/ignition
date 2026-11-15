@@ -3,7 +3,18 @@ import {
   type SavedDriver,
   type DriverEvaluation,
 } from "./training";
-import type { DriverCheckpoint } from "./learned-driver";
+import { LearnedDriver, type DriverCheckpoint } from "./learned-driver";
+
+function acceptDriver(saved: SavedDriver, drivers: SavedDriver[], errors: string[]) {
+  try {
+    const loaded = LearnedDriver.fromCheckpoint(saved.checkpoint);
+    loaded.dispose();
+    drivers.push(saved);
+  } catch (e) {
+    errors.push(`${saved.id}: ${String(e)}`);
+  }
+}
+
 export async function loadGarage({
   storage,
   base,
@@ -16,7 +27,7 @@ export async function loadGarage({
   const drivers: SavedDriver[] = [],
     errors: string[] = [];
   try {
-    drivers.push(...listDrivers(storage));
+    for (const saved of listDrivers(storage)) acceptDriver(saved, drivers, errors);
   } catch (e) {
     errors.push(String(e));
   }
@@ -43,7 +54,8 @@ export async function loadGarage({
     }),
   );
   for (const result of bundled) {
-    if (result.status === "fulfilled") drivers.push(result.value);
+    if (result.status === "fulfilled")
+      acceptDriver(result.value, drivers, errors);
     else errors.push(String(result.reason));
   }
   return { drivers, errors };

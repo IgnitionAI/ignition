@@ -22,7 +22,7 @@ Course now opens a garage for two to four learned competitors. Select a local sa
 
 Race V2 browser proof: new checkpoints 29 and 11 completed three laps in 103.27 s and 115.40 s, with zero penalties and rescues. The lap counter remains visible in narrow desktop windows and the result list separates checkpoint identity from finish time. The public integration test verifies completion with unchanged weights. In the garage, choose Play against AI to drive with one to three learned opponents. Choose your vehicle independently; arrows/WASD/ZQSD use the same nine-action physics as the networks. Opening garage controls pauses the race. The HUD adds position, laps, penalties and a live map; the camera remains on the player.
 
-Current player verification: shared-clock acceleration/braking and frozen-opponent tests pass; browser acceleration and Escape pause were observed. A browser run completing all three human laps remains unverified and is not claimed by the AI-only race proof.
+Current player verification: shared-clock acceleration/braking and frozen-opponent tests pass; Playwright on CPU WebGL exercises garage → keyboard → results → new race. A **GPU-browser** run completing all three human laps remains **NON VÉRIFIÉE**; see `HUMAN-RACE.md`. Do not treat the Playwright frozen-policy finish as that human recipe.
 
 The frozen racing evaluation protocol names Alpine Park for training, Harbour for held-out testing, and seeds 101/307/509 before learned checkpoint selection. The original constant-speed evaluation has its separate version.
 
