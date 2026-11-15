@@ -19,15 +19,29 @@ export interface DockTrainingOptions {
   maxSteps?: number;
   /** A new contact with a wall or module ends the episode as a failure. */
   terminateOnCollision?: boolean;
+  /**
+   * Training curriculum: start each episode with the cargo at rest on the docking axis, at a seeded
+   * distance from the dock drawn uniformly in [min, max] metres. Omitted = the standard IGN-118 start.
+   */
+  startDistance?: readonly [number, number];
 }
+/**
+ * Dense part = Φ(after) − Φ(before) − time, with the potential
+ * Φ = −(progress·distance + alignment·(1 − cos yawError) + speed·min(1, cargoSpeed)·max(0, 1 − distance/nearRadius)).
+ * A potential difference telescopes over an episode: it guides exploration without rewarding loops,
+ * and the docking criterion itself (distance, yaw, speeds, 1.5 s hold) stays the IGN-118 one.
+ */
 export const REWARD = Object.freeze({
-  progress: 2, alignment: 0.5, nearSpeed: 0.1, nearRadius: 2, time: 0.005,
+  progress: 2, alignment: 0.5, speed: 1, nearRadius: 3, time: 0.005,
   collision: 1, success: 10, failure: 10,
 });
+export const GOAL_X = 6;
 /** Per-transition bounds: dense term clipped to [-1, 1], then collision and terminal terms. */
 export const REWARD_BOUNDS = Object.freeze({
   min: -1 - REWARD.collision - REWARD.failure, max: 1 + REWARD.success,
 });
+/** Training-only start distances (m): from beside the dock to the standard start (about 13 m). */
+export const TRAINING_CURRICULUM = Object.freeze([0.5, 13] as const);
 export const TRAINING_ENV = Object.freeze({ seed: 2026, maxSteps: 300, observationSize: 26, actionCount: ACTIONS.length });
 
 const TIME_INDEX = 16;
@@ -35,6 +49,11 @@ const clamp = (value: number, limit = 1) => Math.max(-limit, Math.min(limit, val
 function checkSeed(seed: number): number {
   if (!Number.isInteger(seed) || seed < 0 || seed > 0xffffffff) throw new RangeError('seed must be uint32');
   return seed;
+}
+export function potential(t: Telemetry): number {
+  const speed = Math.hypot(t.cargo.velocity.x, t.cargo.velocity.z);
+  return -(REWARD.progress * t.distance + REWARD.alignment * (1 - Math.cos(t.yawError))
+    + REWARD.speed * Math.min(1, speed) * Math.max(0, 1 - t.distance / REWARD.nearRadius));
 }
 /** Episode n of a run seeded with `base` (n = 0 is the base itself). */
 export function episodeSeed(base: number, index: number): number {
@@ -45,6 +64,8 @@ export class DockTrainingEnv implements TrainingEnv {
   readonly actions = ACTIONS.length;
   readonly maxSteps: number;
   readonly terminateOnCollision: boolean;
+  /** Curriculum range for the next reset() (see DockTrainingOptions.startDistance); undefined = standard start. */
+  startDistance: readonly [number, number] | undefined;
   lastEpisode: DockEpisode | null = null;
   private baseSeed: number;
   private index = 0;
@@ -62,6 +83,9 @@ export class DockTrainingEnv implements TrainingEnv {
     if (!Number.isInteger(maxSteps) || maxSteps < 1) throw new RangeError('maxSteps must be a positive integer');
     this.maxSteps = maxSteps;
     this.terminateOnCollision = options.terminateOnCollision ?? true;
+    const range = options.startDistance;
+    if (range && !(range[0] >= 0 && range[1] >= range[0] && range[1] <= 14)) throw new RangeError('startDistance must satisfy 0 <= min <= max <= 14');
+    this.startDistance = range && [range[0], range[1]];
   }
 
   get seed(): number { return this.currentSeed; }
@@ -76,6 +100,11 @@ export class DockTrainingEnv implements TrainingEnv {
     if (seed === undefined) { this.index++; this.currentSeed = episodeSeed(this.baseSeed, this.index); }
     else { this.baseSeed = this.currentSeed = checkSeed(seed); this.index = 0; }
     this.dock.reset(this.currentSeed);
+    if (this.startDistance) {
+      const [low, high] = this.startDistance;
+      const unit = ((Math.imul(this.currentSeed ^ 0x5bd1e995, 1664525) + 1013904223) >>> 0) / 4294967296;
+      this.dock.placeOnAxis(GOAL_X - (low + unit * (high - low)));
+    }
     this.generation = this.dock.generation; this.ticks = this.dock.telemetry.ticks;
     this.stepCount = 0; this.episodeReturn = 0; this.lastReward = 0; this.state = 'running';
   }
@@ -102,10 +131,7 @@ export class DockTrainingEnv implements TrainingEnv {
   private shape(before: Telemetry, after: Telemetry, contacts: number): number {
     let dense = 0;
     if (this.state !== 'nonfinite') {
-      const speed = Math.hypot(after.cargo.velocity.x, after.cargo.velocity.z);
-      dense = REWARD.progress * (before.distance - after.distance)
-        + REWARD.alignment * (Math.cos(after.yawError) - Math.cos(before.yawError))
-        - (after.distance < REWARD.nearRadius ? REWARD.nearSpeed * Math.min(1, speed) : 0) - REWARD.time;
+      dense = potential(after) - potential(before) - REWARD.time;
       if (!Number.isFinite(dense)) dense = 0;
     }
     return clamp(dense) - (contacts > 0 ? REWARD.collision : 0)

@@ -142,6 +142,35 @@ describe('DockTrainingEnv contract', () => {
     } finally { first.dock.dispose(); second.dock.dispose(); }
   });
 
+  it('curriculum starts place the pair at rest on the axis, seeded, without changing the docking criterion', async () => {
+    const env = await make({ startDistance: [1, 4] });
+    try {
+      const distances: number[] = [];
+      for (let episode = 0; episode < 6; episode++) {
+        env.reset();
+        const t = env.dock.telemetry;
+        distances.push(t.distance);
+        expect(t.distance).toBeGreaterThanOrEqual(1 - 1e-6); expect(t.distance).toBeLessThanOrEqual(4 + 1e-6);
+        expect(t.drone.position.x - t.cargo.position.x).toBeCloseTo(2.3);
+        expect(Math.hypot(t.cargo.velocity.x, t.cargo.velocity.z)).toBe(0);
+        expect(t.ticks).toBe(0); expect(env.stale).toBe(false);
+        expect(env.observe().every(v => Number.isFinite(v) && Math.abs(v) <= 1)).toBe(true);
+      }
+      expect(new Set(distances.map(d => d.toFixed(3))).size).toBeGreaterThan(1);
+      const again = await make({ startDistance: [1, 4] });
+      try { for (let i = 0; i < 6; i++) again.reset(); expect(again.dock.telemetry.distance).toBeCloseTo(distances[5]); }
+      finally { again.dock.dispose(); }
+      // Still the IGN-118 success rule: the scripted PD docks from a near start and must hold 90 ticks.
+      env.reset(42);
+      const controller = createPDState();
+      run(env, () => scriptedPD(env.dock.telemetry, controller), TRAINING_ENV.maxSteps);
+      expect(env.outcome).toBe('success'); expect(env.dock.telemetry.holdSeconds).toBeGreaterThanOrEqual(1.5 - 1e-9);
+      env.dock.step(0);
+      expect(() => env.dock.placeOnAxis(0)).toThrow(/after reset/);
+      expect(() => new DockTrainingEnv(env.dock, { startDistance: [3, 1] })).toThrow(RangeError);
+    } finally { env.dock.dispose(); }
+  });
+
   it('refuses to step a dock reset or stepped behind its back', async () => {
     const env = await make();
     try {
