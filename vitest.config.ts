@@ -10,6 +10,7 @@ export default defineConfig({
       '@ignitionai/storage': resolve(__dirname, 'packages/storage/src/index.ts'),
       '@ignitionai/environments': resolve(__dirname, 'packages/environments/src/index.ts'),
       '@ignitionai/ignitionai': resolve(__dirname, 'packages/ignitionai/src/index.ts'),
+      '@': resolve(__dirname, 'packages/web'),
     },
   },
   test: {
