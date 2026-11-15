@@ -3,7 +3,7 @@
     "environment": "space-dock",
     "slug": "space-dock-physique-pd",
     "title": "Dock spatial : arrimer une cargaison avec Rapier, un PD de référence et un DQN à entraîner",
-    "description": "Un remorqueur et sa cargaison liés physiquement : commandes manuelles, contrôleur PD non entraîné, critères d’arrimage entraînement DQN dans le navigateur et agent pré-entraîné hors ligne, avec ses mesures.",
+    "description": "Un remorqueur et sa cargaison liés physiquement : commandes manuelles, contrôleur PD non entraîné, critères d’arrimage, entraînement DQN dans le navigateur et agent pré-entraîné hors ligne, avec ses mesures.",
     "date": "2026-11-10",
     "image": "/images/blog/space-dock/preview-v3.png",
     "imageAlt": "Le remorqueur et sa cargaison face à l’anneau d’arrimage dans le hangar orbital industriel.",
