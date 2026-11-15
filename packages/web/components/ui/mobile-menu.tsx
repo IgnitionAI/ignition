@@ -34,7 +34,7 @@ export default function MobileMenu({ t, locale }: { t: typeof NavMessages; local
   })
 
   return (
-    <div className="md:hidden flex items-center ml-4">
+    <div className="md:hidden flex items-center ml-2 sm:ml-4">
       {/* Hamburger button */}
       <button
         ref={trigger}

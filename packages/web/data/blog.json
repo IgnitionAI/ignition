@@ -1,5 +1,15 @@
 [
   {
+    "environment": "space-dock",
+    "slug": "space-dock-physique-pd",
+    "title": "Dock spatial : arrimer une cargaison avec Rapier et un PD non entraîné",
+    "description": "Un remorqueur et sa cargaison liés physiquement : commandes manuelles, contrôleur PD et critères d’arrimage, sans apprentissage revendiqué.",
+    "date": "2026-11-10",
+    "image": "/images/blog/space-dock/preview-v3.png",
+    "imageAlt": "Le remorqueur et sa cargaison face à l’anneau d’arrimage dans le hangar orbital industriel.",
+    "example": "demo-space-dock/src/space-dock-env.ts"
+  },
+  {
     "environment": "ball-thrust",
     "slug": "ball-thrust-physique-rapier",
     "title": "Ball Thrust 3D : de Rapier au DQN entraînable",
