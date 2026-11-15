@@ -59,6 +59,22 @@ export class SpaceDockEnv implements TrainingEnv, SimulationView {
     this.action = 0; this.contacts = 0; this.activeContacts.clear(); this.lastForce = ZERO; this.lastTorque = 0;
     this.refresh();
   }
+  /**
+   * Reset-time placement for training curricula: before the first step only, put the joined pair on the
+   * docking axis with the cargo at `cargoX` (at rest, yaw 0). Forces, masses, joint and solids are unchanged.
+   */
+  placeOnAxis(cargoX: number): void {
+    this.live;
+    if (this.ticks !== 0) throw new Error('placeOnAxis is only valid right after reset');
+    if (!Number.isFinite(cargoX) || cargoX < -8 || cargoX > 6) throw new RangeError('cargoX must be within [-8, 6]');
+    const rest = { x: 0, y: 0, z: 0 }, level = { x: 0, y: 0, z: 0, w: 1 };
+    this.cargo.setTranslation({ x: cargoX, y: 0, z: 0 }, true);
+    this.drone.setTranslation({ x: cargoX + 2.3, y: 0, z: 0 }, true);
+    for (const body of [this.cargo, this.drone]) {
+      body.setRotation(level, true); body.setLinvel(rest, true); body.setAngvel(rest, true);
+    }
+    this.refresh();
+  }
   dispose(): void {
     if (!this.physics) return;
     this.physics.events.free(); this.physics.world.free(); this.physics = undefined;

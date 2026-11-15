@@ -10,6 +10,7 @@ it('renders the registered route with the Dock tutorial; preserves existing arti
   const demo = registry.find(demo => demo.slug === 'space-dock');
   expect(demo?.dir).toBe('packages/demo-space-dock'); expect(demo?.pkg).toBe('demo-space-dock');
   expect(demo?.algos).toContain('non entraîné');
+  expect(demo?.algos).toContain('DQN');
   expect(existsSync(new URL('../../web/blog/space-dock-physique-pd.fr.mdx', import.meta.url))).toBe(true);
   expect(existsSync(new URL('../src/space-dock-env.ts', import.meta.url))).toBe(true);
   expect(existsSync(new URL('../../web/public/images/blog/space-dock/preview-v2.png', import.meta.url))).toBe(true);

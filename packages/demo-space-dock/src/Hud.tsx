@@ -25,8 +25,9 @@ export default function Hud({ runtime }: { runtime: DockRuntime }) {
         couple {P.torque} Nm. Frein : −840 v, −1315 ω, bornés à 600 N / 300 Nm.</p>
       <p>PD NON ENTRAÎNÉ : Kp {PD_GAINS.position}, Kd {PD_GAINS.velocity}, lacet Kp {PD_GAINS.yaw}, Kd {PD_GAINS.angularVelocity}.
         Qualification limitée aux départs axiaux seedés, sans évitement d’obstacles.</p>
-      <p>Contrat TrainingEnv disponible : 26 observations normalisées, 8 actions discrètes.
-        Aucun entraînement ni checkpoint livré. Récompense : progression signée + orientation, coûts temps/poussée/contact, bonus terminal unique.</p>
+      <p>Contrat TrainingEnv : 26 observations normalisées, 8 actions discrètes. Le panneau DQN entraîne un réseau dans ce navigateur
+        via DockTrainingEnv (récompense bornée, épisode de 30 s simulées, collision = échec). Un agent pré-entraîné hors ligne peut être chargé depuis ce panneau.
+        Récompense de cette télémétrie (runtime manuel / PD) : progression signée + orientation, coûts temps/poussée/contact, bonus terminal unique.</p>
     </details>
     <details><summary>Historique des 64 dernières transitions</summary><ol>
       {runtime.history.map((r, i) => <li key={`${r.elapsed}-${i}`}>{r.elapsed.toFixed(2)} s · {ACTIONS[r.action]} · r={r.reward.toFixed(4)}</li>)}
