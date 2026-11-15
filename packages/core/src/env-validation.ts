@@ -16,9 +16,11 @@ export function validateTrainingEnv(env: unknown): asserts env is TrainingEnv {
   assertFn(e, 'observe', 'TrainingEnv');
   assertFn(e, 'step', 'TrainingEnv');
   assertFn(e, 'reward', 'TrainingEnv');
-  assertFn(e, 'done', 'TrainingEnv');
   assertFn(e, 'reset', 'TrainingEnv');
-  for (const name of ['terminated', 'truncated']) {
+  if (e.done === undefined && e.isDone === undefined) {
+    assertFn(e, 'done', 'TrainingEnv');
+  }
+  for (const name of ['done', 'isDone', 'terminated', 'isTerminated', 'truncated', 'isTruncated']) {
     if (e[name] !== undefined) assertFn(e, name, 'TrainingEnv');
   }
 
