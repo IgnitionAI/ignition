@@ -18,7 +18,8 @@ export type {
   BoxSpace,
   MultiDiscreteSpace,
 } from './types';
+export { EPISODE_FLAG_NAMES } from './types';
 
 export { mergeDefaults } from './defaults';
 export { validateTrainingEnv, validateInferenceEnv } from './env-validation';
-export { ExperienceSchema } from './schemas';
+export { ExperienceSchema, TrainingEnvSchema } from './schemas';
