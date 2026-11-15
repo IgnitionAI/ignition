@@ -1,6 +1,6 @@
 {
   "drone-remorqueur": {
-    "bytes": 755040,
+    "bytes": 227860,
     "meshes": 21,
     "triangles": 10448,
     "nodes": [
@@ -39,7 +39,7 @@
     "messages": []
   },
   "cargo-orbitale": {
-    "bytes": 914796,
+    "bytes": 237016,
     "meshes": 6,
     "triangles": 12636,
     "nodes": [
@@ -57,7 +57,7 @@
     "messages": []
   },
   "poste-arrimage": {
-    "bytes": 1211488,
+    "bytes": 331240,
     "meshes": 12,
     "triangles": 16684,
     "nodes": [

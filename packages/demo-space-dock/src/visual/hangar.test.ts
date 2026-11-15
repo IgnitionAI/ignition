@@ -17,8 +17,8 @@ async function load(name = 'hangar-orbital') {
 
 test('frozen GLB hash, bounds, geometry and four-asset totals are current', async () => {
   const hangar = await load();
-  expect(createHash('sha256').update(hangar.bytes).digest('hex')).toBe('c004741dffc17a18f9d66d04b21e7a28001a693a689ca872f54114c7aa58b8ee');
-  expect(hangar.bytes.length).toBe(1911040);
+  expect(createHash('sha256').update(hangar.bytes).digest('hex')).toBe('da6076c750b128f0c8ccdbcdbfcc2f8738969da3774328d0827e88eae8ac68e9');
+  expect(hangar.bytes.length).toBe(636036);
   expect(hangar.animations).toHaveLength(0);
   const bounds = new Box3().setFromObject(hangar.scene);
   bounds.min.toArray().forEach((v, i) => expect(v).toBeCloseTo([-18.025, -3.705, -40.0466][i], 4));
@@ -36,7 +36,7 @@ test('frozen GLB hash, bounds, geometry and four-asset totals are current', asyn
     if (name === 'hangar-orbital') expect([assetTriangles, assetMeshes]).toEqual([26430, 10]);
     triangles += assetTriangles; meshes += assetMeshes;
   }
-  expect([bytes, triangles, meshes]).toEqual([4792364, 66198, 49]);
+  expect([bytes, triangles, meshes]).toEqual([1432152, 66198, 49]);
 });
 
 test('authored triangles leave the nominal cargo/drone straight approach corridor clear', async () => {
