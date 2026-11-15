@@ -26,6 +26,15 @@
       ],
       "react/*": [
         "./node_modules/@types/react/*"
+      ],
+      "@ignitionai/backend-tfjs": [
+        "../backend-tfjs/src/index.ts"
+      ],
+      "@ignitionai/core": [
+        "../core/src/index.ts"
+      ],
+      "@ignitionai/storage": [
+        "../storage/src/index.ts"
       ]
     }
   },
