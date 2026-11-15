@@ -125,16 +125,17 @@ Le contrôleur demande une force d'après l'erreur de position et la vitesse du 
 Le panneau « Réseau de neurones / DQN » entraîne un vrai réseau, dans la page, avec `@ignitionai/backend-tfjs` et `@ignitionai/core`. `DockTrainingEnv` enveloppe `SpaceDockEnv` sans changer la physique et définit l'épisode d'apprentissage :
 
 - 26 observations normalisées et 8 actions discrètes, celles du mode manuel ;
-- une récompense dense bornée à [−1, 1] par décision : progression vers le poste, alignement du lacet, vitesse pénalisée près du poste, léger coût de temps ; −1 par nouveau contact ; +10 à l'arrimage ; −10 en cas de collision ou de sortie des limites ;
+- une récompense dense bornée à [−1, 1] par décision : variation d'un potentiel (distance au poste, alignement du lacet, vitesse près du poste) moins un léger coût de temps ; −1 par nouveau contact ; +10 à l'arrimage ; −10 en cas de collision ou de sortie des limites ;
 - terminaison sur arrimage, collision ou sortie des limites ; troncature après 300 décisions (30 s simulées) ;
-- une suite de graines déterministe : `reset(seed)` rejoue le même épisode, `reset()` passe à la graine suivante.
+- une suite de graines déterministe : `reset(seed)` rejoue le même épisode, `reset()` passe à la graine suivante ;
+- en entraînement seulement, un curriculum de départs : le couple part à l'arrêt sur l'axe du poste, entre 0,5 et 13 m du poste. Le départ fait partie du reset, pas de la physique ; « Regarder l'agent » part toujours du départ standard et le critère d'arrimage ne change pas.
 
 ```ts
 import { IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
 import { SpaceDockEnv } from './space-dock-env';
 import { DockTrainingEnv } from './dock-training-env';
 
-const trainingEnv = new DockTrainingEnv(await SpaceDockEnv.create(42));
+const trainingEnv = new DockTrainingEnv(await SpaceDockEnv.create(42), { startDistance: [0.5, 13] });
 trainingEnv.reset(2026);
 const runner = new IgnitionEnvTFJS(trainingEnv);
 runner.train('dqn'); // ε-greedy, replay, réseau cible
@@ -142,7 +143,11 @@ runner.train('dqn'); // ε-greedy, replay, réseau cible
 
 Dans la démo, `TrainingSession` exécute ces transitions par tranches de 12 ms pour laisser la scène s'afficher. Le réseau (26 → 64 → 64 → 8) tourne sur le backend CPU de TF.js. « Pause » attend la fin de la mise à jour en cours. « Regarder l'agent » pilote sans exploration ni mise à jour des poids. Le modèle s'exporte et s'importe en JSON TF.js. Manuel et PD restent disponibles comme références ; choisir l'un d'eux rend la main au runtime.
 
-La courbe affiche la récompense moyenne des dix derniers épisodes joués dans votre navigateur ; le taux d'arrimage compte les épisodes réellement réussis. Aucun réseau pré-entraîné n'est fourni et aucune durée de convergence n'est annoncée : les tests vérifient que l'entraînement démarre, que la perte reste finie et que l'inférence ne modifie pas les poids, pas que l'agent apprend à arrimer.
+La courbe affiche la récompense moyenne des dix derniers épisodes joués dans votre navigateur ; le taux d'arrimage compte les épisodes réellement réussis.
+
+Ce que nous avons mesuré, hors navigateur (Node.js, sans rendu, graine 118, 20 épisodes greedy depuis le départ standard tous les 2 000 pas) : sans curriculum ni potentiel, aucun arrimage en 40 000 pas. Avec la recette de la démo, le réseau arrime 20 épisodes sur 20 à 32 000 pas, puis l'apprentissage se dégrade (au plus 1 sur 20 entre 34 000 et 40 000 pas). Un seul entraînement, une seule graine : c'est un résultat, pas une garantie. Dans un Chromium headless sans rendu, la démo traite environ 100 pas par seconde, donc 32 000 pas représentent au moins cinq minutes ; avec la scène 3D, c'est plus lent.
+
+D'où le bouton « Charger un agent pré-entraîné ». Ce réseau a été entraîné hors ligne par nos soins avec la même recette : 32 000 pas, graine 118. Avant publication, nous l'avons évalué sans exploration sur 50 épisodes inédits depuis le départ standard : 50 arrimages, distance finale moyenne 0,29 m. L'entraînement en direct reste disponible ; « Réinitialiser le réseau » repart de poids initiaux.
 
 ## Lancer la démo en local
 
@@ -170,6 +175,6 @@ Passer au mode automatique depuis l'interface affiche explicitement un PD non en
 
 ## Limites de cette démonstration
 
-Le pilote automatique est un PD scripté non entraîné. L'entraînement DQN n'a pas de résultat publié : aucun taux d'arrimage ni aucune courbe de référence ne sont revendiqués. Les cinq graines nominales des tests ne constituent ni une convergence ni une mesure de réussite générale. Types, tests Rapier/Three et build ne remplacent pas une recette graphique sur le bundle final. Les observations faites en rendu logiciel (SwiftShader) ne sont pas des performances GPU ou téléphone réel.
+Le pilote automatique est un PD scripté non entraîné. Les chiffres DQN ci-dessus viennent d'un seul entraînement hors ligne et d'une évaluation sur des départs axiaux ; ils ne garantissent ni la convergence d'un entraînement dans votre navigateur ni l'arrimage depuis d'autres positions. Les cinq graines nominales des tests ne constituent ni une convergence ni une mesure de réussite générale. Types, tests Rapier/Three et build ne remplacent pas une recette graphique sur le bundle final. Les observations faites en rendu logiciel (SwiftShader) ne sont pas des performances GPU ou téléphone réel.
 
 Les modèles sont déclarés originaux, générés avec Three.js et GLTFExporter, et publiés sous licence MIT : Copyright (c) 2025–2026 Salim Laimeche, d'après la [décision du mainteneur](https://github.com/IgnitionAI/ignition/issues/45#issuecomment-5989916644). Le texte de licence des modèles est dans `public/models/LICENSE.txt`.

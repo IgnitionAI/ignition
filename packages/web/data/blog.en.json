@@ -2,7 +2,7 @@
   {
     "slug": "space-dock-physique-pd",
     "title": "Space Dock: docking cargo with Rapier, a reference PD controller and a trainable DQN",
-    "description": "A tug and its cargo physically linked: manual controls, an untrained PD controller, docking criteria and in-browser DQN training, with no convergence result claimed.",
+    "description": "A tug and its cargo physically linked: manual controls, an untrained PD controller, docking criteria in-browser DQN training and an offline pre-trained agent, with its measurements.",
     "imageAlt": "The tug and its cargo facing the docking ring in the industrial orbital hangar."
   },
   {

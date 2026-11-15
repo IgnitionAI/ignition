@@ -114,7 +114,7 @@
   {
     "slug": "space-dock",
     "title": "Space Dock — technical preview",
-    "description": "Tow a rigidly linked cargo with real Rapier forces and collisions. Train a DQN in your browser and watch it fly the tug without exploration, or compare with manual controls and an untrained scripted PD reference.",
+    "description": "Tow a rigidly linked cargo with real Rapier forces and collisions. Train a DQN in your browser or load an agent we pre-trained offline, watch it fly the tug without exploration, and compare with manual controls and an untrained scripted PD reference.",
     "tech": "R3F · Rapier",
     "algos": "DQN · Manuel · PD non entraîné",
     "accent": "#7ac5f0",
