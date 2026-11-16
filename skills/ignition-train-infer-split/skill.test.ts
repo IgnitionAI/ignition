@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { TRAIN_INFER_SPLIT_BUDGET } from '../../examples/skill-train-infer-split';
+import { TRAIN_INFER_SPLIT_BUDGET } from './examples/skill-train-infer-split';
 
 const SKILL_DIR = 'ignition-train-infer-split';
 const SKILL_PATH = resolve('skills', SKILL_DIR, 'SKILL.md');

@@ -18,21 +18,21 @@ Success is measured only with numbers you actually ran: CartPole training, evalu
 | ignition-export-onnx | Export a trained TF.js policy to ONNX using the published backend API. | `skills/ignition-export-onnx/` |
 | ignition-save-load | Persist and restore agent weights and runner-facing state. | `skills/ignition-save-load/` |
 
-Start at **ignition-quickstart**. The other eight folders are specified in the same batch and may land in parallel pull requests.
+Start at **ignition-quickstart**. Copy any other skill folder you need.
 
 ## Conventions
 
 - Location: `skills/ignition-<name>/SKILL.md`.
 - Frontmatter: `name` equals the folder name; `description` says what the skill does and when to use it (max 1024 characters). Body in English, max 500 lines; extra detail in `references/`.
-- API: only `dev` at SHA `343a76952f9dcd6594674c3526ee03ee45b4d93e`. Cite each signature as `file:line`.
-- Runnable example: `examples/*.ts` plus `examples/*.test.ts`, executed by the root Vitest config with `@ignitionai/*` aliases. Tests call the real framework (no mocks) and stay under 60 s CPU.
+- API: `@ignitionai/*` **0.1.0** only. Cite each signature as `file:line`.
+- Runnable example: `skills/ignition-<name>/examples/*.ts` plus matching `*.test.ts`, executed by the root Vitest config with `@ignitionai/*` aliases. Tests call the real framework (no mocks) and stay under 60 s CPU.
 - Declare budget and seeds (at least three) before running. Paste raw results, including failures. Never weaken an existing test.
 
 ## How to install a skill
 
 There is no Ignition CLI that registers skills.
 
-Copy a skill directory into the project's Agent Skills folder, keeping the folder name:
+Copy a skill directory into the project's Agent Skills folder, keeping the folder name (this includes `examples/` and `references/`):
 
 ```text
 cp -R skills/ignition-quickstart .claude/skills/ignition-quickstart

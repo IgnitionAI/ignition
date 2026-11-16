@@ -79,7 +79,7 @@ describe('skills/ignition-train frontmatter', () => {
   it('name matches folder, description ≤1024, body ≤500 lines', () => {
     const skillPath = join(
       dirname(fileURLToPath(import.meta.url)),
-      '../skills/ignition-train/SKILL.md',
+      '../SKILL.md',
     );
     const text = readFileSync(skillPath, 'utf8');
     const match = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);

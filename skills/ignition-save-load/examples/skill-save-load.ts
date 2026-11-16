@@ -7,7 +7,7 @@ import { LocalStorageProvider } from '@ignitionai/storage';
 /** Declared before any measurement run. Three seeds, no convergence claim. */
 export const SAVE_LOAD_SEEDS = [7, 29, 101] as const;
 
-/** Training steps per seed. Enough to fill a small replay batch and decay epsilon. */
+/** Training steps per seed. Enough to fill a small replay sample and decay epsilon. */
 export const SAVE_LOAD_STEP_BUDGET = 48;
 
 /** Wall-clock budget for the executable example (CPU). */

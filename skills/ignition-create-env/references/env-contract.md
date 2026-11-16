@@ -1,6 +1,6 @@
-# TrainingEnv contract (dev SHA 343a769)
+# TrainingEnv contract (`@ignitionai/*` 0.1.0)
 
-Signatures below are from this checkout. Do not copy APIs from unmerged PRs.
+Signatures below are from the published 0.1.0 API.
 
 ## Spaces (`packages/core/src/types.ts`)
 

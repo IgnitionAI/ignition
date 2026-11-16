@@ -7,7 +7,7 @@ description: Evaluate a frozen IgnitionRL policy with held-out seeds, multiple e
 
 Measure a **fixed** policy. Do not report a single seed, a single episode, or a number without a spread. Do not claim convergence unless you measured it against a declared budget.
 
-This skill uses only the public API on `dev` at SHA `343a76952f9dcd6594674c3526ee03ee45b4d93e`.
+This skill uses only the public `@ignitionai/*` **0.1.0** API.
 
 ## When to use
 
@@ -62,7 +62,7 @@ To prove the policy stayed frozen, snapshot `DQNAgent.getModel().getWeights()` a
 
 ### 3. Run `evaluate(agent, envFactory, seeds, episodes)`
 
-There is **no** public `evaluate()` on `@ignitionai/*`. Use the helper in `examples/skill-evaluate.ts` (or copy it). Proposed addition to core: same signature, documented in the PR, not implemented here.
+There is **no** public `evaluate()` on `@ignitionai/*` 0.1.0. Use the helper in `examples/skill-evaluate.ts` (or copy it). That helper is not part of the published packages.
 
 ```ts
 import {
@@ -71,7 +71,7 @@ import {
   seededCartPoleFactory,
   EVAL_SEEDS,
   EPISODES_PER_SEED,
-} from '../../examples/skill-evaluate';
+} from './examples/skill-evaluate';
 
 const report = await evaluateWithRandomBaseline(
   agent,
@@ -100,7 +100,7 @@ See [references/report-template.md](references/report-template.md). Required fie
 - Do not average only the last episode, or only the best seed.
 - Do not evaluate with epsilon-greedy (`getAction(obs)` / `getAction(obs, false)`).
 - Do not change package code to add seeding; report the gap.
-- Do not paste internal hostnames, tokens, or machine paths into the skill or the PR.
+- Do not paste internal hostnames, tokens, or machine paths into the skill or reports.
 
 ## Executable example
 

@@ -39,7 +39,7 @@ import { CartPoleEnv } from '@ignitionai/environments';
 import { DQNAgent, IgnitionEnvTFJS } from '@ignitionai/backend-tfjs';
 import type { TrainingEnv } from '@ignitionai/core';
 // Root vitest aliases @ignitionai/* only. Resolve TF.js from the backend workspace package.
-import * as tf from '../packages/backend-tfjs/node_modules/@tensorflow/tfjs';
+import * as tf from '../../../packages/backend-tfjs/node_modules/@tensorflow/tfjs';
 
 export const SEEDS = [7, 11, 19] as const;
 export const TRAIN_STEPS = 64;

@@ -16,7 +16,7 @@ Design the **reward the agent trains on** without changing environment physics. 
 
 Do **not** use this skill to change `lr`, network size, or algorithms. Fix the signal first.
 
-## API on `dev` (`343a769`)
+## API (`@ignitionai/*` 0.1.0)
 
 Implement `TrainingEnv` (`packages/core/src/types.ts:95-112`): `actions`, `observe()`, `step()`, `reward()`, `done()`, optional `terminated()` / `truncated()`, `reset()`.
 
@@ -97,7 +97,7 @@ Full list: [references/checklist.md](references/checklist.md). Minimum:
 - Success = `position >= 0.5`, from `StepResult.terminated` after the terminal split — **not** `sumReportedReward`.
 
 ```ts
-import { compareMountainCarRewards } from '../examples/skill-reward-shaping';
+import { compareMountainCarRewards } from './examples/skill-reward-shaping';
 
 const report = await compareMountainCarRewards();
 // report.rows[].flagSuccesses is the metric
@@ -110,4 +110,4 @@ Math notes: [references/shaping-math.md](references/shaping-math.md).
 - Edit `packages/environments` or any package to “fix” reward.
 - Claim convergence without the event count.
 - Skip failed seeds.
-- Use APIs from unmerged PRs.
+- Use unpublished APIs.

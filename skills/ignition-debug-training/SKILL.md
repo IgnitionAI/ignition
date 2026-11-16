@@ -60,7 +60,7 @@ Use this abbreviated map. Details and citations: [references/symptom-table.md](r
 
 ## TensorFlow.js hygiene
 
-- `DQNAgent.train` builds the Bellman batch inside `tf.tidy` and `tf.dispose`s the fit tensors in `finally`.
+- `DQNAgent.train` builds the Bellman update inside `tf.tidy` and `tf.dispose`s the fit tensors in `finally`.
 - `DQNAgent.getAction` disposes `stateTensor`, `qValues`, and `argMaxTensor`.
 - `PPOAgent.train` wraps gradient work in `tf.tidy`.
 - After warmup (replay at `batchSize`), `tf.memory().numTensors` must stay **flat** across N further `env.step()` calls. If it climbs, the leak is in **your** probe code or a custom env, until proven otherwise.
@@ -91,7 +91,7 @@ Shared budget (all protocols): seeds `7`, `11`, `19`; `64` steps; `hiddenLayers:
 
 ## Do not
 
-- Do not use APIs from unmerged PRs.
+- Do not use unpublished APIs.
 - Do not mock `IgnitionEnvTFJS`, `DQNAgent`, or `CartPoleEnv`.
 - Do not skip a failing seed.
-- Do not “fix” `@ignitionai/*` in this skill’s PR. Report gaps instead.
+- Do not patch `@ignitionai/*` while using this skill. Report gaps instead.

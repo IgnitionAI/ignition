@@ -5,7 +5,7 @@ Fill this **after** declaring seeds and budget, and **after** the run. Paste raw
 ```text
 # Policy evaluation report
 
-- Framework API: IgnitionRL @ignitionai/* on git SHA 343a76952f9dcd6594674c3526ee03ee45b4d93e
+- Framework API: IgnitionRL `@ignitionai/*` 0.1.0
 - Policy: frozen greedy (getAction(obs, true) / inferStep). Algorithm + checkpoint id:
 - Train seeds (not evaluated):
 - Eval seeds (≥ 3, disjoint from train):

@@ -1,6 +1,6 @@
-# Symptom table (IgnitionRL on `dev` SHA `343a76952f9dcd6594674c3526ee03ee45b4d93e`)
+# Symptom table (IgnitionRL, `@ignitionai/*` 0.1.0)
 
-Signatures are cited as `file:line` in the pull request. This file only names the symbols.
+Signatures are cited as `file:line`. This file only names the symbols.
 
 ## Flat reward
 

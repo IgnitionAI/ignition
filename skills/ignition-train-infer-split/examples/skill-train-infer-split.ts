@@ -1,7 +1,7 @@
 import type { ModelStorageProvider } from '@ignitionai/storage';
 import { IgnitionEnvTFJS, DQNAgent } from '@ignitionai/backend-tfjs';
 import { CartPoleEnv } from '@ignitionai/environments';
-import * as tf from '../packages/backend-tfjs/node_modules/@tensorflow/tfjs';
+import * as tf from '../../../packages/backend-tfjs/node_modules/@tensorflow/tfjs';
 
 type LayersModel = tf.LayersModel;
 type ModelArtifacts = tf.io.ModelArtifacts;

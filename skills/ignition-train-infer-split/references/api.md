@@ -1,7 +1,6 @@
 # Public signatures used by ignition-train-infer-split
 
-Base SHA `343a76952f9dcd6594674c3526ee03ee45b4d93e`. Nothing from unmerged PRs
-#90, #77/#78, #39, or #42.
+Public `@ignitionai/*` **0.1.0** only. `@ignitionai/viz` is not part of this API.
 
 ## Runner (`packages/core/src/ignition-env.ts`)
 
