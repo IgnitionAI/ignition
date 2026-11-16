@@ -63,13 +63,32 @@ You can preview the bash without saving via `generateConversionScript(tfjsModelD
 
 ## Python conversion (required; not executed by the library)
 
-Conversion is **not** part of `pnpm test`. Install **exactly** the pins in `packages/backend-onnx/examples/requirements-onnx.txt` into a **Python 3.11** virtual environment (tested stack: `tensorflow==2.15.0`, `tensorflowjs==4.15.0`, `tf2onnx==1.16.1`, `numpy==1.26.4`, plus the converter extras listed in that file).
+Conversion is **not** part of `pnpm test`. Install **Python 3.11** and the pinned converter stack, then point tests at that interpreter.
+
+Preferred (uv):
+
+```bash
+uv python install 3.11
+uv venv .venv-onnx --python 3.11
+uv pip install --python .venv-onnx/bin/python -r packages/backend-onnx/examples/requirements-onnx.txt onnxruntime==1.16.3
+export IGNITION_ONNX_PYTHON="$PWD/.venv-onnx/bin/python"
+```
+
+Equivalent without uv:
 
 ```bash
 python3.11 -m venv .venv-onnx
 source .venv-onnx/bin/activate
-python -m pip install -r packages/backend-onnx/examples/requirements-onnx.txt
-bash ./export/convert.sh
+python -m pip install -r packages/backend-onnx/examples/requirements-onnx.txt onnxruntime==1.16.3
+export IGNITION_ONNX_PYTHON="$PWD/.venv-onnx/bin/python"
+```
+
+Pins from `packages/backend-onnx/examples/requirements-onnx.txt` include `tensorflow==2.15.0`, `tensorflowjs==4.15.0`, `tf2onnx==1.16.1`, `numpy==1.26.4`, plus converter extras. The skill additionally pins **`onnxruntime==1.16.3`** in the venv for a Python Runtime check; Vitest comparison uses `OnnxAgent` / `onnxruntime-node`.
+
+After Node wrote `convert.sh`:
+
+```bash
+PYTHON="$IGNITION_ONNX_PYTHON" bash ./export/convert.sh
 ```
 
 The script:
@@ -125,7 +144,7 @@ On a **fixed** observation set, for each row:
 
 Declare seeds and step budget **before** running. Short training is not a performance claim.
 
-If Python conversion cannot run in CI, skip that comparison and state the skip reason. Never treat a skipped conversion as a pass.
+When the venv above is present, the example test **runs** conversion for seeds 7, 13, and 29 (no skip). `it.skipIf` applies **only** if `tensorflowjs`, `tf2onnx`, and `onnxruntime` cannot be imported. A skip is not a fidelity pass.
 
 ## Pitfalls
 
@@ -137,4 +156,4 @@ If Python conversion cannot run in CI, skip that comparison and state the skip r
 
 ## Executable example
 
-`examples/skill-export-onnx.ts` plus `examples/skill-export-onnx.test.ts` (Vitest, no mocks of the framework). Conversion comparison is skipped unless the Python 3.11 pin set is importable.
+`examples/skill-export-onnx.ts` plus `examples/skill-export-onnx.test.ts` (Vitest, no mocks of the framework). The probe prefers `IGNITION_ONNX_PYTHON`, then `.venv-onnx/bin/python`.

@@ -70,30 +70,51 @@ describe('skill-export-onnx', () => {
   }, 60_000);
 
   it.skipIf(!conversionReady)(
-    `ONNX greedy actions match TF.js on the fixed set (${conversionReady ? 'toolchain present' : conversionSkipReason})`,
+    `ONNX greedy Q-values and actions match TF.js for seeds ${EXPORT_MEASUREMENT.seeds.join(', ')} (${conversionReady ? 'toolchain present' : conversionSkipReason})`,
     async () => {
       const python = pythonProbe.python;
       if (!python) {
         throw new Error('skipIf should have excluded this test');
       }
-      const seed = EXPORT_MEASUREMENT.seeds[0];
-      const tfjsPolicy = await collectGreedyTfjsPolicy(seed);
-      try {
-        const modelPath = await trySaveAndConvert(tfjsPolicy.agent.getModel(), python);
-        const comparison = await compareOnnxToTfjs({
-          modelPath,
-          actionSize: 2,
-          tfjsActions: tfjsPolicy.actions,
-          tfjsQValues: tfjsPolicy.qValues,
-        });
-        process.stdout.write(`ONNX_COMPARE ${JSON.stringify({ seed, ...comparison })}\n`);
-        expect(comparison.greedyMatch).toBe(true);
-        expect(comparison.onnxActions).toEqual(tfjsPolicy.actions);
-      } finally {
-        tfjsPolicy.runner.stop();
-        tfjsPolicy.agent.dispose();
+      const rows: Array<{
+        seed: number;
+        maxAbsoluteError: number;
+        tfjsActions: number[];
+        onnxActions: number[];
+        inputName: string;
+        outputName: string;
+      }> = [];
+      for (const seed of EXPORT_MEASUREMENT.seeds) {
+        const tfjsPolicy = await collectGreedyTfjsPolicy(seed);
+        try {
+          const { modelPath, log } = await trySaveAndConvert(tfjsPolicy.agent.getModel(), python);
+          process.stdout.write(`CONVERT_SH seed=${seed}\n${log}\n`);
+          const comparison = await compareOnnxToTfjs({
+            modelPath,
+            actionSize: 2,
+            tfjsActions: tfjsPolicy.actions,
+            tfjsQValues: tfjsPolicy.qValues,
+          });
+          const row = {
+            seed,
+            maxAbsoluteError: comparison.maxAbsoluteError,
+            tfjsActions: tfjsPolicy.actions,
+            onnxActions: comparison.onnxActions,
+            inputName: comparison.inputName,
+            outputName: comparison.outputName,
+          };
+          process.stdout.write(`ONNX_COMPARE ${JSON.stringify(row)}\n`);
+          expect(comparison.greedyMatch).toBe(true);
+          expect(comparison.onnxActions).toEqual(tfjsPolicy.actions);
+          rows.push(row);
+        } finally {
+          tfjsPolicy.runner.stop();
+          tfjsPolicy.agent.dispose();
+        }
       }
+      process.stdout.write(`ONNX_COMPARE_ALL ${JSON.stringify(rows)}\n`);
+      expect(rows).toHaveLength(EXPORT_MEASUREMENT.seeds.length);
     },
-    60_000,
+    300_000,
   );
 });

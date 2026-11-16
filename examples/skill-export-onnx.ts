@@ -3,7 +3,7 @@
  * Declares measurement budget before any training or conversion.
  */
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -117,25 +117,40 @@ export async function collectGreedyTfjsPolicy(seed: number): Promise<{
   return { seed, steps: runner.stepCount, actions, qValues, agent, runner };
 }
 
+const CONVERSION_IMPORT_CHECK =
+  'import tensorflowjs, tf2onnx, onnxruntime; assert tensorflowjs.__version__; assert tf2onnx.__version__';
+
+function pythonCandidates(): string[] {
+  const fromEnv = process.env.IGNITION_ONNX_PYTHON;
+  const localVenv = resolve('.venv-onnx/bin/python');
+  return [
+    ...(fromEnv ? [fromEnv] : []),
+    ...(existsSync(localVenv) ? [localVenv] : []),
+    'python3.11',
+    'python3',
+    'python',
+  ];
+}
+
 export function probePythonConversion(): { available: boolean; python?: string; reason: string } {
-  const candidates = ['python3.11', 'python3', 'python'];
-  const importCheck = 'import tensorflowjs, tf2onnx';
-  for (const python of candidates) {
+  const errors: string[] = [];
+  for (const python of pythonCandidates()) {
     try {
-      execFileSync(python, ['-c', importCheck], { stdio: 'ignore' });
+      execFileSync(python, ['-c', CONVERSION_IMPORT_CHECK], { stdio: 'ignore' });
       return {
         available: true,
         python,
-        reason: `${python} imports tensorflowjs and tf2onnx`,
+        reason: `${python} imports tensorflowjs, tf2onnx, and onnxruntime`,
       };
-    } catch {
-      // try next interpreter
+    } catch (error) {
+      errors.push(`${python}: ${error instanceof Error ? error.message.split('\n')[0] : String(error)}`);
     }
   }
   return {
     available: false,
     reason:
-      'Python 3.11 with packages/backend-onnx/examples/requirements-onnx.txt is not importable (tensorflowjs + tf2onnx). saveForOnnxExport does not run conversion.',
+      'No Python 3.11 venv with tensorflowjs, tf2onnx, and onnxruntime. Install with: uv python install 3.11 && uv venv .venv-onnx --python 3.11 && uv pip install --python .venv-onnx/bin/python -r packages/backend-onnx/examples/requirements-onnx.txt onnxruntime==1.16.3. Then export IGNITION_ONNX_PYTHON="$PWD/.venv-onnx/bin/python". ' +
+      errors.join(' | '),
   };
 }
 
@@ -214,14 +229,25 @@ export async function compareOnnxToTfjs(params: {
   };
 }
 
-export async function trySaveAndConvert(model: { save: (url: string) => Promise<unknown> }, python: string): Promise<string> {
+export async function trySaveAndConvert(
+  model: { save: (url: string) => Promise<unknown> },
+  python: string,
+): Promise<{ modelPath: string; log: string }> {
   const output = mkdtempSync(join(tmpdir(), 'skill-export-onnx-'));
   const modelDir = join(output, 'model');
   const { conversionScript } = await saveForOnnxExport(model, modelDir);
   const scriptPath = join(output, 'convert.sh');
   writeFileSync(scriptPath, conversionScript);
-  execFileSync('bash', [scriptPath], {
-    env: { ...process.env, PYTHON: python, TF_NUM_INTEROP_THREADS: '1', TF_NUM_INTRAOP_THREADS: '1' },
-  });
-  return `${modelDir}.onnx`;
+  try {
+    const log = execFileSync('bash', [scriptPath], {
+      encoding: 'utf8',
+      env: { ...process.env, PYTHON: python, TF_NUM_INTEROP_THREADS: '1', TF_NUM_INTRAOP_THREADS: '1' },
+    });
+    return { modelPath: `${modelDir}.onnx`, log };
+  } catch (error) {
+    const err = error as { stdout?: string; stderr?: string; status?: number; message?: string };
+    const log = [err.stdout ?? '', err.stderr ?? '', err.message ?? ''].filter(Boolean).join('\n');
+    process.stderr.write(`CONVERT_SH_FAILED exit=${err.status ?? 'unknown'}\n${log}\n`);
+    throw error;
+  }
 }

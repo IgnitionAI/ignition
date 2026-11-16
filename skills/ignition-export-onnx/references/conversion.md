@@ -30,15 +30,27 @@ TensorFlow.js imports the extra converter packages even for Layers models. Other
 
 ## Commands
 
+Install Python 3.11 if needed (`uv python install 3.11`, `pyenv install 3.11`, or the distro `python3.11` package). Then:
+
+```bash
+uv venv .venv-onnx --python 3.11
+uv pip install --python .venv-onnx/bin/python -r packages/backend-onnx/examples/requirements-onnx.txt onnxruntime==1.16.3
+export IGNITION_ONNX_PYTHON="$PWD/.venv-onnx/bin/python"
+# After Node wrote convert.sh next to the TF.js files:
+PYTHON="$IGNITION_ONNX_PYTHON" bash ./export/convert.sh
+```
+
+Without uv:
+
 ```bash
 python3.11 -m venv .venv-onnx
 source .venv-onnx/bin/activate
-python -m pip install -r packages/backend-onnx/examples/requirements-onnx.txt
-# After Node wrote convert.sh next to the TF.js files:
-bash ./export/convert.sh
+python -m pip install -r packages/backend-onnx/examples/requirements-onnx.txt onnxruntime==1.16.3
 ```
 
-Override the interpreter inside the script with `PYTHON=/path/to/venv/bin/python`.
+Do not commit `.venv-onnx`. The example test discovers that interpreter via `IGNITION_ONNX_PYTHON` or `.venv-onnx/bin/python`.
+
+Override the converter script interpreter with `PYTHON`. Extra pin for this skill (not in the package requirements file): `onnxruntime==1.16.3`.
 
 ## What the generated script runs
 
