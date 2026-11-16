@@ -13,7 +13,7 @@ import {
   TRAIN_SEEDS,
   assertNoStepsAfterStop,
   measureQTableVsRandom,
-} from '../../examples/skill-train';
+} from './examples/skill-train';
 
 describe('ignition-train skill', () => {
   it('Q-table mean return exceeds random on declared GridWorld seeds', async () => {

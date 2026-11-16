@@ -1,4 +1,4 @@
-# Signatures used (dev SHA `343a76952f9dcd6594674c3526ee03ee45b4d93e`)
+# Signatures used (`@ignitionai/*` 0.1.0)
 
 Line numbers are 1-based in that tree.
 

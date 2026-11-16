@@ -5,7 +5,7 @@ description: Entry point for IgnitionRL. Install @ignitionai/core, @ignitionai/b
 
 # Ignition Quickstart
 
-Use this skill to go from an empty project to a running CartPole DQN loop, then pick the next skill. Packages are `@ignitionai/*` **0.1.0** as published from `dev` SHA `343a76952f9dcd6594674c3526ee03ee45b4d93e`.
+Use this skill to go from an empty project to a running CartPole DQN loop, then pick the next skill. Packages are `@ignitionai/*` **0.1.0**.
 
 Do not claim the pole stays up, that training converged, or that a seed is reproducible for the environment unless you measured it. `CartPoleEnv` draws the initial state with `Math.random()` and has no seed argument.
 
@@ -40,7 +40,7 @@ env.train('dqn')       // starts the automatic DQN loop
 // env.setSpeed(50)    // faster automatic ticks
 ```
 
-What those calls do on this SHA:
+What those calls do on `@ignitionai/*` 0.1.0:
 
 - `new CartPoleEnv()` — built-in `TrainingEnv`: actions `push_left` / `push_right`, 4-D observe, Euler physics, `done()` when the pole tips past 12°, the cart leaves `±2.4`, or 500 env steps elapse.
 - `new IgnitionEnvTFJS(env)` — TF.js factories for `dqn`, `double-dqn`, `ppo`, `qtable`. Input size is `observe().length`; action size is `actions.length`.
@@ -99,7 +99,7 @@ Runnable copy: `examples/skill-quickstart.ts` (tested by `examples/skill-quickst
 | To export a trained policy to ONNX | **ignition-export-onnx** | `skills/ignition-export-onnx/` |
 | To save and load weights / runner state | **ignition-save-load** | `skills/ignition-save-load/` |
 
-The other eight skill folders land in parallel PRs. Follow this index; do not invent extra skill names.
+Follow this index; do not invent extra skill names.
 
 Save/load shown in the web Quickstart (`IndexedDBProvider`, `env.save`, `env.load`) belongs to **ignition-save-load**, not this skill.
 
@@ -111,4 +111,4 @@ Verified method (no CLI): copy this directory to the project's Agent Skills fold
 .claude/skills/ignition-quickstart/SKILL.md
 ```
 
-Keep the folder name equal to the frontmatter `name`. See `skills/README.md` for the full set.
+Keep the folder name equal to the frontmatter `name`. Copy this folder as a unit (including `examples/`).

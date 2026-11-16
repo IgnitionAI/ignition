@@ -53,7 +53,7 @@ describe('skill ignition-debug-training', () => {
 describe('skills/ignition-debug-training frontmatter', () => {
   it('has name = folder, description <= 1024, body <= 500 lines', () => {
     const raw = readFileSync(
-      resolve(__dirname, '../skills/ignition-debug-training/SKILL.md'),
+      resolve(__dirname, '../SKILL.md'),
       'utf8',
     );
     expect(raw.startsWith('---\n')).toBe(true);

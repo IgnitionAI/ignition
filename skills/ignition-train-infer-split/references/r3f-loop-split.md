@@ -1,7 +1,7 @@
 # Training loop vs render loop (React Three Fiber)
 
-Source of the pattern: `packages/web/content/en/r3f.mdx` on SHA `343a769`.
-This skill does not import `@ignitionai/viz` (unmerged PRs #77/#78).
+Source of the pattern: `packages/web/content/en/r3f.mdx`.
+This skill does not import `@ignitionai/viz` (not published in 0.1.0).
 
 ## Two independent timers on one thread
 
@@ -16,7 +16,7 @@ This skill does not import `@ignitionai/viz` (unmerged PRs #77/#78).
 They share the `TrainingEnv` instance. Single-threaded JS: the two callbacks
 never run at the same time.
 
-`setSpeed(1)` keeps one step per 50 ms (smoother frames). `setSpeed(50)` batches
+`setSpeed(1)` keeps one step per 50 ms (smoother frames). `setSpeed(50)` runs
 many learning steps per yield (faster training, heavier frames).
 
 ## Lifecycle

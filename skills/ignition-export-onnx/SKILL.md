@@ -11,6 +11,31 @@ This skill does **not** publish to Hugging Face Hub and does **not** scaffold a 
 
 Do not claim CartPole (or any env) has converged unless you measured returns. Export fidelity is independent of training quality.
 
+## Prerequisites
+
+Conversion is a **separate Node + Python step**. The published `@ignitionai/backend-onnx` helpers write TF.js files and a bash script; they do **not** run Python.
+
+Install all of the following before you convert (see [references/conversion.md](references/conversion.md)):
+
+- **Node.js 20+** and `@tensorflow/tfjs-node` (required for `file://` save in `saveForOnnxExport`).
+- **Python 3.11** in an isolated venv (other versions are not the tested path).
+- The **pinned** converter stack from `packages/backend-onnx/examples/requirements-onnx.txt` (install the whole file): `tensorflow==2.15.0`, `tensorflowjs==4.15.0`, `tf2onnx==1.16.1`, `numpy==1.26.4`, plus the extras listed in that file (`tensorflow-decision-forests==1.8.1`, `tensorflow-hub==0.15.0`, `flax==0.7.5`, `jax==0.4.19`, `jaxlib==0.4.19`, `orbax-checkpoint==0.3.5`, `tensorstore==0.1.45`, `optax==0.1.7`, `chex==0.1.7`, `scipy==1.11.4`, `setuptools==80.9.0`).
+- Extra pin for this skill: **`onnxruntime==1.16.3`** (Python runtime check). Vitest comparison uses `OnnxAgent` / `onnxruntime-node`.
+- Environment variable **`IGNITION_ONNX_PYTHON`** pointing at that venv’s interpreter (the example also looks for `.venv-onnx/bin/python`).
+
+Preferred install:
+
+```bash
+uv python install 3.11
+uv venv .venv-onnx --python 3.11
+uv pip install --python .venv-onnx/bin/python -r packages/backend-onnx/examples/requirements-onnx.txt onnxruntime==1.16.3
+export IGNITION_ONNX_PYTHON="$PWD/.venv-onnx/bin/python"
+```
+
+Without uv: `python3.11 -m venv .venv-onnx`, activate it, then `python -m pip install -r packages/backend-onnx/examples/requirements-onnx.txt onnxruntime==1.16.3`.
+
+The example test **skips** ONNX/TF.js parity when those imports are missing. A skip is not a fidelity pass.
+
 ## When to use
 
 - A DQN policy exists and you need a portable `.onnx` graph.

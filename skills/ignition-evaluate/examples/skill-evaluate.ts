@@ -3,7 +3,7 @@ import { CartPoleEnv } from '@ignitionai/environments';
 import type { DQNAgent } from '@ignitionai/backend-tfjs';
 
 /**
- * Declared before any evaluation run (batch #102).
+ * Declared before any evaluation run.
  * Train seeds are listed only to keep them disjoint from eval seeds.
  * This example does not train to a target return and does not claim convergence.
  */

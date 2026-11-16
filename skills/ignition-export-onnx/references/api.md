@@ -1,6 +1,6 @@
-# API used from `dev` @ `343a76952f9dcd6594674c3526ee03ee45b4d93e`
+# API used from `@ignitionai/*` 0.1.0
 
-Citations are `file:line` in that tree. Do not use APIs from unmerged PRs.
+Citations are `file:line` in that tree. Do not use unpublished APIs.
 
 ## Exporter — `packages/backend-onnx/src/exporter.ts`
 

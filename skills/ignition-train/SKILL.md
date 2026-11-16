@@ -5,18 +5,18 @@ description: Choose DQN, PPO, or Q-Table, configure hyperparameters, then start 
 
 # Train an IgnitionRL agent
 
-Use this skill to pick an algorithm that **this `dev` SHA actually runs**, configure it, start the loop, and stop it. Do not claim the agent converged unless you measured returns against a declared budget and seeds.
+Use this skill to pick an algorithm that **`@ignitionai/*` 0.1.0 actually runs**, configure it, start the loop, and stop it. Do not claim the agent converged unless you measured returns against a declared budget and seeds.
 
 ## Choose an algorithm
 
-`IgnitionEnv.train(algorithm, overrides)` accepts `AlgorithmType`: `'dqn' | 'double-dqn' | 'ppo' | 'qtable'`. Observation size is `observe().length`. Action size is `actions.length` or the numeric `actions` count. PPO on this SHA samples a **discrete** categorical action (`PPOAgent.getAction` returns a single index). Continuous PPO is not on this SHA.
+`IgnitionEnv.train(algorithm, overrides)` accepts `AlgorithmType`: `'dqn' | 'double-dqn' | 'ppo' | 'qtable'`. Observation size is `observe().length`. Action size is `actions.length` or the numeric `actions` count. PPO in 0.1.0 samples a **discrete** categorical action (`PPOAgent.getAction` returns a single index). Continuous PPO is not supported.
 
 | Observation | Actions | Use | Why |
 |---|---|---|---|
 | Small enumerable state (grid cells, few bins per dim, table size `stateBins ** obsDim` stays tractable) | Discrete | `qtable` | Tabular update, no network |
 | Vector obs, discrete actions (default) | Discrete | `dqn` | Replay + target net; also `'double-dqn'` |
 | Vector obs, discrete actions, on-policy / stability | Discrete | `ppo` | Clipped categorical policy; needs a full rollout before `shouldTrain()` |
-| Box / continuous actions | Continuous | **unsupported here** | Not in this SHA |
+| Box / continuous actions | Continuous | **unsupported here** | Not in 0.1.0 |
 
 Q-Table bins every observation dim. Default `stateBins` is 10, so 4D obs → 10⁴ cells. Pass `stateLow` / `stateHigh` when obs are not in `[0, 1]`.
 
@@ -73,7 +73,7 @@ Do this **before** any `step()`:
 3. Evaluate greedy (`inferStep`) vs a random policy on the **same seeds**.
 4. Compare **measured** mean returns. Paste raw per-seed numbers. Do not say “it converged” if you only watched the loop.
 
-Runnable code: `examples/skill-train.ts`. Tests: `examples/skill-train.test.ts` and `skills/ignition-train/skill-train.test.ts`.
+Runnable code: `examples/skill-train.ts`. Tests: `examples/skill-train.test.ts` and `skill-train.test.ts`.
 
 ## More detail
 

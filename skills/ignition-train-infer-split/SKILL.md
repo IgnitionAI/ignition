@@ -57,7 +57,7 @@ fields. Shared mutable state on the `TrainingEnv` is the bridge; JavaScript is
 single-threaded so the timers never overlap. Cleanup with `stop()` on unmount.
 Details: `references/r3f-loop-split.md`.
 
-## Signatures (dev `343a769`)
+## Signatures (`@ignitionai/*` 0.1.0)
 
 See `references/api.md` for `file:line` citations.
 

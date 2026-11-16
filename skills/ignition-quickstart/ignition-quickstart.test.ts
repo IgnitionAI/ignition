@@ -37,7 +37,7 @@ describe('ignition-quickstart skill artifacts', () => {
     expect(body.split(/\r?\n/).length).toBeLessThanOrEqual(500);
   });
 
-  it('indexes exactly the nine skills from issue 102', () => {
+  it('indexes exactly the nine published skills', () => {
     const readme = readFileSync(join(repoRoot, 'skills/README.md'), 'utf8');
     const expected = [
       'skills/ignition-quickstart/',

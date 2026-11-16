@@ -1,6 +1,6 @@
 # Public API used by ignition-quickstart
 
-Pinned to `dev` SHA `343a76952f9dcd6594674c3526ee03ee45b4d93e`. Line numbers are 1-based in that tree.
+Pinned to `@ignitionai/*` **0.1.0**. Line numbers are 1-based in that tree.
 
 ## Packages
 

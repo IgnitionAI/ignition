@@ -6,7 +6,7 @@ description: Use when writing, validating, or wrapping a custom IgnitionRL Train
 # ignition-create-env
 
 Teach an agent how to write a custom environment that matches the framework
-contract on `dev` at SHA `343a76952f9dcd6594674c3526ee03ee45b4d93e`.
+contract for `@ignitionai/*` **0.1.0**.
 
 Executable example: `examples/skill-create-env.ts` (tests in
 `examples/skill-create-env.test.ts`). Full signatures:

@@ -7,7 +7,7 @@ description: Save, version, and reload IgnitionRL agents (DQN, PPO, Q-table) wit
 
 Use this skill to persist a trained agent and reload it in a **new** runner for more training or greedy inference. It covers `IgnitionEnv.save` / `load`, agent `save` / `load` / `getState` / `setState`, the four storage providers, Hub helpers, and checkpoint names.
 
-API surface is `dev` at SHA `343a76952f9dcd6594674c3526ee03ee45b4d93e` only.
+API surface is `@ignitionai/*` **0.1.0** only.
 
 ## When to use
 
