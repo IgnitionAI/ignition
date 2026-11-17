@@ -1,2 +1,2 @@
-export * from './saveModelToHub';
-export * from './loadModel';
+export * from './saveModelToHub.js';
+export * from './loadModel.js';

@@ -1,0 +1,73 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+stderr | packages/backend-tfjs/test/ppo-update.test.ts > PPOAgent — mini-batch updates > keeps a non-zero policy signal on a small batch of more than one transition
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-gae.test.ts (6 tests) 3ms
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+[PPO] Saved actor: file:///tmp/ppo-ckpt-S73EnH/policy/actor, critic: file:///tmp/ppo-ckpt-S73EnH/policy/critic
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+[PPO] Loaded model policy
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy continuous action including log-std
+[PPO] Saved actor: file:///tmp/ppo-ckpt-cont-ZsfdBT/policy/actor, critic: file:///tmp/ppo-ckpt-cont-ZsfdBT/policy/critic
+
+ ✓ packages/backend-tfjs/test/ppo-update.test.ts (7 tests) 183ms
+ ❯ packages/backend-tfjs/test/ppo-checkpoint.test.ts (4 tests | 1 failed) 221ms
+   ✓ PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference 77ms
+   × PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy continuous action including log-std 136ms
+     → Variable with name ppo_log_std was already registered
+   ✓ PPOAgent — checkpoint replay and dispose > greedy inference does not mutate weights 4ms
+   ✓ PPOAgent — checkpoint replay and dispose > dispose releases tensors so a follow-up agent can allocate 2ms
+stderr | packages/backend-tfjs/test/ppo-continuous.test.ts > PPOAgent — continuous actions > samples a 1-D action inside configured bounds
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/demo-target-chasing/test/ppo-artifacts.test.ts (3 tests) 6ms
+stderr | packages/backend-tfjs/test/ppo-discrete.test.ts > PPOAgent — discrete distribution > returns a valid categorical distribution and a coherent log-prob
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-discrete.test.ts (2 tests) 20ms
+ ✓ packages/backend-tfjs/test/ppo-continuous.test.ts (2 tests) 612ms
+   ✓ PPOAgent — continuous actions > learns a deterministic 1-D control task (push toward +1)  578ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy continuous action including log-std
+Error: Variable with name ppo_log_std was already registered
+ ❯ Engine.makeVariable node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/engine.ts:865:13
+ ❯ Proxy.variable node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/ops/variable.ts:41:17
+ ❯ new PPOAgent packages/backend-tfjs/src/agents/ppo.ts:249:24
+    247|     this.criticNet = buildMLP(inputSize, 1, hiddenLayers, seed, 100);
+    248|     if (actionSpace === 'continuous') {
+    249|       this.logStd = tf.variable(tf.fill([actionSize], -0.5), true, 'pp…
+       |                        ^
+    250|     }
+    251| 
+ ❯ packages/backend-tfjs/test/ppo-checkpoint.test.ts:98:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  1 failed | 23 passed (24)
+   Start at  19:14:56
+   Duration  1.50s (transform 175ms, setup 0ms, collect 1.25s, tests 1.04s, environment 1ms, prepare 340ms)
+
+EXIT:1

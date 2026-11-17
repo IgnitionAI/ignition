@@ -70,6 +70,7 @@ export default function App() {
     <div style={{ display: 'flex', height: '100vh', background: '#0a0a1a', color: '#e2e8f0', fontFamily: 'system-ui, sans-serif' }}>
       {/* Left sidebar */}
       <div style={{ width: 360, overflowY: 'auto', borderRight: '1px solid #333', padding: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <a href="./ppo.html" style={{ color: '#a5b4fc', fontSize: 13 }}>PPO before/after replay</a>
         <TrainingControls
           startTraining={handleStart}
           stopTraining={handleStop}

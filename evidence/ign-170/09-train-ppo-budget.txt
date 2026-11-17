@@ -1,0 +1,50 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+stderr | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-11/untrained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-11/untrained/critic
+
+stdout | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-11/trained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-11/trained/critic
+
+stdout | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+{"seed":11,"improved":true,"firstMean20":0.4425,"lastMean20":0.85}
+
+stdout | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-29/untrained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-29/untrained/critic
+
+stdout | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-29/trained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-29/trained/critic
+
+stdout | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+{"seed":29,"improved":true,"firstMean20":-0.1800000000000002,"lastMean20":0.8175000000000001}
+
+stdout | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-47/untrained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-47/untrained/critic
+
+stdout | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-47/trained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-47/trained/critic
+
+stdout | packages/backend-tfjs/test/ppo-train-budget.test.ts > trains the frozen nav1d PPO budget and writes raw logs
+{"seed":47,"improved":true,"firstMean20":0.1474999999999999,"lastMean20":0.8550000000000002}
+{
+  "gitSha": "28c6420b4aadcef4a6d5705ff7ccf479327c21a1",
+  "selectedSeed": 11,
+  "anyImproved": true
+}
+
+ ✓ packages/backend-tfjs/test/ppo-train-budget.test.ts (1 test) 2668ms
+   ✓ trains the frozen nav1d PPO budget and writes raw logs  2667ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  16:21:18
+   Duration  3.10s (transform 81ms, setup 0ms, collect 246ms, tests 2.67s, environment 0ms, prepare 44ms)
+
+EXIT:0

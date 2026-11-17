@@ -1,6 +1,7 @@
 {
   "page": {
-    "title": "Visualisation Target Chasing"
+    "title": "Visualisation Target Chasing",
+    "ppoReplay": "Rejeu PPO avant/après"
   },
   "language": {
     "label": "Langue",

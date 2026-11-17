@@ -1,6 +1,7 @@
 {
   "page": {
-    "title": "Target Chasing Visualization"
+    "title": "Target Chasing Visualization",
+    "ppoReplay": "PPO before/after replay"
   },
   "language": {
     "label": "Language",

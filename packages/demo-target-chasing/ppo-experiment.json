@@ -1,0 +1,41 @@
+{
+  "ticket": "IGN-170",
+  "declaredBeforeExecution": true,
+  "declaredAt": "2026-11-12T16:20:00Z",
+  "note": "Budgets and seeds are frozen before any training command in this branch. Results must come from the raw JSONL logs; do not edit numbers after the run.",
+  "gitBase": "28c6420b4aadcef4a6d5705ff7ccf479327c21a1",
+  "task": {
+    "id": "nav1d-discrete",
+    "description": "1-D navigation on [0, 1]. Action 1 = +0.15, action 0 = -0.15. Episode ends at position > 0.7 or 25 steps. Reward +1 on success else -0.05 per step.",
+    "start": "uniform[0, 0.4] via the seeded RNG",
+    "observation": ["position"]
+  },
+  "seeds": [11, 29, 47],
+  "budget": {
+    "episodesPerSeed": 80,
+    "maxStepsPerEpisode": 25,
+    "trainAfterEachEpisode": true
+  },
+  "agent": {
+    "algorithm": "ppo",
+    "actionSpace": "discrete",
+    "inputSize": 1,
+    "actionSize": 2,
+    "hiddenLayers": [32, 32],
+    "lr": 0.0003,
+    "gamma": 0.99,
+    "gaeLambda": 0.95,
+    "clipRatio": 0.2,
+    "epochs": 4,
+    "batchSize": 16,
+    "entropyCoef": 0.02,
+    "valueLossCoef": 0.5
+  },
+  "successCriterion": "For a seed, mean return of the last 20 episodes is strictly greater than mean return of the first 20 episodes.",
+  "improvementTask": "The same nav1d-discrete task. Report every seed (success and failure). No fabricated convergence.",
+  "eval": {
+    "greedyEpisodes": 20,
+    "checkpoint": "trained policy for that seed versus the same agent's untrained checkpoint, same greedy starts",
+    "demoSeedSelection": "max(trainedGreedyEvalMean - untrainedGreedyEvalMean)"
+  }
+}
