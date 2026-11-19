@@ -5,7 +5,7 @@
 File: `packages/backend-tfjs/src/defaults.ts`
 
 - `DQN_DEFAULTS`: `hiddenLayers [64, 64]`, `gamma 0.99`, `epsilon 1.0`, `epsilonDecay 0.995`, `minEpsilon 0.01`, `lr 0.001`, `batchSize 32`, `memorySize 10000`, `targetUpdateFrequency 100`
-- `PPO_DEFAULTS`: `hiddenLayers [64, 64]`, `gamma 0.99`, `gaeLambda 0.95`, `clipRatio 0.2`, `lr 3e-4`, `epochs 4`, `batchSize 64`, `entropyCoef 0.01`, `valueLossCoef 0.5`
+- `PPO_DEFAULTS`: `hiddenLayers [64, 64]`, `actionSpace 'discrete'` (`'continuous'` possible), `gamma 0.99`, `gaeLambda 0.95`, `clipRatio 0.2`, `lr 3e-4`, `epochs 4`, `batchSize 64`, `entropyCoef 0.01`, `valueLossCoef 0.5`
 - `QTABLE_DEFAULTS`: `stateBins 10`, `gamma 0.99`, `epsilon 1.0`, `epsilonDecay 0.995`, `minEpsilon 0.01`, `lr 0.1`
 - `'double-dqn'` copies DQN defaults and sets `doubleQ: true`
 

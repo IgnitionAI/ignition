@@ -55,6 +55,7 @@ describe('examples/skill-train', () => {
     });
     expect(PPO_DEFAULTS).toEqual({
       hiddenLayers: [64, 64],
+      actionSpace: 'discrete',
       gamma: 0.99,
       gaeLambda: 0.95,
       clipRatio: 0.2,
