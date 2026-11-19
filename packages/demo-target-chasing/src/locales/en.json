@@ -1,10 +1,46 @@
 {
   "page": {
-    "title": "Target Chasing Visualization"
+    "title": "Target Chasing Visualization",
+    "ppoReplay": "PPO before/after replay"
   },
   "language": {
     "label": "Language",
     "fr": "FR",
     "en": "EN"
+  },
+  "ppo": {
+    "title": "IgnitionAI — PPO before/after",
+    "heading": "PPO before / after",
+    "loading": "Loading PPO artifacts…",
+    "errorMissing": "PPO checkpoint/log absent: {url}",
+    "errorMissingStatus": "PPO checkpoint/log absent: {url} ({status})",
+    "errorLogFormat": "PPO log is not an array of numbers",
+    "noSimulatedSuccess": "No simulated success. Place checkpoints and logs under public/ppo then reload.",
+    "subtitle": "Seed {seed} · SHA {sha} · greedy means from loaded summary.json",
+    "liveDqn": "Live DQN 3D",
+    "seedButton": "Seed {seed}",
+    "replayUntrained": "Replay untrained",
+    "replayTrained": "Replay trained checkpoint",
+    "playGreedy": "Play greedy episode",
+    "greedyEval": "Loaded greedy eval (same 20 starts): untrained {untrained} · trained {trained} · gap {gap}",
+    "greedyFrom02": "Greedy episode from 0.2 (file): untrained {untrained} · trained {trained}",
+    "activePolicy": "Active policy:",
+    "policyDetails": "checkpoint {checkpoint} · status {status} · live replay return {episodeReturn}",
+    "policy": {
+      "untrained": "untrained",
+      "trained": "trained"
+    },
+    "status": {
+      "idle": "idle",
+      "loaded": "loaded",
+      "replay": "replaying {policy}"
+    },
+    "chartTitle": "Episode return from loaded JSON logs",
+    "chartSeries": "seed {seed}",
+    "chartEpisode": "Episode {episode}",
+    "seedResult": "seed {seed}: first20={first} last20={last} greedy untrained={untrained} trained={trained} gap={gap}",
+    "improved": "improved (train curve)",
+    "notImproved": "did not improve (train curve)",
+    "absent": "absent"
   }
 }

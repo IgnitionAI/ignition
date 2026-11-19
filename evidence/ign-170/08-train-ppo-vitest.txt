@@ -1,0 +1,10 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+No test files found, exiting with code 1
+
+filter: packages/backend-tfjs/scripts/train-ppo-nav1d.run.ts
+include: **/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}, **/test/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}
+exclude:  **/node_modules/**, **/dist/**, **/cypress/**, **/.{idea,git,cache,output,temp}/**, **/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,eslint,prettier}.config.*
+
+EXIT:1

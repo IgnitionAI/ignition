@@ -1,0 +1,128 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+stderr | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":true,"expected":0}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":true,"truncated":false,"expected":1}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] Loaded model fixture
+
+stderr | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — interface > getAction retourne un indice d'action valide
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] Saved actor: memory, critic: memory
+
+ ✓ packages/backend-tfjs/test/ppo-bootstrap.test.ts (6 tests) 59ms
+stderr | packages/backend-tfjs/test/schemas.test.ts > DQNAgent constructor validation > constructs successfully with valid config
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/schemas.test.ts (33 tests) 25ms
+ ❯ packages/backend-tfjs/test/ppo-gae.test.ts (6 tests | 1 failed) 6ms
+   ✓ computeGeneralizedAdvantages — hand-calculated > matches a two-step Monte-Carlo trace (λ=1, no bootstrap on terminal last step) 1ms
+   ✓ computeGeneralizedAdvantages — hand-calculated > bootstraps a non-terminal last state with the successor value 0ms
+   ✓ computeGeneralizedAdvantages — hand-calculated > does not bootstrap a terminal last state 0ms
+   × computeGeneralizedAdvantages — hand-calculated > bootstraps a truncated (non-terminal) step but cuts the GAE trace 3ms
+     → expected -102 to be close to -100, received difference is 2, but expected 5e-11
+   ✓ computeGeneralizedAdvantages — hand-calculated > uses the actual successor value, not V(s_t) 0ms
+   ✓ computeGeneralizedAdvantages — hand-calculated > does not normalize a single transition 0ms
+stderr | packages/backend-tfjs/test/ppo-update.test.ts > PPOAgent — mini-batch updates > keeps a non-zero policy signal on a small batch of more than one transition
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-update.test.ts (5 tests) 109ms
+stderr | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+[PPO] Saved actor: file:///tmp/ppo-ckpt-BKKqWP/policy/actor, critic: file:///tmp/ppo-ckpt-BKKqWP/policy/critic
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+[PPO] Loaded model policy
+
+ ✓ packages/backend-tfjs/test/ppo-checkpoint.test.ts (3 tests) 83ms
+stderr | packages/backend-tfjs/test/ppo-continuous.test.ts > PPOAgent — continuous actions > samples a 1-D action inside configured bounds
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/ppo-public.test.ts > PPO learns rewarded actions through the public loop (seed 11)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-continuous.test.ts (2 tests) 631ms
+   ✓ PPOAgent — continuous actions > learns a deterministic 1-D control task (push toward +1)  603ms
+stderr | packages/backend-tfjs/test/ppo-discrete.test.ts > PPOAgent — discrete distribution > returns a valid categorical distribution and a coherent log-prob
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-discrete.test.ts (2 tests) 19ms
+ ✓ packages/backend-tfjs/test/ppo-public.test.ts (5 tests) 798ms
+   ✓ PPO learns rewarded actions through the public loop (seed 11)  405ms
+stdout | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+[PPO convergence] premiers 40 épisodes: 0.469, derniers 40 épisodes: 0.855
+
+ ✓ packages/backend-tfjs/test/ppo.test.ts (4 tests) 2304ms
+   ✓ PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)  2215ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-gae.test.ts > computeGeneralizedAdvantages — hand-calculated > bootstraps a truncated (non-terminal) step but cuts the GAE trace
+AssertionError: expected -102 to be close to -100, received difference is 2, but expected 5e-11
+ ❯ packages/backend-tfjs/test/ppo-gae.test.ts:76:34
+     74|     // t=0 truncated: δ = 3 + 0.9*2 − 2 = 2.8; traceMask=0 so A = 2.8 …
+     75|     expect(result.advantages[0]).toBeCloseTo(2.8, 10);
+     76|     expect(result.advantages[1]).toBeCloseTo(-100, 10);
+       |                                  ^
+     77|     expect(result.returns[0]).toBeCloseTo(4.8, 10);
+     78|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 65 passed (66)
+   Start at  16:15:08
+   Duration  2.74s (transform 241ms, setup 0ms, collect 1.91s, tests 4.03s, environment 1ms, prepare 431ms)
+
+EXIT:1

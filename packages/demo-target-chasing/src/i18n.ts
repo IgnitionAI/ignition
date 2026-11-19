@@ -1,5 +1,7 @@
 // i18n maison minimal (pas de React ici) : dictionnaires fr/en,
 // détection navigator.language, persistance localStorage, sync DOM.
+// Chaque page choisit la clé de son titre via <html data-i18n-title="...">
+// (défaut : page.title) ; les vues React s'abonnent via subscribe().
 import fr from './locales/fr.json';
 import en from './locales/en.json';
 
@@ -17,6 +19,7 @@ const detect = (): Language => {
 };
 
 let lang: Language = detect();
+const listeners = new Set<() => void>();
 
 function lookup(messages: Messages, key: string): string | undefined {
   let node: unknown = messages;
@@ -29,11 +32,16 @@ function lookup(messages: Messages, key: string): string | undefined {
 
 function syncDom(): void {
   document.documentElement.lang = lang;
-  document.title = t('page.title');
+  document.title = t(document.documentElement.dataset.i18nTitle ?? 'page.title');
 }
 
-export function t(key: string): string {
-  return lookup(resources[lang], key) ?? key;
+/** Traduit `key` ; les jetons `{nom}` sont remplacés par `vars.nom`. */
+export function t(key: string, vars?: Record<string, string | number>): string {
+  const message = lookup(resources[lang], key) ?? key;
+  if (!vars) return message;
+  return message.replace(/\{(\w+)\}/g, (token, name: string) =>
+    name in vars ? String(vars[name]) : token,
+  );
 }
 
 export function getLanguage(): Language {
@@ -44,6 +52,15 @@ export function setLanguage(next: Language): void {
   lang = next;
   localStorage.setItem('lang', next);
   syncDom();
+  listeners.forEach((listener) => listener());
+}
+
+/** Abonnement aux changements de langue ; renvoie la fonction de désabonnement. */
+export function subscribe(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
 }
 
 syncDom();

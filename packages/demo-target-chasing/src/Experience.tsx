@@ -9,8 +9,9 @@ import React, {
 
 import { Vector3 } from 'three';
 
-import { DQNAgent } from '@ignitionai/backend-tfjs';
-import { IgnitionEnv } from '@ignitionai/core';
+// IgnitionEnv from backend-tfjs registers the TF.js factories ('dqn', ...);
+// the core class has none, so train('dqn') would throw on mount.
+import { DQNAgent, IgnitionEnv } from '@ignitionai/backend-tfjs';
 import { useFrame } from '@react-three/fiber';
 import {
   CuboidCollider,

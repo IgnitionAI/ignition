@@ -1,6 +1,6 @@
-import { AgentInterface, AgentFactory, AlgorithmType, EPISODE_FLAG_NAMES, StepResult, TrainingEnv } from './types';
-import { validateTrainingEnv } from './env-validation';
-import { mergeDefaults } from './defaults';
+import { AgentInterface, AgentFactory, AlgorithmType, EPISODE_FLAG_NAMES, StepResult, TrainingEnv } from './types.js';
+import { validateTrainingEnv } from './env-validation.js';
+import { mergeDefaults } from './defaults.js';
 
 function readFlag(env: TrainingEnv, names: readonly string[]): boolean | undefined {
   const record = env as TrainingEnv & Record<string, unknown>;
