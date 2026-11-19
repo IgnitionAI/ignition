@@ -1,5 +1,11 @@
 [
   {
+    "slug": "ppo-avant-apres",
+    "title": "PPO before / after: train an agent and check what it learned",
+    "description": "A PPO policy on a tiny one-dimensional task, trained by you in a few seconds: three seeds, 80 episodes, greedy evaluation before and after, and what these numbers do not prove.",
+    "imageAlt": "The PPO before / after demo page: seed 29, trained policy, return curve read from the logs."
+  },
+  {
     "slug": "space-dock-physique-pd",
     "title": "Space Dock: docking cargo with Rapier, a reference PD controller and a trainable DQN",
     "description": "A tug and its cargo physically linked: manual controls, an untrained PD controller, docking criteria, in-browser DQN training and an offline pre-trained agent, with its measurements.",

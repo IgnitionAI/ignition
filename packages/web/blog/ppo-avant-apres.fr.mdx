@@ -1,0 +1,81 @@
+Un agent qui « apprend » doit le montrer sur ses propres journaux, pas sur une animation. Cette démo compare une politique PPO avant et après entraînement, sur une tâche volontairement minuscule, et affiche les chiffres lus dans les fichiers produits par l'entraînement.
+
+**Vous allez entraîner l'agent vous-même, retrouver les mêmes chiffres, puis les voir rejoués dans le navigateur.**
+
+[Essayer la démo PPO avant / après](/demos/target-chasing/ppo.html)
+
+## La tâche
+
+Un point se déplace sur un segment [0, 1]. Il part d'une position tirée au hasard entre 0 et 0,4. À chaque pas, l'agent choisit entre deux actions : avancer de 0,15 ou reculer de 0,15. L'épisode réussit si la position dépasse 0,7 ; il s'arrête au plus tard après 25 pas. Une réussite rapporte +1 ; chaque pas sans réussite coûte −0,05. L'agent n'observe qu'une valeur : sa position.
+
+Le protocole a été figé avant tout entraînement dans `packages/demo-target-chasing/ppo-experiment.json` : trois graines (11, 29, 47), 80 épisodes par graine, un réseau [32, 32], PPO avec clip 0,2, gamma 0,99, GAE lambda 0,95, 4 époques, lots de 16.
+
+## Reproduire l'entraînement
+
+Node.js 22 et pnpm 10.8.0 (versions utilisées pour ce tuto : Node 22.23.4, pnpm 10.8.0).
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+git checkout 2e9a24a3a2f53000fefb7ce31eecbacb1bf5c104
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter @ignitionai/core build
+pnpm --filter @ignitionai/backend-tfjs build
+node scripts/train-ppo-nav1d.mjs
+```
+
+Les deux builds sont nécessaires : le script charge les paquets compilés (`dist/`). L'entraînement des trois graines a pris environ 5 secondes sur notre machine (CPU, sans `tfjs-node` ; TensorFlow.js le signale par un avertissement, sans effet sur le résultat).
+
+Le script écrit une ligne par graine. Résultat obtenu :
+
+| Graine | Moyenne des 20 premiers épisodes | Moyenne des 20 derniers | Évaluation gloutonne avant | après | écart |
+|---|---|---|---|---|---|
+| 11 | 0,4425 | 0,85 | 0,845 | 0,845 | 0 |
+| 29 | −0,18 | 0,8175 | −1,25 | 0,855 | 2,105 |
+| 47 | 0,1475 | 0,855 | 0,855 | 0,855 | 0 |
+
+« Gloutonne » veut dire que l'agent prend toujours l'action la plus probable, sur les 20 mêmes départs avant et après.
+
+Ces valeurs sont celles du dépôt : l'entraînement est déterministe pour ces graines. Seuls `manifest.json` (SHA et horodatage) et `train-result.json` changent. Pour revenir à l'état du dépôt :
+
+```bash
+git checkout -- packages/demo-target-chasing/public/ppo
+```
+
+Contrôle des artefacts :
+
+```bash
+pnpm exec vitest run packages/demo-target-chasing/test/ppo-artifacts.test.ts
+```
+
+Attendu : 4 tests passés.
+
+## Lire honnêtement le résultat
+
+- Les trois graines remplissent le critère fixé à l'avance (les 20 derniers épisodes font mieux que les 20 premiers).
+- Mais en évaluation gloutonne, **seule la graine 29 change** : les graines 11 et 47 étaient déjà correctes avant l'entraînement. Leur courbe monte parce que la politique devient moins aléatoire, pas parce qu'elle découvre une meilleure action.
+- La démo choisit donc la graine 29 par défaut, selon une règle écrite dans le manifest : le plus grand écart avant / après.
+- 80 épisodes sur une tâche à une dimension : c'est une démonstration du mécanisme, **pas un benchmark**.
+
+## Ouvrir la démo
+
+```bash
+pnpm --filter target-chasing build
+cd packages/demo-target-chasing
+pnpm exec vite preview --host 127.0.0.1 --port 4173
+```
+
+Ouvrez `http://127.0.0.1:4173/ppo.html`, ou directement [la démo en ligne](/demos/target-chasing/ppo.html). La page charge le manifest, les journaux et les deux checkpoints de la graine 29 :
+
+- **Rejouer la politique non entraînée**, puis **Jouer un épisode glouton** : depuis 0,2, la politique non entraînée obtient −1,250 ;
+- **Rejouer le checkpoint entraîné**, puis **Jouer un épisode glouton** : la politique entraînée obtient 0,850 ;
+- la courbe « Retour par épisode, lu dans les journaux JSON » vient des fichiers `episodes.json`, pas d'un calcul dans la page.
+
+Si un journal d'entraînement manque (`episodes.json`), la page l'écrit (« Checkpoint ou journal PPO introuvable », « PPO checkpoint/log absent » en anglais). Limite observée le 19/11 : si c'est le checkpoint entraîné qui manque, la page n'affiche aucun message et reste sur le replay non entraîné.
+
+## Limites observées (19/11)
+
+- Sous `vite preview`, un fichier absent est remplacé par la page HTML avec un code 200 : le message d'erreur s'affiche bien, mais indique « (200) ».
+- Rendu vérifié dans un navigateur sur serveur (rendu logiciel) ; pas testé sur téléphone réel.
+- Adresse publique : après le merge et le déploiement de la PR #90 seulement.
