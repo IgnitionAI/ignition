@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   root: 'src',
+  // Website build: build-demos.mjs sets DEMO_BASE=/demos/target-chasing/.
+  base: process.env.DEMO_BASE ?? '/',
   publicDir: '../public',
   build: {
     outDir: '../dist',

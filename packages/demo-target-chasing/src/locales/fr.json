@@ -7,5 +7,40 @@
     "label": "Langue",
     "fr": "FR",
     "en": "EN"
+  },
+  "ppo": {
+    "title": "IgnitionAI — PPO avant/après",
+    "heading": "PPO avant / après",
+    "loading": "Chargement des artefacts PPO…",
+    "errorMissing": "Checkpoint ou journal PPO introuvable : {url}",
+    "errorMissingStatus": "Checkpoint ou journal PPO introuvable : {url} ({status})",
+    "errorLogFormat": "Le journal PPO n’est pas une liste de nombres",
+    "noSimulatedSuccess": "Aucun succès simulé. Placez les checkpoints et les journaux dans public/ppo, puis rechargez la page.",
+    "subtitle": "Graine {seed} · SHA {sha} · moyennes gloutonnes lues dans summary.json",
+    "liveDqn": "DQN 3D en direct",
+    "seedButton": "Graine {seed}",
+    "replayUntrained": "Rejouer la politique non entraînée",
+    "replayTrained": "Rejouer le checkpoint entraîné",
+    "playGreedy": "Jouer un épisode glouton",
+    "greedyEval": "Évaluation gloutonne chargée (mêmes 20 départs) : non entraînée {untrained} · entraînée {trained} · écart {gap}",
+    "greedyFrom02": "Épisode glouton depuis 0,2 (fichier) : non entraînée {untrained} · entraînée {trained}",
+    "activePolicy": "Politique active :",
+    "policyDetails": "checkpoint {checkpoint} · état {status} · retour de l’épisode rejoué {episodeReturn}",
+    "policy": {
+      "untrained": "non entraînée",
+      "trained": "entraînée"
+    },
+    "status": {
+      "idle": "en attente",
+      "loaded": "chargée",
+      "replay": "rejeu de la politique {policy}"
+    },
+    "chartTitle": "Retour par épisode, lu dans les journaux JSON",
+    "chartSeries": "graine {seed}",
+    "chartEpisode": "Épisode {episode}",
+    "seedResult": "graine {seed} : 20 premiers = {first} · 20 derniers = {last} · glouton non entraînée = {untrained} · entraînée = {trained} · écart = {gap}",
+    "improved": "progrès (courbe d’entraînement)",
+    "notImproved": "pas de progrès (courbe d’entraînement)",
+    "absent": "absent"
   }
 }

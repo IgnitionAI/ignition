@@ -1,5 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
-import { missingArtifactMessage } from './artifacts';
+import { PpoArtifactMissingError } from './artifacts';
 
 function modelUrl(baseUrl: string, modelId: string): string {
   const prefix = baseUrl.replace(/\/$/, '');
@@ -8,7 +8,7 @@ function modelUrl(baseUrl: string, modelId: string): string {
 }
 
 /**
- * Read-only HTTP loader for PPO actor/critic directories served from /ppo.
+ * Read-only HTTP loader for PPO actor/critic directories served from `<base>ppo`.
  */
 export function httpModelProvider(baseUrl: string) {
   return {
@@ -19,7 +19,7 @@ export function httpModelProvider(baseUrl: string) {
       const url = modelUrl(baseUrl, modelId);
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error(missingArtifactMessage(url, response.status));
+        throw new PpoArtifactMissingError(url, response.status);
       }
       return tf.loadLayersModel(url);
     },

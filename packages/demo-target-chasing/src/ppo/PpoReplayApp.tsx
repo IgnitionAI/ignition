@@ -1,5 +1,13 @@
 import { Canvas } from '@react-three/fiber';
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+} from 'react';
 import {
   CartesianGrid,
   Legend,
@@ -13,12 +21,19 @@ import {
 import { PPOAgent } from '@ignitionai/backend-tfjs';
 import {
   fetchJson,
-  formatPpoReturn,
+  formatPpoNumber,
   parseEpisodeReturns,
+  ppoArtifactUrl,
+  PpoArtifactMissingError,
+  PpoLogFormatError,
   type PpoManifest,
   type PpoSeedSummary,
 } from './artifacts';
 import { httpModelProvider } from './http-provider';
+import { getLanguage, setLanguage, subscribe, t, type Language } from '../i18n';
+
+type Policy = 'untrained' | 'trained';
+type Status = 'idle' | 'loaded' | `replay-${Policy}`;
 
 const COLORS = ['#6366f1', '#22c55e', '#f59e0b'];
 const TARGET = 0.75;
@@ -55,31 +70,72 @@ function Scene({ position }: { position: number }) {
   );
 }
 
+function useLanguage(): Language {
+  return useSyncExternalStore(subscribe, getLanguage);
+}
+
+function errorText(cause: unknown): string {
+  if (cause instanceof PpoArtifactMissingError) {
+    return cause.status === undefined
+      ? t('ppo.errorMissing', { url: cause.url })
+      : t('ppo.errorMissingStatus', { url: cause.url, status: cause.status });
+  }
+  if (cause instanceof PpoLogFormatError) return t('ppo.errorLogFormat');
+  return cause instanceof Error ? cause.message : String(cause);
+}
+
+function statusText(status: Status): string {
+  if (status === 'idle' || status === 'loaded') return t(`ppo.status.${status}`);
+  const policy = status === 'replay-trained' ? 'trained' : 'untrained';
+  return t('ppo.status.replay', { policy: t(`ppo.policy.${policy}`) });
+}
+
+function LanguageSwitcher({ lang }: { lang: Language }) {
+  return (
+    <div style={{ display: 'flex', gap: 4 }} role="group" aria-label={t('language.label')}>
+      {(['fr', 'en'] as const).map((code) => (
+        <button
+          key={code}
+          type="button"
+          data-testid={`ppo-lang-${code}`}
+          aria-label={`${t('language.label')} — ${code.toUpperCase()}`}
+          aria-pressed={lang === code}
+          onClick={() => setLanguage(code)}
+          style={lang === code ? activeBtn : btn}
+        >
+          {t(`language.${code}`)}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function PpoReplayApp() {
+  const lang = useLanguage();
   const [manifest, setManifest] = useState<PpoManifest | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [policy, setPolicy] = useState<'untrained' | 'trained'>('untrained');
+  const [error, setError] = useState<unknown>(null);
+  const [policy, setPolicy] = useState<Policy>('untrained');
   const [seed, setSeed] = useState<number | null>(null);
   const [summaries, setSummaries] = useState<PpoSeedSummary[]>([]);
   const [position, setPosition] = useState(0.2);
   const [episodeReturn, setEpisodeReturn] = useState(0);
-  const [status, setStatus] = useState('idle');
+  const [status, setStatus] = useState<Status>('idle');
   const [curves, setCurves] = useState<Record<string, number>[]>([]);
   const agentRef = useRef<PPOAgent | null>(null);
   const running = useRef(false);
 
   const manifestUrl = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
-    return params.get('manifest') ?? '/ppo/manifest.json';
+    return params.get('manifest') ?? ppoArtifactUrl('manifest.json');
   }, []);
 
-  const loadPolicy = useCallback(async (kind: 'untrained' | 'trained', nextSeed: number) => {
+  const loadPolicy = useCallback(async (kind: Policy, nextSeed: number) => {
     agentRef.current?.dispose?.();
     const agent = new PPOAgent({
       inputSize: 1,
       actionSize: 2,
       hiddenLayers: [32, 32],
-      storageProvider: httpModelProvider('/ppo'),
+      storageProvider: httpModelProvider(ppoArtifactUrl()),
     });
     await agent.load(`seed-${nextSeed}/${kind}`);
     agentRef.current = agent;
@@ -95,7 +151,7 @@ export default function PpoReplayApp() {
         const series: number[][] = [];
         for (const seed of data.seeds) {
           const returns = parseEpisodeReturns(
-            await fetchJson<unknown>(`/ppo/seed-${seed}/episodes.json`),
+            await fetchJson<unknown>(ppoArtifactUrl(`seed-${seed}/episodes.json`)),
           );
           series.push(returns);
         }
@@ -110,7 +166,9 @@ export default function PpoReplayApp() {
         }
         const loadedSummaries: PpoSeedSummary[] = [];
         for (const seedId of data.seeds) {
-          loadedSummaries.push(await fetchJson<PpoSeedSummary>(`/ppo/seed-${seedId}/summary.json`));
+          loadedSummaries.push(
+            await fetchJson<PpoSeedSummary>(ppoArtifactUrl(`seed-${seedId}/summary.json`)),
+          );
         }
         if (cancelled) return;
         setCurves(chart);
@@ -119,7 +177,7 @@ export default function PpoReplayApp() {
         await loadPolicy('untrained', data.selectedSeed);
         setStatus('loaded');
       } catch (cause) {
-        if (!cancelled) setError(cause instanceof Error ? cause.message : String(cause));
+        if (!cancelled) setError(cause);
       }
     })();
     return () => {
@@ -153,12 +211,18 @@ export default function PpoReplayApp() {
     setStatus('idle');
   };
 
+  const num = (value: number | null | undefined, digits = 4) =>
+    formatPpoNumber(value, lang, t('ppo.absent'), digits);
+
   if (error) {
     return (
       <div data-testid="ppo-error" style={page}>
-        <h1>PPO before / after</h1>
-        <p role="alert">{error}</p>
-        <p>No simulated success. Place checkpoints and logs under public/ppo then reload.</p>
+        <header style={headerStyle}>
+          <h1 style={{ margin: 0 }}>{t('ppo.heading')}</h1>
+          <LanguageSwitcher lang={lang} />
+        </header>
+        <p role="alert">{errorText(error)}</p>
+        <p>{t('ppo.noSimulatedSuccess')}</p>
       </div>
     );
   }
@@ -166,7 +230,7 @@ export default function PpoReplayApp() {
   if (!manifest) {
     return (
       <div data-testid="ppo-loading" style={page}>
-        Loading PPO artifacts…
+        {t('ppo.loading')}
       </div>
     );
   }
@@ -175,14 +239,17 @@ export default function PpoReplayApp() {
 
   return (
     <div style={page}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+      <header style={headerStyle}>
         <div>
-          <h1 style={{ margin: 0 }}>PPO before / after</h1>
+          <h1 style={{ margin: 0 }}>{t('ppo.heading')}</h1>
           <p style={{ color: '#94a3b8', margin: '8px 0 0' }}>
-            Seed {seed} · SHA {manifest.gitSha.slice(0, 12)} · greedy means from loaded summary.json
+            {t('ppo.subtitle', { seed: seed ?? '', sha: manifest.gitSha.slice(0, 12) })}
           </p>
         </div>
-        <a href="/" style={{ color: '#a5b4fc' }}>Live DQN 3D</a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <a href={import.meta.env.BASE_URL} style={{ color: '#a5b4fc' }}>{t('ppo.liveDqn')}</a>
+          <LanguageSwitcher lang={lang} />
+        </div>
       </header>
 
       <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
@@ -193,7 +260,7 @@ export default function PpoReplayApp() {
             onClick={() => void loadPolicy(policy, seedId)}
             style={seed === seedId ? activeBtn : btn}
           >
-            Seed {seedId}
+            {t('ppo.seedButton', { seed: seedId })}
           </button>
         ))}
         <button
@@ -201,31 +268,40 @@ export default function PpoReplayApp() {
           onClick={() => seed !== null && void loadPolicy('untrained', seed)}
           style={policy === 'untrained' ? activeBtn : btn}
         >
-          Replay untrained
+          {t('ppo.replayUntrained')}
         </button>
         <button
           data-testid="ppo-trained"
           onClick={() => seed !== null && void loadPolicy('trained', seed)}
           style={policy === 'trained' ? activeBtn : btn}
         >
-          Replay trained checkpoint
+          {t('ppo.replayTrained')}
         </button>
         <button data-testid="ppo-play" onClick={() => void replay()} style={btn}>
-          Play greedy episode
+          {t('ppo.playGreedy')}
         </button>
       </div>
 
       <p data-testid="ppo-greedy-from-file">
-        Loaded greedy eval (same 20 starts): untrained {formatPpoReturn(activeSummary?.untrainedGreedyEvalMean)} ·
-        trained {formatPpoReturn(activeSummary?.greedyEvalMean)} · gap {formatPpoReturn(activeSummary?.greedyGap)}
+        {t('ppo.greedyEval', {
+          untrained: num(activeSummary?.untrainedGreedyEvalMean),
+          trained: num(activeSummary?.greedyEvalMean),
+          gap: num(activeSummary?.greedyGap),
+        })}
         <br />
-        Greedy episode from 0.2 (file): untrained {formatPpoReturn(activeSummary?.untrainedGreedyReturnAt02)} ·
-        trained {formatPpoReturn(activeSummary?.trainedGreedyReturnAt02)}
+        {t('ppo.greedyFrom02', {
+          untrained: num(activeSummary?.untrainedGreedyReturnAt02),
+          trained: num(activeSummary?.trainedGreedyReturnAt02),
+        })}
       </p>
 
       <p data-testid="ppo-policy">
-        Active policy: <strong>{policy}</strong> · checkpoint seed-{seed}/{policy} ·
-        status {status} · live replay return {episodeReturn.toFixed(3)}
+        {t('ppo.activePolicy')} <strong>{t(`ppo.policy.${policy}`)}</strong> ·{' '}
+        {t('ppo.policyDetails', {
+          checkpoint: `seed-${seed}/${policy}`,
+          status: statusText(status),
+          episodeReturn: num(episodeReturn, 3),
+        })}
       </p>
 
       <div data-testid="ppo-canvas" style={{ height: 280, border: '1px solid #334155', borderRadius: 8, overflow: 'hidden' }}>
@@ -235,19 +311,24 @@ export default function PpoReplayApp() {
       </div>
 
       <div data-testid="ppo-chart" style={{ height: 320, marginTop: 16 }}>
-        <h2 style={{ fontSize: 16 }}>Episode return from loaded JSON logs</h2>
+        <h2 style={{ fontSize: 16 }}>{t('ppo.chartTitle')}</h2>
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={curves}>
             <CartesianGrid strokeDasharray="3 3" stroke="#333" />
             <XAxis dataKey="episode" stroke="#888" />
             <YAxis stroke="#888" />
-            <Tooltip contentStyle={{ background: '#0f172a', border: '1px solid #334155' }} />
+            <Tooltip
+              contentStyle={{ background: '#0f172a', border: '1px solid #334155' }}
+              labelFormatter={(episode) => t('ppo.chartEpisode', { episode: String(episode) })}
+              formatter={(value) => (typeof value === 'number' ? num(value, 3) : String(value))}
+            />
             <Legend />
             {manifest.seeds.map((seed, index) => (
               <Line
                 key={seed}
                 type="monotone"
                 dataKey={`seed ${seed}`}
+                name={t('ppo.chartSeries', { seed })}
                 stroke={COLORS[index % COLORS.length]}
                 dot={false}
                 strokeWidth={2}
@@ -260,16 +341,29 @@ export default function PpoReplayApp() {
       <ul data-testid="ppo-seed-results">
         {summaries.map((row) => (
           <li key={row.seed}>
-            seed {row.seed}: first20={formatPpoReturn(row.firstMean20)} last20={formatPpoReturn(row.lastMean20)}{' '}
-            greedy untrained={formatPpoReturn(row.untrainedGreedyEvalMean)} trained={formatPpoReturn(row.greedyEvalMean)}{' '}
-            gap={formatPpoReturn(row.greedyGap)}{' '}
-            {row.improved ? 'improved (train curve)' : 'did not improve (train curve)'}
+            {t('ppo.seedResult', {
+              seed: row.seed,
+              first: num(row.firstMean20),
+              last: num(row.lastMean20),
+              untrained: num(row.untrainedGreedyEvalMean),
+              trained: num(row.greedyEvalMean),
+              gap: num(row.greedyGap),
+            })}{' '}
+            {row.improved ? t('ppo.improved') : t('ppo.notImproved')}
           </li>
         ))}
       </ul>
     </div>
   );
 }
+
+const headerStyle: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  gap: 16,
+  flexWrap: 'wrap',
+};
 
 const page: CSSProperties = {
   minHeight: '100vh',
