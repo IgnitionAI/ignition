@@ -1,5 +1,15 @@
 [
   {
+    "environment": "target-chasing",
+    "slug": "ppo-avant-apres",
+    "title": "PPO avant / après : entraîner un agent et vérifier ce qu'il a appris",
+    "description": "Une politique PPO sur une tâche minuscule à une dimension, entraînée vous-même en quelques secondes : trois graines, 80 épisodes, l'évaluation gloutonne avant et après, et ce que ces chiffres ne prouvent pas.",
+    "date": "2026-11-19",
+    "image": "/images/blog/target-chasing/ppo-avant-apres.png",
+    "imageAlt": "La page de démo PPO avant / après : graine 29, politique entraînée, courbe des retours lue dans les journaux.",
+    "example": "demo-target-chasing/ppo-experiment.json"
+  },
+  {
     "environment": "space-dock",
     "slug": "space-dock-physique-pd",
     "title": "Dock spatial : arrimer une cargaison avec Rapier, un PD de référence et un DQN à entraîner",
