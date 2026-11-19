@@ -1,0 +1,57 @@
+An agent that "learns" should prove it with its own logs, not with an animation. This demo compares a PPO policy before and after training on a deliberately tiny task, and shows numbers read from the files the training run produced.
+
+**You will train the agent yourself, get the same numbers, then watch them replayed in the browser.**
+
+[Try the PPO before / after demo](/demos/target-chasing/ppo.html)
+
+## The task
+
+A point moves on the segment [0, 1], starting at a random position between 0 and 0.4. At each step the agent picks one of two actions: move +0.15 or −0.15. The episode succeeds when the position passes 0.7 and stops after at most 25 steps. Success gives +1; each step without success costs −0.05. The agent observes one value: its position.
+
+The protocol was frozen before any training in `packages/demo-target-chasing/ppo-experiment.json`: three seeds (11, 29, 47), 80 episodes per seed, a [32, 32] network, PPO with clip 0.2, gamma 0.99, GAE lambda 0.95, 4 epochs, batches of 16.
+
+## Reproduce the training
+
+Node.js 22 and pnpm 10.8.0 (used here: Node 22.23.4, pnpm 10.8.0).
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+git checkout 2e9a24a3a2f53000fefb7ce31eecbacb1bf5c104
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter @ignitionai/core build
+pnpm --filter @ignitionai/backend-tfjs build
+node scripts/train-ppo-nav1d.mjs
+```
+
+ Both builds are required because the script loads the compiled packages (`dist/`). Training the three seeds took about 5 seconds on our machine (CPU, no `tfjs-node`; TensorFlow.js prints a warning that does not change the result).
+
+| Seed | Mean of first 20 episodes | Mean of last 20 | Greedy eval before | after | gap |
+|---|---|---|---|---|---|
+| 11 | 0.4425 | 0.85 | 0.845 | 0.845 | 0 |
+| 29 | −0.18 | 0.8175 | −1.25 | 0.855 | 2.105 |
+| 47 | 0.1475 | 0.855 | 0.855 | 0.855 | 0 |
+
+"Greedy" means the agent always takes its most likely action, on the same 20 starts before and after. These values match the repository: training is deterministic for these seeds. Only `manifest.json` (SHA, timestamps) and `train-result.json` change; restore with `git checkout -- packages/demo-target-chasing/public/ppo`. Artifact check: `pnpm exec vitest run packages/demo-target-chasing/test/ppo-artifacts.test.ts`, 4 tests pass.
+
+## Read the result honestly
+
+- All three seeds meet the pre-registered criterion (last 20 episodes beat the first 20).
+- In greedy evaluation, **only seed 29 changes**: seeds 11 and 47 were already correct before training. Their curve rises because the policy becomes less random, not because it finds a better action.
+- The demo therefore shows seed 29 by default, by a rule written in the manifest: largest before/after gap.
+- 80 episodes on a one-dimensional task: a demonstration of the mechanism, **not a benchmark**.
+
+## Open the demo
+
+```bash
+pnpm --filter target-chasing build
+cd packages/demo-target-chasing
+pnpm exec vite preview --host 127.0.0.1 --port 4173
+```
+
+Open `http://127.0.0.1:4173/ppo.html`, or [the online demo](/demos/target-chasing/ppo.html). **Replay untrained** then **Play greedy episode**: −1.250 from 0.2. **Replay trained checkpoint** then **Play greedy episode**: 0.850. The curve comes from the `episodes.json` files. A missing training log (`episodes.json`) shows "PPO checkpoint/log absent". Limit observed on 19/11: if the trained checkpoint is missing, the page shows no message and stays on the untrained replay.
+
+## Observed limits (19/11)
+
+Under `vite preview` a missing file falls back to HTML with status 200, so the error message reads "(200)"; checked in a server-side browser (software rendering), not on a real phone.
