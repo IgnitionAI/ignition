@@ -1,0 +1,29 @@
+
+> @ignitionai/backend-tfjs@0.1.0 build /agent/repos/ignition/packages/backend-tfjs
+> tsc
+
+src/agents/dqn.ts(2,10): error TS2305: Module '"@ignitionai/core"' has no exported member 'AgentInterface'.
+src/agents/dqn.ts(2,26): error TS2305: Module '"@ignitionai/core"' has no exported member 'Experience'.
+src/agents/ppo.ts(325,54): error TS2339: Property 'state' does not exist on type 'RolloutEntry'.
+src/agents/ppo.ts(326,55): error TS2339: Property 'action' does not exist on type 'RolloutEntry'.
+src/agents/ppo.ts(357,68): error TS2339: Property 'nextState' does not exist on type 'RolloutEntry'.
+src/agents/ppo.ts(361,50): error TS2339: Property 'reward' does not exist on type 'RolloutEntry'.
+src/agents/ppo.ts(364,53): error TS2339: Property 'terminated' does not exist on type 'RolloutEntry'.
+src/agents/ppo.ts(365,52): error TS2339: Property 'truncated' does not exist on type 'RolloutEntry'.
+src/defaults.ts(1,15): error TS2305: Module '"@ignitionai/core"' has no exported member 'AlgorithmType'.
+src/ignition-env-tfjs.ts(1,10): error TS2305: Module '"@ignitionai/core"' has no exported member 'IgnitionEnv'.
+src/ignition-env-tfjs.ts(1,28): error TS2305: Module '"@ignitionai/core"' has no exported member 'TrainingEnv'.
+src/ignition-env-tfjs.ts(1,46): error TS2305: Module '"@ignitionai/core"' has no exported member 'AgentFactory'.
+src/ignition-env-tfjs.ts(9,18): error TS7006: Parameter 'config' implicitly has an 'any' type.
+src/ignition-env-tfjs.ts(10,9): error TS7006: Parameter 'config' implicitly has an 'any' type.
+src/ignition-env-tfjs.ts(11,9): error TS7006: Parameter 'config' implicitly has an 'any' type.
+src/ignition-env-tfjs.ts(12,12): error TS7006: Parameter 'config' implicitly has an 'any' type.
+src/ignition-env-tfjs.ts(29,10): error TS2339: Property 'factories' does not exist on type 'IgnitionEnvTFJS'.
+src/ignition-env-tfjs.ts(30,10): error TS2339: Property 'algorithmDefaults' does not exist on type 'IgnitionEnvTFJS'.
+src/memory/ReplayBuffer.ts(1,10): error TS2305: Module '"@ignitionai/core"' has no exported member 'Experience'.
+src/types.ts(5,15): error TS2305: Module '"@ignitionai/core"' has no exported member 'AgentInterface'.
+src/types.ts(5,31): error TS2305: Module '"@ignitionai/core"' has no exported member 'Experience'.
+/agent/repos/ignition/packages/backend-tfjs:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @ignitionai/backend-tfjs@0.1.0 build: `tsc`
+Exit status 2
+EXIT:2

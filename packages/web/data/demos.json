@@ -122,5 +122,16 @@
     "dir": "packages/demo-space-dock",
     "featured": false,
     "platform": "Keyboard · Touch"
+  },
+  {
+    "slug": "target-chasing",
+    "title": "Target Chasing",
+    "description": "An agent learns to reach a randomly placed target in a 3D Rapier scene, with a DQN you configure and train in your browser. A second page replays PPO checkpoints trained offline on a tiny 1-D task (3 seeds, 80 episodes), untrained versus trained, with every number read from the training logs. A demonstration of the mechanism, not a benchmark.",
+    "tech": "R3F · Rapier · TF.js",
+    "algos": "DQN · PPO replay",
+    "accent": "#ef4444",
+    "pkg": "target-chasing",
+    "dir": "packages/demo-target-chasing",
+    "featured": false
   }
 ]

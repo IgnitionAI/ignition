@@ -1,0 +1,101 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+stderr | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — interface > getAction retourne un indice d'action valide
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":false,"expected":0}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":false,"truncated":true,"expected":0}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > single-transition update bootstraps only nonterminal states: {"terminated":true,"truncated":false,"expected":1}
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=false)
+[PPO] Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] Loaded model fixture
+
+ ✓ packages/backend-tfjs/test/ppo-gae.test.ts (6 tests) 3ms
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > GAE does not carry rewards across an episode boundary (truncated=true)
+[PPO] Saved actor: memory, critic: memory
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] Loaded model fixture
+
+stdout | packages/backend-tfjs/test/ppo-bootstrap.test.ts > bootstraps the actual successor rather than the current observation
+[PPO] Saved actor: memory, critic: memory
+
+ ✓ packages/backend-tfjs/test/ppo-bootstrap.test.ts (6 tests) 90ms
+stderr | packages/backend-tfjs/test/ppo-update.test.ts > PPOAgent — mini-batch updates > keeps a non-zero policy signal on a small batch of more than one transition
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+[PPO] Saved actor: file:///tmp/ppo-ckpt-vI6X27/policy/actor, critic: file:///tmp/ppo-ckpt-vI6X27/policy/critic
+
+stdout | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+[PPO] Loaded model policy
+
+ ✓ packages/backend-tfjs/test/ppo-checkpoint.test.ts (3 tests) 95ms
+ ✓ packages/backend-tfjs/test/ppo-update.test.ts (5 tests) 184ms
+stderr | packages/backend-tfjs/test/ppo-continuous.test.ts > PPOAgent — continuous actions > samples a 1-D action inside configured bounds
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+stderr | packages/backend-tfjs/test/ppo-public.test.ts > PPO learns rewarded actions through the public loop (seed 11)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-continuous.test.ts (2 tests) 906ms
+   ✓ PPOAgent — continuous actions > learns a deterministic 1-D control task (push toward +1)  867ms
+ ✓ packages/backend-tfjs/test/ppo-public.test.ts (5 tests) 1102ms
+   ✓ PPO learns rewarded actions through the public loop (seed 11)  584ms
+   ✓ PPO learns rewarded actions through the public loop (seed 29)  300ms
+stderr | packages/backend-tfjs/test/ppo-discrete.test.ts > PPOAgent — discrete distribution > returns a valid categorical distribution and a coherent log-prob
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ✓ packages/backend-tfjs/test/ppo-discrete.test.ts (2 tests) 19ms
+ ✓ packages/demo-target-chasing/test/ppo-artifacts.test.ts (2 tests) 2ms
+stdout | packages/backend-tfjs/test/ppo.test.ts > PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)
+[PPO convergence] premiers 40 épisodes: 0.345, derniers 40 épisodes: 0.860
+
+ ✓ packages/backend-tfjs/test/ppo.test.ts (4 tests) 2940ms
+   ✓ PPOAgent — convergence > la récompense moyenne augmente sur 200 épisodes (navigation 1D)  2786ms
+
+ Test Files  9 passed (9)
+      Tests  35 passed (35)
+   Start at  16:22:41
+   Duration  3.60s (transform 334ms, setup 0ms, collect 2.54s, tests 5.34s, environment 1ms, prepare 623ms)
+
+EXIT:0

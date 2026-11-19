@@ -1,0 +1,10 @@
+
+> @ignitionai/core@0.1.0 build /agent/repos/ignition/packages/core
+> tsc
+
+CORE_EXIT:0
+
+> @ignitionai/backend-tfjs@0.1.0 build /agent/repos/ignition/packages/backend-tfjs
+> tsc
+
+TFJS_EXIT:0

@@ -1,4 +1,4 @@
-import type { TrainingEnv, InferenceEnv } from './types';
+import type { TrainingEnv, InferenceEnv } from './types.js';
 
 function assertFn(obj: Record<string, unknown>, name: string, context: string): void {
   if (typeof obj[name] !== 'function') {

@@ -1,0 +1,33 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+ ✓ packages/demo-target-chasing/test/ppo-artifacts.test.ts (3 tests) 4ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  16:26:43
+   Duration  227ms (transform 34ms, setup 0ms, collect 27ms, tests 4ms, environment 0ms, prepare 52ms)
+
+EXIT:0
+
+> target-chasing@0.0.0 build /agent/repos/ignition/packages/demo-target-chasing
+> tsc -b && vite build
+
+vite v6.3.3 building for production...
+transforming...
+✓ 2427 modules transformed.
+rendering chunks...
+computing gzip size...
+../dist/ppo.html                          0.53 kB │ gzip:   0.36 kB
+../dist/index.html                        0.61 kB │ gzip:   0.39 kB
+../dist/assets/main-B5DZHykP.css          7.32 kB │ gzip:   1.60 kB
+../dist/assets/LineChart-CpC04ZJI.js  1,446.09 kB │ gzip: 407.26 kB
+../dist/assets/ppo-M0uFfcqo.js        1,623.09 kB │ gzip: 257.77 kB
+../dist/assets/main-DfbVRTnT.js       2,302.15 kB │ gzip: 837.51 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 7.52s
+DEMO_BUILD:0

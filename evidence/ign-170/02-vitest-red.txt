@@ -1,0 +1,364 @@
+
+ RUN  v3.1.1 /agent/repos/ignition
+
+ ❯ packages/backend-tfjs/test/ppo-gae.test.ts (6 tests | 6 failed) 6ms
+   × computeGeneralizedAdvantages — hand-calculated > matches a two-step Monte-Carlo trace (λ=1, no bootstrap on terminal last step) 3ms
+     → (0 , computeGeneralizedAdvantages) is not a function
+   × computeGeneralizedAdvantages — hand-calculated > bootstraps a non-terminal last state with the successor value 0ms
+     → (0 , computeGeneralizedAdvantages) is not a function
+   × computeGeneralizedAdvantages — hand-calculated > does not bootstrap a terminal last state 0ms
+     → (0 , computeGeneralizedAdvantages) is not a function
+   × computeGeneralizedAdvantages — hand-calculated > bootstraps a truncated (non-terminal) step but cuts the GAE trace 0ms
+     → (0 , computeGeneralizedAdvantages) is not a function
+   × computeGeneralizedAdvantages — hand-calculated > uses the actual successor value, not V(s_t) 0ms
+     → (0 , computeGeneralizedAdvantages) is not a function
+   × computeGeneralizedAdvantages — hand-calculated > does not normalize a single transition 0ms
+     → (0 , computeGeneralizedAdvantages) is not a function
+stderr | packages/backend-tfjs/test/ppo-update.test.ts > PPOAgent — mini-batch updates > keeps a non-zero policy signal on a small batch of more than one transition
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ❯ packages/backend-tfjs/test/ppo-update.test.ts (5 tests | 5 failed) 59ms
+   × clipSurrogate > leaves an unclipped positive-advantage ratio unchanged 3ms
+     → (0 , clipSurrogate) is not a function
+   × clipSurrogate > clips a large ratio when the advantage is positive 0ms
+     → (0 , clipSurrogate) is not a function
+   × clipSurrogate > clips a small ratio when the advantage is negative 0ms
+     → (0 , clipSurrogate) is not a function
+   × PPOAgent — mini-batch updates > keeps a non-zero policy signal on a small batch of more than one transition 7ms
+     → agent.getActionProbs is not a function
+   × PPOAgent — mini-batch updates > handles mini-batches of size 1 without NaN 47ms
+     → agent.getActionProbs is not a function
+stderr | packages/backend-tfjs/test/schemas.test.ts > DQNAgent constructor validation > constructs successfully with valid config
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ❯ packages/backend-tfjs/test/schemas.test.ts (33 tests | 2 failed) 29ms
+   ✓ DQNConfigSchema > accepts minimal valid config 2ms
+   ✓ DQNConfigSchema > accepts full valid config 1ms
+   ✓ DQNConfigSchema > rejects negative lr 1ms
+   ✓ DQNConfigSchema > rejects lr = 0 0ms
+   ✓ DQNConfigSchema > rejects epsilon > 1 0ms
+   ✓ DQNConfigSchema > rejects epsilon < 0 0ms
+   ✓ DQNConfigSchema > rejects batchSize = 0 0ms
+   ✓ DQNConfigSchema > rejects memorySize <= batchSize 0ms
+   ✓ DQNConfigSchema > rejects gamma > 1 0ms
+   ✓ DQNConfigSchema > rejects negative inputSize 0ms
+   ✓ DQNAgent constructor validation > constructs successfully with valid config 9ms
+   ✓ DQNAgent constructor validation > throws on invalid lr 0ms
+   ✓ DQNAgent constructor validation > throws on epsilon > 1 0ms
+   ✓ PPOConfigSchema > accepts valid PPO config 0ms
+   ✓ PPOConfigSchema > rejects lr = 0 0ms
+   ✓ PPOConfigSchema > rejects clipRatio > 1 0ms
+   ✓ PPOConfigSchema > rejects negative entropyCoef 0ms
+   ✓ PPOConfigSchema > rejects epochs = 0 0ms
+   ✓ PPOConfigSchema > rejects valueLossCoef <= 0 0ms
+   ✓ PPOConfigSchema > keeps actionSpace omitted as undefined (discrete default, no migration required) 0ms
+   × PPOConfigSchema > accepts continuous actionSpace with matching bounds 4ms
+     → expected undefined to be 'continuous' // Object.is equality
+   × PPOConfigSchema > rejects continuous bounds of the wrong length 1ms
+     → expected true to be false // Object.is equality
+   ✓ PPOAgent constructor validation > constructs successfully with valid config 6ms
+   ✓ PPOAgent constructor validation > throws on lr > 1 0ms
+   ✓ QTableConfigSchema > accepts valid QTable config 0ms
+   ✓ QTableConfigSchema > rejects lr = 0 0ms
+   ✓ QTableConfigSchema > rejects lr >= 1 0ms
+   ✓ QTableConfigSchema > rejects epsilon > 1 0ms
+   ✓ QTableConfigSchema > rejects stateBins = 0 0ms
+   ✓ QTableConfigSchema > rejects gamma > 1 0ms
+   ✓ QTableAgent constructor validation > constructs successfully 0ms
+   ✓ QTableAgent constructor validation > throws on negative lr 0ms
+   ✓ QTableAgent constructor validation > throws on stateBins = 0 0ms
+stderr | packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ❯ packages/backend-tfjs/test/ppo-checkpoint.test.ts (3 tests | 2 failed) 55ms
+   × PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference 49ms
+     → agent.getActionProbs is not a function
+   × PPOAgent — checkpoint replay and dispose > greedy inference does not mutate weights 2ms
+     → agent.getWeightFingerprint is not a function
+   ✓ PPOAgent — checkpoint replay and dispose > dispose releases tensors so a follow-up agent can allocate 3ms
+stderr | packages/backend-tfjs/test/ppo-discrete.test.ts > PPOAgent — discrete distribution > returns a valid categorical distribution and a coherent log-prob
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ❯ packages/backend-tfjs/test/ppo-discrete.test.ts (2 tests | 1 failed) 19ms
+   × PPOAgent — discrete distribution > returns a valid categorical distribution and a coherent log-prob 15ms
+     → agent.getActionProbs is not a function
+   ✓ PPOAgent — discrete distribution > defaults to discrete when actionSpace is omitted (public API) 3ms
+stderr | packages/backend-tfjs/test/ppo-continuous.test.ts > PPOAgent — continuous actions > samples a 1-D action inside configured bounds
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+
+ ❯ packages/backend-tfjs/test/ppo-continuous.test.ts (2 tests | 2 failed) 74ms
+   × PPOAgent — continuous actions > samples a 1-D action inside configured bounds 16ms
+     → expected false to be true // Object.is equality
+   × PPOAgent — continuous actions > learns a deterministic 1-D control task (push toward +1) 57ms
+     → Error in oneHot: depth must be >=2, but it is 1
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 18 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > save → new instance → load yields identical greedy inference
+TypeError: agent.getActionProbs is not a function
+ ❯ packages/backend-tfjs/test/ppo-checkpoint.test.ts:40:41
+     38|       const probe = [0.3, 0.7];
+     39|       const expected = await agent.getAction(probe, true);
+     40|       const expectedProbs = await agent.getActionProbs(probe);
+       |                                         ^
+     41|       await agent.save('policy');
+     42|       const restored = new PPOAgent({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-checkpoint.test.ts > PPOAgent — checkpoint replay and dispose > greedy inference does not mutate weights
+TypeError: agent.getWeightFingerprint is not a function
+ ❯ packages/backend-tfjs/test/ppo-checkpoint.test.ts:72:28
+     70|     });
+     71|     try {
+     72|       const before = agent.getWeightFingerprint();
+       |                            ^
+     73|       for (let i = 0; i < 10; i++) {
+     74|         await agent.getAction([0.4], true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-continuous.test.ts > PPOAgent — continuous actions > samples a 1-D action inside configured bounds
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/backend-tfjs/test/ppo-continuous.test.ts:23:39
+     21|       for (let i = 0; i < 20; i++) {
+     22|         const action = await agent.getAction([0]);
+     23|         expect(Array.isArray(action)).toBe(true);
+       |                                       ^
+     24|         expect((action as number[]).length).toBe(1);
+     25|         expect((action as number[])[0]).toBeGreaterThanOrEqual(-1.5);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-continuous.test.ts > PPOAgent — continuous actions > learns a deterministic 1-D control task (push toward +1)
+Error: Error in oneHot: depth must be >=2, but it is 1
+ ❯ oneHot_ node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/ops/one_hot.ts:56:11
+ ❯ Proxy.oneHot__op node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/ops/operation.ts:51:28
+ ❯ packages/backend-tfjs/src/agents/ppo.ts:374:31
+    372| 
+    373|             // Sélectionner log π(a|s) pour chaque action via encodage…
+    374|             const oneHot = tf.oneHot(actionsTensor, this.actionSize).c…
+       |                               ^
+    375|             const newLogProbs = tf.sum(tf.mul(logProbsAll, oneHot), 1);
+    376| 
+ ❯ node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/engine.ts:469:20
+ ❯ Engine.scopedRun node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/engine.ts:480:19
+ ❯ Engine.tidy node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/engine.ts:467:17
+ ❯ node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/engine.ts:1116:20
+ ❯ Engine.scopedRun node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/engine.ts:480:19
+ ❯ Engine.gradients node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/engine.ts:1114:20
+ ❯ variableGrads node_modules/.pnpm/@tensorflow+tfjs-core@4.22.0_encoding@0.1.13/tfjs-core/src/gradients.ts:308:33
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-discrete.test.ts > PPOAgent — discrete distribution > returns a valid categorical distribution and a coherent log-prob
+TypeError: agent.getActionProbs is not a function
+ ❯ packages/backend-tfjs/test/ppo-discrete.test.ts:21:33
+     19|       const action = await agent.getAction(state);
+     20|       expect([0, 1, 2]).toContain(action);
+     21|       const probs = await agent.getActionProbs(state);
+       |                                 ^
+     22|       expect(probs).toHaveLength(3);
+     23|       expect(probs.reduce((s, p) => s + p, 0)).toBeCloseTo(1, 5);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-gae.test.ts > computeGeneralizedAdvantages — hand-calculated > matches a two-step Monte-Carlo trace (λ=1, no bootstrap on terminal last step)
+TypeError: (0 , computeGeneralizedAdvantages) is not a function
+ ❯ packages/backend-tfjs/test/ppo-gae.test.ts:12:20
+     10| describe('computeGeneralizedAdvantages — hand-calculated', () => {
+     11|   it('matches a two-step Monte-Carlo trace (λ=1, no bootstrap on termi…
+     12|     const result = computeGeneralizedAdvantages({
+       |                    ^
+     13|       rewards: [1, 1],
+     14|       values: [0, 0],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-gae.test.ts > computeGeneralizedAdvantages — hand-calculated > bootstraps a non-terminal last state with the successor value
+TypeError: (0 , computeGeneralizedAdvantages) is not a function
+ ❯ packages/backend-tfjs/test/ppo-gae.test.ts:31:20
+     29| 
+     30|   it('bootstraps a non-terminal last state with the successor value', …
+     31|     const result = computeGeneralizedAdvantages({
+       |                    ^
+     32|       rewards: [0.5],
+     33|       values: [2],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-gae.test.ts > computeGeneralizedAdvantages — hand-calculated > does not bootstrap a terminal last state
+TypeError: (0 , computeGeneralizedAdvantages) is not a function
+ ❯ packages/backend-tfjs/test/ppo-gae.test.ts:47:20
+     45| 
+     46|   it('does not bootstrap a terminal last state', () => {
+     47|     const result = computeGeneralizedAdvantages({
+       |                    ^
+     48|       rewards: [0.5],
+     49|       values: [2],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-gae.test.ts > computeGeneralizedAdvantages — hand-calculated > bootstraps a truncated (non-terminal) step but cuts the GAE trace
+TypeError: (0 , computeGeneralizedAdvantages) is not a function
+ ❯ packages/backend-tfjs/test/ppo-gae.test.ts:63:20
+     61| 
+     62|   it('bootstraps a truncated (non-terminal) step but cuts the GAE trac…
+     63|     const result = computeGeneralizedAdvantages({
+       |                    ^
+     64|       rewards: [3, -100],
+     65|       values: [2, 2],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-gae.test.ts > computeGeneralizedAdvantages — hand-calculated > uses the actual successor value, not V(s_t)
+TypeError: (0 , computeGeneralizedAdvantages) is not a function
+ ❯ packages/backend-tfjs/test/ppo-gae.test.ts:81:20
+     79| 
+     80|   it('uses the actual successor value, not V(s_t)', () => {
+     81|     const result = computeGeneralizedAdvantages({
+       |                    ^
+     82|       rewards: [-0.5],
+     83|       values: [2],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-gae.test.ts > computeGeneralizedAdvantages — hand-calculated > does not normalize a single transition
+TypeError: (0 , computeGeneralizedAdvantages) is not a function
+ ❯ packages/backend-tfjs/test/ppo-gae.test.ts:96:20
+     94| 
+     95|   it('does not normalize a single transition', () => {
+     96|     const result = computeGeneralizedAdvantages({
+       |                    ^
+     97|       rewards: [1],
+     98|       values: [0],
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-update.test.ts > clipSurrogate > leaves an unclipped positive-advantage ratio unchanged
+TypeError: (0 , clipSurrogate) is not a function
+ ❯ packages/backend-tfjs/test/ppo-update.test.ts:11:12
+      9| describe('clipSurrogate', () => {
+     10|   it('leaves an unclipped positive-advantage ratio unchanged', () => {
+     11|     expect(clipSurrogate(1.05, 2, 0.2)).toBeCloseTo(2.1, 10);
+       |            ^
+     12|   });
+     13| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-update.test.ts > clipSurrogate > clips a large ratio when the advantage is positive
+TypeError: (0 , clipSurrogate) is not a function
+ ❯ packages/backend-tfjs/test/ppo-update.test.ts:16:12
+     14|   it('clips a large ratio when the advantage is positive', () => {
+     15|     // r=2, clip to 1.2, A>0 → min(2A, 1.2A) = 1.2A
+     16|     expect(clipSurrogate(2, 3, 0.2)).toBeCloseTo(3.6, 10);
+       |            ^
+     17|   });
+     18| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-update.test.ts > clipSurrogate > clips a small ratio when the advantage is negative
+TypeError: (0 , clipSurrogate) is not a function
+ ❯ packages/backend-tfjs/test/ppo-update.test.ts:21:12
+     19|   it('clips a small ratio when the advantage is negative', () => {
+     20|     // r=0.1, clip to 0.8, A<0 → min(0.1A, 0.8A) = 0.8A (less negative…
+     21|     expect(clipSurrogate(0.1, -2, 0.2)).toBeCloseTo(-1.6, 10);
+       |            ^
+     22|   });
+     23| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-update.test.ts > PPOAgent — mini-batch updates > keeps a non-zero policy signal on a small batch of more than one transition
+TypeError: agent.getActionProbs is not a function
+ ❯ packages/backend-tfjs/test/ppo-update.test.ts:40:34
+     38|     });
+     39|     try {
+     40|       const before = await agent.getActionProbs([0]);
+       |                                  ^
+     41|       for (let i = 0; i < 8; i++) {
+     42|         await agent.getAction([0], true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/18]⎯
+
+ FAIL  packages/backend-tfjs/test/ppo-update.test.ts > PPOAgent — mini-batch updates > handles mini-batches of size 1 without NaN
+TypeError: agent.getActionProbs is not a function
+ ❯ packages/backend-tfjs/test/ppo-update.test.ts:93:33
+     91|       }
+     92|       await agent.train();
+     93|       const probs = await agent.getActionProbs([0]);
+       |                                 ^
+     94|       expect(probs.every((p) => Number.isFinite(p) && p >= 0 && p <= 1…
+     95|       const stats = agent.getLastUpdateStats();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/18]⎯
+
+ FAIL  packages/backend-tfjs/test/schemas.test.ts > PPOConfigSchema > accepts continuous actionSpace with matching bounds
+AssertionError: expected undefined to be 'continuous' // Object.is equality
+
+- Expected: 
+"continuous"
+
++ Received: 
+undefined
+
+ ❯ packages/backend-tfjs/test/schemas.test.ts:163:32
+    161|       actionHigh: [1],
+    162|     });
+    163|     expect(parsed.actionSpace).toBe('continuous');
+       |                                ^
+    164|     expect(parsed.actionLow).toEqual([-1]);
+    165|     expect(parsed.actionHigh).toEqual([1]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/18]⎯
+
+ FAIL  packages/backend-tfjs/test/schemas.test.ts > PPOConfigSchema > rejects continuous bounds of the wrong length
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ packages/backend-tfjs/test/schemas.test.ts:175:28
+    173|       actionHigh: [1, 2],
+    174|     });
+    175|     expect(result.success).toBe(false);
+       |                            ^
+    176|   });
+    177| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/18]⎯
+
+
+ Test Files  6 failed (6)
+      Tests  18 failed | 33 passed (51)
+   Start at  16:12:54
+   Duration  923ms (transform 180ms, setup 0ms, collect 1.37s, tests 242ms, environment 1ms, prepare 314ms)
+
+EXIT:1

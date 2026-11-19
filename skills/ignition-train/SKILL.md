@@ -49,6 +49,7 @@ env.stop();
 | Key | DQN / double-dqn | PPO | Q-Table |
 |---|---|---|---|
 | `hiddenLayers` | `[64, 64]` | `[64, 64]` | — |
+| `actionSpace` | — | `'discrete'` (`'continuous'` possible) | — |
 | `lr` | `0.001` | `3e-4` | `0.1` |
 | `gamma` | `0.99` | `0.99` | `0.99` |
 | `epsilon` / decay / min | `1.0` / `0.995` / `0.01` | — | `1.0` / `0.995` / `0.01` |

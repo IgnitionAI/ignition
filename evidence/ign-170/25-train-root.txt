@@ -1,0 +1,20 @@
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-11/untrained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-11/untrained/critic
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-11/trained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-11/trained/critic
+{"seed":11,"improved":true,"firstMean20":0.4425,"lastMean20":0.85,"untrainedGreedyEvalMean":0.8450000000000003,"greedyEvalMean":0.8450000000000003,"greedyGap":0,"untrainedGreedyReturnAt02":0.85,"trainedGreedyReturnAt02":0.85}
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-29/untrained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-29/untrained/critic
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-29/trained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-29/trained/critic
+{"seed":29,"improved":true,"firstMean20":-0.1800000000000002,"lastMean20":0.8175000000000001,"untrainedGreedyEvalMean":-1.2500000000000002,"greedyEvalMean":0.8550000000000002,"greedyGap":2.1050000000000004,"untrainedGreedyReturnAt02":-1.2500000000000004,"trainedGreedyReturnAt02":0.85}
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-47/untrained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-47/untrained/critic
+[PPO] Saved actor: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-47/trained/actor, critic: file:///agent/repos/ignition/packages/demo-target-chasing/public/ppo/seed-47/trained/critic
+{"seed":47,"improved":true,"firstMean20":0.1474999999999999,"lastMean20":0.8550000000000002,"untrainedGreedyEvalMean":0.8549999999999999,"greedyEvalMean":0.8549999999999999,"greedyGap":0,"untrainedGreedyReturnAt02":0.85,"trainedGreedyReturnAt02":0.85}
+{
+  "gitSha": "6c8b35c3bd598f1f9971bb4fee4ddd2c604c6111",
+  "gitShaRule": "gitSha is git rev-parse HEAD at train time; after the artifacts are committed it equals the first parent of git log -1 --format=%H -- packages/demo-target-chasing/public/ppo/manifest.json",
+  "selectedSeed": 29,
+  "anyImproved": true
+}
+EXIT:0
