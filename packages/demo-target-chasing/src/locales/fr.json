@@ -42,5 +42,92 @@
     "improved": "progrès (courbe d’entraînement)",
     "notImproved": "pas de progrès (courbe d’entraînement)",
     "absent": "absent"
+  },
+  "rl2": {
+    "title": "IgnitionAI — DQN contre Double DQN",
+    "heading": "DQN contre Double DQN, à budget égal",
+    "subtitle": "SHA {sha} · budget {budget} pas · graines {seeds}",
+    "linkPpo": "PPO",
+    "linkLive": "DQN 3D",
+    "loading": "Chargement des artefacts…",
+    "variant": {
+      "dqn": "DQN",
+      "double-dqn": "Double DQN"
+    },
+    "bench": {
+      "label": "Banc",
+      "target-chasing": "Target Chasing (témoin)",
+      "target-chasing-noisy": "Target Chasing, récompense bruitée",
+      "changedNone": "Variable changée : aucune (banc témoin)",
+      "changedNoise": "Variable changée : bruit gaussien σ = {sigma} sur la récompense",
+      "changedRaw": "Variable changée : {value}",
+      "missing": "Banc absent de ce build : {url}",
+      "missingStatus": "Banc absent de ce build : {url} ({status})",
+      "missingHint": "Ce banc n’a pas encore de journaux publiés. Les autres bancs restent consultables."
+    },
+    "protocol": "Protocole identique pour les deux variantes",
+    "protocolLine": "budget {budget} pas par run · réseau {layers} · γ = {gamma} · cible recopiée toutes les {target} mises à jour · ε de {eps0} à {eps1} en {epsSteps} mises à jour · lr {lr} · lot {batch} · graines {seeds}",
+    "replay": {
+      "heading": "Rejeu des politiques figées",
+      "seedButton": "Graine {seed}",
+      "playBoth": "Jouer les deux",
+      "reset": "Réinitialiser",
+      "greedyNote": "Politiques gloutonnes (ε = 0), départ commun à la position 0,2, un pas toutes les 120 ms pour les deux panneaux.",
+      "statusLine": "pas {step} · retour {ret} · {state}",
+      "checkpoint": "checkpoint {path}",
+      "state": {
+        "loading": "chargement",
+        "loaded": "chargée",
+        "running": "en cours",
+        "done": "terminé au pas {step}",
+        "limit": "limite de pas atteinte"
+      },
+      "playDisabled": "« Jouer les deux » est désactivé : un checkpoint manque.",
+      "checkpointMissing": "Checkpoint introuvable : {url}",
+      "checkpointMissingStatus": "Checkpoint introuvable : {url} ({status})",
+      "webgl": "La scène 3D n’a pas pu démarrer (WebGL indisponible). Le reste de la page fonctionne."
+    },
+    "chartReturns": "Retour par épisode, lu dans les journaux",
+    "binNote": "moyenne des épisodes terminés dans chaque tranche de {bin} pas ; aucun autre lissage",
+    "band": "bande : min–max sur 3 graines · trait fin : une graine",
+    "xAxis": "pas d’environnement",
+    "tooltipSteps": "pas {from} à {to}",
+    "tooltipEpisodes": "épisodes {from} à {to}",
+    "tooltipMean": "moyenne {mean} · min {min} · max {max}",
+    "chartQ": "Valeur Q estimée contre retour observé (actualisé, γ = {gamma})",
+    "qNote": "Moyenne sur 3 graines, sur les mêmes états de départ fixes. Pointillé : Q estimée (max sur les actions). Trait plein : retour actualisé observé de la politique gloutonne.",
+    "qEstimated": "Q estimée",
+    "qObserved": "retour observé",
+    "gap": "Q estimée − retour observé (0 = estimation juste)",
+    "gapZero": "0 = estimation juste",
+    "gapNote": "Au-dessus de 0 : surestimation. En dessous : sous-estimation.",
+    "table": {
+      "heading": "Résultats par graine",
+      "seed": "Graine",
+      "metric": "Mesure",
+      "diff": "Écart (Double DQN − DQN)",
+      "seedTitle": "Graine {seed}",
+      "lastMean": "retour moyen, {n} derniers épisodes",
+      "lastSuccess": "succès, {n} derniers épisodes",
+      "greedy": "éval gloutonne (20 épisodes)",
+      "finalGap": "Q − retour, fin du run",
+      "gapHalf": "Q − retour, moyenne 2e moitié",
+      "cardLine": "{variant} : retour {ret} · succès {succ} · glouton {greedy} · Q − retour final {gap} · 2e moitié {half}",
+      "cardDiff": "écart (Double DQN − DQN) : retour {ret} · Q − retour final {gap} · 2e moitié {half}"
+    },
+    "readingEasy": "Sur la tâche facile, aucune différence mesurable : mêmes retours et mêmes taux de succès sur les 3 graines, et l’écart Q − retour final reste entre {min} et {max} pour les deux variantes.",
+    "readingDiffers": "Les deux variantes ne donnent pas les mêmes résultats sur toutes les graines : voir le tableau, graine par graine.",
+    "readingSame": "Mêmes retours et mêmes taux de succès sur les 3 graines ; écart Q − retour final entre {min} et {max}.",
+    "reading": "Les courbes viennent des journaux de ce SHA ; elles ne désignent pas de gagnant général.",
+    "error": {
+      "comparisonHeading": "Comparaison indisponible : des artefacts manquent",
+      "missing": "{url} (absent)",
+      "missingStatus": "{url} (HTTP {status})",
+      "format": "{url} (format invalide)",
+      "noSimulated": "Aucun résultat simulé : aucune courbe ni aucun tableau n’est affiché tant qu’une des deux variantes est incomplète.",
+      "qHeading": "Valeurs Q non journalisées dans ce run",
+      "qHint": "Le bloc surestimation reste vide : aucune valeur de remplacement n’est calculée."
+    },
+    "absent": "absent"
   }
 }
