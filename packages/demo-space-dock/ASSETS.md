@@ -63,7 +63,7 @@ Adaptation des instances uniquement : recentrage bbox et correction par axe vers
 1.568 × .784 × 1.176 m (drone, marge mécanique 2 %) et 2 × 1.2 × 1.6 m (cargo).
 Le berth conserve échelle 1, rotation −π/2 et deck y=−.65.
 Détails : `docs/DOCK-VISUAL.md`.
-La correction non uniforme des proportions reste à valider visuellement par le pilote.
+La correction non uniforme des proportions reste à valider visuellement.
 
 ## Hangar intégré — entrée figée du 2026-11-08
 

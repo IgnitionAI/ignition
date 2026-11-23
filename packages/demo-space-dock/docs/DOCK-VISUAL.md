@@ -1,4 +1,4 @@
-# Scène livrée au pilote
+# Scène livrée
 
 Base `52974ec126fd5ee45f08420f01a4aaca38395cbb`.
 Intégration hangar selon PLAN-HANGAR-VALIDATION.md du 2026-11-08, qui remplace
