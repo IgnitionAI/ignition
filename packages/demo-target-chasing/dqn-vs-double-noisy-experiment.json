@@ -1,0 +1,97 @@
+{
+  "experiment": "rl2-dqn-vs-double-dqn-noisy-reward",
+  "declaredBeforeExecution": true,
+  "declaredAt": "2026-11-23T08:41:25Z",
+  "note": "Reward-noise variant of the control experiment, frozen before any training run of this variant. Single change versus the control: zero-mean Gaussian noise added to the reward the agent receives (and stores in replay) at every env step. Environment, starts, budget, network, hyperparameters and seeds are copied unchanged; the only difference between the two algorithms is still agent.doubleQ. One pass of 6 runs; no tuning and no selective rerun after seeing results. If a run fails for a technical reason, the bug fix is documented here and all 6 runs are redone. Results must come from the raw JSONL logs; do not edit numbers after the run.",
+  "gitBase": "319b936",
+  "control": {
+    "declaredPath": "packages/demo-target-chasing/dqn-vs-double-experiment.json",
+    "artifacts": "public/dqn-vs-double",
+    "gitSha": "0278cbe03ec6721732c57ccd49bebd7547c57e36"
+  },
+  "task": {
+    "id": "nav1d-discrete",
+    "sameTaskAs": "public/ppo (RL 1)",
+    "description": "1-D navigation on [0, 1]. Action 1 = +0.15, action 0 = -0.15. Episode ends at position > 0.7 or 25 steps. Reward +1 on success else -0.05 per step.",
+    "start": "uniform[0, 0.4] via mulberry32(seed * 1009), as in RL 1",
+    "observation": [
+      "position"
+    ],
+    "success": "episode terminated by reaching position > 0.7 before the 25-step limit"
+  },
+  "rewardNoise": {
+    "distribution": "gaussian",
+    "mean": 0,
+    "sigma": 0.5,
+    "appliedTo": "the reward passed to agent.remember() at every env step (training only); the environment, its termination and the true reward are unchanged",
+    "stream": "own seeded stream, independent of env starts, exploration and replay sampling: mulberry32(seed * 7919 + 101), one standard normal per env step by Box-Muller (two uniforms per draw, cosine branch). The k-th env step of a run receives the same noise draw for dqn and double-dqn at equal seed.",
+    "sigmaJustification": "Set from the reward function alone, no trial run: rewards are +1 on success and -0.05 otherwise. Under the optimal policy (always +0.15) from starts uniform[0, 0.4], episodes last 3, 4 or 5 steps (probabilities 0.375, 0.375, 0.25; 3.875 steps on average), so the pooled per-step reward has mean 0.221 and standard deviation 0.459 (exact, from nav1dStep). sigma = 0.5 is that per-step standard deviation rounded up to one significant digit, about half the reward range (1.05) and ten times the -0.05 step penalty."
+  },
+  "algorithms": [
+    "dqn",
+    "double-dqn"
+  ],
+  "onlyDifference": "agent.doubleQ = false for dqn, true for double-dqn",
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "budget": {
+    "envStepsPerRun": 50000,
+    "maxStepsPerEpisode": 25,
+    "learningStarts": 500,
+    "trainEveryEnvStep": true,
+    "unit": "environment steps (identical for both algorithms; an episode still running when the budget is reached is not logged as an episode, its length is in summary.partialEpisodeAtBudget)",
+    "choice": "Unchanged from the control on purpose (same 50000 env steps per run). Drawing the noise adds two uniforms and one log/cos per env step, negligible next to the train step."
+  },
+  "agent": {
+    "class": "DQNAgent (packages/backend-tfjs/src/agents/dqn.ts)",
+    "inputSize": 1,
+    "actionSize": 2,
+    "hiddenLayers": [
+      32,
+      32
+    ],
+    "lr": 0.0005,
+    "gamma": 0.99,
+    "epsilon": 1,
+    "epsilonDecay": 0.9998003044569063,
+    "minEpsilon": 0.05,
+    "epsilonSchedule": "multiplied by epsilonDecay after each train() call; epsilonDecay = 0.05^(1/15000), so minEpsilon is reached after 15000 train steps (30 % of the budget)",
+    "batchSize": 32,
+    "memorySize": 10000,
+    "targetUpdateFrequency": 250,
+    "targetUpdateUnit": "train() calls (hard copy of the online weights)",
+    "backend": "cpu",
+    "optimizer": "adam, mean squared error, 1 epoch per train() call, shuffle off (seeded)"
+  },
+  "overestimation": {
+    "file": "q-vs-return.jsonl",
+    "everyEnvSteps": 1000,
+    "probeStarts": {
+      "count": 9,
+      "min": 0,
+      "max": 0.4,
+      "spacing": "evenly spaced, identical for every algo, seed and checkpoint"
+    },
+    "estimated": "max_a Q_online(s0, a) at each probe start s0",
+    "observed": "discounted Monte-Carlo return (same gamma) of the greedy policy rolled out from s0 on the TRUE reward (meanDiscountedReturn); the env is deterministic, so one rollout is the exact true return of that policy",
+    "gap": "estimated - observed on the TRUE reward (meanGap); positive means the network expects more than its own greedy policy obtains. Overestimation is read against the true return, declared before the runs.",
+    "reference": "optimalDiscountedReturn: return of the optimal policy (always +0.15) from s0",
+    "measureUnchanged": "Same probe starts, same checkpoints every 1000 env steps, same gamma 0.99, same estimated quantity max_a Q_online(s0, a) as the control.",
+    "observedNoisy": "meanDiscountedNoisyReturn: the same greedy rollout with N(0, sigma^2) added to each reward, from its own stream mulberry32(seed * 104729 + globalStep * 9 + probeIndex) (same draws for both algos at equal seed and checkpoint). Logged for reference only."
+  },
+  "eval": {
+    "greedyEpisodes": 20,
+    "starts": "uniform[0, 0.4] via mulberry32(seed * 17 + 3), as in RL 1",
+    "checkpoint": "frozen trained policy reloaded in a new process (eval-new-process.json)",
+    "replay": "greedy (epsilon = 0) episode from position 0.2 for every algo and seed (trained-greedy.json, untrained-greedy.json), same start as the RL 1 replay",
+    "reward": "greedy evals, replays and episode returns use the true reward; episodes.jsonl also logs noisyReturn (sum of the noisy rewards the agent received)"
+  },
+  "summary": {
+    "lastEpisodes": 100,
+    "trueReward": "lastMeanReturn, greedyEvalMean and finalQVsReturn are on the true reward; lastMeanNoisyReturn and finalQVsReturn.meanDiscountedNoisyReturn are the noisy counterparts; summary.rewardNoise holds the count, sum, mean and std of the noise actually drawn"
+  },
+  "order": "dqn first, then double-dqn, everywhere"
+}

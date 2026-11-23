@@ -1,21 +1,24 @@
 /**
- * Builds public/dqn-vs-double/experiment.json (declared config + measured runtime per run)
- * and public/dqn-vs-double/manifest.json (every artifact with bytes and sha256, plus the
+ * Builds public/<variant dir>/experiment.json (declared config + measured runtime per run)
+ * and public/<variant dir>/manifest.json (every artifact with bytes and sha256, plus the
  * per-run summaries), so a page can report exactly which artifact is missing or altered.
  * Fails (exit 1) if any expected artifact is absent. Run after train and eval.
  *
- * Usage: node scripts/manifest-dqn-vs-double.mjs
+ * Usage: node scripts/manifest-dqn-vs-double.mjs [--variant noisy]
  */
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ALGOS } from './dqn-target-chasing.mjs';
+import { parseArgs } from 'node:util';
+import { ALGOS, variantOf } from './dqn-target-chasing.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, '../../..');
-const outRoot = join(repoRoot, 'packages/demo-target-chasing/public/dqn-vs-double');
-const declaredPath = 'packages/demo-target-chasing/dqn-vs-double-experiment.json';
+const { values } = parseArgs({ options: { variant: { type: 'string' } } });
+const variant = variantOf(values.variant);
+const outRoot = join(repoRoot, variant.outDir);
+const declaredPath = variant.experimentPath;
 const declared = JSON.parse(readFileSync(join(repoRoot, declaredPath), 'utf8'));
 
 export const RUN_FILES = [
@@ -33,7 +36,7 @@ export const RUN_FILES = [
 ];
 
 const GIT_SHA_RULE =
-  'gitSha is git rev-parse HEAD at train time; after the artifacts are committed it equals the first parent of git log -1 --format=%H -- packages/demo-target-chasing/public/dqn-vs-double/manifest.json';
+  `gitSha is git rev-parse HEAD at train time; after the artifacts are committed it equals the first parent of git log -1 --format=%H -- ${variant.outDir}/manifest.json`;
 
 const readJson = (rel) => JSON.parse(readFileSync(join(outRoot, rel), 'utf8'));
 const missing = [];
@@ -62,6 +65,14 @@ for (const algo of ALGOS) {
       finalMeanGap: summary.finalQVsReturn.meanGap,
       meanGapOverRun: summary.meanGapOverRun,
       meanGapSecondHalf: summary.meanGapSecondHalf,
+      ...(summary.rewardNoise
+        ? {
+            lastMeanNoisyReturn: summary.lastMeanNoisyReturn,
+            finalMeanDiscountedNoisyReturn: summary.finalQVsReturn.meanDiscountedNoisyReturn,
+            rewardNoiseSampleMean: summary.rewardNoise.sampleMean,
+            rewardNoiseSampleStd: summary.rewardNoise.sampleStd,
+          }
+        : {}),
       newProcessIdenticalGreedyAction: evalNew.identicalGreedyAction,
       newProcessIdenticalReplay: evalNew.identicalReplay,
       durationMs: run.durationMs,
@@ -121,6 +132,7 @@ const manifest = {
   seeds: declared.seeds,
   budget: { envStepsPerRun: declared.budget.envStepsPerRun },
   gamma: declared.agent.gamma,
+  ...(declared.rewardNoise ? { rewardNoise: declared.rewardNoise } : {}),
   summaries,
   runs: Object.fromEntries(
     ALGOS.map((algo) => [

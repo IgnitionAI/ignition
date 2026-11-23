@@ -7,6 +7,15 @@
  * Budget rule: both algorithms get exactly `budget.envStepsPerRun` environment steps,
  * the same network, the same hyperparameters and the same seeds. The only config key
  * that differs between the two algorithms is `doubleQ`.
+ *
+ * Optional variant: `experiment.rewardNoise` ({ distribution: 'gaussian', mean, sigma }).
+ * When present, zero-mean Gaussian noise is added to the reward the agent stores at each
+ * env step. The noise comes from its own seeded stream (rewardNoiseStream(seed)), so the
+ * env starts, the agent's exploration and its replay sampling draw exactly what they draw
+ * without noise, and DQN and Double DQN get the same noise sequence at equal seed.
+ * Episode returns, greedy evals and the Q-vs-return gap stay on the true reward; the noisy
+ * returns are logged next to them. Without `rewardNoise` the output is the control's, byte
+ * for byte.
  */
 import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -14,6 +23,54 @@ import * as tf from '@tensorflow/tfjs';
 import { mean, mulberry32, nav1dStep } from './nav1d.mjs';
 
 export const ALGOS = ['dqn', 'double-dqn'];
+
+/** Declared experiment file and artifact directory of each variant (paths from the repo root). */
+export const VARIANTS = {
+  control: {
+    experimentPath: 'packages/demo-target-chasing/dqn-vs-double-experiment.json',
+    outDir: 'packages/demo-target-chasing/public/dqn-vs-double',
+  },
+  noisy: {
+    experimentPath: 'packages/demo-target-chasing/dqn-vs-double-noisy-experiment.json',
+    outDir: 'packages/demo-target-chasing/public/dqn-vs-double-noisy',
+  },
+};
+
+export function variantOf(name) {
+  const v = VARIANTS[name ?? 'control'];
+  if (!v) throw new Error(`unknown variant: ${name} (expected one of ${Object.keys(VARIANTS).join(', ')})`);
+  return v;
+}
+
+/** Validated reward-noise config, or null when the experiment declares none. */
+export function rewardNoiseOf(experiment) {
+  const n = experiment.rewardNoise;
+  if (n === undefined || n === null) return null;
+  if (n.distribution !== 'gaussian') throw new Error(`unsupported reward noise: ${n.distribution}`);
+  if (!Number.isFinite(n.mean) || !Number.isFinite(n.sigma) || n.sigma < 0) {
+    throw new Error('rewardNoise needs a finite mean and a finite sigma >= 0');
+  }
+  return { distribution: n.distribution, mean: n.mean, sigma: n.sigma };
+}
+
+/** Standard normal draw (Box-Muller, cosine branch, two uniforms per draw). */
+export function gaussian(rng) {
+  const u1 = 1 - rng(); // (0, 1], avoids log(0)
+  const u2 = rng();
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+}
+
+/** Training reward-noise stream: one standard normal per env step, its own seed. */
+export function rewardNoiseStream(seed) {
+  const rng = mulberry32(seed * 7919 + 101);
+  return () => gaussian(rng);
+}
+
+/** Probe reward-noise stream: one per (seed, checkpoint, probe start), same for both algos. */
+export function probeNoiseStream(seed, globalStep, probeIndex) {
+  const rng = mulberry32(seed * 104729 + globalStep * 9 + probeIndex);
+  return () => gaussian(rng);
+}
 
 /** Agent config for one run. The only algo-dependent key is doubleQ. */
 export function buildAgentConfig(experiment, algo, seed) {
@@ -67,14 +124,17 @@ function qValuesOf(model, states) {
  * discounted Monte-Carlo return of the greedy policy from s0 (deterministic env,
  * so one rollout is the exact return of that policy). Same gamma as training.
  */
-export async function measureQVsReturn(agent, experiment, starts) {
+export async function measureQVsReturn(agent, experiment, starts, noiseCtx) {
   const { gamma } = experiment.agent;
+  const noise = rewardNoiseOf(experiment);
   const maxSteps = experiment.budget.maxStepsPerEpisode;
   const q = qValuesOf(agent.getModel(), starts);
   const probes = [];
   for (let i = 0; i < starts.length; i++) {
     let pos = starts[i];
     let ret = 0;
+    let noisyRet = 0;
+    const probeNoise = noise ? probeNoiseStream(noiseCtx.seed, noiseCtx.globalStep, i) : null;
     let undiscounted = 0;
     let discount = 1;
     let steps = 0;
@@ -83,6 +143,7 @@ export async function measureQVsReturn(agent, experiment, starts) {
       const action = await agent.getAction([pos], true);
       const { newPos, reward, done } = nav1dStep(pos, action);
       ret += discount * reward;
+      if (noise) noisyRet += discount * (reward + noise.mean + noise.sigma * probeNoise());
       undiscounted += reward;
       discount *= gamma;
       steps += 1;
@@ -95,6 +156,7 @@ export async function measureQVsReturn(agent, experiment, starts) {
       q: q[i],
       qMax,
       discountedReturn: ret,
+      ...(noise ? { discountedNoisyReturn: noisyRet } : {}),
       undiscountedReturn: undiscounted,
       optimalDiscountedReturn: optimalDiscountedReturn(starts[i], gamma, maxSteps),
       gap: qMax - ret,
@@ -105,6 +167,7 @@ export async function measureQVsReturn(agent, experiment, starts) {
   return {
     meanQMax: mean(probes.map((p) => p.qMax)),
     meanDiscountedReturn: mean(probes.map((p) => p.discountedReturn)),
+    ...(noise ? { meanDiscountedNoisyReturn: mean(probes.map((p) => p.discountedNoisyReturn)) } : {}),
     meanOptimalDiscountedReturn: mean(probes.map((p) => p.optimalDiscountedReturn)),
     meanGap: mean(probes.map((p) => p.gap)),
     successRate: probes.filter((p) => p.success).length / probes.length,
@@ -171,6 +234,9 @@ export async function runTraining({ AgentClass, experiment, algo, seed, outDir, 
   const lastN = experiment.summary.lastEpisodes;
   const starts = probeStates(experiment);
 
+  const noise = rewardNoiseOf(experiment);
+  const noiseStream = noise ? rewardNoiseStream(seed) : null;
+  const noiseStats = { draws: 0, sum: 0, sumSq: 0 };
   const config = buildAgentConfig(experiment, algo, seed);
   if (provider) config.storageProvider = provider;
   const agent = new AgentClass(config);
@@ -187,7 +253,7 @@ export async function runTraining({ AgentClass, experiment, algo, seed, outDir, 
   const episodes = [];
   const qVsReturn = [];
   const recordQ = async (globalStep) => {
-    const m = await measureQVsReturn(agent, experiment, starts);
+    const m = await measureQVsReturn(agent, experiment, starts, { seed, globalStep });
     const row = { algo, seed, step: globalStep, globalStep, epsilon: agent.getState().epsilon, ...m };
     qVsReturn.push(row);
     if (qPath) appendFileSync(qPath, `${JSON.stringify(row)}\n`);
@@ -213,6 +279,7 @@ export async function runTraining({ AgentClass, experiment, algo, seed, outDir, 
     while (globalStep < budgetSteps) {
       let pos = envRng() * 0.4;
       let total = 0;
+      let noisyTotal = 0;
       let steps = 0;
       let terminated = false;
       let cutByBudget = false;
@@ -220,10 +287,19 @@ export async function runTraining({ AgentClass, experiment, algo, seed, outDir, 
         const state = [pos];
         const action = await agent.getAction(state);
         const { newPos, reward, done } = nav1dStep(pos, action);
+        let storedReward = reward;
+        if (noise) {
+          const added = noise.mean + noise.sigma * noiseStream();
+          storedReward = reward + added;
+          noisyTotal += storedReward;
+          noiseStats.draws += 1;
+          noiseStats.sum += added;
+          noiseStats.sumSq += added * added;
+        }
         agent.remember({
           state,
           action,
-          reward,
+          reward: storedReward,
           nextState: [newPos],
           terminated: done,
           truncated: !done && step === maxSteps - 1,
@@ -242,7 +318,7 @@ export async function runTraining({ AgentClass, experiment, algo, seed, outDir, 
         if (globalStep >= budgetSteps) { cutByBudget = true; break; }
       }
       if (cutByBudget) {
-        partialEpisode = { steps, return: total };
+        partialEpisode = noise ? { steps, return: total, noisyReturn: noisyTotal } : { steps, return: total };
         break;
       }
       episode += 1;
@@ -251,6 +327,7 @@ export async function runTraining({ AgentClass, experiment, algo, seed, outDir, 
         seed,
         episode,
         return: total,
+        ...(noise ? { noisyReturn: noisyTotal } : {}),
         steps,
         terminated,
         success: terminated,
@@ -303,6 +380,19 @@ export async function runTraining({ AgentClass, experiment, algo, seed, outDir, 
       meanGapOverRun: mean(qVsReturn.map((r) => r.meanGap)),
       meanGapSecondHalf: mean(qVsReturn.filter((r) => r.globalStep > globalStep / 2).map((r) => r.meanGap)),
     };
+    if (noise) {
+      const sampleMean = noiseStats.draws ? noiseStats.sum / noiseStats.draws : null;
+      summary.rewardNoise = {
+        ...noise,
+        draws: noiseStats.draws,
+        sum: noiseStats.sum,
+        sumSq: noiseStats.sumSq,
+        sampleMean,
+        sampleStd: noiseStats.draws ? Math.sqrt(noiseStats.sumSq / noiseStats.draws - sampleMean * sampleMean) : null,
+      };
+      summary.lastMeanNoisyReturn = mean(lastRows.map((r) => r.noisyReturn));
+      summary.finalQVsReturn.meanDiscountedNoisyReturn = finalQ.meanDiscountedNoisyReturn;
+    }
     if (outDir) {
       writeFileSync(join(outDir, 'summary.json'), JSON.stringify(summary, null, 2));
       if (trainedProbe) writeFileSync(join(outDir, 'trained-greedy.json'), JSON.stringify(trainedProbe, null, 2));
