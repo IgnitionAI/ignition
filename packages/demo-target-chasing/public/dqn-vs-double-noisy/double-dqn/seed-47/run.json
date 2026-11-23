@@ -1,0 +1,37 @@
+{
+  "algo": "double-dqn",
+  "seed": 47,
+  "agentConfig": {
+    "inputSize": 1,
+    "actionSize": 2,
+    "hiddenLayers": [
+      32,
+      32
+    ],
+    "lr": 0.0005,
+    "gamma": 0.99,
+    "epsilon": 1,
+    "epsilonDecay": 0.9998003044569063,
+    "minEpsilon": 0.05,
+    "batchSize": 32,
+    "memorySize": 10000,
+    "targetUpdateFrequency": 250,
+    "backend": "cpu",
+    "seed": 47,
+    "doubleQ": true
+  },
+  "envSteps": 50000,
+  "trainSteps": 49500,
+  "episodes": 11234,
+  "startedAt": "2026-11-23T08:54:28.730Z",
+  "finishedAt": "2026-11-23T08:56:31.904Z",
+  "durationMs": 123174.322219,
+  "msPerEnvStep": 2.46348644438,
+  "gitSha": "c770d1f1bba2e9cd67aa1fbc84d69c07d23b7ccf",
+  "gitDirtyAtTrainTime": false,
+  "nodeVersion": "v22.23.4",
+  "platform": "linux-x64",
+  "tfjsVersion": "4.22.0",
+  "tfjsCoreVersion": "4.22.0",
+  "tfjsBackend": "cpu"
+}
