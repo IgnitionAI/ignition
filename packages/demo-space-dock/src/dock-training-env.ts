@@ -4,7 +4,7 @@ import type { SpaceDockEnv } from './space-dock-env';
 import type { Telemetry } from './simulation-contract';
 
 /**
- * Learning view of the IGN-118 dock. The physics stays in SpaceDockEnv (Rapier, microgravity,
+ * Learning view of the space dock. The physics stays in SpaceDockEnv (Rapier, microgravity,
  * planar translation + yaw, 8 discrete actions at 10 Hz); this wrapper only defines the episode
  * (shorter horizon, collision as failure), a bounded dense reward and a deterministic seed sequence.
  */
@@ -21,7 +21,7 @@ export interface DockTrainingOptions {
   terminateOnCollision?: boolean;
   /**
    * Training curriculum: start each episode with the cargo at rest on the docking axis, at a seeded
-   * distance from the dock drawn uniformly in [min, max] metres. Omitted = the standard IGN-118 start.
+   * distance from the dock drawn uniformly in [min, max] metres. Omitted = the standard dock start.
    */
   startDistance?: readonly [number, number];
 }
@@ -29,7 +29,7 @@ export interface DockTrainingOptions {
  * Dense part = Φ(after) − Φ(before) − time, with the potential
  * Φ = −(progress·distance + alignment·(1 − cos yawError) + speed·min(1, cargoSpeed)·max(0, 1 − distance/nearRadius)).
  * A potential difference telescopes over an episode: it guides exploration without rewarding loops,
- * and the docking criterion itself (distance, yaw, speeds, 1.5 s hold) stays the IGN-118 one.
+ * and the docking criterion itself (distance, yaw, speeds, 1.5 s hold) stays the one of SpaceDockEnv.
  */
 export const REWARD = Object.freeze({
   progress: 2, alignment: 0.5, speed: 1, nearRadius: 3, time: 0.005,

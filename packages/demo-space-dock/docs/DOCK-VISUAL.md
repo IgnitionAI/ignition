@@ -1,6 +1,6 @@
-# IGN-118 — scène livrée au pilote
+# Scène livrée au pilote
 
-Base `52974ec126fd5ee45f08420f01a4aaca38395cbb`, branche `feat/ign-118-space-dock`.
+Base `52974ec126fd5ee45f08420f01a4aaca38395cbb`.
 Intégration hangar selon PLAN-HANGAR-VALIDATION.md du 2026-11-08, qui remplace
 l’ancienne allocation du worktree visuel. Scene est déjà reliée au jeu par
 scene-adapter. Interface conservée : `{ env: SpaceDockEnv; compact: boolean; reducedMotion: boolean }`.
@@ -105,7 +105,7 @@ restent conservés. Aucun chargement World sur refus graphique.
 
 ## Preuves actuelles et limites
 
-Voir ../proofs/hangar-integration/RESULT.md : 22 tests visuels (16 préexistants
+Validation de l'intégration hangar : 22 tests visuels (16 préexistants
 intacts + 6 nouveaux), 23 techniques, typecheck intégré et build Vite avec
 DEMO_BASE=/demos/space-dock/ passent. Tests GLTFLoader réels : hash, bbox,
 triangles, identité des transformations, propriété/late/dispose/statuts, HTML SSR.
@@ -127,7 +127,7 @@ sans attribution inventée : voir ASSETS.md.
 
 ## Correction mobile V1 — reprise autorisée du 2026-11-08
 
-Correctif statique à recetter : ../proofs/mobile-reprise/RESULT.md. Aucun nouveau
+Correctif statique à recetter. Aucun nouveau
 rendu navigateur ni visa esthétique mobile. Les captures App de la recette
 précédente restent des preuves historiques du précédent artefact seulement.
 

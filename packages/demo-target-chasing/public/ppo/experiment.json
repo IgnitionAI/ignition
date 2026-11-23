@@ -1,5 +1,5 @@
 {
-  "ticket": "IGN-170",
+  "experimentId": "ppo-nav1d-before-after",
   "declaredBeforeExecution": true,
   "declaredAt": "2026-11-12T16:20:00Z",
   "note": "Budgets and seeds are frozen before any training command in this branch. Results must come from the raw JSONL logs; do not edit numbers after the run.",

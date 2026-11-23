@@ -62,7 +62,7 @@ mesure 1.50625 × .705 × 1.643 m ; le cargo après .65 mesure 1.781 × 1.469 ×
 Adaptation des instances uniquement : recentrage bbox et correction par axe vers
 1.568 × .784 × 1.176 m (drone, marge mécanique 2 %) et 2 × 1.2 × 1.6 m (cargo).
 Le berth conserve échelle 1, rotation −π/2 et deck y=−.65.
-Détails et preuves : `docs/DOCK-VISUAL.md`, `src/visual/proofs/07-animated-envelope.log`.
+Détails : `docs/DOCK-VISUAL.md`.
 La correction non uniforme des proportions reste à valider visuellement par le pilote.
 
 ## Hangar intégré — entrée figée du 2026-11-08
@@ -91,4 +91,4 @@ dans le vrai GLB avec Three 0.162.0. Les 66 198 triangles / 49 meshes / 1 432 15
 octets sont les totaux des fichiers, pas une mesure des appels de rendu ou du GPU.
 Aucune texture image externe ; aucun achat ni nouvelle dépendance. Les captures
 amont d'assets ne prouvent pas l'intégration. Licence MIT et attribution comme ci-dessus.
-Voir `proofs/hangar-integration/RESULT.md` pour la preuve actuelle et ses limites.
+Voir `docs/DOCK-VISUAL.md` pour l'état actuel de la vérification et ses limites.
