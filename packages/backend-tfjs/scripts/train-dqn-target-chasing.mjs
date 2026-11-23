@@ -8,12 +8,15 @@
  *   node scripts/train-dqn-target-chasing.mjs                 # all algos x all seeds
  *   node scripts/train-dqn-target-chasing.mjs --algo dqn --seed 11
  *   node scripts/train-dqn-target-chasing.mjs --steps 2000 --out /tmp/x   # speed probe, not an artifact
+ *   node scripts/train-dqn-target-chasing.mjs --variant noisy  # reward-noise variant
+ *     (reads dqn-vs-double-noisy-experiment.json, writes public/dqn-vs-double-noisy/)
  *
  * Then: node scripts/eval-dqn-checkpoint.mjs && node scripts/manifest-dqn-vs-double.mjs
+ * (same --variant on all three scripts)
  *
  * gitSha is `git rev-parse HEAD` at train time (same rule as RL 1): after the
  * artifacts commit it is the first parent of the commit that last modified
- * public/dqn-vs-double/manifest.json.
+ * public/<variant dir>/manifest.json.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -23,15 +26,14 @@ import { parseArgs } from 'node:util';
 import * as tf from '@tensorflow/tfjs';
 import { DQNAgent } from '../dist/index.js';
 import { fileSystemModelProvider } from './fs-provider.mjs';
-import { ALGOS, buildAgentConfig, runTraining } from './dqn-target-chasing.mjs';
+import { ALGOS, buildAgentConfig, runTraining, variantOf } from './dqn-target-chasing.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, '../../..');
-const experimentPath = join(repoRoot, 'packages/demo-target-chasing/dqn-vs-double-experiment.json');
-const defaultOut = join(repoRoot, 'packages/demo-target-chasing/public/dqn-vs-double');
 
 const { values } = parseArgs({
   options: {
+    variant: { type: 'string' },
     algo: { type: 'string' },
     seed: { type: 'string' },
     steps: { type: 'string' },
@@ -39,6 +41,9 @@ const { values } = parseArgs({
   },
 });
 
+const variant = variantOf(values.variant);
+const experimentPath = join(repoRoot, variant.experimentPath);
+const defaultOut = join(repoRoot, variant.outDir);
 const experiment = JSON.parse(readFileSync(experimentPath, 'utf8'));
 const outRoot = values.out ?? defaultOut;
 const envSteps = values.steps ? Number(values.steps) : undefined;

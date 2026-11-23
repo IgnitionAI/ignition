@@ -5,7 +5,7 @@
  * replay the greedy episode from 0.2, and run the greedy eval episodes.
  * Writes <algo>/seed-<n>/eval-new-process.json. Exit code 2 if any greedy action differs.
  *
- * Usage: node scripts/eval-dqn-checkpoint.mjs [--algo dqn] [--seed 11]
+ * Usage: node scripts/eval-dqn-checkpoint.mjs [--variant noisy] [--algo dqn] [--seed 11]
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -14,15 +14,16 @@ import { parseArgs } from 'node:util';
 import * as tf from '@tensorflow/tfjs';
 import { DQNAgent } from '../dist/index.js';
 import { fileSystemModelProvider } from './fs-provider.mjs';
-import { ALGOS, buildAgentConfig, evaluateGreedy, greedyEpisodeFrom } from './dqn-target-chasing.mjs';
+import { ALGOS, buildAgentConfig, evaluateGreedy, greedyEpisodeFrom, variantOf } from './dqn-target-chasing.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, '../../..');
-const outRoot = join(repoRoot, 'packages/demo-target-chasing/public/dqn-vs-double');
-const experiment = JSON.parse(
-  readFileSync(join(repoRoot, 'packages/demo-target-chasing/dqn-vs-double-experiment.json'), 'utf8'),
-);
-const { values } = parseArgs({ options: { algo: { type: 'string' }, seed: { type: 'string' } } });
+const { values } = parseArgs({
+  options: { variant: { type: 'string' }, algo: { type: 'string' }, seed: { type: 'string' } },
+});
+const variant = variantOf(values.variant);
+const outRoot = join(repoRoot, variant.outDir);
+const experiment = JSON.parse(readFileSync(join(repoRoot, variant.experimentPath), 'utf8'));
 const algos = values.algo ? [values.algo] : ALGOS;
 const seeds = values.seed ? [Number(values.seed)] : experiment.seeds;
 
