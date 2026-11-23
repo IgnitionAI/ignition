@@ -76,28 +76,28 @@ async function view(name, width, lang, target = url) {
   return page;
 }
 
-for (const [width, tag] of [[1440, 'desktop'], [390, 'mobile']]) {
-  for (const lang of ['fr', 'en']) {
-    const page = await view(`${tag}-${lang}`, width, lang);
-    const before = await measure(page);
-    await page.screenshot({ path: join(output, `rl2-${tag}-${lang}.png`), fullPage: true });
-    const play = page.locator('[data-testid="rl2-play"]');
-    let after = null;
-    if (await play.isEnabled()) {
-      await play.click();
-      await page.waitForTimeout(25 * 120 + 800);
-      after = await page.evaluate(() => ['dqn', 'double'].map((id) => document.querySelector(`[data-testid="rl2-status-${id}"]`)?.textContent));
-      await page.locator('[data-testid="rl2-replay"]').screenshot({ path: join(output, `rl2-${tag}-${lang}-replay-done.png`) });
+const benches = (process.env.RL2_BENCHES || 'target-chasing,target-chasing-noisy').split(',');
+for (const [width, tag] of [[1280, 'desktop1280'], [1440, 'desktop1440'], [390, 'mobile390']]) {
+  for (const bench of benches) {
+    for (const lang of ['fr', 'en']) {
+      const name = `${tag}-${bench}-${lang}`;
+      const page = await view(name, width, lang, `${url}?bench=${bench}`);
+      const before = await measure(page);
+      const reading = await page.locator('[data-testid="rl2-reading"]').getAttribute('data-reading').catch(() => null);
+      const changed = await page.locator('[data-testid="rl2-changed"]').innerText().catch(() => null);
+      await page.screenshot({ path: join(output, `rl2-${name}.png`), fullPage: true });
+      const play = page.locator('[data-testid="rl2-play"]');
+      let after = null;
+      if (await play.isEnabled()) {
+        await play.click();
+        await page.waitForTimeout(25 * 120 + 800);
+        after = await page.evaluate(() => ['dqn', 'double'].map((id) => document.querySelector(`[data-testid="rl2-status-${id}"]`)?.textContent));
+        await page.locator('[data-testid="rl2-replay"]').screenshot({ path: join(output, `rl2-${name}-replay-done.png`) });
+      }
+      const { text, ...rest } = before;
+      report.views.push({ name, ...rest, reading, changed, readingText: text.match(/(Sur la tâche|Les deux variantes|Pic de|On the easy|Both variants|Q − return peak|The two variants)[^\n]*/)?.[0] ?? null, rawKeysVisible: /\brl2\.[a-z]/.test(text), statusAfterPlay: after });
+      await page.close();
     }
-    if (tag === 'desktop' && lang === 'fr') {
-      await page.locator('[data-testid="rl2-bench-target-chasing-noisy"]').click();
-      await page.waitForTimeout(1500);
-      await page.screenshot({ path: join(output, `rl2-${tag}-${lang}-noisy-bench.png`), fullPage: true });
-      report.noisyBench = (await page.locator('[data-testid="rl2-bench-error"]').count()) ? 'bench-error' : 'loaded';
-    }
-    const { text, ...rest } = before;
-    report.views.push({ name: `${tag}-${lang}`, ...rest, rawKeysVisible: /\brl2\.[a-z]/.test(text), statusAfterPlay: after });
-    await page.close();
   }
 }
 
@@ -111,4 +111,4 @@ for (const c of errorCases) {
 
 await browser.close();
 writeFileSync(join(output, 'checks.json'), JSON.stringify(report, null, 2));
-console.log(JSON.stringify({ output, views: report.views.map((v) => ({ name: v.name, scrollWidth: v.scrollWidth, innerWidth: v.innerWidth, minButtonHeight: v.minButtonHeight, xTicksPerChart: v.xTicksPerChart, cards: v.cards, hasTable: v.hasTable, rawKeysVisible: v.rawKeysVisible, statusAfterPlay: v.statusAfterPlay })), noisyBench: report.noisyBench, errorCases: report.errorCases.map((c) => ({ name: c.name, testids: c.testids })), pageErrors: report.pageErrors }, null, 2));
+console.log(JSON.stringify({ output, views: report.views.map((v) => ({ name: v.name, scrollWidth: v.scrollWidth, innerWidth: v.innerWidth, minButtonHeight: v.minButtonHeight, xTicksPerChart: v.xTicksPerChart, cards: v.cards, hasTable: v.hasTable, rawKeysVisible: v.rawKeysVisible, reading: v.reading, changed: v.changed, statusAfterPlay: v.statusAfterPlay })), errorCases: report.errorCases.map((c) => ({ name: c.name, testids: c.testids })), pageErrors: report.pageErrors }, null, 2));

@@ -499,3 +499,81 @@ export function changedVariable(experiment: Pick<Rl2Experiment, 'rewardNoise'>):
 export function epsilonSteps(agent: Rl2Experiment['agent']): number {
   return Math.round(Math.log(agent.minEpsilon / agent.epsilon) / Math.log(agent.epsilonDecay));
 }
+
+// ── Overestimation reading (declared threshold, computed from q-vs-return) ───
+
+/**
+ * Reading threshold, declared here and shown on the page: a run "clearly overestimates"
+ * when, at some evaluation point, its mean max_a Q minus the observed discounted
+ * return (same fixed starts, same gamma) exceeds this value.
+ */
+export const OVERESTIMATION_PEAK = 0.05;
+
+export interface Rl2Peak {
+  peak: number;
+  step: number;
+}
+
+/** Highest Q − G of each run over its evaluation points. */
+export function peakGaps(q: ByRun<Rl2QRow[]>, seeds: number[]): ByRun<Rl2Peak> {
+  const out = { dqn: {}, 'double-dqn': {} } as ByRun<Rl2Peak>;
+  for (const algo of RL2_ALGOS) {
+    for (const seed of seeds) {
+      let best: Rl2Peak = { peak: -Infinity, step: 0 };
+      for (const row of q[algo][seed]) {
+        const gap = row.meanQMax - row.meanDiscountedReturn;
+        if (gap > best.peak) best = { peak: gap, step: row.step };
+      }
+      out[algo][seed] = best;
+    }
+  }
+  return out;
+}
+
+export interface Rl2Overestimation {
+  /** Each variant has at least one seed whose peak exceeds the threshold. */
+  bothAbove: boolean;
+  anyAbove: boolean;
+  range: Record<Rl2Algo, [number, number]>;
+  peakMin: number;
+  peakMax: number;
+  /** Largest |peak(dqn) − peak(double-dqn)| at equal seed. */
+  betweenVariants: number;
+  /** Smallest, over the two variants, of the peak spread across seeds. */
+  betweenSeeds: number;
+}
+
+export function readOverestimation(q: ByRun<Rl2QRow[]>, seeds: number[], threshold = OVERESTIMATION_PEAK): Rl2Overestimation {
+  const peaks = peakGaps(q, seeds);
+  const values = (algo: Rl2Algo) => seeds.map((s) => peaks[algo][s].peak);
+  const range = {
+    dqn: [Math.min(...values('dqn')), Math.max(...values('dqn'))],
+    'double-dqn': [Math.min(...values('double-dqn')), Math.max(...values('double-dqn'))],
+  } as Record<Rl2Algo, [number, number]>;
+  const above = (algo: Rl2Algo) => values(algo).some((v) => v > threshold);
+  return {
+    bothAbove: above('dqn') && above('double-dqn'),
+    anyAbove: above('dqn') || above('double-dqn'),
+    range,
+    peakMin: Math.min(range.dqn[0], range['double-dqn'][0]),
+    peakMax: Math.max(range.dqn[1], range['double-dqn'][1]),
+    betweenVariants: Math.max(...seeds.map((s) => Math.abs(peaks.dqn[s].peak - peaks['double-dqn'][s].peak))),
+    betweenSeeds: Math.min(range.dqn[1] - range.dqn[0], range['double-dqn'][1] - range['double-dqn'][0]),
+  };
+}
+
+export type Rl2ReadingKey = 'easy' | 'same' | 'differs' | 'overBoth' | 'overFacts';
+
+/**
+ * Which reading sentence the logs support. Never names a winner:
+ * - overBoth: both variants peak above the threshold and the gap between variants at
+ *   equal seed does not exceed the spread between seeds;
+ * - overFacts: some peak is above the threshold but not that pattern: the peaks are listed;
+ * - easy / same: same outcome and overlapping final gaps (easy on the control bench);
+ * - differs: anything else.
+ */
+export function chooseReading(isControl: boolean, reading: Rl2Reading, over: Rl2Overestimation | null): Rl2ReadingKey {
+  if (over?.anyAbove) return over.bothAbove && over.betweenVariants <= over.betweenSeeds ? 'overBoth' : 'overFacts';
+  if (reading.noMeasurableDifference) return isControl ? 'easy' : 'same';
+  return 'differs';
+}

@@ -38,6 +38,12 @@ import {
   manifestOverride,
   qRows,
   readResults,
+  chooseReading,
+  readOverestimation,
+  peakGaps,
+  OVERESTIMATION_PEAK,
+  type Rl2Peak,
+  type ByRun,
   returnRows,
   rl2ManifestUrl,
   Rl2BenchMissingError,
@@ -279,7 +285,7 @@ function BenchView({ data, benchId, seed, setSeed, narrow, lang, num }: BenchVie
           {changed === null
             ? t('rl2.bench.changedNone')
             : changed.kind === 'gaussianRewardNoise'
-              ? t('rl2.bench.changedNoise', { sigma: num(changed.sigma, 3) })
+              ? t('rl2.bench.changedNoise', { sigma: lang === 'fr' ? String(changed.sigma).replace('.', ',') : String(changed.sigma) })
               : t('rl2.bench.changedRaw', { value: changed.text })}
         </p>
       )}
@@ -500,14 +506,38 @@ function ReplayPanel({ algo, seed, panel, narrow, num }: { algo: Rl2Algo; seed: 
 
 function ComparisonBlocks({ data, benchId, narrow, lang, num }: Omit<BenchViewProps, 'seed' | 'setSeed'>) {
   if (!data.comparison.ok) return null;
-  const { summaries, binned } = data.comparison.data;
+  const { summaries, binned, experiment } = data.comparison.data;
   const { seeds, budget, gamma } = data.manifest;
   const reading = readResults(summaries, seeds);
+  const over = data.q.ok ? readOverestimation(data.q.data, seeds) : null;
+  const peaks = data.q.ok ? peakGaps(data.q.data, seeds) : null;
+  const noisy = changedVariable(experiment)?.kind === 'gaussianRewardNoise';
+  const absent = t('rl2.absent');
+  const sg = (v: number) => formatSigned(v, lang, absent);
+  const key = chooseReading(benchId === RL2_CONTROL_BENCH, reading, over);
+  const vars: Record<string, string> = {
+    min: sg(reading.finalGapMin),
+    max: sg(reading.finalGapMax),
+    thr: num(OVERESTIMATION_PEAK, 2),
+    ...(over
+      ? {
+          pmin: sg(over.peakMin),
+          pmax: sg(over.peakMax),
+          a0: sg(over.range.dqn[0]),
+          a1: sg(over.range.dqn[1]),
+          b0: sg(over.range['double-dqn'][0]),
+          b1: sg(over.range['double-dqn'][1]),
+          between: num(over.betweenVariants, 4),
+          seedSpread: num(over.betweenSeeds, 4),
+        }
+      : {}),
+  };
+  const readingKey = { easy: 'rl2.readingEasy', same: 'rl2.readingSame', differs: 'rl2.readingDiffers', overBoth: 'rl2.readingOverBoth', overFacts: 'rl2.readingOverFacts' }[key];
   return (
     <>
-      <ReturnsChart rows={returnRows(binned, seeds)} budget={budget.envStepsPerRun} narrow={narrow} lang={lang} num={num} />
+      <ReturnsChart rows={returnRows(binned, seeds)} budget={budget.envStepsPerRun} narrow={narrow} lang={lang} num={num} noisy={noisy} />
       {data.q.ok ? (
-        <QBlock rows={qRows(data.q.data, seeds)} budget={budget.envStepsPerRun} gamma={gamma} narrow={narrow} lang={lang} num={num} />
+        <QBlock rows={qRows(data.q.data, seeds)} budget={budget.envStepsPerRun} gamma={gamma} narrow={narrow} lang={lang} num={num} noisy={noisy} />
       ) : (
         <section data-testid="rl2-q-error" role="alert" style={{ ...alertBox, marginTop: 16 }}>
           <h2 style={{ ...h2, marginTop: 0 }}>{t('rl2.error.qHeading')}</h2>
@@ -515,13 +545,9 @@ function ComparisonBlocks({ data, benchId, narrow, lang, num }: Omit<BenchViewPr
           <p style={{ margin: 0 }}>{t('rl2.error.qHint')}</p>
         </section>
       )}
-      <ResultsTable summaries={summaries} seeds={seeds} narrow={narrow} lang={lang} num={num} />
-      <p data-testid="rl2-reading" style={{ marginTop: 16 }}>
-        {(() => {
-          const vars = { min: formatSigned(reading.finalGapMin, lang, t('rl2.absent')), max: formatSigned(reading.finalGapMax, lang, t('rl2.absent')) };
-          if (!reading.noMeasurableDifference) return t('rl2.readingDiffers');
-          return benchId === RL2_CONTROL_BENCH ? t('rl2.readingEasy', vars) : t('rl2.readingSame', vars);
-        })()}
+      <ResultsTable summaries={summaries} peaks={peaks} seeds={seeds} narrow={narrow} lang={lang} num={num} />
+      <p data-testid="rl2-reading" data-reading={key} style={{ marginTop: 16 }}>
+        {t(readingKey, vars)}
       </p>
     </>
   );
@@ -564,13 +590,14 @@ function Legend2() {
   );
 }
 
-function ReturnsChart({ rows, budget, narrow, lang, num }: { rows: ChartRow[]; budget: number; narrow: boolean; lang: Language; num: BenchViewProps['num'] }) {
+function ReturnsChart({ rows, budget, narrow, lang, num, noisy }: { rows: ChartRow[]; budget: number; narrow: boolean; lang: Language; num: BenchViewProps['num']; noisy: boolean }) {
   const seedKeys = (algo: Rl2Algo) => Object.keys(rows[0] ?? {}).filter((k) => k.startsWith(seriesKey(algo, 's')));
   const domain = sharedDomain(rows, RL2_ALGOS.flatMap((algo) => [seriesKey(algo, 'band'), ...seedKeys(algo)]));
   return (
     <section data-testid="rl2-chart-returns" style={{ ...block, marginTop: 16 }}>
       <h2 style={h2}>{t('rl2.chartReturns')}</h2>
       <p style={{ color: MUTED, fontSize: 14, margin: '0 0 8px' }}>{t('rl2.binNote', { bin: RL2_BIN_STEPS })}</p>
+      {noisy && <p data-testid="rl2-true-return-note" style={{ color: MUTED, fontSize: 14, margin: '0 0 8px' }}>{t('rl2.trueReturnNote')}</p>}
       <ResponsiveContainer width="100%" height={narrow ? 240 : 280}>
         <ComposedChart data={rows} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#333" />
@@ -640,7 +667,7 @@ function QTooltip({ active, payload, lang, num, keys }: TooltipProps & { keys: {
   );
 }
 
-function QBlock({ rows, budget, gamma, narrow, lang, num }: { rows: ChartRow[]; budget: number; gamma: number; narrow: boolean; lang: Language; num: BenchViewProps['num'] }) {
+function QBlock({ rows, budget, gamma, narrow, lang, num, noisy }: { rows: ChartRow[]; budget: number; gamma: number; narrow: boolean; lang: Language; num: BenchViewProps['num']; noisy: boolean }) {
   const qDomain = sharedDomain(rows, RL2_ALGOS.flatMap((algo) => [seriesKey(algo, 'q'), seriesKey(algo, 'g')]));
   const gapDomain = sharedDomain(rows, RL2_ALGOS.map((algo) => seriesKey(algo, 'gap')), 0.1);
   const gapDomainWithZero: [number, number] = [Math.min(gapDomain[0], 0), Math.max(gapDomain[1], 0)];
@@ -649,6 +676,7 @@ function QBlock({ rows, budget, gamma, narrow, lang, num }: { rows: ChartRow[]; 
     <section data-testid="rl2-chart-q" style={{ ...block, marginTop: 16 }}>
       <h2 style={h2}>{t('rl2.chartQ', { gamma: num(gamma, 2) })}</h2>
       <p style={{ color: MUTED, fontSize: 14, margin: '0 0 8px' }}>{t('rl2.qNote')}</p>
+      {noisy && <p style={{ color: MUTED, fontSize: 14, margin: '0 0 8px' }}>{t('rl2.trueReturnQNote')}</p>}
       <div style={{ display: 'grid', gridTemplateColumns: narrow ? '1fr' : '1fr 1fr', gap: 16 }}>
         {RL2_ALGOS.map((algo) => (
           <div key={algo} data-testid={`rl2-chart-q-${testIdOf[algo]}`} style={{ minWidth: 0 }}>
@@ -718,7 +746,7 @@ function QBlock({ rows, budget, gamma, narrow, lang, num }: { rows: ChartRow[]; 
   );
 }
 
-type Metric = { key: string; label: (n: number) => string; get: (s: Rl2Summary) => number; kind: 'num' | 'pct' | 'signed' };
+type Metric = { key: string; label: (n: number) => string; get: (s: Rl2Summary, peak?: Rl2Peak) => number; kind: 'num' | 'pct' | 'signed' };
 
 const METRICS: Metric[] = [
   { key: 'lastMean', label: (n) => t('rl2.table.lastMean', { n }), get: (s) => s.lastMeanReturn, kind: 'num' },
@@ -728,12 +756,17 @@ const METRICS: Metric[] = [
   { key: 'gapHalf', label: () => t('rl2.table.gapHalf'), get: (s) => s.meanGapSecondHalf, kind: 'signed' },
 ];
 
-function ResultsTable({ summaries, seeds, narrow, lang, num }: { summaries: Record<Rl2Algo, Record<number, Rl2Summary>>; seeds: number[]; narrow: boolean; lang: Language; num: BenchViewProps['num'] }) {
+/** Only when q-vs-return is readable: highest Q − G of the run over its evaluation points. */
+const PEAK_METRIC: Metric = { key: 'peakGap', label: () => t('rl2.table.peakGap'), get: (_s, peak) => peak?.peak ?? NaN, kind: 'signed' };
+
+function ResultsTable({ summaries, peaks, seeds, narrow, lang, num }: { summaries: Record<Rl2Algo, Record<number, Rl2Summary>>; peaks: ByRun<Rl2Peak> | null; seeds: number[]; narrow: boolean; lang: Language; num: BenchViewProps['num'] }) {
   const absent = t('rl2.absent');
   const show = (m: Metric, v: number) => (m.kind === 'pct' ? formatPercent(v, lang, absent) : m.kind === 'signed' ? formatSigned(v, lang, absent) : num(v));
   const diff = (m: Metric, a: number, b: number) =>
     m.kind === 'pct' ? `${formatSigned((b - a) * 100, lang, absent, 1)} pt` : formatSigned(b - a, lang, absent);
   const n = summaries.dqn[seeds[0]].lastEpisodesCount;
+  const metrics = peaks ? [...METRICS, PEAK_METRIC] : METRICS;
+  const peakText = (algo: Rl2Algo, seed: number) => (peaks ? ` · ${t('rl2.table.peakShort', { peak: formatSigned(peaks[algo][seed].peak, lang, absent) })}` : '');
 
   if (narrow) {
     return (
@@ -750,7 +783,7 @@ function ResultsTable({ summaries, seeds, narrow, lang, num }: { summaries: Reco
               greedy: num(s.greedyEvalMean),
               gap: formatSigned(s.finalQVsReturn.meanGap, lang, absent),
               half: formatSigned(s.meanGapSecondHalf, lang, absent),
-            });
+            }) + peakText(algo, seed);
           return (
             <div key={seed} data-testid={`rl2-card-${seed}`} style={{ border: `1px solid ${BORDER}`, borderRadius: 8, padding: 12, marginTop: 8 }}>
               <h3 style={{ fontSize: 14, margin: '0 0 8px' }}>{t('rl2.table.seedTitle', { seed })}</h3>
@@ -786,9 +819,9 @@ function ResultsTable({ summaries, seeds, narrow, lang, num }: { summaries: Reco
         </thead>
         <tbody>
           {seeds.flatMap((seed) =>
-            METRICS.map((m, i) => {
-              const a = m.get(summaries.dqn[seed]);
-              const b = m.get(summaries['double-dqn'][seed]);
+            metrics.map((m, i) => {
+              const a = m.get(summaries.dqn[seed], peaks?.dqn[seed]);
+              const b = m.get(summaries['double-dqn'][seed], peaks?.['double-dqn'][seed]);
               return (
                 <tr key={`${seed}-${m.key}`} style={i === 0 ? { borderTop: `1px solid ${BORDER}` } : undefined}>
                   <td style={td}>{i === 0 ? seed : ''}</td>

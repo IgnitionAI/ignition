@@ -113,7 +113,9 @@
       "finalGap": "Q − return, end of run",
       "gapHalf": "Q − return, second-half mean",
       "cardLine": "{variant}: return {ret} · success {succ} · greedy {greedy} · final Q − return {gap} · second half {half}",
-      "cardDiff": "difference (Double DQN − DQN): return {ret} · final Q − return {gap} · second half {half}"
+      "cardDiff": "difference (Double DQN − DQN): return {ret} · final Q − return {gap} · second half {half}",
+      "peakGap": "Q − return peak during the run",
+      "peakShort": "peak {peak}"
     },
     "readingEasy": "On the easy task, no measurable difference: same returns and same success rates on all 3 seeds, and the final Q − return gap stays between {min} and {max} for both variants.",
     "readingDiffers": "The two variants do not give the same results on every seed: see the table, seed by seed.",
@@ -128,6 +130,10 @@
       "qHeading": "Q-values not logged in this run",
       "qHint": "The overestimation block stays empty: no substitute value is computed."
     },
-    "absent": "absent"
+    "absent": "absent",
+    "readingOverBoth": "Both variants clearly overestimate during training: Q − return peaks between {pmin} and {pmax} depending on seed and variant (reading: peak above {thr}). By the end of the run, the Q − return gap is back between {min} and {max}. At equal seed the two variants differ by at most {between}, less than the spread between seeds of one variant (at least {seedSpread}): no winner on this bench.",
+    "readingOverFacts": "Q − return peak per seed: DQN from {a0} to {a1}, Double DQN from {b0} to {b1} (reading: peak above {thr}). By the end of the run, the Q − return gap is between {min} and {max}. See the curves and the table, seed by seed.",
+    "trueReturnNote": "True environment return, without the noise added to the training reward.",
+    "trueReturnQNote": "True observed return (without the training noise); the agent itself learns from the noisy reward."
   }
 }

@@ -4,6 +4,9 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
   changedVariable,
+  chooseReading,
+  OVERESTIMATION_PEAK,
+  readOverestimation,
   formatAxis,
   formatPercent,
   niceTicks,
@@ -170,9 +173,9 @@ describe('RL 2 error states', () => {
   });
 
   it('an absent bench (or HTML fallback) is a missing-bench error, not a broken page', async () => {
-    const error = await loadBench('/dqn-vs-double-noisy/manifest.json', siteFetch()).catch((e: unknown) => e);
+    const error = await loadBench('/dqn-vs-double-absent/manifest.json', siteFetch()).catch((e: unknown) => e);
     expect(error).toBeInstanceOf(Rl2BenchMissingError);
-    expect((error as Rl2BenchMissingError).url).toBe('/dqn-vs-double-noisy/manifest.json');
+    expect((error as Rl2BenchMissingError).url).toBe('/dqn-vs-double-absent/manifest.json');
     const fallback = await loadBench(CONTROL, siteFetch({ remove: [CONTROL] })).catch((e: unknown) => e);
     expect(fallback).toBeInstanceOf(Rl2BenchMissingError);
   });
@@ -213,5 +216,57 @@ describe('RL 2 display helpers', () => {
       Object.entries(obj).flatMap(([k, v]) => (typeof v === 'object' ? keys(v, `${prefix}${k}.`) : [`${prefix}${k}`]));
     expect(keys(fr.rl2)).toEqual(keys(en.rl2));
     for (const b of RL2_BENCHES) expect((fr.rl2.bench as Record<string, string>)[b.id]).toBeTruthy();
+  });
+});
+
+describe('RL 2 noisy-reward bench, read from the committed logs', () => {
+  const NOISY = '/dqn-vs-double-noisy/manifest.json';
+
+  it('loads, shows the changed variable and draws the true return', async () => {
+    const bench = await loadBench(NOISY, siteFetch());
+    expect(bench.comparison.ok).toBe(true);
+    expect(bench.q.ok).toBe(true);
+    expect(changedVariable(bench.experiment!)).toEqual({ kind: 'gaussianRewardNoise', sigma: 0.5 });
+    const raw = readFileSync(join(publicDir, 'dqn-vs-double-noisy/dqn/seed-11/episodes.jsonl'), 'utf8');
+    const lines = raw.trim().split('\n').map((l) => JSON.parse(l));
+    expect(lines[0]).toHaveProperty('noisyReturn');
+    const first = lines.filter((l) => l.globalStep <= RL2_BIN_STEPS);
+    const binned = binEpisodes(raw, { budget: 50000 });
+    expect(binned.bins[0].mean).toBeCloseTo(first.reduce((s, l) => s + l.return, 0) / first.length, 12);
+  });
+
+  it('reads clear overestimation for both variants, without a winner', async () => {
+    const bench = await loadBench(NOISY, siteFetch());
+    if (!bench.comparison.ok || !bench.q.ok) throw new Error('bench incomplete');
+    const seeds = bench.manifest.seeds;
+    const over = readOverestimation(bench.q.data, seeds);
+    expect(over.bothAbove).toBe(true);
+    expect(over.peakMin).toBeGreaterThan(OVERESTIMATION_PEAK);
+    expect(over.peakMax).toBeGreaterThan(2);
+    expect(over.betweenVariants).toBeLessThanOrEqual(over.betweenSeeds);
+    const reading = readResults(bench.comparison.data.summaries, seeds);
+    expect(chooseReading(false, reading, over)).toBe('overBoth');
+  });
+
+  it('keeps the easy-task reading on the control bench', async () => {
+    const bench = await loadBench(CONTROL, siteFetch());
+    if (!bench.comparison.ok || !bench.q.ok) throw new Error('bench incomplete');
+    const over = readOverestimation(bench.q.data, bench.manifest.seeds);
+    expect(over.anyAbove).toBe(false);
+    expect(chooseReading(true, readResults(bench.comparison.data.summaries, bench.manifest.seeds), over)).toBe('easy');
+  });
+
+  it('lists the peaks instead of concluding when only one variant peaks, or variants differ more than seeds', () => {
+    const rows = (peak: number) => [{ step: 0, meanQMax: 0, meanDiscountedReturn: 0 }, { step: 1, meanQMax: peak, meanDiscountedReturn: 0 }];
+    const q = (a: number[], b: number[]) => ({
+      dqn: { 1: rows(a[0]), 2: rows(a[1]) },
+      'double-dqn': { 1: rows(b[0]), 2: rows(b[1]) },
+    });
+    const same = { sameOutcome: true, gapRangesOverlap: true, noMeasurableDifference: true, finalGapMin: 0, finalGapMax: 0 };
+    expect(chooseReading(true, same, readOverestimation(q([0.5, 0.4], [0.01, 0.02]), [1, 2]))).toBe('overFacts');
+    expect(chooseReading(true, same, readOverestimation(q([1.0, 1.1], [0.2, 0.25]), [1, 2]))).toBe('overFacts');
+    expect(chooseReading(true, same, readOverestimation(q([0.01, 0.02], [0.03, 0.01]), [1, 2]))).toBe('easy');
+    expect(chooseReading(true, same, null)).toBe('easy');
+    expect(chooseReading(false, { ...same, sameOutcome: false, noMeasurableDifference: false }, null)).toBe('differs');
   });
 });

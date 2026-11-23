@@ -113,7 +113,9 @@
       "finalGap": "Q − retour, fin du run",
       "gapHalf": "Q − retour, moyenne 2e moitié",
       "cardLine": "{variant} : retour {ret} · succès {succ} · glouton {greedy} · Q − retour final {gap} · 2e moitié {half}",
-      "cardDiff": "écart (Double DQN − DQN) : retour {ret} · Q − retour final {gap} · 2e moitié {half}"
+      "cardDiff": "écart (Double DQN − DQN) : retour {ret} · Q − retour final {gap} · 2e moitié {half}",
+      "peakGap": "pic de Q − retour pendant le run",
+      "peakShort": "pic {peak}"
     },
     "readingEasy": "Sur la tâche facile, aucune différence mesurable : mêmes retours et mêmes taux de succès sur les 3 graines, et l’écart Q − retour final reste entre {min} et {max} pour les deux variantes.",
     "readingDiffers": "Les deux variantes ne donnent pas les mêmes résultats sur toutes les graines : voir le tableau, graine par graine.",
@@ -128,6 +130,10 @@
       "qHeading": "Valeurs Q non journalisées dans ce run",
       "qHint": "Le bloc surestimation reste vide : aucune valeur de remplacement n’est calculée."
     },
-    "absent": "absent"
+    "absent": "absent",
+    "readingOverBoth": "Les deux variantes surestiment nettement pendant l’apprentissage : pic de Q − retour entre {pmin} et {pmax} selon la graine et la variante (lecture : pic au-dessus de {thr}). En fin de run, l’écart Q − retour revient entre {min} et {max}. À graine égale, les deux variantes diffèrent d’au plus {between}, moins que l’écart entre graines d’une même variante (au moins {seedSpread}) : pas de vainqueur sur ce banc.",
+    "readingOverFacts": "Pic de Q − retour selon la graine : DQN de {a0} à {a1}, Double DQN de {b0} à {b1} (lecture : pic au-dessus de {thr}). En fin de run, l’écart Q − retour est entre {min} et {max}. Voir les courbes et le tableau, graine par graine.",
+    "trueReturnNote": "Retour vrai de l’environnement, sans le bruit ajouté à la récompense d’entraînement.",
+    "trueReturnQNote": "Retour observé vrai (sans le bruit d’entraînement) ; l’agent apprend, lui, sur la récompense bruitée."
   }
 }
