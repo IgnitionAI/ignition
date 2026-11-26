@@ -1,4 +1,4 @@
-# Local validation — 12 November 2026 (IGN-221 / #17)
+# Local validation — 12 November 2026 (#17)
 
 Status: garage → keyboard race → results → new race is implemented and covered by Circuit tests plus a Playwright pass on CPU WebGL (SwiftShader). **A complete three-lap human keyboard race on a GPU browser remains NON VÉRIFIÉE.** No merge, publish, retraining or new asset is included. Follow [HUMAN-RACE.md](HUMAN-RACE.md) for the remaining GPU recipe.
 
@@ -39,11 +39,11 @@ With browser cache disabled, final local Formula GLB transfer took **16.2 ms** (
 
 Final rendered V3 report opened through the Training link. Report, raw JSON and all ten weight files returned HTTP 200; raw JSON contains all 200 evaluations. Narrow-window lap counter and readable result rows checked visually.
 
-## IGN-221 Playwright (CPU WebGL / SwiftShader) — 12 November 2026
+## Playwright (CPU WebGL / SwiftShader) — 12 November 2026
 
 Environment: Linux 6.12, Chromium Playwright 158, `ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero)))`. Viewport 1280×720. Dev server `http://127.0.0.1:3020/?e2e=1`. Circuit `alpine-park-v1`, driving `circuit-racing-v2`, rules `circuit-race-v2-ghost-v1`. Vehicles: player Sport GT, opponent Formule R. Opponent checkpoint `bundled-29` (imitation V2 seed 29). Player finish used frozen imitation seed 11 on the keyboard contract — **not** a human GPU race.
 
-Measured: keyboard hold reached 72 km/h after countdown; pause/resume; both cars completed 3 laps (player 244.10 s with 5 rescues / +41 s, `bundled-29` 59.05 s). Results overlay showed checkpoint ids. New race restarted countdown at 3 s with the same opponent. 90 animation-frame intervals: median **50 ms**, p95 **100 ms**, mean **58.8 ms**, ≈**17 FPS**. Not a 60 FPS claim. Artifacts: `evidence/ign-221/`.
+Measured: keyboard hold reached 72 km/h after countdown; pause/resume; both cars completed 3 laps (player 244.10 s with 5 rescues / +41 s, `bundled-29` 59.05 s). Results overlay showed checkpoint ids. New race restarted countdown at 3 s with the same opponent. 90 animation-frame intervals: median **50 ms**, p95 **100 ms**, mean **58.8 ms**, ≈**17 FPS**. Not a 60 FPS claim. Artifacts were kept locally and are not committed.
 
 Console: Vite HMR debug, React DevTools hint, and a pre-existing `setState` during `Vehicle` render warning. No rule-controller fallback.
 

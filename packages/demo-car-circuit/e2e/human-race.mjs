@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const outDir = join(here, "../evidence/ign-221");
+const outDir = join(here, "../.scratch/human-race");
 const origin = process.env.CIRCUIT_URL ?? "http://127.0.0.1:3020";
 const url = `${origin}/?e2e=1`;
 
