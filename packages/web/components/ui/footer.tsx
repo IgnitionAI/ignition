@@ -54,7 +54,7 @@ export default function Footer({ t, locale }: { t: typeof FooterMessages; locale
 
           {/* Project */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-sm text-slate-50 font-medium mb-2">{t.sections.project}</h6>
+            <h6 className="text-sm text-slate-50 font-semibold mb-2">{t.sections.project}</h6>
             <ul className="text-sm space-y-2">
               <li>
                 <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -79,7 +79,7 @@ export default function Footer({ t, locale }: { t: typeof FooterMessages; locale
 
           {/* Docs */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-sm text-slate-50 font-medium mb-2">{t.sections.docs}</h6>
+            <h6 className="text-sm text-slate-50 font-semibold mb-2">{t.sections.docs}</h6>
             <ul className="text-sm space-y-2">
               <li>
                 <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="#quickstart">{t.links.quickstart}</a>
@@ -98,7 +98,7 @@ export default function Footer({ t, locale }: { t: typeof FooterMessages; locale
 
           {/* Community */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-3">
-            <h6 className="text-sm text-slate-50 font-medium mb-2">{t.sections.community}</h6>
+            <h6 className="text-sm text-slate-50 font-semibold mb-2">{t.sections.community}</h6>
             <ul className="text-sm space-y-2">
               <li>
                 <a className="text-slate-400 hover:text-slate-200 transition duration-150 ease-in-out" href="https://github.com/IgnitionAI/ignition/issues" target="_blank" rel="noopener noreferrer">{t.links.issues}</a>
