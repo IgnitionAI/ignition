@@ -1,3 +1,0 @@
-200 http://localhost:3071/demos/ball-thrust
-200 http://localhost:3071/fr/blog/ball-thrust-physique-rapier
-200 http://localhost:3071/en/blog/ball-thrust-physique-rapier

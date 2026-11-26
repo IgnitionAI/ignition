@@ -4,7 +4,10 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execSync } = require('node:child_process');
-const output = path.resolve(process.argv[2] || '.scratch/ball-thrust-browser');
+const output = path.resolve(process.argv[2] || (() => {
+  const git = (args) => execSync(`git ${args}`, { encoding: 'utf8' }).trim();
+  return path.join(git('rev-parse --show-toplevel'), '.scratch', 'ball-thrust', git('rev-parse HEAD'), 'physics-browser');
+})());
 fs.mkdirSync(output, { recursive: true });
 
 (async () => {
