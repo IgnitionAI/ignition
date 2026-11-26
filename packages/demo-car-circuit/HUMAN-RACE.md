@@ -1,4 +1,4 @@
-# Recette humaine GPU — IGN-221 / GitHub #17
+# Recette humaine GPU — GitHub #17
 
 **Statut de cette recette sur machine GPU navigateur : NON VÉRIFIÉE.**
 
@@ -39,7 +39,7 @@ corepack pnpm --filter demo-car-circuit exec vite --host 127.0.0.1 --port 3020
 CIRCUIT_URL=http://127.0.0.1:3020 corepack pnpm --filter demo-car-circuit e2e:human-race
 ```
 
-Artifacts: `evidence/ign-221/`. The player slot is completed with frozen imitation-11 after real keyboard/pause checks.
+Artifacts: written locally to `.scratch/human-race/` (not committed). The player slot is completed with frozen imitation-11 after real keyboard/pause checks.
 
 ## Ce que cette PR a déjà prouvé
 

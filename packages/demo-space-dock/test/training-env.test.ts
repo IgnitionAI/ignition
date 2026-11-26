@@ -160,7 +160,7 @@ describe('DockTrainingEnv contract', () => {
       const again = await make({ startDistance: [1, 4] });
       try { for (let i = 0; i < 6; i++) again.reset(); expect(again.dock.telemetry.distance).toBeCloseTo(distances[5]); }
       finally { again.dock.dispose(); }
-      // Still the IGN-118 success rule: the scripted PD docks from a near start and must hold 90 ticks.
+      // Still the SpaceDockEnv success rule: the scripted PD docks from a near start and must hold 90 ticks.
       env.reset(42);
       const controller = createPDState();
       run(env, () => scriptedPD(env.dock.telemetry, controller), TRAINING_ENV.maxSteps);

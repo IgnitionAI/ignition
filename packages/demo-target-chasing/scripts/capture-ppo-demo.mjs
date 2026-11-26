@@ -8,7 +8,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const output = process.argv[2] || join(here, '../../../evidence/ign-170/playwright');
+const output = process.argv[2] || join(here, '../.scratch/ppo-playwright');
 mkdirSync(output, { recursive: true });
 
 const require = createRequire(import.meta.url);

@@ -107,7 +107,7 @@ Need help or want to showcase your own scenes? Join the [IgnitionAI Discussions]
 
 ---
 
-## PPO before / after (IGN-170)
+## PPO before / after
 
 This package also serves a **PPO replay** at `src/ppo.html`. It does not reuse `@ignitionai/viz` from PRs #77/#78. The reward curve and greedy returns come from files under `public/ppo/`; nothing is hardcoded. Missing checkpoint/log → `PPO checkpoint/log absent: …`.
 
@@ -141,7 +141,7 @@ git log -1 --format=%P -- packages/demo-target-chasing/public/ppo/manifest.json
 # first parent of the artifacts commit must equal gitSha
 ```
 
-Copied from `public/ppo/seed-*/summary.json` after `RUN_PPO_TRAIN=1` (`evidence/ign-170/24-retrain-greedy-gap.txt`):
+Copied from `public/ppo/seed-*/summary.json` after `RUN_PPO_TRAIN=1`:
 
 | seed | first20 | last20 | untrained greedy eval | trained greedy eval | gap | greedy from 0.2 untrained → trained |
 | --- | --- | --- | --- | --- | --- | --- |

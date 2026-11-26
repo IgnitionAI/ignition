@@ -68,14 +68,14 @@ Both opt-in browser harnesses use an existing headed Playwright/Chrome installat
 PLAYWRIGHT_PATH=/absolute/path/to/playwright \
 CHROMIUM_PATH=/absolute/path/to/chrome \
 BALL_THRUST_URL=http://localhost:4170 \
-node packages/demo-ball-thrust/test/browser-check.cjs evidence/$(git rev-parse HEAD)/physics-browser
+node packages/demo-ball-thrust/test/browser-check.cjs .scratch/ball-thrust/$(git rev-parse HEAD)/physics-browser
 
 # Frozen 4096-transition run, initial/final/random evaluation, real IndexedDB reload,
 # byte-for-byte weight checks and a 30 s inference RAF sample:
 PLAYWRIGHT_PATH=/absolute/path/to/playwright \
 CHROMIUM_PATH=/absolute/path/to/chrome \
 BALL_THRUST_URL=http://localhost:4170 \
-node packages/demo-ball-thrust/test/training-browser.cjs evidence/$(git rev-parse HEAD)/training-browser
+node packages/demo-ball-thrust/test/training-browser.cjs .scratch/ball-thrust/$(git rev-parse HEAD)/training-browser
 ```
 
-The keyboard harness drives actual events, never writes simulation state, and checks collisions, goal, resets, focus, narrow layout and denied-WebGL fallback. The training harness drives visible controls and reads actual IndexedDB artifacts, not hidden simulation hooks. RAF cadence is not GPU timing or a mobile-device guarantee. Final results belong to `evidence/<executed source SHA>/`; failures/skips remain documented. The evidence-only commit follows its executed source commit.
+The keyboard harness drives actual events, never writes simulation state, and checks collisions, goal, resets, focus, narrow layout and denied-WebGL fallback. The training harness drives visible controls and reads actual IndexedDB artifacts, not hidden simulation hooks. RAF cadence is not GPU timing or a mobile-device guarantee. Without an argument, each harness writes to `.scratch/ball-thrust/<executed source SHA>/` (local, not committed); failures/skips remain documented.

@@ -1,7 +1,0 @@
-$ pnpm run typecheck
-
-> ignition-monorepo@ typecheck /Users/salimlaimeche/dev/ignition-demo-70-ball-thrust
-> tsc --build
-
-
-EXIT_CODE=0

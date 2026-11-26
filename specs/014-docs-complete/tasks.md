@@ -3,7 +3,7 @@
 **Feature**: `014-docs-complete` | **Date**: 2026-04-13
 **Spec**: [spec.md](./spec.md) · **Plan**: [plan.md](./plan.md) · **Data model**: [data-model.md](./data-model.md) · **Contracts**: [contracts/sidebar.md](./contracts/sidebar.md)
 
-All paths are relative to repo root: `/Users/salimlaimeche/dev/ignitionai_agency/ignition/`. Every MDX and `_meta.js` file lives under `packages/web/content/`.
+All paths are relative to the repository root. Every MDX and `_meta.js` file lives under `packages/web/content/`.
 
 ---
 
