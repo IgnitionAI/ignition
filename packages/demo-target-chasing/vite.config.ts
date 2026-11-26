@@ -1,6 +1,8 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { rl2CurvesPlugin } from './scripts/rl2-curves.mjs';
+import { RL2_BENCHES } from './src/rl2/benches';
 
 export default defineConfig({
   root: 'src',
@@ -14,6 +16,7 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, 'src/index.html'),
         ppo: path.resolve(__dirname, 'src/ppo.html'),
+        'dqn-vs-double': path.resolve(__dirname, 'src/dqn-vs-double.html'),
       },
       external: [
         '@tensorflow/tfjs-node',
@@ -28,7 +31,11 @@ export default defineConfig({
   define: {
     'process.env.VITE_HF_TOKEN': JSON.stringify(process.env.VITE_HF_TOKEN ?? ''),
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    // Light per-bin aggregate of the RL 2 episode logs; the raw JSONL stays the source.
+    rl2CurvesPlugin({ publicDir: path.resolve(__dirname, 'public'), benchDirs: RL2_BENCHES.map((b) => b.dir) }),
+  ],
   resolve: {
     alias: {
       '@ignitionai/backend-tfjs': path.resolve(__dirname, '../backend-tfjs/src'),

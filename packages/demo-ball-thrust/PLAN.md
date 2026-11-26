@@ -2,7 +2,7 @@
 
 ## Analysis and scope
 
-The manual physics slice is present, but no TrainingEnv, learner or inference exists. Existing issues #68 (RL/DQN) and #69 (web integration/evidence) cover the requested remaining work; no new issue is needed. Work stays in the assigned `ignition-demo-70-ball-thrust` worktree. Local stacked branches preserve one issue per branch: `feat/68-ball-thrust-dqn` starts at `aa135e20ea0cbb8574f72e6679ce038af226dfc7` (slice #70); the final integration branch for #69 will start from completed #68, without merging branches.
+The manual physics slice is present, but no TrainingEnv, learner or inference exists. Existing issues #68 (RL/DQN) and #69 (web integration/evidence) cover the requested remaining work; no new issue is needed. Work is split one issue per change: the #68 work starts at `aa135e20ea0cbb8574f72e6679ce038af226dfc7` (slice #70); the #69 integration builds on the completed #68, without merging unrelated work.
 
 Reuse the public TrainingEnv, IgnitionEnvTFJS manual step/inferStep and DQNAgent, plus IndexedDBProvider. Protected packages are read-only. No push, merge, release, deployment or early ticket closure.
 

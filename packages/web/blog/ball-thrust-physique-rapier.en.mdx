@@ -93,7 +93,7 @@ The versioned protocol was fixed before execution: environment seed 70, network 
 
 **Évaluer les 3 politiques** compares the initial network, the current greedy network and a uniform random baseline seeded 2026 on the same held-out seeds **1000 through 1007**, at most 300 actions per episode. Evaluation uses separate worlds, leaves the visible arena unchanged and performs no training. Expandable raw results give return, success, duration and final distance per seed. A higher return with zero targets reached is still a navigation failure, not a success to relabel.
 
-Real tests verify collisions and resets, the bounded contract, episode endings, changed training weights, exact inference equality, checkpoint reload and tensor-count plateaus. Browser harnesses drive actual buttons and read IndexedDB artifacts. Dated, SHA-linked evidence lives in `evidence/`; RAF cadence and p95 are not GPU timings or mobile performance promises.
+Real tests verify collisions and resets, the bounded contract, episode endings, changed training weights, exact inference equality, checkpoint reload and tensor-count plateaus. Browser harnesses drive actual buttons and read IndexedDB artifacts. These checks can be rerun locally with the commands in the demo README; RAF cadence and p95 are not GPU timings or mobile performance promises.
 
 ```bash
 pnpm install --frozen-lockfile

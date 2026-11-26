@@ -1,0 +1,80 @@
+{
+  "experiment": "rl2-dqn-vs-double-dqn",
+  "declaredBeforeExecution": true,
+  "declaredAt": "2026-11-23T08:10:45Z",
+  "note": "Budget, hyperparameters and seeds are frozen before the training command that produced public/dqn-vs-double/. Both algorithms use exactly the same values; the only difference is agent.doubleQ. Results must come from the raw JSONL logs; do not edit numbers after the run.",
+  "gitBase": "ca7beb4",
+  "task": {
+    "id": "nav1d-discrete",
+    "sameTaskAs": "public/ppo (RL 1)",
+    "description": "1-D navigation on [0, 1]. Action 1 = +0.15, action 0 = -0.15. Episode ends at position > 0.7 or 25 steps. Reward +1 on success else -0.05 per step.",
+    "start": "uniform[0, 0.4] via mulberry32(seed * 1009), as in RL 1",
+    "observation": [
+      "position"
+    ],
+    "success": "episode terminated by reaching position > 0.7 before the 25-step limit"
+  },
+  "algorithms": [
+    "dqn",
+    "double-dqn"
+  ],
+  "onlyDifference": "agent.doubleQ = false for dqn, true for double-dqn",
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "budget": {
+    "envStepsPerRun": 50000,
+    "maxStepsPerEpisode": 25,
+    "learningStarts": 500,
+    "trainEveryEnvStep": true,
+    "unit": "environment steps (identical for both algorithms; an episode still running when the budget is reached is not logged as an episode, its length is in summary.partialEpisodeAtBudget)",
+    "choice": "Speed measured before the runs with a 3000-step probe on this machine (tfjs cpu backend, node v22): 2.08 ms per env step for dqn and 2.40 ms for double-dqn (one extra forward pass per train step). 50000 steps is about 2 minutes per run, about 15 minutes for the 6 runs, far below a few CPU hours. The 3000-step probe already reached 100 % greedy success on this small task, so 50000 steps leaves 35000 steps at minimum epsilon to watch the Q estimates settle (or drift) after the policy is solved. Episode logs stay near 1 MB per run for the page."
+  },
+  "agent": {
+    "class": "DQNAgent (packages/backend-tfjs/src/agents/dqn.ts)",
+    "inputSize": 1,
+    "actionSize": 2,
+    "hiddenLayers": [
+      32,
+      32
+    ],
+    "lr": 0.0005,
+    "gamma": 0.99,
+    "epsilon": 1.0,
+    "epsilonDecay": 0.9998003044569063,
+    "minEpsilon": 0.05,
+    "epsilonSchedule": "multiplied by epsilonDecay after each train() call; epsilonDecay = 0.05^(1/15000), so minEpsilon is reached after 15000 train steps (30 % of the budget)",
+    "batchSize": 32,
+    "memorySize": 10000,
+    "targetUpdateFrequency": 250,
+    "targetUpdateUnit": "train() calls (hard copy of the online weights)",
+    "backend": "cpu",
+    "optimizer": "adam, mean squared error, 1 epoch per train() call, shuffle off (seeded)"
+  },
+  "overestimation": {
+    "file": "q-vs-return.jsonl",
+    "everyEnvSteps": 1000,
+    "probeStarts": {
+      "count": 9,
+      "min": 0,
+      "max": 0.4,
+      "spacing": "evenly spaced, identical for every algo, seed and checkpoint"
+    },
+    "estimated": "max_a Q_online(s0, a) at each probe start s0",
+    "observed": "discounted Monte-Carlo return (same gamma) of the greedy policy rolled out from s0; the task is deterministic, so one rollout is the exact return of that policy",
+    "gap": "estimated - observed; positive means the network expects more than its own greedy policy obtains",
+    "reference": "optimalDiscountedReturn: return of the optimal policy (always +0.15) from s0"
+  },
+  "eval": {
+    "greedyEpisodes": 20,
+    "starts": "uniform[0, 0.4] via mulberry32(seed * 17 + 3), as in RL 1",
+    "checkpoint": "frozen trained policy reloaded in a new process (eval-new-process.json)",
+    "replay": "greedy (epsilon = 0) episode from position 0.2 for every algo and seed (trained-greedy.json, untrained-greedy.json), same start as the RL 1 replay"
+  },
+  "summary": {
+    "lastEpisodes": 100
+  },
+  "order": "dqn first, then double-dqn, everywhere"
+}

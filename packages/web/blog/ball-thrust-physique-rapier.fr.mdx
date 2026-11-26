@@ -93,7 +93,7 @@ Le protocole versionné a été figé avant exécution : entraînement sur la gr
 
 **Évaluer les 3 politiques** compare le réseau initial, le réseau actuel en greedy et une baseline uniforme semée 2026 sur les mêmes graines inédites **1000 à 1007**, avec au plus 300 actions par épisode. L’évaluation utilise des mondes séparés, ne touche pas à l’arène visible et n’entraîne rien. Les résultats bruts dépliables donnent retour, succès, durée et distance finale pour chaque graine. Un meilleur retour avec zéro cible atteinte reste un échec de navigation, pas une réussite à rebaptiser.
 
-Les tests réels vérifient les collisions et resets, le contrat borné, les fins d’épisode, la modification des poids après entraînement, leur égalité exacte en inférence, la sauvegarde/recharge et le plateau de tenseurs. Les harness navigateur pilotent les vrais boutons et lisent les artefacts IndexedDB. Les preuves datées et liées à leur SHA sont conservées dans `evidence/` ; la cadence RAF et son p95 ne sont pas un chronométrage GPU ni une promesse mobile.
+Les tests réels vérifient les collisions et resets, le contrat borné, les fins d’épisode, la modification des poids après entraînement, leur égalité exacte en inférence, la sauvegarde/recharge et le plateau de tenseurs. Les harness navigateur pilotent les vrais boutons et lisent les artefacts IndexedDB. Ces vérifications se rejouent localement avec les commandes du README de la démo ; la cadence RAF et son p95 ne sont pas un chronométrage GPU ni une promesse mobile.
 
 ```bash
 pnpm install --frozen-lockfile
