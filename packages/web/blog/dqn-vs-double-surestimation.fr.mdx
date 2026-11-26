@@ -1,0 +1,70 @@
+Un algorithme « corrigé » doit prouver la correction sur ses propres journaux. Cette démo compare DQN et Double DQN à budget égal, sur la même tâche que la démo PPO, et affiche ce que disent les journaux, y compris quand ils ne désignent aucun vainqueur.
+
+**Vous allez lancer les deux entraînements, voir apparaître une surestimation, puis constater ce que Double DQN change ici, et ce qu'il ne change pas.**
+
+[Essayer la démo DQN contre Double DQN](/demos/target-chasing/dqn-vs-double.html)
+
+## La tâche et le protocole
+
+La tâche est celle de la démo PPO : un point sur le segment [0, 1], deux actions (+0,15 ou −0,15), succès au-delà de 0,7, au plus 25 pas, +1 en cas de succès et −0,05 par pas sinon.
+
+Deux bancs, chacun figé dans un fichier avant tout entraînement :
+- **le témoin** (`dqn-vs-double-experiment.json`) : 50 000 pas d'environnement par run, même réseau et mêmes hyperparamètres pour les deux algorithmes, graines 11, 29 et 47. Seul `doubleQ` change ;
+- **la variante bruitée** (`dqn-vs-double-noisy-experiment.json`) : tout est copié du témoin, avec un seul ajout, un bruit gaussien de moyenne nulle (σ = 0,5) sur la récompense que l'agent reçoit à l'entraînement. L'environnement et la vraie récompense ne changent pas, et les deux algorithmes reçoivent les mêmes tirages à graine égale. σ a été fixé à partir de la seule fonction de récompense (écart-type par pas sous la politique optimale : 0,459, arrondi à 0,5), sans aucun essai préalable. Les 6 runs ont été faits en un seul passage, sans réglage ni relance.
+
+## Ce qu'on mesure
+
+Sur 9 départs fixes, tous les 1 000 pas, on compare la valeur que le réseau prédit, `max_a Q`, au retour actualisé vraiment obtenu (γ = 0,99). Si la prédiction dépasse le retour, l'agent **surestime**.
+
+## Reproduire
+
+Node.js 22 et pnpm 10.8.0 (versions utilisées : Node 22.23.4, TensorFlow.js 4.22.0, backend CPU).
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+git checkout d47d225ec3ec152b5c253d7f1ea177b27f028b51
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter @ignitionai/backend-tfjs... build
+cd packages/backend-tfjs
+node scripts/train-dqn-target-chasing.mjs
+node scripts/train-dqn-target-chasing.mjs --variant noisy
+```
+
+Chaque banc a pris entre 11 et 15 minutes selon la machine (CPU). L'entraînement est déterministe pour ces graines : vous retrouvez les mêmes journaux, les mêmes valeurs Q et les mêmes checkpoints que le dépôt. Seuls les fichiers `run.json` changent (date, durée, SHA de lancement), ce qui fait échouer le contrôle d'empreintes tant qu'on ne les restaure pas :
+
+```bash
+cd ../..
+git status --porcelain packages/demo-target-chasing/public   # seuls des run.json
+git checkout -- packages/demo-target-chasing/public
+pnpm exec vitest run packages/backend-tfjs/test/dqn-vs-double
+```
+
+Attendu : 46 tests passés.
+
+## Lire honnêtement le résultat
+
+**Témoin, sans bruit.** Les deux algorithmes réussissent la tâche ; la moyenne des 100 derniers épisodes vaut entre 0,845 et 0,855 selon la graine, identique pour DQN et Double DQN. L'écart Q − retour culmine entre +0,001 et +0,018, puis finit près de −0,01. **Aucune différence mesurable.** La tâche est trop facile pour que la surestimation apparaisse.
+
+**Variante bruitée.** Le bruit fait apparaître la surestimation pendant l'apprentissage, **pour les deux algorithmes** :
+
+| Graine | DQN : pic de Q − retour (pas) | Double DQN : pic (pas) | Fin de run, DQN / Double DQN |
+|---|---|---|---|
+| 11 | +2,25 (3 000) | +2,18 (3 000) | +0,019 / +0,016 |
+| 29 | +1,31 (8 000) | +1,89 (4 000) | +0,012 / +0,004 |
+| 47 | +0,09 (20 000) | +0,34 (35 000) | −0,005 / −0,016 |
+
+- La surestimation est réelle et nette en début d'apprentissage, puis elle se résorbe : en fin de run, l'écart revient entre −0,016 et +0,019.
+- **Double DQN ne la réduit pas de façon visible ici** : les écarts entre algorithmes sont du même ordre que les écarts entre graines. La démo ne désigne donc aucun vainqueur.
+- Limites : 3 graines seulement ; une mesure tous les 1 000 pas, ce qui peut manquer un pic plus court ; une tâche qui reste facile (succès partout). Ce n'est pas un benchmark : c'est un mécanisme montré sur ses propres journaux.
+
+## Ouvrir la démo
+
+```bash
+pnpm --filter ./packages/demo-target-chasing build
+cd packages/demo-target-chasing
+pnpm exec vite preview --host 127.0.0.1 --port 4173
+```
+
+La démo est aussi [en ligne](/demos/target-chasing/dqn-vs-double.html). En local, ouvrez `http://127.0.0.1:4173/dqn-vs-double.html`. Le témoin s'affiche en premier, puis la variante bruitée, avec la variable changée écrite en clair. Chaque banc indique le SHA qui a produit ses journaux : 0278cbe pour le témoin ; c770d1f pour la variante bruitée, entraînée sur ce commit, dont le code est le même que 2dace4d, sur main. « Jouer les deux » fait avancer les deux politiques pas à pas, ensemble. Si un journal ou un checkpoint manque, seul le panneau concerné passe en erreur : la page ne montre jamais une demi-comparaison.
