@@ -1,0 +1,481 @@
+{
+  "gitSha": "0278cbe03ec6721732c57ccd49bebd7547c57e36",
+  "gitShaRule": "gitSha is git rev-parse HEAD at train time; after the artifacts are committed it equals the first parent of git log -1 --format=%H -- packages/demo-target-chasing/public/dqn-vs-double/manifest.json",
+  "experiment": {
+    "path": "experiment.json",
+    "bytes": 7236,
+    "sha256": "4f037d6e14bcff31afd4d2286ae500cc7173dd2ee2db943c24fd232d870a3a99"
+  },
+  "algorithms": [
+    "dqn",
+    "double-dqn"
+  ],
+  "order": "dqn first, then double-dqn",
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "budget": {
+    "envStepsPerRun": 50000
+  },
+  "gamma": 0.99,
+  "summaries": [
+    {
+      "algo": "dqn",
+      "seed": 11,
+      "envSteps": 50000,
+      "episodes": 11226,
+      "lastMeanReturn": 0.8489999999999998,
+      "lastSuccessRate": 1,
+      "greedyEvalMean": 0.8450000000000003,
+      "greedySuccessRate": 1,
+      "finalMeanQMax": 0.8336302174462212,
+      "finalMeanDiscountedReturn": 0.84159268,
+      "finalMeanGap": -0.007962462553778674,
+      "meanGapOverRun": -0.03819616959739866,
+      "meanGapSecondHalf": -0.013129649078911596,
+      "newProcessIdenticalGreedyAction": true,
+      "newProcessIdenticalReplay": true,
+      "durationMs": 108758.441627
+    },
+    {
+      "algo": "dqn",
+      "seed": 29,
+      "envSteps": 50000,
+      "episodes": 11243,
+      "lastMeanReturn": 0.8549999999999995,
+      "lastSuccessRate": 1,
+      "greedyEvalMean": 0.8550000000000002,
+      "greedySuccessRate": 1,
+      "finalMeanQMax": 0.824848386976454,
+      "finalMeanDiscountedReturn": 0.84159268,
+      "finalMeanGap": -0.016744293023545926,
+      "meanGapOverRun": -0.03854971230581102,
+      "meanGapSecondHalf": -0.012946291946105876,
+      "newProcessIdenticalGreedyAction": true,
+      "newProcessIdenticalReplay": true,
+      "durationMs": 103511.471743
+    },
+    {
+      "algo": "dqn",
+      "seed": 47,
+      "envSteps": 50000,
+      "episodes": 11280,
+      "lastMeanReturn": 0.8454999999999991,
+      "lastSuccessRate": 1,
+      "greedyEvalMean": 0.8549999999999999,
+      "greedySuccessRate": 1,
+      "finalMeanQMax": 0.8305529091093276,
+      "finalMeanDiscountedReturn": 0.84159268,
+      "finalMeanGap": -0.011039770890672393,
+      "meanGapOverRun": -0.03687579129645174,
+      "meanGapSecondHalf": -0.013771860251227404,
+      "newProcessIdenticalGreedyAction": true,
+      "newProcessIdenticalReplay": true,
+      "durationMs": 102837.75719
+    },
+    {
+      "algo": "double-dqn",
+      "seed": 11,
+      "envSteps": 50000,
+      "episodes": 11226,
+      "lastMeanReturn": 0.8489999999999998,
+      "lastSuccessRate": 1,
+      "greedyEvalMean": 0.8450000000000003,
+      "greedySuccessRate": 1,
+      "finalMeanQMax": 0.831197460492452,
+      "finalMeanDiscountedReturn": 0.84159268,
+      "finalMeanGap": -0.010395219507547935,
+      "meanGapOverRun": -0.037479211591126924,
+      "meanGapSecondHalf": -0.012146070185038167,
+      "newProcessIdenticalGreedyAction": true,
+      "newProcessIdenticalReplay": true,
+      "durationMs": 125903.977534
+    },
+    {
+      "algo": "double-dqn",
+      "seed": 29,
+      "envSteps": 50000,
+      "episodes": 11243,
+      "lastMeanReturn": 0.8549999999999995,
+      "lastSuccessRate": 1,
+      "greedyEvalMean": 0.8550000000000002,
+      "greedySuccessRate": 1,
+      "finalMeanQMax": 0.8282383812798394,
+      "finalMeanDiscountedReturn": 0.84159268,
+      "finalMeanGap": -0.01335429872016051,
+      "meanGapOverRun": -0.03813009703502602,
+      "meanGapSecondHalf": -0.012519044527808216,
+      "newProcessIdenticalGreedyAction": true,
+      "newProcessIdenticalReplay": true,
+      "durationMs": 107755.261339
+    },
+    {
+      "algo": "double-dqn",
+      "seed": 47,
+      "envSteps": 50000,
+      "episodes": 11280,
+      "lastMeanReturn": 0.8454999999999991,
+      "lastSuccessRate": 1,
+      "greedyEvalMean": 0.8549999999999999,
+      "greedySuccessRate": 1,
+      "finalMeanQMax": 0.8305349085066054,
+      "finalMeanDiscountedReturn": 0.84159268,
+      "finalMeanGap": -0.01105777149339456,
+      "meanGapOverRun": -0.0369255089720784,
+      "meanGapSecondHalf": -0.01377326188756299,
+      "newProcessIdenticalGreedyAction": true,
+      "newProcessIdenticalReplay": true,
+      "durationMs": 117514.165644
+    }
+  ],
+  "runs": {
+    "dqn": {
+      "11": {
+        "episodes.jsonl": {
+          "path": "dqn/seed-11/episodes.jsonl",
+          "bytes": 1633026,
+          "sha256": "1312f974d0de63f644a0c97748234e0630a897cbf78030a05a22eaa37c5edbac"
+        },
+        "q-vs-return.jsonl": {
+          "path": "dqn/seed-11/q-vs-return.jsonl",
+          "bytes": 126051,
+          "sha256": "911587bb366c0b6f8fc7dfaa73d97468093d353ec21b0cbc8ec21f896bd62578"
+        },
+        "summary.json": {
+          "path": "dqn/seed-11/summary.json",
+          "bytes": 1040,
+          "sha256": "992acb846fd943498ded83f902ce398e4736bae5decb788a4055a6f5fbef2c02"
+        },
+        "run.json": {
+          "path": "dqn/seed-11/run.json",
+          "bytes": 846,
+          "sha256": "be6c2850bba19cc1df08bd20db21d9429e718be8322939b79d6de1049a6bde63"
+        },
+        "untrained-greedy.json": {
+          "path": "dqn/seed-11/untrained-greedy.json",
+          "bytes": 281,
+          "sha256": "86fc58226134cd757adb594bcaf6bf93a269a69858725ec476310cb704350bc1"
+        },
+        "trained-greedy.json": {
+          "path": "dqn/seed-11/trained-greedy.json",
+          "bytes": 277,
+          "sha256": "a014608ed0ff1bf914f96f9f1513141b9b52cc1ab217572a1d9c5ddce7a7318c"
+        },
+        "eval-new-process.json": {
+          "path": "dqn/seed-11/eval-new-process.json",
+          "bytes": 904,
+          "sha256": "d4277cb0d692daf2d7bd4b6c2e6ed8b7c6a6364661dcc9319fdfa709d55f1341"
+        },
+        "untrained/model.json": {
+          "path": "dqn/seed-11/untrained/model.json",
+          "bytes": 2036,
+          "sha256": "c26f839a63bf6ba95c397533dcdf6ba41a3bae8394e728ae2b88a02b9e71fd41"
+        },
+        "untrained/weights.bin": {
+          "path": "dqn/seed-11/untrained/weights.bin",
+          "bytes": 4744,
+          "sha256": "e6dc88a98af725b3b8261583a48b4d81b405a63ada397c86e2b40a005e06c987"
+        },
+        "trained/model.json": {
+          "path": "dqn/seed-11/trained/model.json",
+          "bytes": 2036,
+          "sha256": "c26f839a63bf6ba95c397533dcdf6ba41a3bae8394e728ae2b88a02b9e71fd41"
+        },
+        "trained/weights.bin": {
+          "path": "dqn/seed-11/trained/weights.bin",
+          "bytes": 4744,
+          "sha256": "d2f2edc8d1f0d3e7516abb4925f729245e747b2907e206ac0bd83572f77704cc"
+        }
+      },
+      "29": {
+        "episodes.jsonl": {
+          "path": "dqn/seed-29/episodes.jsonl",
+          "bytes": 1635570,
+          "sha256": "994bf2e1cc4a81e7fec825cb9c6b3fb9794db5bcdcd0f9835aeed77917df6490"
+        },
+        "q-vs-return.jsonl": {
+          "path": "dqn/seed-29/q-vs-return.jsonl",
+          "bytes": 126029,
+          "sha256": "cb1cde9040906553fbf0008a910f89a9b7e35a9ce3b33dc94f5deadd83bd4450"
+        },
+        "summary.json": {
+          "path": "dqn/seed-29/summary.json",
+          "bytes": 1080,
+          "sha256": "2ac26aaebcd83c690cafb15c048a763e1c9855c5c23a31c70ad4509b171350a0"
+        },
+        "run.json": {
+          "path": "dqn/seed-29/run.json",
+          "bytes": 846,
+          "sha256": "48fc0a0d1bb18d1cfa01c363f3a94043197d73c5623d55f273e36b4458938f0b"
+        },
+        "untrained-greedy.json": {
+          "path": "dqn/seed-29/untrained-greedy.json",
+          "bytes": 281,
+          "sha256": "f3d25798a38421a207f86ad69a4e00d3b2b7e18b345837f718040e03b70a4be6"
+        },
+        "trained-greedy.json": {
+          "path": "dqn/seed-29/trained-greedy.json",
+          "bytes": 276,
+          "sha256": "06ead7061e9c813d26d53b7dd0fc713223557996c1c40cec442a3cd2471fa141"
+        },
+        "eval-new-process.json": {
+          "path": "dqn/seed-29/eval-new-process.json",
+          "bytes": 906,
+          "sha256": "d44e7d1c5a17075e032d7527c9436f58d10daffd22ee825ae997784cecdd2a76"
+        },
+        "untrained/model.json": {
+          "path": "dqn/seed-29/untrained/model.json",
+          "bytes": 2036,
+          "sha256": "5c632da5d68d09dfd6dddf863ec2d1ee4831f749ac5548db154c18fe28535855"
+        },
+        "untrained/weights.bin": {
+          "path": "dqn/seed-29/untrained/weights.bin",
+          "bytes": 4744,
+          "sha256": "8d7ecaa9939d359ae0d2bc40b4432d04b045f4ad9c424dc27a6ef415d6750950"
+        },
+        "trained/model.json": {
+          "path": "dqn/seed-29/trained/model.json",
+          "bytes": 2036,
+          "sha256": "5c632da5d68d09dfd6dddf863ec2d1ee4831f749ac5548db154c18fe28535855"
+        },
+        "trained/weights.bin": {
+          "path": "dqn/seed-29/trained/weights.bin",
+          "bytes": 4744,
+          "sha256": "ec85c7447b0d8fe488706c26cdcde0618153703076673bb3dec981d25f1ef9b9"
+        }
+      },
+      "47": {
+        "episodes.jsonl": {
+          "path": "dqn/seed-47/episodes.jsonl",
+          "bytes": 1640512,
+          "sha256": "b0ee6c70b3b96c541c5e8bb1ed0463118fcfdfaae5b2b8c001fe0e84aec52f75"
+        },
+        "q-vs-return.jsonl": {
+          "path": "dqn/seed-47/q-vs-return.jsonl",
+          "bytes": 126053,
+          "sha256": "84f54427c9bb015860df4ae9a3ccc4938a9907215840b697a152c86f032893c0"
+        },
+        "summary.json": {
+          "path": "dqn/seed-47/summary.json",
+          "bytes": 1081,
+          "sha256": "eae87a683761153d2cbcaaa441f322ebdb02e7aeae559f89f268a590ce407d43"
+        },
+        "run.json": {
+          "path": "dqn/seed-47/run.json",
+          "bytes": 850,
+          "sha256": "8ebd9d4791849710edd4a7201fe4ce85ed9fc10b24242766ce91032d94f5721a"
+        },
+        "untrained-greedy.json": {
+          "path": "dqn/seed-47/untrained-greedy.json",
+          "bytes": 281,
+          "sha256": "9e2716fed52d365567b75cc0832eb12f476fd7add14bb37550b34ffbff669f9e"
+        },
+        "trained-greedy.json": {
+          "path": "dqn/seed-47/trained-greedy.json",
+          "bytes": 277,
+          "sha256": "a98f133af97922e5e2ccd274d574d4418263c4ae4bef5542f8d2aa5f98400e9f"
+        },
+        "eval-new-process.json": {
+          "path": "dqn/seed-47/eval-new-process.json",
+          "bytes": 908,
+          "sha256": "2526bc3c44e38a98f57f2a7ad975044bc9cab56d6a9884867df9daff43636c04"
+        },
+        "untrained/model.json": {
+          "path": "dqn/seed-47/untrained/model.json",
+          "bytes": 2045,
+          "sha256": "9ae50863984141c3dfcf7a8ae9045c2661b7019540515e1f0d2a17bc8841916a"
+        },
+        "untrained/weights.bin": {
+          "path": "dqn/seed-47/untrained/weights.bin",
+          "bytes": 4744,
+          "sha256": "b165c9f850ae802e1c39f704252877cf7148744eaf6dcbe1a20d424367cd16ab"
+        },
+        "trained/model.json": {
+          "path": "dqn/seed-47/trained/model.json",
+          "bytes": 2045,
+          "sha256": "9ae50863984141c3dfcf7a8ae9045c2661b7019540515e1f0d2a17bc8841916a"
+        },
+        "trained/weights.bin": {
+          "path": "dqn/seed-47/trained/weights.bin",
+          "bytes": 4744,
+          "sha256": "b3ab46a0472457b28a9f6aae7c785fd0764eac253ce4557930eaf1cde30c8f04"
+        }
+      }
+    },
+    "double-dqn": {
+      "11": {
+        "episodes.jsonl": {
+          "path": "double-dqn/seed-11/episodes.jsonl",
+          "bytes": 1711574,
+          "sha256": "3816533ab8fbe3e78efd1f83f4710d7e0ad9e6b027904de179fc6749836cfb3e"
+        },
+        "q-vs-return.jsonl": {
+          "path": "double-dqn/seed-11/q-vs-return.jsonl",
+          "bytes": 126384,
+          "sha256": "9d418e6d29d125e21773bd6f5352cd7a6ea27db809ae40e40021723b8a53db1a"
+        },
+        "summary.json": {
+          "path": "double-dqn/seed-11/summary.json",
+          "bytes": 1045,
+          "sha256": "5cceea4e116c31add5aa4d63f4ece68b8bad504cd43bf92b336acc74f2c908db"
+        },
+        "run.json": {
+          "path": "double-dqn/seed-11/run.json",
+          "bytes": 852,
+          "sha256": "b84787b4cf32a379535b184fac2d2050d8d41aaac9f9f0d03594d3804ac61ad2"
+        },
+        "untrained-greedy.json": {
+          "path": "double-dqn/seed-11/untrained-greedy.json",
+          "bytes": 281,
+          "sha256": "86fc58226134cd757adb594bcaf6bf93a269a69858725ec476310cb704350bc1"
+        },
+        "trained-greedy.json": {
+          "path": "double-dqn/seed-11/trained-greedy.json",
+          "bytes": 277,
+          "sha256": "ffc91fd485aca7d149728519e3f2dbb6c69f55a92c6454e5cabcfe9375e89b1a"
+        },
+        "eval-new-process.json": {
+          "path": "double-dqn/seed-11/eval-new-process.json",
+          "bytes": 911,
+          "sha256": "edaee729613cd7c8695c083c8e54d0d3cdf5f98e73eb2e01ef5537e53235db34"
+        },
+        "untrained/model.json": {
+          "path": "double-dqn/seed-11/untrained/model.json",
+          "bytes": 2052,
+          "sha256": "e8e845cf386b00b873081fcfb7cd6fd5a2e9a5260b859f89880f3c53cfa2ae67"
+        },
+        "untrained/weights.bin": {
+          "path": "double-dqn/seed-11/untrained/weights.bin",
+          "bytes": 4744,
+          "sha256": "e6dc88a98af725b3b8261583a48b4d81b405a63ada397c86e2b40a005e06c987"
+        },
+        "trained/model.json": {
+          "path": "double-dqn/seed-11/trained/model.json",
+          "bytes": 2052,
+          "sha256": "e8e845cf386b00b873081fcfb7cd6fd5a2e9a5260b859f89880f3c53cfa2ae67"
+        },
+        "trained/weights.bin": {
+          "path": "double-dqn/seed-11/trained/weights.bin",
+          "bytes": 4744,
+          "sha256": "ffdd19f0d42767b673e2bfcdfb0b1936e0ade3d6ad50f7dfea7cc96d534e24cf"
+        }
+      },
+      "29": {
+        "episodes.jsonl": {
+          "path": "double-dqn/seed-29/episodes.jsonl",
+          "bytes": 1714349,
+          "sha256": "ede1dea23dab216426a12ec13ce7625cc249d147b2a684dd0842a9bcac2cc811"
+        },
+        "q-vs-return.jsonl": {
+          "path": "double-dqn/seed-29/q-vs-return.jsonl",
+          "bytes": 126417,
+          "sha256": "423ce69312cbc98985cdd33af729e6b604c4c35b1e6adb4c7fe5327fdc504858"
+        },
+        "summary.json": {
+          "path": "double-dqn/seed-29/summary.json",
+          "bytes": 1086,
+          "sha256": "35e37eab87de27a56e7c4691e50c299b6dbdbd5260fa84e686b90c279e0ca863"
+        },
+        "run.json": {
+          "path": "double-dqn/seed-29/run.json",
+          "bytes": 852,
+          "sha256": "6814b603837da2853e0a486d1517b1a434e496a6a62b09c7855d894aca6d7f08"
+        },
+        "untrained-greedy.json": {
+          "path": "double-dqn/seed-29/untrained-greedy.json",
+          "bytes": 281,
+          "sha256": "f3d25798a38421a207f86ad69a4e00d3b2b7e18b345837f718040e03b70a4be6"
+        },
+        "trained-greedy.json": {
+          "path": "double-dqn/seed-29/trained-greedy.json",
+          "bytes": 277,
+          "sha256": "129455ad5335afaaecd420af619732753e99f1ae5c2f413920e482ec1b5c5a77"
+        },
+        "eval-new-process.json": {
+          "path": "double-dqn/seed-29/eval-new-process.json",
+          "bytes": 915,
+          "sha256": "64a75670587e3c5021bb1aa81cb45c1752c8e3bacbf74de857eab18442b97f2e"
+        },
+        "untrained/model.json": {
+          "path": "double-dqn/seed-29/untrained/model.json",
+          "bytes": 2052,
+          "sha256": "8b2d35af64d746b16436927d69b8e18071b0397ffe17d5553e5bd9e358da6294"
+        },
+        "untrained/weights.bin": {
+          "path": "double-dqn/seed-29/untrained/weights.bin",
+          "bytes": 4744,
+          "sha256": "8d7ecaa9939d359ae0d2bc40b4432d04b045f4ad9c424dc27a6ef415d6750950"
+        },
+        "trained/model.json": {
+          "path": "double-dqn/seed-29/trained/model.json",
+          "bytes": 2052,
+          "sha256": "8b2d35af64d746b16436927d69b8e18071b0397ffe17d5553e5bd9e358da6294"
+        },
+        "trained/weights.bin": {
+          "path": "double-dqn/seed-29/trained/weights.bin",
+          "bytes": 4744,
+          "sha256": "73bbc49bde9621f2bdd6bee6aee0bf3e2112c281131a9e8da6898d55b61acb33"
+        }
+      },
+      "47": {
+        "episodes.jsonl": {
+          "path": "double-dqn/seed-47/episodes.jsonl",
+          "bytes": 1719486,
+          "sha256": "663a6d93f844d35eaa279aa2cd87fb2aa1b48ae91b5245348198f88a333102cc"
+        },
+        "q-vs-return.jsonl": {
+          "path": "double-dqn/seed-47/q-vs-return.jsonl",
+          "bytes": 126344,
+          "sha256": "bfec8bbab0e54dd1b46e672ebe7ea6bb61924fba5146559f20d65a58e828184a"
+        },
+        "summary.json": {
+          "path": "double-dqn/seed-47/summary.json",
+          "bytes": 1084,
+          "sha256": "2e750e291010a243358e2668836fee1b30d44760acd6ad822ddc558cf9061797"
+        },
+        "run.json": {
+          "path": "double-dqn/seed-47/run.json",
+          "bytes": 852,
+          "sha256": "b11cab8ad6268e221ee41f7b5d363da26b2e7709d075d5843f9e73c121e5569e"
+        },
+        "untrained-greedy.json": {
+          "path": "double-dqn/seed-47/untrained-greedy.json",
+          "bytes": 281,
+          "sha256": "9e2716fed52d365567b75cc0832eb12f476fd7add14bb37550b34ffbff669f9e"
+        },
+        "trained-greedy.json": {
+          "path": "double-dqn/seed-47/trained-greedy.json",
+          "bytes": 277,
+          "sha256": "47a048bf993502bc45b6b06d66b87d1db551c321f39d2a385031c05be968dde5"
+        },
+        "eval-new-process.json": {
+          "path": "double-dqn/seed-47/eval-new-process.json",
+          "bytes": 915,
+          "sha256": "9351eaeea960a69c7353bca1281e5d001662e9d3d635fca8839ee118aa556de0"
+        },
+        "untrained/model.json": {
+          "path": "double-dqn/seed-47/untrained/model.json",
+          "bytes": 2053,
+          "sha256": "245d9f5fa06f033f3d3683110ea1866525f60f51c76bb116b605d96be589b457"
+        },
+        "untrained/weights.bin": {
+          "path": "double-dqn/seed-47/untrained/weights.bin",
+          "bytes": 4744,
+          "sha256": "b165c9f850ae802e1c39f704252877cf7148744eaf6dcbe1a20d424367cd16ab"
+        },
+        "trained/model.json": {
+          "path": "double-dqn/seed-47/trained/model.json",
+          "bytes": 2053,
+          "sha256": "245d9f5fa06f033f3d3683110ea1866525f60f51c76bb116b605d96be589b457"
+        },
+        "trained/weights.bin": {
+          "path": "double-dqn/seed-47/trained/weights.bin",
+          "bytes": 4744,
+          "sha256": "467c3d5ecbf92cddca32168b853206726ee8f14b4638827cf1b6d7bf2b552a34"
+        }
+      }
+    }
+  }
+}
