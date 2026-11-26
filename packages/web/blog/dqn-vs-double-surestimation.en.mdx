@@ -1,0 +1,59 @@
+A "fixed" algorithm should prove the fix on its own logs. This demo compares DQN and Double DQN at equal budget, on the same task as the PPO demo, and shows what the logs say, including when they name no winner.
+
+**You will run both trainings, watch overestimation appear, then see what Double DQN changes here, and what it does not.**
+
+[Try the DQN vs Double DQN demo](/demos/target-chasing/dqn-vs-double.html)
+
+## Task and protocol
+
+Same task as the PPO demo: a point on [0, 1], two actions (+0.15 or −0.15), success above 0.7, at most 25 steps, +1 on success, −0.05 per step otherwise.
+
+Two benches, each frozen in a file before any training: the **control** (`dqn-vs-double-experiment.json`): 50,000 environment steps per run, same network and hyperparameters for both algorithms, seeds 11, 29 and 47, only `doubleQ` changes; and the **noisy variant** (`dqn-vs-double-noisy-experiment.json`): copied from the control with one addition, zero-mean Gaussian noise (σ = 0.5) on the reward the agent receives during training. The environment and the true reward are unchanged; both algorithms get the same draws at equal seed. σ was set from the reward function alone (per-step standard deviation under the optimal policy: 0.459, rounded up to 0.5), with no trial run. The 6 runs were done in one pass, with no tuning or rerun.
+
+## What we measure
+
+On 9 fixed starts, every 1,000 steps, we compare the network's predicted value, `max_a Q`, with the discounted return actually obtained (γ = 0.99). If the prediction exceeds the return, the agent **overestimates**.
+
+## Reproduce
+
+Node.js 22 and pnpm 10.8.0 (used here: Node 22.23.4, TensorFlow.js 4.22.0, CPU backend).
+
+```bash
+git clone https://github.com/IgnitionAI/ignition.git
+cd ignition
+git checkout d47d225ec3ec152b5c253d7f1ea177b27f028b51
+corepack enable
+pnpm install --frozen-lockfile
+pnpm --filter @ignitionai/backend-tfjs... build
+cd packages/backend-tfjs
+node scripts/train-dqn-target-chasing.mjs
+node scripts/train-dqn-target-chasing.mjs --variant noisy
+```
+
+Each bench took 11 to 15 minutes depending on the machine (CPU). Training is deterministic for these seeds: you get the same logs, Q values and checkpoints as the repository. Only the `run.json` files change (date, duration, launch SHA), which makes the checksum test fail until you restore them:
+
+```bash
+cd ../..
+git status --porcelain packages/demo-target-chasing/public   # only run.json files
+git checkout -- packages/demo-target-chasing/public
+pnpm exec vitest run packages/backend-tfjs/test/dqn-vs-double
+```
+
+Expected: 46 tests passed.
+
+## Read the result honestly
+
+**Control, no noise.** Both algorithms solve the task; the mean of the last 100 episodes is between 0.845 and 0.855 depending on the seed, identical for DQN and Double DQN. The Q − return gap peaks between +0.001 and +0.018 and ends near −0.01. **No measurable difference**: the task is too easy for overestimation to show.
+
+**Noisy variant.** The noise makes overestimation appear during learning, **for both algorithms** (peak of Q − return, step in brackets): seed 11, DQN +2.25 (3,000) vs Double DQN +2.18 (3,000); seed 29, +1.31 (8,000) vs +1.89 (4,000); seed 47, +0.09 (20,000) vs +0.34 (35,000). At the end of the runs the gap is back between −0.016 and +0.019. **Double DQN does not visibly reduce it here**: differences between algorithms are of the same order as differences between seeds, so the demo names no winner. Limits: 3 seeds only; one measurement every 1,000 steps, which can miss a shorter peak; a task that stays easy. Not a benchmark: a mechanism shown on its own logs.
+
+## Open the demo
+
+```bash
+pnpm --filter ./packages/demo-target-chasing build
+cd packages/demo-target-chasing
+pnpm exec vite preview --host 127.0.0.1 --port 4173
+```
+
+
+The demo is also [online](/demos/target-chasing/dqn-vs-double.html). Locally, build, then run `vite preview`, and open `http://127.0.0.1:4173/dqn-vs-double.html`. The control comes first, then the noisy variant, with the changed variable stated plainly; each bench shows the SHA that produced its logs: 0278cbe for the control; c770d1f for the noisy variant, trained on that commit, whose code is the same as 2dace4d, on main. "Play both" steps both policies together. If a log or checkpoint is missing, only that panel shows an error: the page never shows half a comparison.
