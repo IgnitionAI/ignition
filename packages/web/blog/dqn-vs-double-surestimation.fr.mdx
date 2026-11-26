@@ -9,12 +9,12 @@ Un algorithme « corrigé » doit prouver la correction sur ses propres journaux
 La tâche est celle de la démo PPO : un point sur le segment [0, 1], deux actions (+0,15 ou −0,15), succès au-delà de 0,7, au plus 25 pas, +1 en cas de succès et −0,05 par pas sinon.
 
 Deux bancs, chacun figé dans un fichier avant tout entraînement :
-- **le témoin** (`dqn-vs-double-experiment.json`) : 50 000 pas d'environnement par run, même réseau et mêmes hyperparamètres pour les deux algorithmes, graines 11, 29 et 47. Seul `doubleQ` change ;
+- **le témoin** (`dqn-vs-double-experiment.json`) : 50 000 pas d'environnement par run, même réseau et mêmes hyperparamètres pour les deux algorithmes, graines 11, 29 et 47. Seul `doubleQ` change ;
 - **la variante bruitée** (`dqn-vs-double-noisy-experiment.json`) : tout est copié du témoin, avec un seul ajout, un bruit gaussien de moyenne nulle (σ = 0,5) sur la récompense que l'agent reçoit à l'entraînement. L'environnement et la vraie récompense ne changent pas, et les deux algorithmes reçoivent les mêmes tirages à graine égale. σ a été fixé à partir de la seule fonction de récompense (écart-type par pas sous la politique optimale : 0,459, arrondi à 0,5), sans aucun essai préalable. Les 6 runs ont été faits en un seul passage, sans réglage ni relance.
 
 ## Ce qu'on mesure
 
-Sur 9 départs fixes, tous les 1 000 pas, on compare la valeur que le réseau prédit, `max_a Q`, au retour actualisé vraiment obtenu (γ = 0,99). Si la prédiction dépasse le retour, l'agent **surestime**.
+Sur 9 départs fixes, tous les 1 000 pas, on compare la valeur que le réseau prédit, `max_a Q`, au retour actualisé vraiment obtenu (γ = 0,99). Si la prédiction dépasse le retour, l'agent **surestime**.
 
 ## Reproduire
 
@@ -51,13 +51,13 @@ Attendu : 46 tests passés.
 
 | Graine | DQN : pic de Q − retour (pas) | Double DQN : pic (pas) | Fin de run, DQN / Double DQN |
 |---|---|---|---|
-| 11 | +2,25 (3 000) | +2,18 (3 000) | +0,019 / +0,016 |
-| 29 | +1,31 (8 000) | +1,89 (4 000) | +0,012 / +0,004 |
-| 47 | +0,09 (20 000) | +0,34 (35 000) | −0,005 / −0,016 |
+| 11 | +2,25 (3 000) | +2,18 (3 000) | +0,019 / +0,016 |
+| 29 | +1,31 (8 000) | +1,89 (4 000) | +0,012 / +0,004 |
+| 47 | +0,09 (20 000) | +0,34 (35 000) | −0,005 / −0,016 |
 
 - La surestimation est réelle et nette en début d'apprentissage, puis elle se résorbe : en fin de run, l'écart revient entre −0,016 et +0,019.
 - **Double DQN ne la réduit pas de façon visible ici** : les écarts entre algorithmes sont du même ordre que les écarts entre graines. La démo ne désigne donc aucun vainqueur.
-- Limites : 3 graines seulement ; une mesure tous les 1 000 pas, ce qui peut manquer un pic plus court ; une tâche qui reste facile (succès partout). Ce n'est pas un benchmark : c'est un mécanisme montré sur ses propres journaux.
+- Limites : 3 graines seulement ; une mesure tous les 1 000 pas, ce qui peut manquer un pic plus court ; une tâche qui reste facile (succès partout). Ce n'est pas un benchmark : c'est un mécanisme montré sur ses propres journaux.
 
 ## Ouvrir la démo
 

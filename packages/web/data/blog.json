@@ -13,7 +13,7 @@
     "environment": "target-chasing",
     "slug": "dqn-vs-double-surestimation",
     "title": "DQN contre Double DQN à budget égal : lire une surestimation",
-    "description": "Deux bancs figés, trois graines, 50 000 pas : un bruit sur la récompense fait apparaître une surestimation chez les deux algorithmes, et Double DQN ne la réduit pas de façon visible ici. Ce que disent les journaux, rien de plus.",
+    "description": "Deux bancs figés, trois graines, 50 000 pas : un bruit sur la récompense fait apparaître une surestimation chez les deux algorithmes, et Double DQN ne la réduit pas de façon visible ici. Ce que disent les journaux, rien de plus.",
     "date": "2026-11-26",
     "image": "/images/blog/target-chasing/dqn-vs-double-surestimation.png",
     "imageAlt": "La page de démo DQN contre Double DQN : banc témoin, graine 11, deux politiques figées côte à côte.",
