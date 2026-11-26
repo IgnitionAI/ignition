@@ -33,7 +33,7 @@ Reuse the public TrainingEnv, IgnitionEnvTFJS manual step/inferStep and DQNAgent
 - Headed browser walkthrough: catalogue FR/EN → demo → manual → train → pause/resume → save → reload → load → inference → back. Rapid command changes, missing checkpoint, narrow layout, denied WebGL and console checked.
 - Render cadence/FPS and p95 over 30 s while running the actual training/inference UI; no mobile or GPU timing claims from desktop RAF.
 - Update EN/FR articles and catalogue to describe actual training APIs and real measurements; preserve semantic GFM-table checks.
-- evidence/<executed SHA>/ contains protocol, raw evaluations and weight proofs, exact source SHA/worktree state, commands/results and visible captures. Final oneshot verification reports PASS per acceptance criterion, or BLOCKED with retained evidence, never a fabricated convergence claim.
+- `.scratch/ball-thrust/<executed SHA>/` (local, not committed) contains protocol, raw evaluations and weight proofs, exact source SHA/worktree state, commands/results and visible captures. Final oneshot verification reports PASS per acceptance criterion, or BLOCKED with retained evidence, never a fabricated convergence claim.
 
 ## Workflow gates
 

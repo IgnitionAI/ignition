@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check public content
+        run: node scripts/check-public-content.mjs
+
       - uses: pnpm/action-setup@v4
 
       - uses: actions/setup-node@v4
