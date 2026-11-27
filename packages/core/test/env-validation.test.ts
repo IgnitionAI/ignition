@@ -66,6 +66,23 @@ describe('validateTrainingEnv', () => {
     expect(() => validateTrainingEnv({ ...validTrainingEnv, observe: 'nope' })).toThrow(/observe.*function/);
   });
 
+  it('accepts canonical done() alone', () => {
+    expect(() => validateTrainingEnv(validTrainingEnv)).not.toThrow();
+  });
+
+  it('accepts alias isDone() alone', () => {
+    const { done, ...rest } = validTrainingEnv;
+    expect(() => validateTrainingEnv({ ...rest, isDone: () => false })).not.toThrow();
+  });
+
+  it('accepts both done() and isDone()', () => {
+    expect(() => validateTrainingEnv({ ...validTrainingEnv, isDone: () => false })).not.toThrow();
+  });
+
+  it('throws if isTerminated is not a function', () => {
+    expect(() => validateTrainingEnv({ ...validTrainingEnv, isTerminated: true })).toThrow(/isTerminated/);
+  });
+
   it('accepts a class instance (duck typing)', () => {
     class MyEnv {
       actions = ['a', 'b'];

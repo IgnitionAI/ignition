@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { IgnitionEnv } from '../src/ignition-env';
 import type { TrainingEnv } from '../src/types';
 
@@ -66,5 +66,26 @@ describe('IgnitionEnv with TrainingEnv interface', () => {
   it('accepts a plain object (duck typing)', () => {
     const obj = { actions: ['a', 'b'], observe: () => [1], step: () => {}, reward: () => 0, done: () => false, reset: () => {} };
     expect(() => new IgnitionEnv(obj)).not.toThrow();
+  });
+
+  it('runs 10 steps on a valid config and calls isTerminated and isTruncated', async () => {
+    const isTerminated = vi.fn(() => false);
+    const isTruncated = vi.fn(() => false);
+    const env = new IgnitionEnv({
+      actions: 2,
+      observe: () => [0],
+      step() {},
+      reward: () => 0,
+      done: () => false,
+      reset() {},
+      isTerminated,
+      isTruncated,
+    });
+    env.agent = { getAction: async () => 0, remember() {}, train: async () => {} };
+    for (let i = 0; i < 10; i++) {
+      await expect(env.step()).resolves.toMatchObject({ terminated: false, truncated: false });
+    }
+    expect(isTerminated).toHaveBeenCalledTimes(10);
+    expect(isTruncated).toHaveBeenCalledTimes(10);
   });
 });

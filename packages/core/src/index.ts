@@ -18,7 +18,8 @@ export type {
   BoxSpace,
   MultiDiscreteSpace,
 } from './types.js';
+export { EPISODE_FLAG_NAMES } from './types.js';
 
 export { mergeDefaults } from './defaults.js';
 export { validateTrainingEnv, validateInferenceEnv } from './env-validation.js';
-export { ExperienceSchema } from './schemas.js';
+export { ExperienceSchema, TrainingEnvSchema } from './schemas.js';
