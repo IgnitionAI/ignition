@@ -90,6 +90,7 @@
     "chartReturns": "Episode return, read from the logs",
     "binNote": "mean of the episodes that end in each {bin}-step bin; no other smoothing",
     "band": "band: min–max over 3 seeds · thin line: one seed",
+    "overlapNote": "alternating line: both means overlap",
     "xAxis": "environment steps",
     "tooltipSteps": "steps {from} to {to}",
     "tooltipEpisodes": "episodes {from} to {to}",

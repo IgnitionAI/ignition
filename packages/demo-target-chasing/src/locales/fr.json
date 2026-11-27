@@ -90,6 +90,7 @@
     "chartReturns": "Retour par épisode, lu dans les journaux",
     "binNote": "moyenne des épisodes terminés dans chaque tranche de {bin} pas ; aucun autre lissage",
     "band": "bande : min–max sur 3 graines · trait fin : une graine",
+    "overlapNote": "trait alterné : les deux moyennes se superposent",
     "xAxis": "pas d’environnement",
     "tooltipSteps": "pas {from} à {to}",
     "tooltipEpisodes": "épisodes {from} à {to}",

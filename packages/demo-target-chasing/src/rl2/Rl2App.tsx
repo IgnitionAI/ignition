@@ -4,6 +4,7 @@ import {
   Component,
   useCallback,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -19,6 +20,7 @@ import {
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
+  usePlotArea,
   XAxis,
   YAxis,
 } from 'recharts';
@@ -590,9 +592,56 @@ function Legend2() {
   );
 }
 
+/**
+ * Where the two mean lines overlap, the last one drawn would hide the other.
+ * Both stay solid and each is clipped to alternating vertical stripes in screen
+ * coordinates (first variant: even stripes, second: odd ones), so an overlap
+ * reads as one line alternating both colours, whatever the path length.
+ */
+const STRIPE_PX = 8;
+const STRIPE_PX_NARROW = 6;
+/** Vertical margin so the clip never trims a stroke lying on the plot edge. */
+const STRIPE_PAD = 4;
+
+/** One clip-path id per variant, unique per chart. */
+function useStripeIds(): Record<Rl2Algo, string> {
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
+  return useMemo(() => Object.fromEntries(RL2_ALGOS.map((algo) => [algo, `rl2-stripes-${uid}-${algo}`])) as Record<Rl2Algo, string>, [uid]);
+}
+
+/** Rendered inside the chart: stripe clip paths sized on the plot area. */
+function StripeClips({ ids, stripe }: { ids: Record<Rl2Algo, string>; stripe: number }) {
+  const plot = usePlotArea();
+  if (!plot || plot.width <= 0) return null;
+  const count = Math.ceil(plot.width / stripe);
+  return (
+    <defs>
+      {RL2_ALGOS.map((algo, parity) => (
+        <clipPath key={algo} id={ids[algo]} clipPathUnits="userSpaceOnUse">
+          {Array.from({ length: count }, (_, i) => i)
+            .filter((i) => i % 2 === parity % 2)
+            .map((i) => (
+              <rect key={i} x={plot.x + i * stripe} y={plot.y - STRIPE_PAD} width={Math.min(stripe, plot.width - i * stripe)} height={plot.height + 2 * STRIPE_PAD} />
+            ))}
+        </clipPath>
+      ))}
+    </defs>
+  );
+}
+
+/**
+ * Line props for a mean line clipped to its stripes. Line overrides a plain
+ * clipPath prop with its plot-area clip; a shape object is merged last, so the
+ * stripes (bounded by the plot area) replace that clip.
+ */
+function stripedLine(ids: Record<Rl2Algo, string>, algo: Rl2Algo) {
+  return { strokeWidth: 2, shape: { clipPath: `url(#${ids[algo]})` } };
+}
+
 function ReturnsChart({ rows, budget, narrow, lang, num, noisy }: { rows: ChartRow[]; budget: number; narrow: boolean; lang: Language; num: BenchViewProps['num']; noisy: boolean }) {
   const seedKeys = (algo: Rl2Algo) => Object.keys(rows[0] ?? {}).filter((k) => k.startsWith(seriesKey(algo, 's')));
   const domain = sharedDomain(rows, RL2_ALGOS.flatMap((algo) => [seriesKey(algo, 'band'), ...seedKeys(algo)]));
+  const stripeIds = useStripeIds();
   return (
     <section data-testid="rl2-chart-returns" style={{ ...block, marginTop: 16 }}>
       <h2 style={h2}>{t('rl2.chartReturns')}</h2>
@@ -612,14 +661,16 @@ function ReturnsChart({ rows, budget, narrow, lang, num, noisy }: { rows: ChartR
               <Line key={key} type="linear" dataKey={key} stroke={HUE[algo]} strokeWidth={1} strokeOpacity={0.35} dot={false} activeDot={false} isAnimationActive={false} />
             )),
           )}
+          <StripeClips ids={stripeIds} stripe={narrow ? STRIPE_PX_NARROW : STRIPE_PX} />
           {RL2_ALGOS.map((algo) => (
-            <Line key={`${algo}-mean`} type="linear" dataKey={seriesKey(algo, 'mean')} stroke={HUE[algo]} strokeWidth={2} dot={false} isAnimationActive={false} />
+            <Line key={`${algo}-mean`} type="linear" dataKey={seriesKey(algo, 'mean')} stroke={HUE[algo]} {...stripedLine(stripeIds, algo)} dot={false} isAnimationActive={false} />
           ))}
         </ComposedChart>
       </ResponsiveContainer>
       <p style={{ color: MUTED, fontSize: 14, margin: '4px 0 0', textAlign: 'center' }}>{t('rl2.xAxis')}</p>
       <Legend2 />
       <p style={{ color: MUTED, fontSize: 14, margin: '4px 0 0' }}>{t('rl2.band')}</p>
+      <p data-testid="rl2-overlap-note" style={{ color: MUTED, fontSize: 14, margin: '4px 0 0' }}>{t('rl2.overlapNote')}</p>
     </section>
   );
 }
@@ -672,6 +723,7 @@ function QBlock({ rows, budget, gamma, narrow, lang, num, noisy }: { rows: Chart
   const gapDomain = sharedDomain(rows, RL2_ALGOS.map((algo) => seriesKey(algo, 'gap')), 0.1);
   const gapDomainWithZero: [number, number] = [Math.min(gapDomain[0], 0), Math.max(gapDomain[1], 0)];
   const height = narrow ? 180 : 200;
+  const stripeIds = useStripeIds();
   return (
     <section data-testid="rl2-chart-q" style={{ ...block, marginTop: 16 }}>
       <h2 style={h2}>{t('rl2.chartQ', { gamma: num(gamma, 2) })}</h2>
@@ -733,8 +785,9 @@ function QBlock({ rows, budget, gamma, narrow, lang, num, noisy }: { rows: Chart
               }
             />
             <ReferenceLine y={0} stroke="#64748b" strokeDasharray="4 4" label={{ value: t('rl2.gapZero'), fill: MUTED, fontSize: 12, position: 'insideTopRight' }} />
+            <StripeClips ids={stripeIds} stripe={narrow ? STRIPE_PX_NARROW : STRIPE_PX} />
             {RL2_ALGOS.map((algo) => (
-              <Line key={algo} type="linear" dataKey={seriesKey(algo, 'gap')} stroke={HUE[algo]} strokeWidth={2} dot={false} isAnimationActive={false} />
+              <Line key={algo} type="linear" dataKey={seriesKey(algo, 'gap')} stroke={HUE[algo]} {...stripedLine(stripeIds, algo)} dot={false} isAnimationActive={false} />
             ))}
           </ComposedChart>
         </ResponsiveContainer>
